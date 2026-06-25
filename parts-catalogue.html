@@ -1462,7 +1462,7 @@
 
       <div class="alt-modal__footer">
         <button class="alt-quote-link" id="alt-to-quote-btn" type="button">
-          Request a Quote for the original part instead â†’
+          Request a Quote for the original part instead →
         </button>
       </div>
     </div>
@@ -1660,7 +1660,7 @@
       });
       // Change popup button label
       popupAddBtn.textContent = 'Add to Order';
-      // Change modal title and View Cart â†’ View Order
+      // Change modal title and View Cart → View Order
       document.getElementById('cart-modal-title').textContent = 'Added to Order';
       const btnVC = document.querySelector('.btn-view-cart');
       if (btnVC) {
@@ -1669,9 +1669,9 @@
       }
     }
 
-    // â”€â”€ Alternatives map (partNum â†’ array of alternative part IDs) â”€â”€
+    // â”€â”€ Alternatives map (partNum → array of alternative part IDs) â”€â”€
     const ALTERNATIVES_MAP = {
-      'C5010-080201': [6, 7]   // BOLT 8X20 â†’ BOLT 12X30, BOLT 12X45
+      'C5010-080201': [6, 7]   // BOLT 8X20 → BOLT 12X30, BOLT 12X45
     };
 
     // â”€â”€ Build Table Rows â”€â”€
@@ -2018,7 +2018,7 @@
       hidePopup();
     }
 
-    // â”€â”€ Default: all dropdowns blank; user picks Book â†’ Group â†’ Sheet â”€â”€
+    // â”€â”€ Default: all dropdowns blank; user picks Book → Group → Sheet â”€â”€
     function applyDefault() {
       selBook.value   = '';
       selGroup.disabled = true;  selGroup.value = '';
@@ -2185,7 +2185,7 @@
       const pinTop  = (parseFloat(pinEl.style.top)  / 100) * innerH;
       const scaledLeft = pinLeft * scale + translateX;
       const scaledTop  = pinTop  * scale + translateY;
-      // Convert diagram-wrapper coords â†’ viewport coords (popup is position:fixed)
+      // Convert diagram-wrapper coords → viewport coords (popup is position:fixed)
       const wRect = diagramWrapper.getBoundingClientRect();
       const vpLeft = wRect.left + scaledLeft;
       const vpTop  = wRect.top  + scaledTop;
@@ -2401,7 +2401,7 @@
     document.getElementById('alt-modal-close').addEventListener('click', closeAltModal);
     altModalOverlay.addEventListener('click', e => { if (e.target === altModalOverlay) closeAltModal(); });
 
-    // "Request a Quote" footer link â†’ close alt modal and open quote modal
+    // "Request a Quote" footer link → close alt modal and open quote modal
     document.getElementById('alt-to-quote-btn').addEventListener('click', () => {
       closeAltModal();
       const part = partsData.find(p => p.id === selectedPartId);
