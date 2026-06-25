@@ -18,8 +18,12 @@
   'use strict';
 
   /* ---------- APP HEADER (nav 92px + sub-bar 29px) ---------- */
+  function _getSessionUser() {
+    try { return JSON.parse(sessionStorage.getItem('okuma_user') || 'null'); } catch (e) { return null; }
+  }
   function appHeaderHTML() {
-    var isDealer = (localStorage.getItem('okmUserRole') === 'dealer');
+    var _u = _getSessionUser();
+    var isDealer = (_u && _u.role === 'dealer');
     var machPickHTML =
       '<div class="machine-picker" id="machinePicker">' +
         '<button class="machine-picker__btn" id="machinePickerBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Change default machine">' +
@@ -104,7 +108,7 @@
                 My Account
               </a>
               <div class="user-menu__sep"></div>
-              <a href="login.html" class="user-menu__item" role="menuitem">
+              <a href="#" class="user-menu__item" role="menuitem" onclick="event.preventDefault();OkumaAuth&&OkumaAuth.logout();">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5.5 12H2.5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round"/><path d="M9 9.5L12 7 9 4.5M12 7H5.5" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Logout
               </a>
@@ -120,7 +124,7 @@
   }
 
   /* ---------- SIDEBAR (desktop: hover-expand rail; mobile: drawer) ---------- */
-  var _dashHref = (localStorage.getItem('okmUserRole') === 'dealer') ? 'dealer-dashboard.html' : 'dashboard.html';
+  var _dashHref = (_getSessionUser() && _getSessionUser().role === 'dealer') ? 'dealer-dashboard.html' : 'dashboard.html';
   var SIDEBAR_ITEMS = [
     { key: 'dashboard', label: 'Dashboard', href: _dashHref,
       icon: '<rect x="2" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="2" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>' },

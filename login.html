@@ -360,6 +360,11 @@
             <a href="forgot-password.html">Forgot Password?</a>
           </div>
         </div>
+          <!-- Error message -->
+        <p id="loginError" style="display:none;color:#D32F2F;font-size:13px;margin-top:12px;text-align:center;" role="alert">
+          Incorrect email or password. Please try again.
+        </p>
+
         <!-- Sign In button -->
         <button type="button" class="btn--primary" id="signInBtn">Sign In</button>
 
@@ -373,8 +378,10 @@
     </div>
   </div>
 
+  <script src="auth.js"></script>
   <script>
     (function() {
+      /* Password show/hide toggle */
       var btn = document.getElementById('eye-toggle');
       var inp = document.getElementById('password');
       var iconShow = document.getElementById('eye-show');
@@ -387,17 +394,25 @@
         btn.setAttribute('aria-label', isText ? 'Show password' : 'Hide password');
       });
 
-      document.getElementById('signInBtn').addEventListener('click', function() {
-        var email = (document.getElementById('email').value || '').trim().toLowerCase();
-        if (email === 'dealer') {
-          localStorage.setItem('okmUserRole', 'dealer');
-          localStorage.removeItem('okmSelectedCustomer');
-          window.location = 'dealer-dashboard.html';
+      /* Sign-in */
+      function attemptLogin() {
+        var email    = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var errorEl  = document.getElementById('loginError');
+        var user = OkumaAuth.validate(email, password);
+        if (user) {
+          errorEl.style.display = 'none';
+          OkumaAuth.login(user);
         } else {
-          localStorage.removeItem('okmUserRole');
-          window.location = 'dashboard.html';
+          errorEl.style.display = 'block';
         }
-      });
+      }
+
+      document.getElementById('signInBtn').addEventListener('click', attemptLogin);
+
+      /* Allow Enter key in either field to submit */
+      document.getElementById('email').addEventListener('keydown', function(e) { if (e.key === 'Enter') attemptLogin(); });
+      document.getElementById('password').addEventListener('keydown', function(e) { if (e.key === 'Enter') attemptLogin(); });
     })();
   </script>
 

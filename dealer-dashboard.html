@@ -8,6 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
+  <script>
+    (function() {
+      var user = OkumaAuth.checkAuth();
+      /* Customers don't belong here; send them to their dashboard */
+      if (user && user.role === 'customer') { window.location.replace('dashboard.html'); }
+    })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
