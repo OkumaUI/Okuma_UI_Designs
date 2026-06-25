@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results — Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #F9F9F9;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── MAIN AREA ── */
+    .main-area { flex: 1; min-width: 0; padding: 32px; overflow-x: hidden; }
+
+    /* Page head */
+    .sr-count { font-size: 13px; font-weight: 400; color: #717171; line-height: 1.2; }
+    .sr-title { font-size: 26px; font-weight: 700; color: #1A1A1A; margin-top: 8px; line-height: 1.2; }
+
+    /* Two-column layout */
+    .sr-layout { display: flex; gap: 28px; margin-top: 28px; align-items: flex-start; min-width: 0; overflow-x: hidden; }
+
+    /* ── FILTERS PANEL (LEFT) ── */
+    .filters {
+      width: 240px;
+      flex-shrink: 0;
+      min-width: 0;
+      background: #fff;
+      border: 1px solid #E5E5E5;
+      border-radius: 4px;
+      padding: 20px;
+    }
+    .filters__head { display: flex; align-items: center; gap: 8px; }
+    .filters__head svg { width: 16px; height: 16px; color: #1A1A1A; flex-shrink: 0; }
+    .filters__head-label { font-size: 14px; font-weight: 700; color: #1A1A1A; }
+
+    .filters__section-label {
+      font-size: 11px; font-weight: 700; color: #717171;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .filters__section--cat { margin-top: 20px; }
+    .filters__section--mc, .filters__section--price { margin-top: 24px; }
+
+    .filters__opts { display: flex; flex-direction: column; gap: 11px; margin-top: 12px; }
+    .check {
+      display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;
+    }
+    .check input {
+      appearance: none; -webkit-appearance: none;
+      width: 16px; height: 16px; flex-shrink: 0;
+      border: 1.5px solid #808080; border-radius: 3px; background: #fff;
+      cursor: pointer; position: relative; margin: 0;
+    }
+    .check input:checked { background: #005EB8; border-color: #005EB8; }
+    .check input:checked::after {
+      content: ''; position: absolute; left: 4.5px; top: 1.5px;
+      width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    .check__label { font-size: 13px; font-weight: 500; color: #1A1A1A; }
+
+    /* Price range */
+    .price-range {
+      width: 100%; margin-top: 14px;
+      appearance: none; -webkit-appearance: none;
+      height: 4px; border-radius: 2px; background: #E0E0E0; outline: none;
+      accent-color: #005EB8; cursor: pointer;
+    }
+    .price-range::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #005EB8; cursor: pointer; border: none;
+    }
+    .price-range::-moz-range-thumb {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #005EB8; cursor: pointer; border: none;
+    }
+    .price-range::-moz-range-track { height: 4px; border-radius: 2px; background: #E0E0E0; }
+    .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+    .price-row__min { font-size: 12px; font-weight: 400; color: #717171; }
+    .price-row__max { font-size: 12px; font-weight: 500; color: #1A1A1A; }
+
+    /* ── RESULTS AREA (RIGHT) ── */
+    .results { flex: 1; min-width: 0; }
+
+    /* Sort bar */
+    .results-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
+    }
+    .results-bar__count { font-size: 13px; color: #717171; }
+    .sort-select {
+      height: 32px; border: 1px solid #E5E5E5; border-radius: 4px;
+      padding: 0 10px; font-family: inherit; font-size: 13px; color: #1A1A1A;
+      background: #fff; cursor: pointer; outline: none;
+    }
+    .sort-select:focus { border-color: #005EB8; }
+
+    .cards-grid { display: flex; flex-direction: column; gap: 8px; }
+
+    /* ── PART CARD — 3-zone grid layout ── */
+    .part-card {
+      background: #fff;
+      border: 1px solid #E5E5E5;
+      border-left: 3px solid var(--cat-color, #005EB8);
+      border-radius: 4px;
+      display: grid;
+      grid-template-columns: 1fr 160px 164px;
+      align-items: center;
+      transition: box-shadow 0.15s;
+      overflow: hidden;
+    }
+    .part-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.09); }
+
+    /* Zone 1 — Identity */
+    .part-card__identity {
+      padding: 18px 20px; min-width: 0;
+      display: flex; flex-direction: column; gap: 5px;
+      border-right: 1px solid #F0F0F0;
+    }
+    .part-card__pn {
+      font-size: 11px; font-weight: 700; color: #005EB8;
+      letter-spacing: 0.6px; text-transform: uppercase; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    .part-card__name {
+      font-size: 15px; font-weight: 700; color: #1A1A1A; line-height: 1.3;
+    }
+    .part-card__attrs {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px;
+    }
+    .part-card__attr {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 400; color: #6B7280;
+    }
+    .part-card__attr svg { width: 12px; height: 12px; flex-shrink: 0; color: #9E9E9E; }
+    .attr-sep { color: #D1D5DB; font-size: 12px; }
+
+    /* Zone 2 — Availability */
+    .part-card__avail {
+      padding: 18px 16px; display: flex; flex-direction: column;
+      align-items: flex-start; gap: 4px;
+      border-right: 1px solid #F0F0F0; align-self: stretch; justify-content: center;
+    }
+    .avail-status { display: flex; align-items: center; gap: 6px; }
+    .avail-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .avail-dot--in  { background: #208831; box-shadow: 0 0 0 2px #dcfce7; }
+    .avail-dot--out { background: #9E9E9E; box-shadow: 0 0 0 2px #f3f4f6; }
+    .avail-text {
+      font-size: 12px; font-weight: 700;
+    }
+    .avail-text--in  { color: #208831; }
+    .avail-text--out { color: #9E9E9E; }
+    .avail-sub {
+      font-size: 11px; font-weight: 400; color: #9E9E9E; line-height: 1.4; padding-left: 13px;
+    }
+
+    /* Zone 3 — Price + CTA */
+    .part-card__action {
+      padding: 18px 20px; display: flex; flex-direction: column;
+      align-items: flex-end; gap: 10px; align-self: stretch; justify-content: center;
+    }
+    .part-card__price-wrap { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .part-card__price { font-size: 20px; font-weight: 800; color: #1A1A1A; line-height: 1; }
+    .part-card__price--sale { color: #AD0000; }
+    .part-card__price--original { font-size: 12px; font-weight: 400; color: #6E6E6E; text-decoration: line-through; line-height: 1; }
+    .part-card__unit  { font-size: 11px; color: #9E9E9E; margin-top: 2px; }
+
+    .add-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      border-radius: 4px; height: 36px; padding: 0 14px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .add-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .add-btn--cart {
+      background: #005EB8; color: #fff; border: none;
+    }
+    .add-btn--cart:hover { background: #0052A3; }
+    .add-btn--quote {
+      background: #fff; color: #005EB8; border: 1.5px solid #005EB8;
+    }
+    .add-btn--quote:hover { background: #EBF3FF; }
+
+    /* Empty state */
+    .no-results {
+      padding: 48px 20px; text-align: center;
+      font-size: 14px; color: #717171; font-weight: 400;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex; align-items: center; gap: 4px; margin-top: 24px; justify-content: flex-end;
+      flex-wrap: wrap; overflow-x: auto;
+    }
+    .page-btn {
+      min-width: 36px; height: 36px; padding: 0 8px;
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 4px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; font-weight: 500; color: #1A1A1A; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .page-btn:hover:not(:disabled) { border-color: #005EB8; color: #005EB8; }
+    .page-btn.active { background: #005EB8; border-color: #005EB8; color: #fff; font-weight: 700; }
+    .page-btn:disabled { color: #C4C4C4; border-color: #E5E5E5; cursor: not-allowed; }
+    .page-btn--nav { min-width: auto; padding: 0 14px; font-weight: 600; }
+    .page-ellipsis { font-size: 13px; color: #9E9E9E; padding: 0 4px; line-height: 36px; }
+
+    img, svg { max-width: 100%; }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 900px) {
+      .main-area { padding: 20px; }
+      .sr-layout { flex-direction: column; gap: 20px; }
+      .filters { width: 100%; }
+    }
+    @media (max-width: 768px) {
+      .main-area { padding: 16px; }
+      .sr-layout { margin-top: 20px; }
+      .part-card { grid-template-columns: 1fr; }
+      .part-card__identity { border-right: none; border-bottom: 1px solid #F0F0F0; }
+      .part-card__avail { border-right: none; border-bottom: 1px solid #F0F0F0; flex-direction: row; align-items: center; gap: 16px; }
+      .part-card__action { flex-direction: row; align-items: center; justify-content: space-between; }
+    }
+    @media (max-width: 640px) {
+      .sr-title { font-size: 22px; }
+    }
+    @media (max-width: 480px) {
+      .main-area { padding: 12px; }
+      .sr-title { font-size: 20px; }
+      .results-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .sort-select { width: 100%; }
+      .part-card__price { font-size: 17px; }
+      .pagination { justify-content: center; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ────────────── HEADER ────────────── -->
+  <div id="okuma-header"></div>
+
+  <!-- ────────────── PAGE ────────────── -->
+  <div class="app-body-shell">
+
+    <!-- SIDEBAR (no active item) -->
+    <div id="okuma-sidebar" data-active=""></div>
+
+    <!-- MAIN AREA -->
+    <main class="main-area">
+
+      <div class="sr-count" id="srCount">0 results found</div>
+      <h1 class="sr-title" id="srTitle">All Parts</h1>
+
+      <div class="sr-layout">
+
+        <!-- FILTERS PANEL -->
+        <aside class="filters">
+          <div class="filters__head">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 2.5h13L9.5 8.5V13l-3 1.5V8.5L1.5 2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+            <span class="filters__head-label">Filters</span>
+          </div>
+
+          <!-- Category -->
+          <div class="filters__section filters__section--cat">
+            <div class="filters__section-label">Filter by Category</div>
+            <div class="filters__opts" id="catOpts">
+              <label class="check"><input type="checkbox" data-filter="category" value="Spindle Assembly"><span class="check__label">Spindle Assembly</span></label>
+              <label class="check"><input type="checkbox" data-filter="category" value="Coolant System"><span class="check__label">Coolant System</span></label>
+              <label class="check"><input type="checkbox" data-filter="category" value="Axis Drive"><span class="check__label">Axis Drive</span></label>
+              <label class="check"><input type="checkbox" data-filter="category" value="Electrical Cabinet"><span class="check__label">Electrical Cabinet</span></label>
+            </div>
+          </div>
+
+          <!-- Machine compatibility -->
+          <div class="filters__section filters__section--mc">
+            <div class="filters__section-label">Machine Compatibility</div>
+            <div class="filters__opts" id="mcOpts">
+              <label class="check"><input type="checkbox" data-filter="machine" value="GENOS M560-V"><span class="check__label">GENOS M560-V</span></label>
+              <label class="check"><input type="checkbox" data-filter="machine" value="MULTUS U3000"><span class="check__label">MULTUS U3000</span></label>
+              <label class="check"><input type="checkbox" data-filter="machine" value="LB2000 EX III"><span class="check__label">LB2000 EX III</span></label>
+            </div>
+          </div>
+
+          <!-- Price range -->
+          <div class="filters__section filters__section--price">
+            <div class="filters__section-label">Price Range</div>
+            <input type="range" class="price-range" id="priceRange" min="0" max="1000" value="1000" aria-label="Maximum price" aria-valuetext="$1000">
+            <div class="price-row">
+              <span class="price-row__min">$0</span>
+              <span class="price-row__max" id="priceMax">$1000</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- RESULTS -->
+        <section class="results">
+          <div class="results-bar">
+            <span class="results-bar__count" id="resultsBarCount"></span>
+            <select class="sort-select" id="sortSelect" aria-label="Sort results">
+              <option value="relevance">Sort: Relevance</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name-asc">Name: A – Z</option>
+            </select>
+          </div>
+          <div class="cards-grid" id="cardsGrid"></div>
+          <div class="pagination" id="pagination"></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+
+
+  <script src="components.js"></script>
+
+  <!-- ────────────── PAGE LOGIC ────────────── -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* Parts dataset */
+      var PARTS = [
+        { name: 'Spindle Bearing Unit',    number: 'E4809-045-017-A', category: 'Spindle Assembly',   machine: 'GENOS M560-V',  price: 247.50, originalPrice: 329.00, img: 'product-spindle-bearing.png', inStock: true },
+        { name: 'Spindle Bearing Unit',    number: 'E4809-045-033-B', category: 'Spindle Assembly',   machine: 'MULTUS U3000',  price: 247.50, img: 'product-spindle-bearing.png', inStock: true },
+        { name: 'Angular Contact Bearing', number: 'E4809-045-008-C', category: 'Spindle Assembly',   machine: 'LB2000 EX III', price: 312.00, img: 'product-plate-bearing.png',    inStock: true },
+        { name: 'Spindle Housing Seal',    number: 'E4809-061-021-A', category: 'Spindle Assembly',   machine: 'GENOS M560-V',  price: 189.00, img: 'product-oring-seal.png',       inStock: false },
+        { name: 'O-Ring Seal Kit',         number: 'E4809-045-090-K', category: 'Spindle Assembly',   machine: 'GENOS M560-V',  price: 42.50,  originalPrice: 65.00, img: 'product-oring-seal.png', inStock: true },
+        { name: 'Spindle Bearing Unit',    number: 'E4809-061-022-B', category: 'Spindle Assembly',   machine: 'LB2000 EX III', price: 247.50, img: 'product-spindle-bearing.png', inStock: true },
+        { name: 'Coolant Pump Assembly',   number: 'C4809-045-022-B', category: 'Coolant System',     machine: 'MULTUS U3000',  price: 185.00, img: 'product-coolant-pump.png',     inStock: true },
+        { name: 'Coolant Nozzle Kit',      number: 'C4809-058-001-A', category: 'Coolant System',     machine: 'GENOS M560-V',  price: 64.00,  originalPrice: 89.00, img: 'product-coolant-pump.png', inStock: true },
+        { name: 'Hydraulic Filter Kit',    number: 'C4809-058-077-E', category: 'Coolant System',     machine: 'MULTUS U3000',  price: 98.00,  img: 'product-coolant-pump.png',     inStock: true },
+        { name: 'Servo Drive Belt',        number: 'A4809-072-014-D', category: 'Axis Drive',         machine: 'LB2000 EX III', price: 62.50,  originalPrice: 89.00, img: 'product-servo-belt.png', inStock: true },
+        { name: 'Servo Drive Unit',        number: 'A4809-072-101-A', category: 'Axis Drive',         machine: 'MULTUS U3000',  price: 342.50, img: 'product-servo-belt.png',       inStock: true },
+        { name: 'Ball Screw Assembly',     number: 'A4809-072-205-C', category: 'Axis Drive',         machine: 'LB2000 EX III', price: 498.00, img: 'product-plate-bearing.png',    inStock: true },
+        { name: 'Control Relay Module',    number: 'EC809-033-011-A', category: 'Electrical Cabinet', machine: 'MULTUS U3000',  price: 128.00, img: 'product-servo-belt.png',       inStock: true },
+        { name: 'Proximity Sensor',        number: 'EC809-033-044-B', category: 'Electrical Cabinet', machine: 'GENOS M560-V',  price: 76.00,  img: 'product-oring-seal.png',       inStock: true }
+      ];
+
+      var PAGE_SIZE = 4;
+
+      /* State */
+      var query = '';
+      var queryFiltered = [];   /* parts matching the URL query */
+      var currentPage = 1;
+
+      /* DOM refs */
+      var elCount = document.getElementById('srCount');
+      var elTitle = document.getElementById('srTitle');
+      var elGrid  = document.getElementById('cardsGrid');
+      var elPag   = document.getElementById('pagination');
+      var elPriceRange = document.getElementById('priceRange');
+      var elPriceMax   = document.getElementById('priceMax');
+      var elBarCount   = document.getElementById('resultsBarCount');
+      var elSort       = document.getElementById('sortSelect');
+
+      function getParam(name) {
+        var m = new RegExp('[?&]' + name + '=([^&]*)').exec(location.search);
+        return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      /* Checked values for a filter group */
+      function checkedValues(filter) {
+        var boxes = document.querySelectorAll('input[data-filter="' + filter + '"]:checked');
+        return Array.prototype.map.call(boxes, function (b) { return b.value; });
+      }
+
+      /* Apply the live filters (category, machine, price) to the query-filtered set */
+      function applyFilters() {
+        var cats = checkedValues('category');
+        var machines = checkedValues('machine');
+        var maxPrice = parseInt(elPriceRange.value, 10);
+
+        return queryFiltered.filter(function (p) {
+          if (cats.length && cats.indexOf(p.category) === -1) return false;
+          if (machines.length && machines.indexOf(p.machine) === -1) return false;
+          if (p.price > maxPrice) return false;
+          return true;
+        });
+      }
+
+      var CAT_COLORS = {
+        'Spindle Assembly': '#005EB8',
+        'Coolant System':   '#0EA5E9',
+        'Axis Drive':       '#7C3AED',
+        'Electrical':       '#F59E0B'
+      };
+
+      function cardHTML(p) {
+        var catColor = CAT_COLORS[p.category] || '#005EB8';
+
+        var availZone = p.inStock
+          ? '<div class="avail-status"><span class="avail-dot avail-dot--in"></span><span class="avail-text avail-text--in">In Stock</span></div>' +
+            '<div class="avail-sub">Ships in 1–3 business days</div>'
+          : '<div class="avail-status"><span class="avail-dot avail-dot--out"></span><span class="avail-text avail-text--out">Out of Stock</span></div>' +
+            '<div class="avail-sub">Contact sales for availability</div>';
+
+        var btn = p.inStock
+          ? '<button class="add-btn add-btn--cart" type="button">' +
+              '<svg viewBox="0 0 20 20" fill="none"><path d="M1 1h2.2l2.1 10.4a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.47-1.2L19 4.5H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="1.3" fill="currentColor"/><circle cx="16" cy="17" r="1.3" fill="currentColor"/></svg>' +
+              'Add to Cart</button>'
+          : '<button class="add-btn add-btn--quote" type="button">' +
+              '<svg viewBox="0 0 20 20" fill="none"><path d="M10 2H4a1 1 0 00-1 1v14a1 1 0 001 1h12a1 1 0 001-1V8l-6-6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 2v6h6M7 13h6M7 10h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
+              'Add to Quote</button>';
+
+        return '<div class="part-card" style="--cat-color:' + catColor + '">' +
+
+          '<div class="part-card__identity">' +
+            '<div class="part-card__pn">' + escapeHtml(p.number) + '</div>' +
+            '<div class="part-card__name">' + escapeHtml(p.name) + '</div>' +
+            '<div class="part-card__attrs">' +
+              '<span class="part-card__attr">' +
+                '<svg viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h4M4 8h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>' +
+                escapeHtml(p.category) +
+              '</span>' +
+              '<span class="attr-sep">·</span>' +
+              '<span class="part-card__attr">' +
+                '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>' +
+                escapeHtml(p.machine) +
+              '</span>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="part-card__avail">' + availZone + '</div>' +
+
+          '<div class="part-card__action">' +
+            '<div class="part-card__price-wrap">' +
+              (p.originalPrice
+                ? '<div class="part-card__price--original">$' + p.originalPrice.toFixed(2) + '</div>' +
+                  '<div class="part-card__price part-card__price--sale">$' + p.price.toFixed(2) + '</div>'
+                : '<div class="part-card__price">$' + p.price.toFixed(2) + '</div>'
+              ) +
+              '<div class="part-card__unit">per unit</div>' +
+            '</div>' +
+            btn +
+          '</div>' +
+
+        '</div>';
+      }
+
+      /* Add-to-cart feedback */
+      function wireAddButtons() {
+        var btns = elGrid.querySelectorAll('.add-btn:not([disabled])');
+        Array.prototype.forEach.call(btns, function (btn) {
+          btn.addEventListener('click', function () {
+            if (btn.dataset.busy === '1') return;
+            btn.dataset.busy = '1';
+            var orig = btn.innerHTML;
+            btn.innerHTML = '<span>✓ Added</span>';
+            setTimeout(function () {
+              btn.innerHTML = orig;
+              btn.dataset.busy = '';
+            }, 1200);
+          });
+        });
+      }
+
+      function renderPagination(totalPages) {
+        elPag.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        function makeBtn(label, page, extra) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'page-btn' + (extra || '');
+          if (typeof label === 'string') {
+            b.innerHTML = label;
+          } else {
+            b.textContent = label;
+          }
+          if (page === null) {
+            b.disabled = true;
+          } else {
+            b.addEventListener('click', function () {
+              currentPage = page;
+              renderResults();
+              elPag.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+          }
+          return b;
+        }
+
+        /* ← Previous */
+        var prevBtn = makeBtn(
+          '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Previous',
+          currentPage > 1 ? currentPage - 1 : null,
+          ' page-btn--nav'
+        );
+        if (currentPage === 1) prevBtn.disabled = true;
+        elPag.appendChild(prevBtn);
+
+        /* Page numbers with ellipsis */
+        var pages = [];
+        for (var i = 1; i <= totalPages; i++) {
+          if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            pages.push(i);
+          } else if (pages[pages.length - 1] !== '…') {
+            pages.push('…');
+          }
+        }
+
+        pages.forEach(function(p) {
+          if (p === '…') {
+            var span = document.createElement('span');
+            span.className = 'page-ellipsis';
+            span.textContent = '…';
+            elPag.appendChild(span);
+          } else {
+            var b = makeBtn(p, p, p === currentPage ? ' active' : '');
+            elPag.appendChild(b);
+          }
+        });
+
+        /* Next → */
+        var nextBtn = makeBtn(
+          'Next <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+          currentPage < totalPages ? currentPage + 1 : null,
+          ' page-btn--nav'
+        );
+        if (currentPage === totalPages) nextBtn.disabled = true;
+        elPag.appendChild(nextBtn);
+      }
+
+      function sortParts(arr) {
+        var sort = elSort.value;
+        var copy = arr.slice();
+        if (sort === 'price-asc')  copy.sort(function(a,b){ return a.price - b.price; });
+        if (sort === 'price-desc') copy.sort(function(a,b){ return b.price - a.price; });
+        if (sort === 'name-asc')   copy.sort(function(a,b){ return a.name.localeCompare(b.name); });
+        return copy;
+      }
+
+      function renderResults() {
+        var filtered = sortParts(applyFilters());
+
+        /* count */
+        var countText = filtered.length + ' result' + (filtered.length === 1 ? '' : 's') + ' found';
+        elCount.textContent = countText;
+        if (elBarCount) elBarCount.textContent = countText;
+
+        var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        var start = (currentPage - 1) * PAGE_SIZE;
+        var slice = filtered.slice(start, start + PAGE_SIZE);
+
+        if (slice.length === 0) {
+          elGrid.innerHTML = '<div class="no-results">No parts match your filters.</div>';
+        } else {
+          elGrid.innerHTML = slice.map(cardHTML).join('');
+          wireAddButtons();
+        }
+
+        renderPagination(totalPages);
+      }
+
+      /* ---- init ---- */
+      query = getParam('q').trim();
+
+      if (query) {
+        elTitle.textContent = 'Search Results for "' + query + '"';
+        var q = query.toLowerCase();
+        queryFiltered = PARTS.filter(function (p) {
+          return p.name.toLowerCase().indexOf(q) !== -1 ||
+                 p.number.toLowerCase().indexOf(q) !== -1;
+        });
+      } else {
+        elTitle.textContent = 'All Parts';
+        queryFiltered = PARTS.slice();
+      }
+
+      /* filter listeners */
+      var checkboxes = document.querySelectorAll('input[data-filter]');
+      Array.prototype.forEach.call(checkboxes, function (cb) {
+        cb.addEventListener('change', function () {
+          currentPage = 1;
+          renderResults();
+        });
+      });
+      elPriceRange.addEventListener('input', function () {
+        elPriceMax.textContent = '$' + elPriceRange.value;
+        elPriceRange.setAttribute('aria-valuetext', '$' + elPriceRange.value);
+        currentPage = 1;
+        renderResults();
+      });
+
+      elSort.addEventListener('change', function () { currentPage = 1; renderResults(); });
+
+      renderResults();
+    })();
+  </script>
+
+</body>
+</html>

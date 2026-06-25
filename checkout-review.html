@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout: Review Order – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      color: #1A1A1A;
+      min-height: 100vh;
+    }
+
+    /* ─── PAGE CONTENT ────────────────────────────────────────── */
+    .page-content {
+      display: flex;
+      justify-content: center;
+      padding: 92px 0 48px;
+    }
+    .page-inner {
+      width: 1200px;
+      max-width: 100%;
+      padding: 0 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* ─── STEPPER ─────────────────────────────────────────────── */
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 24px 0;
+    }
+    .step { display: flex; align-items: center; gap: 10px; }
+    .step-circle {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 12px; font-weight: 700;
+    }
+    .step-circle.complete { background: #10B981; border: 1px solid #005EB8; color: #fff; }
+    .step-circle.active { background: #005EB8; border: 1px solid #005EB8; color: #fff; }
+    .step-circle.inactive { background: #fff; border: 1px solid #6E6E6E; color: #6E6E6E; }
+    .step-label { font-size: 14px; white-space: nowrap; }
+    .step-label.complete { font-weight: 500; color: #6B7280; }
+    .step-label.active { font-weight: 700; color: #005EB8; }
+    .step-label.inactive { font-weight: 500; color: #6B7280; }
+    .step--link { cursor: pointer; text-decoration: none; }
+    .step--link:hover .step-label { color: #005EB8; }
+    .btn-back {
+      background: transparent; border: 1.5px solid #6B7280; border-radius: 4px;
+      height: 52px; width: 100%; font-family: inherit; font-size: 15px;
+      font-weight: 600; color: #4B4B4B; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-back:hover { border-color: #005EB8; color: #005EB8; }
+    .step-connector { width: 60px; height: 1px; flex-shrink: 0; }
+    .step-connector.done { background: #005EB8; }
+    .step-connector.pending { background: #E5E5E5; }
+
+    /* ─── CHECKOUT LAYOUT ─────────────────────────────────────── */
+    .checkout-layout { display: flex; gap: 32px; align-items: flex-start; width: 960px; max-width: 100%; }
+    .checkout-left { width: 488px; max-width: 100%; flex-shrink: 0; display: flex; flex-direction: column; gap: 20px; }
+
+    .review-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #2C2A29;
+      line-height: 1.15;
+    }
+
+    /* ─── SUMMARY CARDS (shipping + payment) ──────────────────── */
+    .summary-cards { display: flex; gap: 32px; }
+    .summary-card {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid #E5E5E5;
+      border-radius: 4px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .summary-card__head {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .summary-card__label {
+      font-size: 13px; font-weight: 700; color: #6B7280; text-transform: uppercase;
+    }
+    .summary-card__edit {
+      font-size: 12px; font-weight: 700; color: #005EB8; text-decoration: none;
+    }
+    .summary-card__edit:hover { text-decoration: underline; }
+    .summary-card__name { font-size: 14px; font-weight: 700; color: #2C2A29; }
+    .summary-card__addr { font-size: 13px; font-weight: 400; color: #6B7280; line-height: 1.4; }
+    .summary-card__ship { font-size: 13px; font-weight: 700; color: #2C2A29; }
+    .summary-card__note { font-size: 13px; font-weight: 400; color: #6B7280; }
+
+    .pay-row { display: flex; align-items: center; gap: 8px; }
+    .pay-mc {
+      width: 32px; height: 20px; background: #fff; border-radius: 2px;
+      position: relative; flex-shrink: 0;
+    }
+    .pay-mc .circ { position: absolute; top: 1.5px; width: 17px; height: 17px; border-radius: 50%; }
+    .pay-mc .circ--red { left: 0; background: #EB001B; }
+    .pay-mc .circ--orange { right: 0; background: #F79E1B; mix-blend-mode: multiply; }
+    .pay-card-name { font-size: 14px; font-weight: 700; color: #2C2A29; }
+
+    /* ─── INFO BANNER ────────────────────────────────────────── */
+    .info-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #EEF5FF;
+      border: 1px solid #BDD3F5;
+      border-radius: 4px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #1A4A8A;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+    .info-banner svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* ─── ORDER ITEMS ─────────────────────────────────────────── */
+    .order-items { display: flex; flex-direction: column; gap: 16px; }
+    .order-items__heading {
+      font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase;
+    }
+    .order-items__list { border: 1px solid #E5E5E5; border-radius: 4px; overflow: hidden; }
+    .order-items__header {
+      display: flex; align-items: center; gap: 16px;
+      background: #F7F8F9; padding: 10px 20px;
+      border-bottom: 1px solid #E5E5E5;
+    }
+    .order-items__header .hcol {
+      font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .order-items__header .hcol-name    { width: 170px; }
+    .order-items__header .hcol-machine { width: 130px; }
+    .order-items__header .hcol-qty    { width: 48px; text-align: center; }
+    .order-items__header .hcol-price  { flex: 1; text-align: right; }
+    .order-item {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; padding: 14px 20px;
+      border-bottom: 1px solid #E5E5E5;
+    }
+    .order-item:last-child { border-bottom: none; }
+    .order-item__thumb { display: none; }
+    .order-item__info { width: 170px; display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+    .order-item__name { font-size: 13px; font-weight: 700; color: #000000; line-height: 1.3; }
+    .order-item__pn   { font-size: 11px; font-weight: 400; color: #6E6E6E; line-height: 1; }
+    .order-item__machine-col { width: 130px; flex-shrink: 0; display: flex; flex-direction: column; gap: 3px; }
+    .order-item__machine-name   { font-size: 12px; font-weight: 600; color: #2C2A29; line-height: 1.2; }
+    .order-item__machine-serial { font-size: 11px; font-weight: 400; color: #6E6E6E; line-height: 1; }
+    .order-item__qty {
+      width: 48px; text-align: center; flex-shrink: 0;
+      font-size: 13px; font-weight: 500; color: #2C2A29;
+    }
+    .order-item__price {
+      flex: 1; text-align: right;
+      font-size: 14px; font-weight: 700; color: #2C2A29;
+    }
+
+    /* ─── TERMS + PLACE ORDER ─────────────────────────────────── */
+    .checkout-cta { display: flex; flex-direction: column; gap: 16px; }
+    .terms-row { display: flex; align-items: flex-start; gap: 12px; }
+    .terms-checkbox-native {
+      position: absolute; opacity: 0; width: 0; height: 0; margin: 0; pointer-events: none;
+    }
+    .checkbox-custom {
+      width: 18px; height: 18px; border-radius: 2px;
+      background: #005EB8; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; cursor: pointer; margin-top: 1px;
+    }
+    .terms-checkbox-native:not(:checked) + .checkbox-custom { background: #fff; border: 2px solid #6E6E6E; }
+    .terms-checkbox-native:not(:checked) + .checkbox-custom svg { display: none; }
+    .terms-row:has(input:focus-visible) .checkbox-custom { outline: 2px solid #005EB8; outline-offset: 2px; }
+    .terms-text { font-size: 14px; font-weight: 400; color: #2C2A29; line-height: 1.4; }
+    .terms-link { color: #005EB8; text-decoration: underline; }
+
+    .place-order-btn {
+      height: 56px; width: 100%;
+      background: #005EB8; border: none; border-radius: 4px;
+      color: #fff; font-family: inherit;
+      font-size: 18px; font-weight: 800;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .place-order-btn:hover:not(:disabled) { background: #0052A3; }
+    .place-order-btn:disabled {
+      background: #D1D5DB; color: #9E9E9E; cursor: not-allowed;
+    }
+
+    /* ─── ORDER SUMMARY SIDEBAR ───────────────────────────────── */
+    .checkout-right { width: 440px; max-width: 100%; flex-shrink: 0; display: flex; flex-direction: column; gap: 24px; }
+    .order-summary-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 4px;
+      padding: 20px; display: flex; flex-direction: column; gap: 16px;
+    }
+    .order-summary-card__head { display: flex; align-items: center; justify-content: space-between; }
+    .order-summary-card__title { font-size: 18px; font-weight: 700; color: #2C2A29; }
+    .order-summary-card__edit { font-size: 13px; font-weight: 700; color: #005EB8; text-decoration: none; }
+    .order-summary-card__edit:hover { text-decoration: underline; }
+
+    .summary-rows { display: flex; flex-direction: column; gap: 16px; }
+    .summary-row { display: flex; justify-content: space-between; align-items: center; }
+    .summary-row__label { font-size: 14px; font-weight: 400; color: #6B7280; }
+    .summary-row__value { font-size: 14px; font-weight: 500; color: #2C2A29; }
+    .summary-row__value--green { color: #208831; }
+
+    .summary-divider { height: 1px; background: #E5E5E5; }
+
+    .total-row { display: flex; justify-content: space-between; align-items: center; }
+    .total-row__label { font-size: 16px; font-weight: 700; color: #2C2A29; }
+    .total-row__value { font-size: 24px; font-weight: 800; color: #005EB8; line-height: 1.2; }
+
+    .secured-row { display: flex; align-items: center; gap: 8px; padding-top: 8px; }
+    .secured-row span { font-size: 12px; font-weight: 400; color: #6B7280; }
+
+    .help-card {
+      background: #F7F8F9; border-radius: 4px; padding: 20px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .help-card__title { font-size: 13px; font-weight: 700; color: #2C2A29; }
+    .help-card__text { font-size: 12px; font-weight: 400; color: #6B7280; line-height: 1.4; }
+
+    img, svg { max-width: 100%; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1199px) {
+      .checkout-layout { width: 100%; flex-direction: column; gap: 32px; }
+      .checkout-left { width: 100%; }
+      .checkout-right { width: 100%; }
+    }
+
+    @media (max-width: 1200px) {
+      .page-inner { padding: 0 24px; }
+    }
+
+    @media (max-width: 1024px) {
+      .page-inner { width: 100%; padding: 0 24px; }
+      .stepper { width: 100%; }
+    }
+
+    @media (max-width: 768px) {
+      .page-content { padding-top: 60px; }
+      .page-inner { padding: 0 16px; }
+      .stepper {
+        justify-content: space-between;
+        gap: 8px;
+        padding: 24px 0;
+        overflow-x: auto;
+      }
+      .step { gap: 6px; }
+      .step-connector { flex: 1; width: auto; }
+      .summary-cards { gap: 16px; }
+      .order-item { padding: 16px; gap: 12px; }
+      .order-item__info { width: auto; flex: 1; }
+      .order-item__price { width: auto; }
+      .review-title { font-size: 28px; }
+      /* hide the table header row on mobile — item rows wrap so it no longer aligns */
+      .order-items__header { display: none; }
+      /* reduce gaps for mobile density */
+      .checkout-left { gap: 16px; }
+
+      /* Tablet typography — bump small text up 1–2px */
+      .summary-card__label { font-size: 13px; }
+      .summary-card__name  { font-size: 15px; }
+      .summary-card__addr  { font-size: 14px; }
+      .summary-card__ship  { font-size: 14px; }
+      .summary-card__note  { font-size: 14px; }
+      .pay-card-name       { font-size: 15px; }
+      .order-item__name    { font-size: 16px; }
+      .order-item__pn      { font-size: 13px; }
+      .order-item__machine { font-size: 12px; }
+      .order-item__qty     { font-size: 15px; }
+      .order-item__price   { font-size: 16px; }
+      .terms-text          { font-size: 15px; }
+      .summary-row__label,
+      .summary-row__value  { font-size: 15px; }
+      .total-row__label    { font-size: 17px; }
+      .total-row__value    { font-size: 26px; }
+      .order-summary-card__title { font-size: 20px; }
+      .help-card__title    { font-size: 14px; }
+      .help-card__text     { font-size: 13px; }
+
+      /* CTA: terms spans full width, buttons 50/50 below */
+      .checkout-cta    { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .terms-row       { grid-column: 1 / -1; }
+      .place-order-btn { width: auto; }
+      .btn-back        { width: auto; }
+    }
+
+    @media (max-width: 480px) {
+      /* Revert CTA to stacked on mobile */
+      .checkout-cta    { display: flex; flex-direction: column; gap: 16px; }
+      .place-order-btn { width: 100%; }
+      .btn-back        { width: 100%; }
+      .summary-cards { flex-direction: column; }
+      .stepper { gap: 6px; padding: 16px 0; }
+      .step-label { font-size: 12px; }
+      .step-connector { flex: 1; width: auto; }
+      .review-title { font-size: 22px; }
+      /* let the item row wrap so qty/price don't squeeze the name */
+      .order-item { flex-wrap: wrap; }
+      .order-item__qty { flex: 0 0 auto; text-align: left; }
+      .order-item__price { width: auto; margin-left: auto; }
+      /* reduce left-column gap further on smallest screens */
+      .checkout-left { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── HEADER ───────────────────────────────────────────────── -->
+  <div id="okuma-header"></div>
+
+  <!-- ─── PAGE CONTENT ─────────────────────────────────────────── -->
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- STEPPER -->
+      <div class="stepper">
+        <a class="step step--link" href="checkout-shipping.html" aria-label="Go back to Shipping step">
+          <div class="step-circle complete">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2 6.2L4.7 9 10 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="step-label complete">Shipping</span>
+        </a>
+        <div class="step-connector done"></div>
+        <a class="step step--link" href="checkout-payment.html" aria-label="Go back to Payment step">
+          <div class="step-circle complete">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2 6.2L4.7 9 10 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="step-label complete">Payment</span>
+        </a>
+        <div class="step-connector done"></div>
+        <div class="step">
+          <div class="step-circle active">3</div>
+          <span class="step-label active">Review Order</span>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">4</div>
+          <span class="step-label inactive">Confirmation</span>
+        </div>
+      </div>
+
+      <!-- CHECKOUT LAYOUT -->
+      <div class="checkout-layout">
+
+        <!-- LEFT COLUMN -->
+        <div class="checkout-left">
+          <h1 class="review-title">Review Your Order</h1>
+
+          <!-- Shipping + Payment summary cards -->
+          <div class="summary-cards">
+            <!-- Shipping -->
+            <div class="summary-card">
+              <div class="summary-card__head">
+                <span class="summary-card__label">Shipping</span>
+                <a href="checkout-shipping.html" class="summary-card__edit">Edit</a>
+              </div>
+              <div class="summary-card__name">Okuma HQ - Warehouse B</div>
+              <div class="summary-card__addr">11900 Cottonwood Street, Charlotte, NC 28214</div>
+              <div class="summary-card__ship">Express (2&ndash;3 days)</div>
+            </div>
+
+            <!-- Payment -->
+            <div class="summary-card">
+              <div class="summary-card__head">
+                <span class="summary-card__label">Payment</span>
+                <a href="checkout-payment.html" class="summary-card__edit">Edit</a>
+              </div>
+              <div class="pay-row">
+                <span class="pay-mc">
+                  <span class="circ circ--red"></span>
+                  <span class="circ circ--orange"></span>
+                </span>
+                <span class="pay-card-name">Visa ending in 4521</span>
+              </div>
+              <div class="summary-card__note">Exp: 09/28</div>
+              <div class="summary-card__note">Billing matches shipping</div>
+            </div>
+          </div>
+
+          <!-- Order Items -->
+          <div class="order-items">
+            <div class="order-items__heading">Order Items</div>
+            <div class="order-items__list">
+              <!-- Table header -->
+              <div class="order-items__header">
+                <div class="hcol hcol-name">Part</div>
+                <div class="hcol hcol-machine">Machine</div>
+                <div class="hcol hcol-qty">Qty</div>
+                <div class="hcol hcol-price">Price</div>
+              </div>
+              <!-- Item 1 -->
+              <div class="order-item">
+                <div class="order-item__info">
+                  <div class="order-item__name">Spindle Bearing - 7014C</div>
+                  <div class="order-item__pn">P/N: 1002-4458-99</div>
+                </div>
+                <div class="order-item__machine-col">
+                  <div class="order-item__machine-name">LU300-M</div>
+                  <div class="order-item__machine-serial">S/N: M5-2891-K</div>
+                </div>
+                <div class="order-item__qty">1</div>
+                <div class="order-item__price">$315.00</div>
+              </div>
+              <!-- Item 2 -->
+              <div class="order-item">
+                <div class="order-item__info">
+                  <div class="order-item__name">O-Ring Seal Kit (Premium)</div>
+                  <div class="order-item__pn">P/N: 5521-0082-12</div>
+                </div>
+                <div class="order-item__machine-col">
+                  <div class="order-item__machine-name">MULTUS U3000</div>
+                  <div class="order-item__machine-serial">S/N: MU-9102-L</div>
+                </div>
+                <div class="order-item__qty">2</div>
+                <div class="order-item__price">$42.50</div>
+              </div>
+              <!-- Item 3 -->
+              <div class="order-item">
+                <div class="order-item__info">
+                  <div class="order-item__name">Servo Drive Unit (AXIS)</div>
+                  <div class="order-item__pn">P/N: 2004-9912-00</div>
+                </div>
+                <div class="order-item__machine-col">
+                  <div class="order-item__machine-name">LB2000 EX III</div>
+                  <div class="order-item__machine-serial">S/N: LB-4431-M</div>
+                </div>
+                <div class="order-item__qty">1</div>
+                <div class="order-item__price">$342.50</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info banner -->
+          <div class="info-banner" role="note">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="8" cy="8" r="7" stroke="#005EB8" stroke-width="1.5"/>
+              <path d="M8 7v5" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="8" cy="4.5" r="0.75" fill="#005EB8"/>
+            </svg>
+            Some items may ship separately depending on availability.
+          </div>
+
+          <!-- Terms + Place Order -->
+          <div class="checkout-cta">
+            <div class="terms-row">
+              <input type="checkbox" class="terms-checkbox-native" id="terms-agree" name="terms-agree">
+              <label class="checkbox-custom" for="terms-agree" id="terms-checkbox">
+                <svg id="terms-check-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M1.5 5.2L4 7.5 8.5 2.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </label>
+              <label class="terms-text" for="terms-agree">
+                I confirm that all order information above is correct and I agree to Okuma's
+                <a href="#" class="terms-link" onclick="event.stopPropagation()">Terms and Conditions</a> and
+                <a href="#" class="terms-link" onclick="event.stopPropagation()">Privacy Policy</a>.
+              </label>
+            </div>
+            <button class="place-order-btn" id="placeOrderBtn" onclick="window.location='order-confirmation.html'" disabled>Place Order</button>
+            <button class="btn-back" onclick="window.location='checkout-payment.html'">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="13" y1="8" x2="3" y2="8"/><polyline points="7.5 3.5 3 8 7.5 12.5"/>
+              </svg>
+              Back to Payment
+            </button>
+          </div>
+        </div><!-- /checkout-left -->
+
+        <!-- RIGHT COLUMN -->
+        <div class="checkout-right">
+          <div class="order-summary-card">
+            <div class="order-summary-card__head">
+              <span class="order-summary-card__title">Order Summary</span>
+              <a href="cart.html" class="order-summary-card__edit">Edit Cart</a>
+            </div>
+
+            <div class="summary-rows">
+              <div class="summary-row">
+                <span class="summary-row__label">Items (3)</span>
+                <span class="summary-row__value">$742.50</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-row__label">Shipping &amp; Handling</span>
+                <span class="summary-row__value">$24.99</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-row__label">Tax (Estimated)</span>
+                <span class="summary-row__value">$59.40</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-row__label">Discount (NEW10)</span>
+                <span class="summary-row__value summary-row__value--green">(-) $42.50</span>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="total-row">
+              <span class="total-row__label">Total</span>
+              <span class="total-row__value">$826.89</span>
+            </div>
+
+            <div class="secured-row">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="2.5" y="6" width="9" height="6.5" rx="1" stroke="#6B7280" stroke-width="1.5"/>
+                <path d="M4.5 6V4.3a2.5 2.5 0 0 1 5 0V6" stroke="#6B7280" stroke-width="1.5"/>
+              </svg>
+              <span>Secured by MyOkuma Enterprise Grade Encryption</span>
+            </div>
+          </div>
+
+          <div class="help-card">
+            <div class="help-card__title">Need Help?</div>
+            <div class="help-card__text">Contact OKUMA America Parts Support at 1-800-MY-OKUMA or email parts@okuma.com</div>
+          </div>
+        </div><!-- /checkout-right -->
+
+      </div><!-- /checkout-layout -->
+    </div><!-- /page-inner -->
+  </main>
+
+  <script>
+    document.getElementById('terms-agree').addEventListener('change', function () {
+      document.getElementById('placeOrderBtn').disabled = !this.checked;
+    });
+  </script>
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+
+
+  <script src="components.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	precomposeunicode = true
+[remote "origin"]
+	url = https://github.com/Deloitte-US-Consulting/Okuma-UIUX---Manish.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "feedback-24jun"]
+	remote = origin
+	merge = refs/heads/feedback-24jun

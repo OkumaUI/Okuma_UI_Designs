@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Details – Register | Okuma</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #F5F5F5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #1A1A1A;
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+      padding-bottom: 80px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    /* WIZARD CARD */
+    .wizard-card {
+      width: 100%;
+      max-width: 720px;
+      box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* WIZARD STEP HEADER */
+    .wizard-steps {
+      min-height: 80px;
+      height: auto;
+      border-bottom: 1px solid #E0E0E0;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+    }
+
+    .wizard-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wizard-step__number {
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .wizard-step__number--active {
+      background: #005EB8;
+      color: #fff;
+    }
+
+    .wizard-step__number--inactive {
+      background: #F5F5F5;
+      color: rgba(49,52,64,0.7);
+    }
+
+    .wizard-step__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .wizard-step__label--active {
+      color: #005EB8;
+    }
+
+    .wizard-step__label--inactive {
+      color: rgba(49,52,64,0.7);
+    }
+
+    /* WIZARD BODY */
+    .wizard-body {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .wizard-section-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: #2C2A29;
+    }
+
+    /* FORM GRID */
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-row--2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-row--3col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* FIELD */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field__label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #2C2A29;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .field__input {
+      height: 48px;
+      border: 1px solid #9E9E9E;
+      border-radius: 4px;
+      padding: 0 16px;
+      font-size: 14px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #1A1A1A;
+      background: #fff;
+      outline: none;
+      transition: border 0.15s;
+    }
+
+    .field__input::placeholder {
+      color: #757575;
+    }
+
+    .field__input:focus {
+      border: 2px solid #005EB8;
+      outline: none;
+    }
+
+    .field__input--select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239E9E9E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    /* PASSWORD FIELD */
+    .field__input-wrap {
+      position: relative;
+    }
+
+    .field__input-wrap .field__input {
+      width: 100%;
+      padding-right: 48px;
+    }
+
+    .field__eye-btn {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      color: #9E9E9E;
+    }
+
+    .field__eye-btn:hover {
+      color: #4B4B4B;
+    }
+
+    /* CTA AREA */
+    .cta-area {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      background: #005EB8;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.7px;
+      cursor: pointer;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: #004fa0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: normal;
+      color: #005EB8;
+      text-decoration: none;
+      margin-top: 16px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Safety net: never let media overflow the viewport */
+    img, svg { max-width: 100%; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────── */
+    /* Card fits within the viewport on every screen */
+    @media (max-width: 1024px) {
+      .content { padding-left: 16px; padding-right: 16px; }
+      .wizard-card { width: 100%; max-width: 720px; }
+    }
+
+    /* Tablet & mobile: step indicator scrolls instead of overflowing */
+    @media (max-width: 768px) {
+      .content { padding-top: 24px; padding-bottom: 48px; }
+      .wizard-steps {
+        height: auto;
+        padding: 16px 20px;
+        gap: 20px;
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .wizard-steps::-webkit-scrollbar { display: none; }
+      .wizard-step { flex-shrink: 0; }
+      .wizard-body { padding: 24px 20px; gap: 24px; }
+    }
+
+    /* Tablet: collapse multi-column field grids to a single column */
+    @media (max-width: 768px) {
+      .form-row--2col,
+      .form-row--3col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .wizard-body { padding: 20px 16px; gap: 20px; }
+      .wizard-steps { padding: 14px 16px; }
+      .wizard-section-title { font-size: 18px; }
+      .btn-primary { letter-spacing: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div id="okuma-auth-header"></div>
+
+  <!-- CONTENT -->
+  <main class="content">
+    <div class="wizard-card">
+
+      <!-- STEP HEADER -->
+      <div class="wizard-steps">
+        <div class="wizard-step">
+          <div class="wizard-step__number wizard-step__number--active">1</div>
+          <span class="wizard-step__label wizard-step__label--active">Company Details</span>
+        </div>
+        <div class="wizard-step">
+          <div class="wizard-step__number wizard-step__number--inactive">2</div>
+          <span class="wizard-step__label wizard-step__label--inactive">Machine Verification</span>
+        </div>
+        <div class="wizard-step">
+          <div class="wizard-step__number wizard-step__number--inactive">3</div>
+          <span class="wizard-step__label wizard-step__label--inactive">Account Type</span>
+        </div>
+        <div class="wizard-step">
+          <div class="wizard-step__number wizard-step__number--inactive">4</div>
+          <span class="wizard-step__label wizard-step__label--inactive">Upload Documents</span>
+        </div>
+      </div>
+
+      <!-- WIZARD BODY -->
+      <div class="wizard-body">
+        <h1 class="wizard-section-title">Company Details</h1>
+
+        <div class="form-grid">
+
+          <!-- Row 1: First Name | Last Name -->
+          <div class="form-row--2col">
+            <div class="field">
+              <label class="field__label" for="first-name">First Name</label>
+              <input class="field__input" type="text" id="first-name" name="first-name" placeholder="First Name" autocomplete="given-name">
+            </div>
+            <div class="field">
+              <label class="field__label" for="last-name">Last Name</label>
+              <input class="field__input" type="text" id="last-name" name="last-name" placeholder="Last Name" autocomplete="family-name">
+            </div>
+          </div>
+
+          <!-- Job Title -->
+          <div class="field">
+            <label class="field__label" for="job-title">Job Title</label>
+            <input class="field__input" type="text" id="job-title" name="job-title" placeholder="e.g. Purchasing Manager" autocomplete="organization-title">
+          </div>
+
+          <!-- Company Name -->
+          <div class="field">
+            <label class="field__label" for="company-name">Company Name</label>
+            <input class="field__input" type="text" id="company-name" name="company-name" placeholder="Legal Entity Name" autocomplete="organization">
+          </div>
+
+          <!-- Address Line 1 -->
+          <div class="field">
+            <label class="field__label" for="address-1">Company Address Line 1</label>
+            <input class="field__input" type="text" id="address-1" name="address-1" placeholder="Street Address" autocomplete="address-line1">
+          </div>
+
+          <!-- Address Line 2 -->
+          <div class="field">
+            <label class="field__label" for="address-2">Address Line 2</label>
+            <input class="field__input" type="text" id="address-2" name="address-2" placeholder="Suite, Unit, etc." autocomplete="address-line2">
+          </div>
+
+          <!-- Row 2: City | State | ZIP -->
+          <div class="form-row--3col">
+            <div class="field">
+              <label class="field__label" for="city">City</label>
+              <input class="field__input" type="text" id="city" name="city" placeholder="City" autocomplete="address-level2">
+            </div>
+            <div class="field">
+              <label class="field__label" for="state">State / Province</label>
+              <input class="field__input" type="text" id="state" name="state" placeholder="State / Province" autocomplete="address-level1">
+            </div>
+            <div class="field">
+              <label class="field__label" for="zip">ZIP / Postal Code</label>
+              <input class="field__input" type="text" id="zip" name="zip" placeholder="ZIP / Postal Code" autocomplete="postal-code">
+            </div>
+          </div>
+
+          <!-- Row 3: Country | Phone -->
+          <div class="form-row--2col">
+            <div class="field">
+              <label class="field__label" for="country">Country</label>
+              <select class="field__input field__input--select" id="country" name="country" autocomplete="country-name">
+                <option value="US" selected>United States</option>
+                <option value="CA">Canada</option>
+                <option value="MX">Mexico</option>
+                <option value="GB">United Kingdom</option>
+                <option value="DE">Germany</option>
+                <option value="JP">Japan</option>
+                <option value="AU">Australia</option>
+                <option value="FR">France</option>
+                <option value="IT">Italy</option>
+                <option value="BR">Brazil</option>
+                <option value="IN">India</option>
+                <option value="CN">China</option>
+                <option value="KR">South Korea</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field__label" for="phone">Phone Number</label>
+              <input class="field__input" type="tel" id="phone" name="phone" placeholder="+1 (___) ___-____" autocomplete="tel">
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="field">
+            <label class="field__label" for="email">Email Address</label>
+            <input class="field__input" type="email" id="email" name="email" placeholder="name@company.com" autocomplete="email">
+          </div>
+
+          <!-- Row 4: Password | Confirm Password -->
+          <div class="form-row--2col">
+            <div class="field">
+              <label class="field__label" for="password">Password</label>
+              <div class="field__input-wrap">
+                <input class="field__input" type="password" id="password" name="password" placeholder="Create a password" autocomplete="new-password">
+                <button type="button" class="field__eye-btn" onclick="togglePassword('password', this)" aria-label="Toggle password visibility">
+                  <svg id="eye-icon-password" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="confirm-password">Confirm Password</label>
+              <div class="field__input-wrap">
+                <input class="field__input" type="password" id="confirm-password" name="confirm-password" placeholder="Repeat your password" autocomplete="new-password">
+                <button type="button" class="field__eye-btn" onclick="togglePassword('confirm-password', this)" aria-label="Toggle confirm password visibility">
+                  <svg id="eye-icon-confirm-password" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /form-grid -->
+
+        <!-- CTA -->
+        <div class="cta-area">
+          <button class="btn-primary" onclick="window.location='register-step2.html'">Next: Machine Verification</button>
+          <a href="login.html" class="back-link">← Back</a>
+        </div>
+
+      </div><!-- /wizard-body -->
+    </div><!-- /wizard-card -->
+  </main>
+
+  <!-- FOOTER -->
+  <div id="okuma-auth-footer"></div>
+
+  <script src="components.js"></script>
+
+  <script>
+    function togglePassword(fieldId, btn) {
+      var input = document.getElementById(fieldId);
+      var svg = btn.querySelector('svg');
+      if (input.type === 'password') {
+        input.type = 'text';
+        svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+      } else {
+        input.type = 'password';
+        svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+      }
+    }
+  </script>
+
+</body>
+</html>

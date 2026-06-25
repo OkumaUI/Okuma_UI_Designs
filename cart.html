@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    main {
+      flex: 1;
+      padding: 48px;
+      background: #FFFFFF;
+    }
+    .cart-layout {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+    }
+    /* Intermediate breakpoint: reduce padding and gap before layout stacks at 900px */
+    @media (max-width: 900px) and (min-width: 769px) {
+      main { padding: 32px; }
+      .cart-layout { gap: 24px; }
+      .cart-right { width: 340px; }
+    }
+    .cart-left { flex: 1; min-width: 0; }
+    .page-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #2C2A29;
+      line-height: 1.2;
+      margin-bottom: 32px;
+    }
+
+    /* Cart table header */
+    .cart-head {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    .cart-head .col-desc,
+    .cart-row .col-desc { flex: 1; min-width: 0; }
+    .cart-head .col-machine,
+    .cart-row .col-machine { width: 150px; flex-shrink: 0; }
+    .cart-head .col-price,
+    .cart-row .col-price { width: 80px; flex-shrink: 0; }
+    .cart-head .col-qty,
+    .cart-row .col-qty { width: 110px; flex-shrink: 0; display: flex; justify-content: center; }
+    .cart-head .col-total,
+    .cart-row .col-total { width: 100px; flex-shrink: 0; text-align: right; }
+    .cart-head .col-action,
+    .cart-row .col-action { width: 20px; flex-shrink: 0; }
+    .cart-head .head-thumb { display: none; }
+    .cart-head .hcol {
+      font-size: 14px;
+      font-weight: 700;
+      color: #000000;
+    }
+    .cart-head .col-qty .hcol,
+    .cart-head .col-total .hcol { width: 100%; text-align: center; }
+    .cart-head .col-total .hcol { text-align: right; }
+
+    /* Machine column in cart rows */
+    .item-machine-name   { font-size: 12px; font-weight: 600; color: #2C2A29; line-height: 1.3; }
+    .item-machine-serial { font-size: 11px; font-weight: 400; color: #6E6E6E; line-height: 1; margin-top: 3px; }
+
+    /* Cart item row */
+    .cart-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    .item-thumb {
+      display: none;
+    }
+    .item-info { display: flex; flex-direction: column; gap: 4px; }
+    .item-name { font-size: 15px; font-weight: 700; color: #000000; line-height: 1; }
+    .item-part { font-size: 12px; font-weight: 400; color: #6E6E6E; line-height: 1; }
+    .item-machine-tag { font-size: 11px; font-weight: 500; color: #005EB8; line-height: 1; }
+    .col-price { font-size: 14px; font-weight: 400; color: #000000; }
+
+    /* Qty stepper */
+    .qty-stepper {
+      display: flex;
+      align-items: center;
+      height: 30px;
+      border: 1px solid #E0E0E0;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .qty-btn {
+      width: 30px;
+      height: 30px;
+      background: #FFFFFF;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6E6E6E;
+      transition: background 0.15s, color 0.15s;
+    }
+    .qty-btn:hover { background: #F5F5F5; color: #005EB8; }
+    .qty-value {
+      min-width: 32px;
+      height: 30px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-left: 1px solid #E0E0E0;
+      border-right: 1px solid #E0E0E0;
+      font-size: 14px;
+      font-weight: 500;
+      color: #000000;
+    }
+
+    /* Total cell */
+    .col-total .total-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .price-original {
+      font-size: 12px;
+      font-weight: 400;
+      color: #6E6E6E;
+      text-decoration: line-through;
+      line-height: 1;
+    }
+    .price-sale { font-size: 16px; font-weight: 700; color: #AD0000; line-height: 1; }
+    .price-plain { font-size: 16px; font-weight: 700; color: #000000; line-height: 1; }
+
+    .trash-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6E6E6E;
+      transition: color 0.15s;
+    }
+    .trash-btn:hover { color: #AD0000; }
+
+    /* ===== ORDER SUMMARY ===== */
+    .cart-right { width: 380px; flex-shrink: 0; }
+    .summary-card {
+      background: #FFFFFF;
+      border: 1px solid #2C2A29;
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .summary-title { font-size: 18px; font-weight: 700; color: #000000; line-height: 1; }
+    .summary-lines { display: flex; flex-direction: column; gap: 12px; }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .summary-line .lbl { font-size: 14px; font-weight: 400; color: #616161; }
+    .summary-line .val { font-size: 14px; font-weight: 500; color: #000000; }
+    .summary-line .val.muted { font-size: 12px; font-weight: 400; color: #6E6E6E; }
+    .summary-line.discount .lbl,
+    .summary-line.discount .val { color: #AD0000; }
+
+    /* Coupon */
+    .coupon-row { display: flex; align-items: center; gap: 12px; }
+    .coupon-input {
+      flex: 1;
+      min-width: 0;
+      height: 40px;
+      border: 1px solid #E5E5E5;
+      border-radius: 4px;
+      padding: 0 12px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #1A1A1A;
+      outline: none;
+    }
+    .coupon-input:focus { border-color: #005EB8; }
+    .coupon-input::placeholder { color: #6B7280; }
+    .coupon-btn {
+      height: 40px;
+      padding: 0 16px;
+      background: #005EB8;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .coupon-btn:hover { background: #00509C; }
+    .coupon-msg { font-size: 12px; min-height: 0; margin-top: -8px; }
+    .coupon-msg.show { min-height: 14px; }
+    .coupon-msg.success { color: #208831; }
+    .coupon-msg.error { color: #AD0000; }
+
+    .summary-divider { height: 1px; background: #E0E0E0; }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .total-label { font-size: 18px; font-weight: 700; color: #000000; }
+    .total-amount { font-size: 24px; font-weight: 700; color: #005EB8; line-height: 1; }
+
+    .checkout-btn {
+      width: 100%;
+      padding: 12px 24px;
+      background: #005EB8;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 2px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .checkout-btn:hover { background: #00509C; }
+
+
+    /* Accepted payments */
+    .payments { display: flex; flex-direction: column; gap: 12px; padding-top: 12px; }
+    .payments-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: #6E6E6E;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .payments-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .pay-badge {
+      width: 32px;
+      height: 20px;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .pay-amex { object-fit: contain; }
+    .pay-mc { background: #FFFFFF; position: relative; }
+    .pay-mc .mc-circle { width: 17px; height: 17px; border-radius: 50%; position: absolute; top: 1.5px; }
+    .pay-mc .mc-red { background: #EB001B; left: 4px; }
+    .pay-mc .mc-yellow { background: #F79E1B; right: 4px; mix-blend-mode: multiply; }
+    .pay-visa { background: #0B308E; }
+    .pay-visa span {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #FFFFFF;
+    }
+    .pay-paypal {
+      width: 52px;
+      height: 20px;
+      border-radius: 999px;
+      background: #FFFFFF;
+      border: 1px solid #003087;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .pay-paypal span { font-size: 11px; font-weight: 700; color: #003087; }
+
+    /* Safety net: nothing exceeds the viewport */
+    main img, main svg { max-width: 100%; }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE  —  breakpoints: 900 (stack) / 768 / 640 (card rows) / 480
+    ══════════════════════════════════════════ */
+
+    /* Stack the two columns: Order Summary drops below the items, full-width */
+    @media (max-width: 900px) {
+      .cart-layout { flex-direction: column; align-items: stretch; gap: 32px; }
+      .cart-right { width: 100%; flex-shrink: 1; }
+    }
+
+    /* Tablet/large mobile: trim page padding */
+    @media (max-width: 768px) {
+      main { padding: 24px; }
+      .page-title { font-size: 28px; margin-bottom: 24px; }
+      .cart-row { gap: 16px; }
+      .cart-head { gap: 16px; }
+    }
+
+    /* Mobile: cart rows become wrapping cards; hide the table header row */
+    @media (max-width: 640px) {
+      main { padding: 16px; }
+      .page-title { font-size: 24px; }
+
+      /* Hide column headers entirely — card layout makes them redundant and they overflow at 414px */
+      .cart-head { display: none; }
+
+      /* Larger touch targets for qty stepper buttons (min 40px per WCAG 2.5.5) */
+      .qty-btn { width: 40px; height: 40px; }
+      .qty-stepper { height: 40px; }
+      .qty-value { height: 40px; }
+
+      .cart-row {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 12px 16px;
+        position: relative;
+        padding: 20px 0;
+      }
+      /* Thumb + description share the top line; description fills remaining width */
+      .cart-row .item-thumb { display: none; }
+      .cart-row .col-desc { flex: 1 1 0; min-width: 0; }
+      /* Machine column wraps below desc on mobile */
+      .cart-row .col-machine { width: 100%; flex-basis: 100%; order: 1; margin-top: -4px; }
+
+      /* Remove (trash) pins to the top-right of the card */
+      .cart-row .col-action {
+        width: auto;
+        order: 1;
+      }
+
+      /* Price / Qty / Total wrap onto a second line, left-aligned, evenly spaced */
+      .cart-row .col-price,
+      .cart-row .col-qty,
+      .cart-row .col-total {
+        width: auto;
+        flex: 0 0 auto;
+      }
+      .cart-row .col-price { order: 2; }
+      .cart-row .col-qty { order: 3; justify-content: flex-start; }
+      .cart-row .col-total { order: 4; text-align: left; margin-left: auto; }
+      .cart-row .col-total .total-stack { align-items: flex-end; }
+
+      /* Force price/qty/total onto their own line below thumb+desc */
+      .cart-row .col-price { flex-basis: 100%; }
+      .cart-row .col-price::before {
+        content: 'Price: ';
+        color: #6E6E6E;
+        font-weight: 400;
+      }
+      .cart-row .col-qty { margin-top: 4px; }
+      .cart-row .col-total { margin-top: 4px; }
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 16px 12px; }
+      .summary-card { padding: 20px; }
+      .cart-row { padding: 16px 0; }
+    }
+
+    /* 414px — narrowest common mobile viewport (iPhone XR) */
+    @media (max-width: 414px) {
+      .page-title { font-size: 22px; }
+      .cart-row { padding: 14px 0; }
+      .summary-card { padding: 16px; }
+      .qty-btn { width: 40px; height: 40px; }
+      .qty-stepper { height: 40px; }
+      .qty-value { height: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <div id="okuma-header"></div>
+
+  <!-- ===== BODY ===== -->
+  <div class="app-body-shell">
+
+    <!-- Collapsible sidebar (hover to expand) -->
+    <div id="okuma-sidebar" data-active=""></div>
+
+    <!-- ===== MAIN ===== -->
+    <main>
+      <div class="cart-layout">
+
+        <!-- LEFT: Cart items -->
+        <div class="cart-left">
+          <h1 class="page-title">Your Cart</h1>
+
+          <!-- Table header -->
+          <div class="cart-head">
+            <div class="head-thumb"></div>
+            <div class="col-desc"><span class="hcol">Part</span></div>
+            <div class="col-machine"><span class="hcol">Machine</span></div>
+            <div class="col-price"><span class="hcol">Unit Price</span></div>
+            <div class="col-qty"><span class="hcol">Qty</span></div>
+            <div class="col-total"><span class="hcol">Total</span></div>
+            <div class="col-action"></div>
+          </div>
+
+          <!-- Item 1: Plate (on sale) -->
+          <div class="cart-row" id="item-row-0">
+            <img class="item-thumb" src="product-plate-bearing.png" alt="Plate">
+            <div class="col-desc">
+              <div class="item-info">
+                <div class="item-name">Plate</div>
+                <div class="item-part">525-0100-11</div>
+              </div>
+            </div>
+            <div class="col-machine">
+              <div class="item-machine-name">LU300-M</div>
+              <div class="item-machine-serial">S/N: M5-2891-K</div>
+            </div>
+            <div class="col-price">$247.50</div>
+            <div class="col-qty">
+              <div class="qty-stepper">
+                <button class="qty-btn" onclick="changeQty(0,-1)" aria-label="Decrease quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/></svg>
+                </button>
+                <span class="qty-value" id="qty-0">2</span>
+                <button class="qty-btn" onclick="changeQty(0,1)" aria-label="Increase quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="col-total">
+              <div class="total-stack">
+                <span class="price-original" id="orig-0">$495.00</span>
+                <span class="price-sale" id="row-total-0">$405.00</span>
+              </div>
+            </div>
+            <div class="col-action">
+              <button class="trash-btn" onclick="removeItem(0)" aria-label="Remove item">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2.5 5 4 5 17.5 5"/>
+                  <path d="M15.5 5l-.8 11.5a1.5 1.5 0 01-1.5 1.4H6.8a1.5 1.5 0 01-1.5-1.4L4.5 5"/>
+                  <path d="M8 5V3.2a1 1 0 011-1h2a1 1 0 011 1V5"/>
+                  <line x1="8.2" y1="8.5" x2="8.2" y2="14.5"/><line x1="11.8" y1="8.5" x2="11.8" y2="14.5"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Item 2: Coolant Pump Assembly -->
+          <div class="cart-row" id="item-row-1">
+            <img class="item-thumb" src="product-coolant-pump.png" alt="Coolant Pump Assembly">
+            <div class="col-desc">
+              <div class="item-info">
+                <div class="item-name">Coolant Pump Assembly</div>
+                <div class="item-part">E4809-045-017-A</div>
+              </div>
+            </div>
+            <div class="col-machine">
+              <div class="item-machine-name">LU300-M</div>
+              <div class="item-machine-serial">S/N: M5-2891-K</div>
+            </div>
+            <div class="col-price">$185.00</div>
+            <div class="col-qty">
+              <div class="qty-stepper">
+                <button class="qty-btn" onclick="changeQty(1,-1)" aria-label="Decrease quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/></svg>
+                </button>
+                <span class="qty-value" id="qty-1">1</span>
+                <button class="qty-btn" onclick="changeQty(1,1)" aria-label="Increase quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="col-total">
+              <div class="total-stack">
+                <span class="price-plain" id="row-total-1">$185.00</span>
+              </div>
+            </div>
+            <div class="col-action">
+              <button class="trash-btn" onclick="removeItem(1)" aria-label="Remove item">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2.5 5 4 5 17.5 5"/>
+                  <path d="M15.5 5l-.8 11.5a1.5 1.5 0 01-1.5 1.4H6.8a1.5 1.5 0 01-1.5-1.4L4.5 5"/>
+                  <path d="M8 5V3.2a1 1 0 011-1h2a1 1 0 011 1V5"/>
+                  <line x1="8.2" y1="8.5" x2="8.2" y2="14.5"/><line x1="11.8" y1="8.5" x2="11.8" y2="14.5"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Item 3: Servo Drive Belt -->
+          <div class="cart-row" id="item-row-2">
+            <img class="item-thumb" src="product-servo-belt.png" alt="Servo Drive Belt">
+            <div class="col-desc">
+              <div class="item-info">
+                <div class="item-name">Servo Drive Belt</div>
+                <div class="item-part">E4809-045-017-A</div>
+              </div>
+            </div>
+            <div class="col-machine">
+              <div class="item-machine-name">LU300-M</div>
+              <div class="item-machine-serial">S/N: M5-2891-K</div>
+            </div>
+            <div class="col-price">$62.50</div>
+            <div class="col-qty">
+              <div class="qty-stepper">
+                <button class="qty-btn" onclick="changeQty(2,-1)" aria-label="Decrease quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/></svg>
+                </button>
+                <span class="qty-value" id="qty-2">1</span>
+                <button class="qty-btn" onclick="changeQty(2,1)" aria-label="Increase quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="col-total">
+              <div class="total-stack">
+                <span class="price-plain" id="row-total-2">$62.50</span>
+              </div>
+            </div>
+            <div class="col-action">
+              <button class="trash-btn" onclick="removeItem(2)" aria-label="Remove item">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2.5 5 4 5 17.5 5"/>
+                  <path d="M15.5 5l-.8 11.5a1.5 1.5 0 01-1.5 1.4H6.8a1.5 1.5 0 01-1.5-1.4L4.5 5"/>
+                  <path d="M8 5V3.2a1 1 0 011-1h2a1 1 0 011 1V5"/>
+                  <line x1="8.2" y1="8.5" x2="8.2" y2="14.5"/><line x1="11.8" y1="8.5" x2="11.8" y2="14.5"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /cart-left -->
+
+        <!-- RIGHT: Order Summary -->
+        <div class="cart-right">
+          <div class="summary-card">
+            <div class="summary-title">Order Summary</div>
+
+            <div class="summary-lines">
+              <div class="summary-line">
+                <span class="lbl">Subtotal</span>
+                <span class="val" id="summary-subtotal">$742.50</span>
+              </div>
+              <div class="summary-line">
+                <span class="lbl">Estimated Shipping</span>
+                <span class="val muted">Calculated at checkout</span>
+              </div>
+              <div class="summary-line">
+                <span class="lbl">Estimated Tax</span>
+                <span class="val muted">Calculated at checkout</span>
+              </div>
+              <div class="summary-line discount" id="discount-line" style="display:none;">
+                <span class="lbl">Discount (NEW10)</span>
+                <span class="val" id="summary-discount">-$0.00</span>
+              </div>
+            </div>
+
+            <!-- Coupon -->
+            <div class="coupon-row">
+              <label for="coupon-input" class="sr-only">Coupon code</label>
+              <input type="text" class="coupon-input" id="coupon-input" placeholder="Enter coupon code">
+              <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+            </div>
+            <div class="coupon-msg" id="coupon-msg" role="status" aria-live="polite"></div>
+
+            <div class="summary-divider"></div>
+
+            <div class="total-row">
+              <span class="total-label">Total</span>
+              <span class="total-amount" id="summary-total">$742.50+</span>
+            </div>
+
+            <button class="checkout-btn" onclick="window.location='checkout-shipping.html'">Proceed To Checkout</button>
+
+<div class="payments">
+              <div class="payments-label">Accepted Payments</div>
+              <div class="payments-row">
+                <img class="pay-badge pay-amex" src="pay-amex.png" alt="American Express">
+                <div class="pay-badge pay-mc">
+                  <span class="mc-circle mc-red"></span>
+                  <span class="mc-circle mc-yellow"></span>
+                </div>
+                <div class="pay-badge pay-visa"><span>VISA</span></div>
+                <div class="pay-paypal"><span>PayPal</span></div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /cart-right -->
+
+      </div><!-- /cart-layout -->
+    </main>
+  </div><!-- /app-body -->
+
+  <script>
+    // Item data. unitPrice = effective per-unit price used for totals.
+    // sale=true items show strikethrough original (list) + red sale total.
+    var items = [
+      { unitPrice: 202.50, listPrice: 247.50, qty: 2, sale: true,  removed: false },
+      { unitPrice: 185.00, listPrice: 185.00, qty: 1, sale: false, removed: false },
+      { unitPrice: 62.50,  listPrice: 62.50,  qty: 1, sale: false, removed: false }
+    ];
+
+    var couponApplied = false;
+    var DISCOUNT = 0;
+
+    function money(n) {
+      return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function changeQty(idx, delta) {
+      if (items[idx].removed) return;
+      var newQty = items[idx].qty + delta;
+      if (newQty < 1) newQty = 1;
+      items[idx].qty = newQty;
+
+      document.getElementById('qty-' + idx).textContent = newQty;
+
+      var rowTotal = items[idx].unitPrice * newQty;
+      document.getElementById('row-total-' + idx).textContent = money(rowTotal);
+
+      if (items[idx].sale) {
+        var origEl = document.getElementById('orig-' + idx);
+        if (origEl) origEl.textContent = money(items[idx].listPrice * newQty);
+      }
+
+      recalcSummary();
+    }
+
+    function removeItem(idx) {
+      items[idx].removed = true;
+      var row = document.getElementById('item-row-' + idx);
+      if (row) row.style.display = 'none';
+      recalcSummary();
+    }
+
+    function recalcSummary() {
+      // Subtotal mirrors the "Price" column (list prices x qty), matching the
+      // Figma value of $742.50 ($247.50x2 + $185.00 + $62.50).
+      var subtotal = 0;
+      for (var i = 0; i < items.length; i++) {
+        if (!items[i].removed) subtotal += items[i].listPrice * items[i].qty;
+      }
+      var discount = couponApplied ? subtotal * 0.10 : 0;
+      DISCOUNT = discount;
+      var total = subtotal - discount;
+
+      document.getElementById('summary-subtotal').textContent = money(subtotal);
+      // Estimated shipping + tax are calculated at checkout, hence the trailing "+".
+      document.getElementById('summary-total').textContent = money(total) + '+';
+
+      if (couponApplied) {
+        document.getElementById('discount-line').style.display = 'flex';
+        document.getElementById('summary-discount').textContent = '-' + money(discount);
+      } else {
+        document.getElementById('discount-line').style.display = 'none';
+      }
+    }
+
+    function applyCoupon() {
+      var code = document.getElementById('coupon-input').value.trim().toUpperCase();
+      var msg = document.getElementById('coupon-msg');
+
+      if (code === 'NEW10') {
+        if (couponApplied) {
+          msg.className = 'coupon-msg success show';
+          msg.textContent = 'Coupon NEW10 is already applied.';
+          return;
+        }
+        couponApplied = true;
+        recalcSummary();
+        msg.className = 'coupon-msg success show';
+        msg.textContent = 'Coupon NEW10 applied! 10% off your subtotal.';
+      } else if (code === '') {
+        msg.className = 'coupon-msg error show';
+        msg.textContent = 'Please enter a coupon code.';
+      } else {
+        msg.className = 'coupon-msg error show';
+        msg.textContent = 'Invalid coupon code. Try NEW10.';
+      }
+    }
+
+    document.getElementById('coupon-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); }
+    });
+
+    // Initial render
+    recalcSummary();
+  </script>
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+
+
+  <script src="components.js"></script>
+  <script>
+    (function () {
+      if (localStorage.getItem('okmUserRole') !== 'dealer') return;
+      var cust = localStorage.getItem('okmSelectedCustomer') || '';
+      if (!cust) return;
+      var h1 = document.querySelector('.page-title');
+      if (h1) h1.textContent = cust + ' Cart';
+      document.title = cust + ' Cart – Okuma Parts Portal';
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      color: #2C2A29;
+    }
+
+    /* ─── LEFT PANEL (HERO) ───────────────────────────────────── */
+    .hero {
+      flex: 0 0 50%;
+      max-width: 50%;
+      background: url('login-hero.png') center/cover no-repeat, #005EB8;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Blue tint over the machine photo (Figma: #005EB8 @ 70%) */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #005EB8;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .hero__logo {
+      width: 280px;
+      max-width: 60%;
+      object-fit: contain;
+      display: block;
+      /* Render the dark/blue logo asset as solid white over the blue field */
+      filter: brightness(0) invert(1);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── RIGHT PANEL (FORM) ──────────────────────────────────── */
+    .form-panel {
+      flex: 0 0 50%;
+      max-width: 50%;
+      background: #ffffff;
+      padding: 80px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .form-panel__inner {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* Title */
+    .form-panel__title {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #2C2A29;
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+    }
+
+    /* Subtitle */
+    .form-panel__subtitle {
+      font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: #2C2A29;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    /* ─── FORM ────────────────────────────────────────────────── */
+    .login-form {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Field group */
+    .field { display: flex; flex-direction: column; gap: 0; }
+    .field + .field { margin-top: 20px; }
+
+    .field__label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #2C2A29;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 6px;
+    }
+
+    .field__input {
+      height: 48px;
+      border: 1px solid #9E9E9E;
+      border-radius: 4px;
+      padding: 0 16px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #2C2A29;
+      background: #ffffff;
+      width: 100%;
+      outline: none;
+      transition: border 0.15s;
+    }
+
+    .field__input::placeholder { color: #757575; }
+    .field__input:focus { border: 2px solid #005EB8; }
+
+    /* Password wrapper */
+    .field__password-wrap { position: relative; }
+    .field__password-wrap .field__input { padding-right: 48px; }
+
+    .field__eye-btn {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6B7280;
+      line-height: 0;
+    }
+
+    .field__eye-btn:hover { color: #2C2A29; }
+
+    /* Forgot password */
+    .field__forgot {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .field__forgot a {
+      font-size: 13px;
+      font-weight: 500;
+      color: #005EB8;
+      text-decoration: none;
+    }
+
+    .field__forgot a:hover { text-decoration: underline; }
+
+    /* ─── BUTTONS ─────────────────────────────────────────────── */
+    .btn--primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      background: #005EB8;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      margin-top: 24px;
+    }
+
+    .btn--primary:hover { opacity: 0.88; }
+
+    .btn--ghost {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      background: transparent;
+      color: #005EB8;
+      border: 1px solid #005EB8;
+      border-radius: 4px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn--ghost:hover { background: #005EB8; color: #ffffff; }
+
+    /* ─── DIVIDER ─────────────────────────────────────────────── */
+    .divider {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .divider__line { flex: 1; height: 1px; background: #DFDFDF; }
+
+    .divider__text {
+      font-size: 14px;
+      font-weight: 400;
+      color: #2C2A29;
+      white-space: nowrap;
+    }
+
+    /* ─── BOTTOM TEXT ─────────────────────────────────────────── */
+    .bottom-text {
+      font-size: 15px;
+      font-weight: 400;
+      color: #2C2A29;
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .bottom-text a {
+      font-size: 15px;
+      font-weight: 500;
+      color: #005EB8;
+      text-decoration: none;
+    }
+
+    .bottom-text a:hover { text-decoration: underline; }
+
+    /* Safety net: never let media overflow the viewport */
+    img, svg { max-width: 100%; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────── */
+    /* Tablet: tighten the generous form padding */
+    @media (max-width: 1024px) {
+      .form-panel { padding: 64px 48px; }
+    }
+
+    /* ≤900: stack to one column. Hero becomes a short banner above the form. */
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      .hero {
+        flex: 0 0 auto;
+        max-width: 100%;
+        width: 100%;
+        height: 200px;
+      }
+      .hero__logo { width: 220px; }
+      .form-panel {
+        flex: 0 0 auto;
+        max-width: 100%;
+        width: 100%;
+        padding: 40px 32px;
+      }
+    }
+
+    /* ≤768: hide the hero photo entirely; full-width centered form */
+    @media (max-width: 768px) {
+      .hero { display: none; }
+      .form-panel {
+        padding: 32px 24px;
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100%;
+      }
+      .form-panel__title { font-size: 28px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero { height: 140px; }
+      .form-panel { padding: 24px; }
+      .form-panel__title { font-size: 26px; }
+    }
+
+    @media (max-width: 414px) {
+      .form-panel__subtitle { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── LEFT PANEL (HERO) ─────────────────────────────────────── -->
+  <div class="hero">
+    <img src="okuma-logo.png" alt="Okuma – Open Possibilities" class="hero__logo" />
+  </div>
+
+  <!-- ─── RIGHT PANEL (FORM) ────────────────────────────────────── -->
+  <div class="form-panel">
+    <div class="form-panel__inner">
+
+      <!-- Title + subtitle -->
+      <h1 class="form-panel__title">Welcome Back</h1>
+      <p class="form-panel__subtitle">Sign in to access your parts portal.</p>
+
+      <!-- Form -->
+      <form class="login-form" onsubmit="return false;">
+
+        <!-- Email field -->
+        <div class="field">
+          <label class="field__label" for="email">Email Address</label>
+          <input
+            class="field__input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="name@company.com"
+            autocomplete="email"
+          />
+        </div>
+
+        <!-- Password field -->
+        <div class="field">
+          <label class="field__label" for="password">Password</label>
+          <div class="field__password-wrap">
+            <input
+              class="field__input"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="field__eye-btn"
+              id="eye-toggle"
+              aria-label="Show password"
+            >
+              <!-- Eye open (visible by default) -->
+              <svg id="eye-show" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M1 10S4 4 10 4s9 6 9 6-3 6-9 6-9-6-9-6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <!-- Eye closed (hidden by default) -->
+              <svg id="eye-hide" width="20" height="20" viewBox="0 0 20 20" fill="none" style="display:none;" aria-hidden="true">
+                <path d="M3 3l14 14M8.05 8.05A2.5 2.5 0 0010 13.5a2.5 2.5 0 001.95-4.03" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M6.35 5.35C4.42 6.48 2.8 8.18 1 10c0 0 3 6 9 6a9.3 9.3 0 003.65-.75M11.5 5.18C14.34 6.24 17 8.68 19 10c0 0-3 6-9 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="field__forgot">
+            <a href="forgot-password.html">Forgot Password?</a>
+          </div>
+        </div>
+        <!-- Sign In button -->
+        <button type="button" class="btn--primary" id="signInBtn">Sign In</button>
+
+      </form>
+
+      <!-- Bottom text -->
+      <p class="bottom-text">
+        Need Help? <a href="https://www.okuma.com/distributors" target="_blank" rel="noopener noreferrer">Find your distributor</a>
+      </p>
+
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var btn = document.getElementById('eye-toggle');
+      var inp = document.getElementById('password');
+      var iconShow = document.getElementById('eye-show');
+      var iconHide = document.getElementById('eye-hide');
+      btn.addEventListener('click', function() {
+        var isText = inp.type === 'text';
+        inp.type = isText ? 'password' : 'text';
+        iconShow.style.display = isText ? 'block' : 'none';
+        iconHide.style.display = isText ? 'none' : 'block';
+        btn.setAttribute('aria-label', isText ? 'Show password' : 'Hide password');
+      });
+
+      document.getElementById('signInBtn').addEventListener('click', function() {
+        var email = (document.getElementById('email').value || '').trim().toLowerCase();
+        if (email === 'dealer') {
+          localStorage.setItem('okmUserRole', 'dealer');
+          localStorage.removeItem('okmSelectedCustomer');
+          window.location = 'dealer-dashboard.html';
+        } else {
+          localStorage.removeItem('okmUserRole');
+          window.location = 'dashboard.html';
+        }
+      });
+    })();
+  </script>
+
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+</body>
+</html>

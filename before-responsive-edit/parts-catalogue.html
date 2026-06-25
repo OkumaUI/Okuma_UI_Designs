@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parts Catalogue – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #F9F9F9;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── MAIN CONTENT AREA ── */
+    .content-area {
+      flex: 1;
+      background: #FAFAFA;
+      padding: 24px 32px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      overflow-y: auto;
+    }
+
+    /* ══════════════════════════════════════════
+       BREADCRUMB
+    ══════════════════════════════════════════ */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .breadcrumb a {
+      color: #717171;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover { color: #005EB8; }
+
+    .breadcrumb__sep { color: #717171; }
+
+    .breadcrumb__current {
+      color: #1A1A1A;
+      font-weight: 500;
+    }
+
+    /* ══════════════════════════════════════════
+       MACHINE TITLE SECTION
+    ══════════════════════════════════════════ */
+    .machine-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .machine-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .machine-title {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #000000;
+      line-height: 1;
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: #74AA50;
+      text-transform: uppercase;
+      background: #EBF7F2;
+      border: 1px solid #74AA50;
+      border-radius: 2px;
+      padding: 4px 8px;
+      line-height: 1;
+    }
+
+    .machine-details {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #4B4B4B;
+    }
+
+    /* ══════════════════════════════════════════
+       FILTER BAR
+    ══════════════════════════════════════════ */
+    .filter-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .filter-label {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #4B4B4B;
+      display: block;
+    }
+
+    .filter-select {
+      height: 44px;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      padding: 0 40px 0 16px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #000000;
+      background-color: #FFFFFF;
+      cursor: pointer;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234B4B4B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      transition: border-color 0.15s;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #005EB8;
+    }
+
+    .filter-select:invalid,
+    .filter-select option[value=""] { color: #4B4B4B; }
+
+    .filter-select.is-placeholder { color: #4B4B4B; font-weight: 400; }
+
+    .filter-select:disabled {
+      background-color: #F5F5F5;
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .filter-select option { color: #1A1A1A; }
+
+    /* ══════════════════════════════════════════
+       EXPLODED DIAGRAM VIEWER
+    ══════════════════════════════════════════ */
+    .diagram-viewer {
+      background: #F5F5F5;
+      border: 1px solid #0B308E;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      height: 553px;
+    }
+
+    .zoom-controls {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #0B308E;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .zoom-btn {
+      width: 36px;
+      height: 36px;
+      background: white;
+      border: none;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0B308E;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.1s;
+    }
+
+    .zoom-btn + .zoom-btn { border-top: 1px solid #0B308E; }
+    .zoom-btn:hover { background: #EEF2FF; }
+
+    #diagram-wrapper {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+    }
+
+    #diagram-wrapper.dragging { cursor: grabbing; }
+
+    #diagram-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-origin: 0 0;
+      transition: transform 0.1s;
+    }
+
+    #diagram-inner.no-transition { transition: none; }
+
+    /* Real diagram image — show the upper exploded GENERAL VIEW.
+       Source is portrait (1202x1546). We scale it wide and anchor it to the
+       top, letting the container's overflow:hidden crop the lower drawing.
+       A small negative top pulls the "GENERAL VIEW" title band out of view. */
+    .diagram-img {
+      position: absolute;
+      left: 50%;
+      top: -54px;
+      transform: translateX(-50%);
+      width: 86%;
+      max-width: 1140px;
+      height: auto;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* Pins */
+    .pin {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: white;
+      cursor: pointer;
+      position: absolute;
+      z-index: 5;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, box-shadow 0.1s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .pin:hover {
+      transform: translate(-50%, -50%) scale(1.15);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .pin.in-stock  { background: #005EB8; }
+    .pin.out-of-stock { background: #9E9E9E; }
+    .pin.selected { box-shadow: 0 0 0 3px white, 0 0 0 5px #005EB8; }
+
+    /* Pins are only shown once all filters are chosen (diagram unlocked) */
+    .diagram-viewer.is-locked .pin { display: none; }
+
+    /* Viewer Lock */
+    .viewer-lock-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,94,184,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .lock-card {
+      background: #FFFFFF;
+      border: 1px solid #E0E0E0;
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lock-text {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: #2C2A29;
+      text-align: center;
+      line-height: 1.25;
+    }
+
+    /* Part Popup */
+    #part-popup {
+      position: absolute;
+      z-index: 50;
+      display: none;
+      background: #2C2A29;
+      padding: 8px;
+      border-radius: 4px;
+      width: 143px;
+      box-shadow: 0px 12px 24px rgba(0,0,0,0.25);
+    }
+
+    #part-popup::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 24px;
+      width: 12px;
+      height: 12px;
+      background: #2C2A29;
+      transform: rotate(45deg);
+      z-index: -1;
+    }
+
+    #popup-part-num {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+    }
+
+    #popup-desc {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: white;
+      margin-top: 8px;
+    }
+
+    .popup-stepper {
+      display: flex;
+      align-items: center;
+      height: 24px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 2px;
+      width: fit-content;
+      margin-top: 8px;
+    }
+
+    .popup-stepper button {
+      font-size: 14px;
+      color: white;
+      width: 28px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .popup-stepper button:hover { background: rgba(255,255,255,0.1); }
+
+    #popup-qty {
+      font-size: 14px;
+      color: white;
+      padding: 0 12px;
+      min-width: 20px;
+      text-align: center;
+      border-left: 1px solid rgba(255,255,255,0.3);
+      border-right: 1px solid rgba(255,255,255,0.3);
+      line-height: 22px;
+    }
+
+    #popup-add-btn {
+      background: #005EB8;
+      width: 127px;
+      height: 24px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
+      display: block;
+      text-transform: uppercase;
+      transition: background 0.15s;
+    }
+
+    #popup-add-btn:hover { background: #0B308E; }
+
+    /* ══════════════════════════════════════════
+       SHEET HEADING
+    ══════════════════════════════════════════ */
+    .sheet-heading {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #000000;
+      line-height: 1;
+    }
+
+    /* ══════════════════════════════════════════
+       PARTS TABLE
+    ══════════════════════════════════════════ */
+    #parts-table-wrapper {
+      background: white;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .parts-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .parts-table th {
+      background: #F5F5F5;
+      height: 37px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #717171;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #DEDEDE;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    /* Column widths */
+    .parts-table th:nth-child(1) { width: 70px; }   /* Part #  (number) */
+    .parts-table th:nth-child(2) { width: 150px; }  /* Part Name (part number) */
+    .parts-table th:nth-child(3) { width: auto;  }  /* Description */
+    .parts-table th:nth-child(4) { width: 160px; }  /* Compatibility */
+    .parts-table th:nth-child(5) { width: 110px; }  /* Unit Price */
+    .parts-table th:nth-child(6) { width: 130px; }  /* Available */
+    .parts-table th:nth-child(7) { width: 250px; }  /* Qty + actions */
+
+    .parts-table td {
+      height: 52px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: #000000;
+      padding: 14px 16px;
+      border-bottom: 1px solid #DEDEDE;
+      vertical-align: middle;
+    }
+
+    .parts-table tbody tr {
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .parts-table tbody tr:hover { background: #F7F9FC; }
+    .parts-table tbody tr.row-selected { background: #E5EFF8; }
+    .parts-table tbody tr.row-selected:hover { background: #E5EFF8; }
+    .parts-table tbody tr:last-child td { border-bottom: none; }
+
+    .cell-rownum {
+      font-size: 13px;
+      font-weight: 700;
+      color: #005EB8;
+    }
+
+    .cell-part-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: #005EB8;
+    }
+
+    .cell-desc {
+      font-size: 13px;
+      font-weight: 400;
+      color: #000000;
+    }
+
+    .cell-compat {
+      font-size: 12px;
+      font-weight: 400;
+      color: #4B4B4B;
+    }
+
+    .cell-price {
+      font-size: 13px;
+      font-weight: 500;
+      color: #000000;
+    }
+
+    /* Stock badge */
+    .stock-badge {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      white-space: nowrap;
+      display: inline-block;
+      line-height: 1;
+    }
+
+    .stock-badge.in-stock  { background: #29AA3F; }
+    .stock-badge.out-of-stock { background: #9BA2AE; }
+
+    /* Qty cell wrapper: stepper + action button */
+    .qty-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: space-between;
+    }
+
+    .row-stepper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .row-stepper-btn {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F5F5F5;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #000000;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      flex-shrink: 0;
+    }
+
+    .row-stepper-btn:hover { background: #E8E8E8; }
+
+    .row-qty-val {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      color: #000000;
+      min-width: 10px;
+      text-align: center;
+    }
+
+    .action-btn-inline {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      background: #005EB8;
+      border: none;
+      border-radius: 2px;
+      padding: 6px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .action-btn-inline:hover { background: #0B308E; }
+
+    /* ══════════════════════════════════════════
+       CART MODAL
+    ══════════════════════════════════════════ */
+    #cart-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #cart-modal {
+      width: 560px;
+      background: white;
+      border-radius: 2px;
+      box-shadow: 0px 12px 24px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: #005EB8;
+      height: 64px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-title {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    #cart-modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      line-height: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    .modal-body {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .modal-part-row {
+      display: flex;
+      gap: 24px;
+    }
+
+    .modal-thumbnail {
+      width: 120px;
+      height: 120px;
+      background: #F5F5F5;
+      border-radius: 4px;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-part-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    #modal-part-name {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    #modal-part-num {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: #9E9E9E;
+    }
+
+    .modal-qty-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #modal-qty-text {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #000000;
+    }
+
+    #modal-each {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #000000;
+    }
+
+    .modal-price-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #modal-price-original {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: #9E9E9E;
+      text-decoration: line-through;
+    }
+
+    #modal-price-discounted {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #AD0000;
+    }
+
+    .modal-divider {
+      border: none;
+      border-top: 1px solid #E0E0E0;
+      margin: 0;
+    }
+
+    .modal-cart-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-cart-count {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #9E9E9E;
+    }
+
+    .modal-subtotal {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .modal-cta-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-continue {
+      flex: 1;
+      height: 38px;
+      border: 1px solid #005EB8;
+      background: transparent;
+      color: #005EB8;
+      border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-continue:hover { background: #EEF4FF; }
+
+    .btn-view-cart {
+      flex: 1;
+      height: 38px;
+      background: #005EB8;
+      color: white;
+      border: none;
+      border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-view-cart:hover { background: #0B308E; }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════ -->
+  <div id="okuma-header"></div>
+
+  <!-- ══════════════════════════════════════════
+       MAIN LAYOUT
+  ══════════════════════════════════════════ -->
+  <div class="app-body-shell">
+
+    <!-- Left Sidebar (collapsible — hover to expand) -->
+    <div id="okuma-sidebar" data-active="parts"></div>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+
+      <!-- BREADCRUMB -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="dashboard.html">Home</a>
+        <span class="breadcrumb__sep">/</span>
+        <a href="#">Parts Book</a>
+        <span class="breadcrumb__sep">/</span>
+        <a href="#">LU300-M</a>
+        <span class="breadcrumb__sep">/</span>
+        <span class="breadcrumb__current">Catalogue</span>
+      </nav>
+
+      <!-- MACHINE TITLE SECTION -->
+      <div class="machine-section">
+        <div class="machine-title-row">
+          <h1 class="machine-title">LU300-M</h1>
+          <span class="verified-badge">Verified Machine</span>
+        </div>
+        <p class="machine-details">Model: M560-V&nbsp;&nbsp;|&nbsp;&nbsp;Serial: M5-2891-K&nbsp;&nbsp;|&nbsp;&nbsp;Stock Condition: Active</p>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label class="filter-label" for="sel-book">Select Book</label>
+          <select class="filter-select" id="sel-book">
+            <option value="">Select Book</option>
+            <option value="book1">Parts Book 1</option>
+            <option value="book2">Parts Book 2</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="sel-group">Select Group</label>
+          <select class="filter-select is-placeholder" id="sel-group" disabled>
+            <option value="">Select Group</option>
+            <option value="headstock">Headstock Group</option>
+            <option value="turret">Turret Group</option>
+          </select>
+        </div>
+
+        <div class="filter-group" id="fg-subgroup" style="display:none">
+          <label class="filter-label" for="sel-subgroup">Select Sub Group</label>
+          <select class="filter-select is-placeholder" id="sel-subgroup" disabled>
+            <option value="">Select Sub Group</option>
+            <option value="sub22">2.2 Headstock Group</option>
+            <option value="sub23">2.3 Headstock Group</option>
+          </select>
+        </div>
+
+        <div class="filter-group" id="fg-sheet" style="display:none">
+          <label class="filter-label" for="sel-sheet">Select Sheet</label>
+          <select class="filter-select is-placeholder" id="sel-sheet" disabled>
+            <option value="">Select Sheet</option>
+            <option value="pgcover">PG Cover (7)</option>
+            <option value="sheet53">Sheet No.53</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- EXPLODED DIAGRAM VIEWER -->
+      <div class="diagram-viewer">
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+          <button class="zoom-btn" id="zoom-out" title="Zoom out">&minus;</button>
+        </div>
+
+        <div id="diagram-wrapper">
+          <div id="diagram-inner">
+            <!-- Real exploded GENERAL VIEW drawing -->
+            <img class="diagram-img" src="diagram-general-view.png" alt="LU300-M exploded general view"
+                 draggable="false"
+                 onerror="this.style.display='none'">
+
+            <!-- Numbered Pins (positioned over the exploded machine assembly) -->
+            <div class="pin in-stock"     data-pin="1" style="left:36%;top:34%;" title="1">1</div>
+            <div class="pin in-stock"     data-pin="2" style="left:39%;top:62%;" title="2">2</div>
+            <div class="pin out-of-stock" data-pin="3" style="left:33%;top:48%;" title="3">3</div>
+            <div class="pin in-stock"     data-pin="4" style="left:57%;top:38%;" title="4">4</div>
+            <div class="pin in-stock"     data-pin="5" style="left:61%;top:46%;" title="5">5</div>
+            <div class="pin in-stock"     data-pin="6" style="left:45%;top:30%;" title="6">6</div>
+            <div class="pin in-stock"     data-pin="7" style="left:53%;top:55%;" title="7">7</div>
+
+            <!-- Part Popup -->
+            <div id="part-popup">
+              <div id="popup-part-num"></div>
+              <div id="popup-desc"></div>
+              <div class="popup-stepper">
+                <button id="popup-minus" type="button">&minus;</button>
+                <span id="popup-qty">1</span>
+                <button id="popup-plus" type="button">+</button>
+              </div>
+              <button id="popup-add-btn" type="button">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Viewer Lock Overlay -->
+        <div class="viewer-lock-overlay" id="viewer-lock" style="display:none;">
+          <div class="lock-card">
+            <p class="lock-text" id="viewer-lock-text">Select a Group to get started</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHEET HEADING -->
+      <h2 class="sheet-heading" id="sheet-heading">PG Cover (7)</h2>
+
+      <!-- PARTS TABLE -->
+      <div id="parts-table-wrapper">
+        <table class="parts-table">
+          <thead>
+            <tr>
+              <th>Part #</th>
+              <th>Part Name</th>
+              <th>Description</th>
+              <th>Compatibility</th>
+              <th>Unit Price</th>
+              <th>Available</th>
+              <th>Qty</th>
+            </tr>
+          </thead>
+          <tbody id="parts-tbody">
+            <!-- Rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CART MODAL
+  ══════════════════════════════════════════ -->
+  <div id="cart-modal-overlay">
+    <div id="cart-modal">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <span class="modal-title">Added to Cart</span>
+        </div>
+        <button id="cart-modal-close" type="button" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+            <path d="M5 5L15 15M15 5L5 15"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-part-row">
+          <div class="modal-thumbnail">
+            <img src="product-plate-bearing.png" alt="Part"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="modal-part-info">
+            <div id="modal-part-name">Plate</div>
+            <div id="modal-part-num">Part # 525-0100-11</div>
+            <div class="modal-qty-line">
+              <span id="modal-qty-text">Qty: <span id="modal-qty">2</span></span>
+              <span id="modal-each">$247.50 each</span>
+            </div>
+            <div class="modal-price-block">
+              <span id="modal-price-original">$495.00</span>
+              <span id="modal-price-discounted">$405.00 total</span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="modal-divider">
+
+        <div class="modal-cart-summary">
+          <span class="modal-cart-count" id="modal-cart-count">3 items in cart</span>
+          <span class="modal-subtotal" id="modal-subtotal">Subtotal: $495.00</span>
+        </div>
+
+        <div class="modal-cta-row">
+          <button class="btn-continue" id="btn-continue" type="button">Continue Shopping</button>
+          <button class="btn-view-cart" type="button" onclick="window.location='cart.html'">View Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════════════ -->
+  <script src="components.js"></script>
+  <script>
+    // ── Parts Data — pins map by callout number; rows match active render (PG Cover (7)) ──
+    const partsData = [
+      { id: 1, num: 1, partNum: '112-0140-10',   name: 'Joint',                   compat: 'Verified',            price: 247.50,  inStock: true,  action: 'Add To Cart'  },
+      { id: 2, num: 2, partNum: '525-0100-11',   name: 'Plate',                   compat: 'Verified',            price: 412.00,  inStock: true,  action: 'Add To Cart'  },
+      { id: 3, num: 3, partNum: 'C5010-080201',  name: 'BOLT, socket-head 8X20',  compat: 'Verified',            price: 89.75,   inStock: false, action: 'Add To Quote' },
+      { id: 4, num: 4, partNum: '25-0100-02-02', name: 'Support',                 compat: 'Direct Replacement',  price: 34.20,   inStock: true,  action: 'Add To Cart'  },
+      { id: 5, num: 5, partNum: 'C0201-080321',  name: 'TP 8X30',                 compat: 'Direct Replacement',  price: 34.20,   inStock: true,  action: 'Add To Cart'  },
+      { id: 6, num: 6, partNum: 'C5010-120301',  name: 'BOLT, socket-head 12X30', compat: 'Direct Replacement',  price: 34.20,   inStock: true,  action: 'Add To Cart'  },
+      { id: 7, num: 7, partNum: 'C5010-120451',  name: 'BOLT, socket-head 12X45', compat: 'Direct Replacement',  price: 34.20,   inStock: true,  action: 'Add To Cart'  },
+    ];
+
+    // Per-row quantities
+    const rowQtys = {};
+    partsData.forEach(p => { rowQtys[p.id] = 1; });
+
+    // ── State ──
+    let selectedPartId = null;
+    let popupQty = 1;
+    let modalQty = 1;
+    let modalPartId = null;
+
+    // ── Zoom / Pan state ──
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isPanning = false;
+    let startX, startY, startTX, startTY;
+
+    // ── DOM refs ──
+    const selBook      = document.getElementById('sel-book');
+    const selGroup     = document.getElementById('sel-group');
+    const selSubgroup  = document.getElementById('sel-subgroup');
+    const selSheet     = document.getElementById('sel-sheet');
+    const viewerLock   = document.getElementById('viewer-lock');
+    const viewerLockText = document.getElementById('viewer-lock-text');
+    const diagramInner   = document.getElementById('diagram-inner');
+    const diagramWrapper = document.getElementById('diagram-wrapper');
+    const popup          = document.getElementById('part-popup');
+    const popupPartNum   = document.getElementById('popup-part-num');
+    const popupDesc      = document.getElementById('popup-desc');
+    const popupQtyEl     = document.getElementById('popup-qty');
+    const popupMinus     = document.getElementById('popup-minus');
+    const popupPlus      = document.getElementById('popup-plus');
+    const popupAddBtn    = document.getElementById('popup-add-btn');
+    const cartOverlay    = document.getElementById('cart-modal-overlay');
+    const cartClose      = document.getElementById('cart-modal-close');
+    const btnContinue    = document.getElementById('btn-continue');
+    const modalPartName  = document.getElementById('modal-part-name');
+    const modalPartNum   = document.getElementById('modal-part-num');
+    const modalQtyEl     = document.getElementById('modal-qty');
+    const modalEach      = document.getElementById('modal-each');
+    const modalPriceOrig = document.getElementById('modal-price-original');
+    const modalPriceDisc = document.getElementById('modal-price-discounted');
+    const modalSubtotal  = document.getElementById('modal-subtotal');
+    const zoomIn         = document.getElementById('zoom-in');
+    const zoomOut        = document.getElementById('zoom-out');
+
+    // ── Build Table Rows ──
+    function buildTable() {
+      const tbody = document.getElementById('parts-tbody');
+      tbody.innerHTML = '';
+      partsData.forEach(part => {
+        const tr = document.createElement('tr');
+        tr.id = 'row-' + part.id;
+        tr.setAttribute('data-id', part.id);
+        // Row 2 selected by default (matches active render)
+        if (part.id === 2) tr.classList.add('row-selected');
+
+        const stockClass = part.inStock ? 'in-stock' : 'out-of-stock';
+        const stockLabel = part.inStock ? 'In-Stock' : 'Out of Stock';
+
+        tr.innerHTML = `
+          <td class="cell-rownum">${part.num}</td>
+          <td class="cell-part-num">${part.partNum}</td>
+          <td class="cell-desc">${part.name}</td>
+          <td class="cell-compat">${part.compat}</td>
+          <td class="cell-price">$${part.price.toFixed(2)}</td>
+          <td><span class="stock-badge ${stockClass}">${stockLabel}</span></td>
+          <td>
+            <div class="qty-cell">
+              <div class="row-stepper">
+                <button class="row-stepper-btn row-step-btn" data-id="${part.id}" data-dir="-1" type="button">&minus;</button>
+                <span class="row-qty-val" id="row-qty-${part.id}">${rowQtys[part.id]}</span>
+                <button class="row-stepper-btn row-step-btn" data-id="${part.id}" data-dir="1" type="button">+</button>
+              </div>
+              <button class="action-btn-inline" data-id="${part.id}" data-action="add" type="button">${part.action}</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    buildTable();
+
+    // ── Dropdown Cascade ──
+    function setPlaceholderState(sel) {
+      if (sel.value === '') sel.classList.add('is-placeholder');
+      else sel.classList.remove('is-placeholder');
+    }
+
+    function resetDisable(sel) {
+      sel.disabled = true;
+      sel.value = '';
+      setPlaceholderState(sel);
+    }
+
+    function checkAllSelected() {
+      return selBook.value && selGroup.value && selSubgroup.value && selSheet.value;
+    }
+
+    selBook.addEventListener('change', () => {
+      setPlaceholderState(selBook);
+      if (selBook.value) {
+        selGroup.disabled = false;
+      } else {
+        resetDisable(selGroup);
+      }
+      resetDisable(selSubgroup);
+      resetDisable(selSheet);
+      updateViewerState();
+    });
+
+    selGroup.addEventListener('change', () => {
+      setPlaceholderState(selGroup);
+      if (selGroup.value) {
+        selSubgroup.disabled = false;
+      } else {
+        resetDisable(selSubgroup);
+      }
+      resetDisable(selSheet);
+      updateViewerState();
+    });
+
+    selSubgroup.addEventListener('change', () => {
+      setPlaceholderState(selSubgroup);
+      if (selSubgroup.value) {
+        selSheet.disabled = false;
+      } else {
+        resetDisable(selSheet);
+      }
+      updateViewerState();
+    });
+
+    selSheet.addEventListener('change', () => {
+      setPlaceholderState(selSheet);
+      updateViewerState();
+    });
+
+    // Reveal each later dropdown only once the previous level is chosen (matches Figma)
+    function updateGroupVisibility() {
+      document.getElementById('fg-subgroup').style.display = selGroup.value ? '' : 'none';
+      document.getElementById('fg-sheet').style.display = selSubgroup.value ? '' : 'none';
+    }
+
+    // Determine lock state + the prompt message based on how far the cascade has progressed
+    function updateViewerState() {
+      updateGroupVisibility();
+      if (checkAllSelected()) {
+        unlockViewer();
+        return;
+      }
+      // Locked — choose the prompt text from the deepest unfilled level
+      let msg = 'Select a Book to get started';
+      if (!selBook.value)            msg = 'Select a Book to get started';
+      else if (!selGroup.value)      msg = 'Select a Group to get started';
+      else if (!selSubgroup.value)   msg = 'Select a Sub Group';
+      else if (!selSheet.value)      msg = 'Select a Sheet to Continue';
+      viewerLockText.textContent = msg;
+      lockViewer();
+    }
+
+    const diagramViewer = document.querySelector('.diagram-viewer');
+
+    function unlockViewer() {
+      viewerLock.style.display = 'none';
+      diagramViewer.classList.remove('is-locked');
+      document.getElementById('parts-table-wrapper').style.display = '';
+      document.getElementById('sheet-heading').style.display = '';
+    }
+
+    function lockViewer() {
+      viewerLock.style.display = 'flex';
+      diagramViewer.classList.add('is-locked');
+      // In the empty/partial states the table + sheet heading are not shown
+      document.getElementById('parts-table-wrapper').style.display = 'none';
+      document.getElementById('sheet-heading').style.display = 'none';
+      hidePopup();
+    }
+
+    // ── Default: Parts Book pre-selected; the user picks Group next, then continues ──
+    function applyDefault() {
+      selBook.value = 'book1';
+      selGroup.disabled = false;     selGroup.value = '';
+      selSubgroup.disabled = true;   selSubgroup.value = '';
+      selSheet.disabled = true;      selSheet.value = '';
+      [selBook, selGroup, selSubgroup, selSheet].forEach(setPlaceholderState);
+      updateViewerState();
+    }
+    applyDefault();
+
+    // ── Zoom ──
+    function applyTransform(transition) {
+      if (transition === false) diagramInner.classList.add('no-transition');
+      else diagramInner.classList.remove('no-transition');
+      diagramInner.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+
+    zoomIn.addEventListener('click', () => {
+      scale = Math.min(4, scale + 0.25);
+      applyTransform();
+    });
+
+    zoomOut.addEventListener('click', () => {
+      scale = Math.max(0.5, scale - 0.25);
+      applyTransform();
+    });
+
+    diagramWrapper.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        scale = Math.min(4, Math.max(0.5, scale + delta));
+        applyTransform(false);
+      }
+    }, { passive: false });
+
+    // ── Pan ──
+    diagramWrapper.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.pin') || e.target.closest('#part-popup')) return;
+      isPanning = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startTX = translateX;
+      startTY = translateY;
+      diagramWrapper.classList.add('dragging');
+      diagramInner.classList.add('no-transition');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isPanning) return;
+      translateX = startTX + (e.clientX - startX);
+      translateY = startTY + (e.clientY - startY);
+      applyTransform(false);
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isPanning) {
+        isPanning = false;
+        diagramWrapper.classList.remove('dragging');
+      }
+    });
+
+    diagramWrapper.addEventListener('mouseleave', () => {
+      if (isPanning) {
+        isPanning = false;
+        diagramWrapper.classList.remove('dragging');
+      }
+    });
+
+    // ── Pin Click ──
+    document.querySelectorAll('.pin').forEach(pin => {
+      pin.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const pinNum = parseInt(pin.getAttribute('data-pin'), 10);
+        const part = partsData.find(p => p.num === pinNum);
+        if (!part) return;
+        selectPart(part.id);
+        highlightRow(part.id);
+        scrollRowIntoView(part.id);
+        popupQty = 1;
+        popupQtyEl.textContent = popupQty;
+        showPopupNearPin(pin, part);
+      });
+    });
+
+    function showPopupNearPin(pinEl, part) {
+      popupPartNum.textContent = part.partNum;
+      popupDesc.textContent = part.name;
+      popup.style.display = 'block';
+      // pins are positioned in % — resolve to px relative to inner
+      const innerW = diagramInner.offsetWidth;
+      const innerH = diagramInner.offsetHeight;
+      const pinLeft = (parseFloat(pinEl.style.left) / 100) * innerW;
+      const pinTop  = (parseFloat(pinEl.style.top)  / 100) * innerH;
+      const scaledLeft = pinLeft * scale + translateX;
+      const scaledTop  = pinTop  * scale + translateY;
+      const popupW = 143;
+      const popupH = popup.offsetHeight || 130;
+      let px = scaledLeft - 24;
+      let py = scaledTop - popupH - 14;
+      const maxLeft = diagramWrapper.offsetWidth - popupW - 10;
+      if (px < 8) px = 8;
+      if (px > maxLeft) px = maxLeft;
+      if (py < 8) py = scaledTop + 18;
+      popup.style.left = px + 'px';
+      popup.style.top  = py + 'px';
+    }
+
+    function hidePopup() {
+      popup.style.display = 'none';
+      document.querySelectorAll('.pin').forEach(p => p.classList.remove('selected'));
+    }
+
+    function selectPart(id) {
+      selectedPartId = id;
+      const part = partsData.find(p => p.id === id);
+      document.querySelectorAll('.pin').forEach(p => {
+        const pinNum = parseInt(p.getAttribute('data-pin'), 10);
+        if (part && part.num === pinNum) p.classList.add('selected');
+        else p.classList.remove('selected');
+      });
+    }
+
+    // ── Table Row Click ──
+    document.getElementById('parts-tbody').addEventListener('click', (e) => {
+      // Stepper button
+      if (e.target.classList.contains('row-step-btn')) {
+        e.stopPropagation();
+        const id  = parseInt(e.target.getAttribute('data-id'), 10);
+        const dir = parseInt(e.target.getAttribute('data-dir'), 10);
+        rowQtys[id] = Math.max(1, rowQtys[id] + dir);
+        const qtyEl = document.getElementById('row-qty-' + id);
+        if (qtyEl) qtyEl.textContent = rowQtys[id];
+        return;
+      }
+
+      // Action button (Add To Cart / Add To Quote)
+      if (e.target.classList.contains('action-btn-inline') && e.target.getAttribute('data-action') === 'add') {
+        e.stopPropagation();
+        const id = parseInt(e.target.getAttribute('data-id'), 10);
+        const part = partsData.find(p => p.id === id);
+        if (part) openCartModal(part, rowQtys[id]);
+        return;
+      }
+
+      // Row click: select + show popup near matching pin
+      const tr = e.target.closest('tr[data-id]');
+      if (!tr) return;
+      const id = parseInt(tr.getAttribute('data-id'), 10);
+      const part = partsData.find(p => p.id === id);
+      if (!part) return;
+      selectPart(id);
+      highlightRow(id);
+      popupQty = 1;
+      popupQtyEl.textContent = popupQty;
+      const pinEl = document.querySelector(`.pin[data-pin="${part.num}"]`);
+      if (pinEl) showPopupNearPin(pinEl, part);
+    });
+
+    function highlightRow(id) {
+      document.querySelectorAll('#parts-tbody tr').forEach(r => r.classList.remove('row-selected'));
+      const row = document.getElementById('row-' + id);
+      if (row) row.classList.add('row-selected');
+    }
+
+    function scrollRowIntoView(id) {
+      const row = document.getElementById('row-' + id);
+      if (row) row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ── Popup Qty Stepper ──
+    popupMinus.addEventListener('click', (e) => {
+      e.stopPropagation();
+      popupQty = Math.max(1, popupQty - 1);
+      popupQtyEl.textContent = popupQty;
+    });
+
+    popupPlus.addEventListener('click', (e) => {
+      e.stopPropagation();
+      popupQty++;
+      popupQtyEl.textContent = popupQty;
+    });
+
+    // ── Add To Cart (popup) ──
+    popupAddBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!selectedPartId) return;
+      const part = partsData.find(p => p.id === selectedPartId);
+      if (!part) return;
+      openCartModal(part, popupQty);
+    });
+
+    // ── Modal logic ──
+    function refreshModalPrices() {
+      const part = partsData.find(p => p.id === modalPartId);
+      if (!part) return;
+      const each = part.price;                 // unit price
+      const totalOrig = each * modalQty;        // pre-discount total
+      const totalDisc = totalOrig * 0.9;        // 10% discount
+      modalQtyEl.textContent = modalQty;
+      modalEach.textContent = '$' + each.toFixed(2) + ' each';
+      modalPriceOrig.textContent = '$' + totalOrig.toFixed(2);
+      modalPriceDisc.textContent = '$' + totalDisc.toFixed(2) + ' total';
+      modalSubtotal.textContent = 'Subtotal: $' + totalOrig.toFixed(2);
+    }
+
+    function openCartModal(part, qty) {
+      modalPartId = part.id;
+      modalQty = qty || 1;
+      modalPartName.textContent = part.name;
+      modalPartNum.textContent = 'Part # ' + part.partNum;
+      refreshModalPrices();
+      cartOverlay.style.display = 'flex';
+    }
+
+    function closeCartModal() {
+      cartOverlay.style.display = 'none';
+    }
+
+    cartClose.addEventListener('click', closeCartModal);
+    btnContinue.addEventListener('click', closeCartModal);
+
+    cartOverlay.addEventListener('click', (e) => {
+      if (e.target === cartOverlay) closeCartModal();
+    });
+
+    // ── Close popup when clicking outside ──
+    document.addEventListener('click', (e) => {
+      if (popup.style.display === 'none') return;
+      if (e.target.closest('#part-popup') || e.target.closest('.pin')) return;
+      hidePopup();
+    });
+
+    popup.addEventListener('click', (e) => e.stopPropagation());
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=parts-catalogue.html">
+  <title>Parts Book â Okuma Parts Portal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #F9F9F9;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ââ MAIN AREA ââ */
+    .main-area {
+      flex: 1;
+      min-width: 0; /* allow the flex item to shrink instead of widening the page */
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Page title */
+    .page-head { display: flex; flex-direction: column; gap: 12px; }
+    .page-head__title { font-size: 28px; font-weight: 700; color: #000; line-height: 1; }
+    .page-head__sub { font-size: 14px; font-weight: 400; color: #4B4B4B; }
+
+    /* Toolbar (search + filters) */
+    .toolbar { display: flex; align-items: center; gap: 12px; }
+    .search-box {
+      flex: 1;
+      height: 44px;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+    }
+    .search-box svg { width: 18px; height: 18px; color: #717171; flex-shrink: 0; }
+    .search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #1A1A1A;
+    }
+    .search-box input::placeholder { color: #717171; }
+
+    .filter-pill {
+      height: 44px;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .filter-pill__label { font-size: 14px; font-weight: 500; color: #000; }
+    .filter-pill svg { width: 14px; height: 14px; color: #4B4B4B; flex-shrink: 0; transition: transform 0.15s; }
+
+    /* Filter dropdown */
+    .filter-dd { position: relative; }
+    .filter-dd.open .filter-pill { border-color: #005EB8; }
+    .filter-dd.open .filter-pill svg { transform: rotate(180deg); }
+    .filter-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      min-width: 100%;
+      width: max-content;
+      max-width: calc(100vw - 32px);
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.12);
+      overflow: hidden;
+      z-index: 50;
+    }
+    .filter-dd.open .filter-menu { display: block; }
+    .filter-menu__item {
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1A1A1A;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .filter-menu__item:hover { background: #F5F5F5; }
+    .filter-menu__item.selected { color: #005EB8; font-weight: 700; }
+
+    /* No results */
+    .no-machines { font-size: 14px; font-weight: 400; color: #717171; }
+
+    /* Machine grid: 2 rows Ã 3 cols */
+    .machine-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .machine-card {
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .machine-card:hover {
+      border-color: #005EB8;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .machine-card__photo {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+      background: #E8EAED;
+    }
+    .machine-card__body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .machine-card__name { font-size: 16px; font-weight: 700; color: #1A1A1A; }
+    .machine-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .machine-card__serial {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #717171;
+    }
+    .category-pill {
+      background: #E6EFFA;
+      border-radius: 2px;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #005EB8;
+      white-space: nowrap;
+    }
+
+    /* Hover: blue overlay + "Browse Catalogue" CTA on the photo */
+    .machine-card__media { position: relative; overflow: hidden; }
+    .machine-card__overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 94, 184, 0.82);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .machine-card:hover .machine-card__overlay { opacity: 1; }
+    .machine-card__cta {
+      background: #fff;
+      color: #005EB8;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 16px 28px;
+      border-radius: 6px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+      transform: translateY(6px);
+      transition: transform 0.2s ease;
+      white-space: nowrap;
+    }
+    .machine-card:hover .machine-card__cta { transform: translateY(0); }
+
+    /* Safety net: never let media exceed the viewport */
+    img, svg { max-width: 100%; }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE  —  breakpoints aligned with chrome (1024 / 768 / 480)
+    ══════════════════════════════════════════ */
+    /* Tablet: machine grid 3→2 */
+    @media (max-width: 1024px) {
+      .machine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    /* Mobile: toolbar wraps (search full-width row, filter pills below),
+       machine grid 1-col, reduced page padding */
+    @media (max-width: 768px) {
+      .main-area { padding: 16px; gap: 24px; }
+      .toolbar { flex-wrap: wrap; gap: 12px; }
+      .search-box { flex: 1 1 100%; }
+      .filter-dd { flex: 1 1 0; min-width: 0; }
+      .filter-pill { width: 100%; justify-content: space-between; }
+      /* Keep an opened dropdown within the viewport */
+      .filter-menu { left: 0; right: auto; }
+      .machine-grid { grid-template-columns: minmax(0, 1fr); }
+      /* Taller photo on 1-column cards to preserve visual content */
+      .machine-card__photo { height: 200px; }
+    }
+
+    /* Raised from 480px to 520px: at 481-494px the three filter pills
+       each get ~142px but 'Machine Type' needs ~146px minimum, causing
+       silent overflow. 520px gives the pills room to stack before that
+       window is reached. Font-size reduction moves with it so both rules
+       fire consistently at the same threshold. */
+    @media (max-width: 520px) {
+      .page-head__title { font-size: 24px; }
+      /* Pills stack full-width so their menus never run off-screen */
+      .filter-dd { flex: 1 1 100%; }
+    }
+
+    /* Touch devices: overlay is always visible so the CTA is not hidden
+       behind a hover state that never fires on tap. */
+    @media (hover: none) and (pointer: coarse) {
+      .machine-card__overlay { opacity: 1; }
+      .machine-card__cta { transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ââââââââââââââ HEADER ââââââââââââââ -->
+  <div id="okuma-header"></div>
+
+  <!-- ââââââââââââââ PAGE ââââââââââââââ -->
+  <div class="app-body-shell">
+
+    <!-- SIDEBAR -->
+    <div id="okuma-sidebar" data-active="parts"></div>
+
+    <!-- MAIN AREA -->
+    <main class="main-area">
+
+      <!-- Title -->
+      <div class="page-head">
+        <h1 class="page-head__title">Parts Book</h1>
+        <p class="page-head__sub">Select a machine to browse its parts catalogue.</p>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-box">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 12L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <label for="machineSearch" class="sr-only">Search your machines</label>
+          <input type="text" id="machineSearch" placeholder="Search your machines..." autocomplete="off">
+        </div>
+
+        <!-- Machine Type -->
+        <div class="filter-dd" data-dd="type">
+          <div class="filter-pill" tabindex="0">
+            <span class="filter-pill__label" data-default="Machine Type">Machine Type</span>
+            <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.5 5L7 8.5L10.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="filter-menu">
+            <div class="filter-menu__item" data-value="">All Types</div>
+            <div class="filter-menu__item" data-value="Machining Centre">Machining Centre</div>
+            <div class="filter-menu__item" data-value="Multitasking">Multitasking</div>
+            <div class="filter-menu__item" data-value="Lathe">Lathe</div>
+          </div>
+        </div>
+
+        <!-- Year -->
+        <div class="filter-dd" data-dd="year">
+          <div class="filter-pill" tabindex="0">
+            <span class="filter-pill__label" data-default="Year">Year</span>
+            <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.5 5L7 8.5L10.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="filter-menu">
+            <div class="filter-menu__item" data-value="">All Years</div>
+            <div class="filter-menu__item" data-value="2025">2025</div>
+            <div class="filter-menu__item" data-value="2024">2024</div>
+            <div class="filter-menu__item" data-value="2023">2023</div>
+            <div class="filter-menu__item" data-value="2022">2022</div>
+          </div>
+        </div>
+
+        <!-- Sort by -->
+        <div class="filter-dd" data-dd="sort">
+          <div class="filter-pill" tabindex="0">
+            <span class="filter-pill__label" data-default="Sort by">Sort by</span>
+            <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.5 5L7 8.5L10.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="filter-menu">
+            <div class="filter-menu__item" data-value="az">Name (A–Z)</div>
+            <div class="filter-menu__item" data-value="za">Name (Z–A)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No results message -->
+      <p class="no-machines" id="noMachines" hidden>No machines found</p>
+
+      <!-- Machine grid (2 rows Ã 3 cols) -->
+      <div class="machine-grid" id="machineGrid">
+
+        <!-- 1. LU300-M -->
+        <a href="parts-catalogue.html" class="machine-card" data-name="LU300-M" data-type="Machining Centre" data-year="2024">
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-lu300m.png" alt="LU300-M"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__body">
+            <div class="machine-card__name">LU300-M</div>
+            <div class="machine-card__meta">
+              <span class="machine-card__serial">Serial: M5-2891-K</span>
+              <span class="category-pill">Machining Centre</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 2. MULTUS U3000 -->
+        <a href="parts-catalogue.html" class="machine-card" data-name="MULTUS U3000" data-type="Multitasking" data-year="2025">
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-multus-u3000.png" alt="MULTUS U3000"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__body">
+            <div class="machine-card__name">MULTUS U3000</div>
+            <div class="machine-card__meta">
+              <span class="machine-card__serial">Serial: MU-9102-L</span>
+              <span class="category-pill">Multitasking</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 3. LB2000 EX III -->
+        <a href="parts-catalogue.html" class="machine-card" data-name="LB2000 EX III" data-type="Lathe" data-year="2025">
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-lb2000.png" alt="LB2000 EX III"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__body">
+            <div class="machine-card__name">LB2000 EX III</div>
+            <div class="machine-card__meta">
+              <span class="machine-card__serial">Serial: LB-4431-M</span>
+              <span class="category-pill">Lathe</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 4. GENOS L200E -->
+        <a href="parts-catalogue.html" class="machine-card" data-name="GENOS L200E" data-type="Lathe" data-year="2023">
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-genos-l200e.png" alt="GENOS L200E"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__body">
+            <div class="machine-card__name">GENOS L200E</div>
+            <div class="machine-card__meta">
+              <span class="machine-card__serial">Serial: L2-1108-A</span>
+              <span class="category-pill">Lathe</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 5. SPACE TURN LB3000 -->
+        <a href="parts-catalogue.html" class="machine-card" data-name="SPACE TURN LB3000" data-type="Lathe" data-year="2024">
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-spaceturn-lb3000.png" alt="SPACE TURN LB3000"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__body">
+            <div class="machine-card__name">SPACE TURN LB3000</div>
+            <div class="machine-card__meta">
+              <span class="machine-card__serial">Serial: LB-8821-X</span>
+              <span class="category-pill">Lathe</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 6. MB-56V AII -->
+        <a href="parts-catalogue.html" class="machine-card" data-name="MB-56V AII" data-type="Machining Centre" data-year="2022">
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-mb56v.png" alt="MB-56V AII"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__body">
+            <div class="machine-card__name">MB-56V AII</div>
+            <div class="machine-card__meta">
+              <span class="machine-card__serial">Serial: MB-2234-P</span>
+              <span class="category-pill">Machining Centre</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Page logic: search + filter pills + sort -->
+  <script>
+    (function () {
+      'use strict';
+
+      function init() {
+        var grid = document.getElementById('machineGrid');
+        if (!grid) return;
+        var cards = Array.prototype.slice.call(grid.querySelectorAll('.machine-card'));
+        var searchInput = document.getElementById('machineSearch');
+        var noMsg = document.getElementById('noMachines');
+        var dds = Array.prototype.slice.call(document.querySelectorAll('.filter-dd'));
+
+        /* Active filter/sort state */
+        var state = { search: '', type: '', year: '', sort: '' };
+
+        /* Remember original DOM order for stable sorting */
+        cards.forEach(function (c, i) { c.dataset.order = i; });
+
+        function matches(card) {
+          if (state.type && card.dataset.type !== state.type) return false;
+          if (state.year && card.dataset.year !== state.year) return false;
+          if (state.search) {
+            var q = state.search.toLowerCase();
+            var name = (card.dataset.name || '').toLowerCase();
+            var serial = (card.querySelector('.machine-card__serial') || {}).textContent || '';
+            if (name.indexOf(q) === -1 && serial.toLowerCase().indexOf(q) === -1) return false;
+          }
+          return true;
+        }
+
+        function apply() {
+          var visible = [];
+          cards.forEach(function (card) {
+            var show = matches(card);
+            card.style.display = show ? '' : 'none';
+            if (show) visible.push(card);
+          });
+
+          /* Sort visible cards (reorder in DOM) */
+          var ordered = visible.slice();
+          if (state.sort === 'az' || state.sort === 'za') {
+            ordered.sort(function (a, b) {
+              var an = (a.dataset.name || '').toLowerCase();
+              var bn = (b.dataset.name || '').toLowerCase();
+              return state.sort === 'az' ? an.localeCompare(bn) : bn.localeCompare(an);
+            });
+          } else {
+            ordered.sort(function (a, b) {
+              return (+a.dataset.order) - (+b.dataset.order);
+            });
+          }
+          ordered.forEach(function (card) { grid.appendChild(card); });
+
+          if (noMsg) noMsg.hidden = visible.length !== 0;
+        }
+
+        /* Search box */
+        if (searchInput) {
+          searchInput.addEventListener('input', function () {
+            state.search = searchInput.value.trim();
+            apply();
+          });
+        }
+
+        /* Dropdown pills */
+        function closeAll(except) {
+          dds.forEach(function (dd) { if (dd !== except) dd.classList.remove('open'); });
+        }
+
+        dds.forEach(function (dd) {
+          var pill = dd.querySelector('.filter-pill');
+          var label = dd.querySelector('.filter-pill__label');
+          var key = dd.getAttribute('data-dd');
+          var items = Array.prototype.slice.call(dd.querySelectorAll('.filter-menu__item'));
+
+          pill.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var willOpen = !dd.classList.contains('open');
+            closeAll(dd);
+            dd.classList.toggle('open', willOpen);
+          });
+
+          items.forEach(function (item) {
+            item.addEventListener('click', function (e) {
+              e.stopPropagation();
+              var val = item.getAttribute('data-value');
+              state[key] = val;
+
+              /* Update pill label */
+              if (val === '') {
+                label.textContent = label.getAttribute('data-default');
+              } else {
+                label.textContent = item.textContent;
+              }
+
+              /* Mark selected item */
+              items.forEach(function (it) { it.classList.remove('selected'); });
+              item.classList.add('selected');
+
+              dd.classList.remove('open');
+              apply();
+            });
+          });
+        });
+
+        /* Close on outside click / Escape */
+        document.addEventListener('click', function () { closeAll(null); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeAll(null);
+        });
+
+        apply();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+
+
+  <script src="components.js"></script>
+
+</body>
+</html>

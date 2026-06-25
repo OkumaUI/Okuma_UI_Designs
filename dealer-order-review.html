@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Your Order – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      color: #1A1A1A;
+      min-height: 100vh;
+    }
+
+    /* ─── PAGE LAYOUT ──────────────────────────────────────────── */
+    .page-content { display: flex; justify-content: center; padding: 92px 0 64px; overflow-x: hidden; }
+    .page-inner {
+      width: 1200px; max-width: 100%;
+      padding: 0 40px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    @media (min-width: 1400px) {
+      .page-inner { padding: 0 120px; }
+    }
+
+    /* ─── STEPPER ───────────────────────────────────────────────── */
+    .stepper {
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px; padding: 40px 0;
+    }
+    .step { display: flex; align-items: center; gap: 10px; }
+    .step-circle {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 12px; font-weight: 700;
+    }
+    .step-circle.active   { background: #005EB8; border: 1px solid #005EB8; color: #fff; }
+    .step-circle.complete { background: #10B981; border: 1px solid #10B981; color: #fff; }
+    .step-circle.inactive { background: #fff; border: 1px solid #6E6E6E; color: #6E6E6E; }
+    .step-label { font-size: 14px; white-space: nowrap; }
+    .step-label.active   { font-weight: 700; color: #005EB8; }
+    .step-label.inactive { font-weight: 500; color: #6B7280; }
+    .step-connector { width: 60px; height: 1px; flex-shrink: 0; }
+    .step-connector.done    { background: #005EB8; }
+    .step-connector.pending { background: #E5E5E5; }
+
+    /* ─── CHECKOUT BODY ────────────────────────────────────────── */
+    .checkout-body { width: 960px; max-width: 100%; display: flex; gap: 32px; align-items: flex-start; }
+    .checkout-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
+
+    .page-title { font-size: 32px; font-weight: 800; color: #2C2A29; line-height: 1; }
+
+    /* ─── INFO CARDS ROW (Customer / Ship-to / Machine) ─────────── */
+    .info-cards { display: flex; gap: 16px; }
+    .info-card {
+      flex: 1; border: 1px solid #E5E5E5; border-radius: 4px;
+      padding: 16px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .info-card__head { display: flex; align-items: center; justify-content: space-between; }
+    .info-card__label {
+      font-size: 11px; font-weight: 700; color: #6B7280;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .info-card__edit {
+      font-size: 12px; font-weight: 700; color: #005EB8;
+      text-decoration: none;
+    }
+    .info-card__edit:hover { text-decoration: underline; }
+    .info-card__name { font-size: 14px; font-weight: 700; color: #2C2A29; line-height: 1.3; }
+    .info-card__sub  { font-size: 12px; font-weight: 400; color: #6B7280; line-height: 1.4; }
+
+    /* ─── PARTS LIST ────────────────────────────────────────────── */
+    .parts-section { display: flex; flex-direction: column; gap: 12px; }
+    .parts-section__heading {
+      font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase;
+    }
+    .parts-table-wrap { border: 1px solid #E5E5E5; border-radius: 4px; overflow: hidden; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .parts-table { width: 100%; border-collapse: collapse; }
+    .parts-table thead tr { background: #F7F8F9; }
+    .parts-table th {
+      text-align: left; padding: 10px 16px;
+      font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase;
+      border-bottom: 1px solid #E5E5E5;
+    }
+    .parts-table th.right, .parts-table td.right { text-align: right; }
+    .parts-table td {
+      padding: 14px 16px; font-size: 14px; color: #2C2A29;
+      border-bottom: 1px solid #F0F0F0;
+      vertical-align: middle;
+    }
+    .parts-table tbody tr:last-child td { border-bottom: none; }
+    .td-pn { font-weight: 700; font-size: 13px; color: #1A1A1A; font-family: 'Inter', monospace; }
+    .td-desc { color: #4B4B4B; }
+    .td-price { font-weight: 700; }
+    .td-total { font-weight: 700; color: #005EB8; }
+    .empty-parts {
+      padding: 28px 16px; text-align: center;
+      font-size: 14px; color: #9E9E9E;
+    }
+
+    /* ─── TERMS + CTA ───────────────────────────────────────────── */
+    .checkout-cta { display: flex; flex-direction: column; gap: 16px; }
+    .terms-row { display: flex; align-items: flex-start; gap: 12px; }
+    .terms-checkbox-native {
+      position: absolute; opacity: 0; width: 0; height: 0; margin: 0; pointer-events: none;
+    }
+    .checkbox-custom {
+      width: 18px; height: 18px; border-radius: 2px;
+      background: #005EB8; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; cursor: pointer; margin-top: 1px;
+    }
+    .terms-checkbox-native:not(:checked) + .checkbox-custom { background: #fff; border: 2px solid #6E6E6E; }
+    .terms-checkbox-native:not(:checked) + .checkbox-custom svg { display: none; }
+    .terms-row:has(input:focus-visible) .checkbox-custom { outline: 2px solid #005EB8; outline-offset: 2px; }
+    .terms-text { font-size: 14px; font-weight: 400; color: #2C2A29; line-height: 1.4; }
+    .terms-link { color: #005EB8; text-decoration: underline; }
+
+    .btn-primary {
+      min-height: 56px; height: auto; width: 100%;
+      background: #005EB8; border: none; border-radius: 4px;
+      color: #fff; font-family: inherit;
+      font-size: 16px; font-weight: 700;
+      cursor: pointer; transition: background 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      padding: 14px 16px;
+    }
+    .btn-primary:hover { background: #0052A3; }
+
+    .btn-back {
+      min-height: 44px; height: auto; width: 100%;
+      background: transparent; border: 1px solid #D1D5DB; border-radius: 4px;
+      color: #6B7280; font-family: inherit;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: border-color 0.15s, color 0.15s;
+      padding: 10px 16px;
+    }
+    .btn-back:hover { border-color: #9CA3AF; color: #2C2A29; }
+
+    /* ─── RIGHT SIDEBAR ─────────────────────────────────────────── */
+    .checkout-right { width: 312px; flex-shrink: 0; display: flex; flex-direction: column; gap: 24px; }
+    .summary-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 4px;
+      padding: 24px; display: flex; flex-direction: column; gap: 20px;
+    }
+    .summary-card__title { font-size: 16px; font-weight: 700; color: #2C2A29; }
+    .summary-rows { display: flex; flex-direction: column; gap: 12px; }
+    .summary-row { display: flex; justify-content: space-between; align-items: center; }
+    .summary-row .lbl { font-size: 13px; font-weight: 400; color: #6B7280; }
+    .summary-row .val { font-size: 13px; font-weight: 600; color: #2C2A29; }
+    .summary-divider { height: 1px; background: #E5E5E5; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; }
+    .total-label { font-size: 15px; font-weight: 700; color: #2C2A29; }
+    .total-amount { font-size: 22px; font-weight: 800; color: #005EB8; }
+    .secured-note { display: flex; align-items: center; gap: 8px; }
+    .secured-note span { font-size: 11px; font-weight: 400; color: #9CA3AF; }
+
+    .help-card {
+      background: #F7F8F9; border-radius: 4px; padding: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .help-card__title { font-size: 13px; font-weight: 700; color: #2C2A29; }
+    .help-card__text  { font-size: 12px; font-weight: 400; color: #6B7280; line-height: 1.4; }
+
+    img, svg { max-width: 100%; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .page-inner { padding: 0 24px; }
+      .checkout-body { flex-direction: column; }
+      .checkout-right { width: 100%; }
+    }
+    @media (max-width: 900px) {
+      .info-cards { flex-direction: column; }
+    }
+    @media (max-width: 768px) {
+      .page-content { padding-top: 60px; }
+      .page-inner { padding: 0 16px; }
+      .stepper { gap: 8px; padding: 24px 0; overflow-x: auto; justify-content: space-between; }
+      .step-connector { flex: 1; width: auto; }
+      .page-title { font-size: 26px; }
+    }
+    @media (max-width: 480px) {
+      .stepper { gap: 6px; }
+      .step-label { font-size: 12px; }
+      .step-connector { flex: 1; width: auto; }
+      .page-title { font-size: 22px; }
+      .total-amount { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <main class="page-content">
+    <div class="page-inner">
+
+      <!-- STEPPER -->
+      <div class="stepper">
+        <div class="step">
+          <div class="step-circle active">1</div>
+          <span class="step-label active">Review Order</span>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">2</div>
+          <span class="step-label inactive">Payment Details</span>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">3</div>
+          <span class="step-label inactive">Confirmation</span>
+        </div>
+      </div>
+
+      <!-- CHECKOUT BODY -->
+      <div class="checkout-body">
+
+        <!-- LEFT COLUMN -->
+        <div class="checkout-left">
+          <h1 class="page-title">Review Your Order</h1>
+
+          <!-- Info cards: Customer · Ship-to · Machine -->
+          <div class="info-cards">
+            <div class="info-card">
+              <div class="info-card__head">
+                <span class="info-card__label">Customer</span>
+                <a href="create-order.html" class="info-card__edit">Edit</a>
+              </div>
+              <div class="info-card__name" id="rc-customer">—</div>
+              <div class="info-card__sub"  id="rc-acct">—</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card__head">
+                <span class="info-card__label">Ship To</span>
+                <a href="create-order.html" class="info-card__edit">Edit</a>
+              </div>
+              <div class="info-card__name" id="rc-shipto">—</div>
+              <div class="info-card__sub"  id="rc-shipto-addr">—</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card__head">
+                <span class="info-card__label">Machine</span>
+              </div>
+              <div class="info-card__name" id="rc-machine">—</div>
+            </div>
+          </div>
+
+          <!-- Parts table -->
+          <div class="parts-section">
+            <div class="parts-section__heading">Ordered Parts</div>
+            <div class="parts-table-wrap">
+              <table class="parts-table">
+                <thead>
+                  <tr>
+                    <th>Part #</th>
+                    <th>Description</th>
+                    <th class="right">Qty</th>
+                    <th class="right">Unit Price</th>
+                    <th class="right">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="review-parts-body">
+                  <tr><td colspan="5" class="empty-parts">No parts added.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Terms + CTA -->
+          <div class="checkout-cta">
+            <div class="terms-row">
+              <input type="checkbox" class="terms-checkbox-native" id="terms-agree" checked>
+              <label class="checkbox-custom" for="terms-agree">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                  <path d="M1.5 5.2L4 7.5 8.5 2.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </label>
+              <label class="terms-text" for="terms-agree">
+                I confirm all order information above is correct and I agree to Okuma's
+                <a href="#" class="terms-link" onclick="event.stopPropagation()">Terms &amp; Conditions</a>.
+              </label>
+            </div>
+            <button class="btn-primary" onclick="window.location='dealer-order-payment.html'">
+              Confirm &amp; Enter Payment Details
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3" y1="8" x2="13" y2="8"/><polyline points="8.5 3.5 13 8 8.5 12.5"/>
+              </svg>
+            </button>
+            <button class="btn-back" onclick="window.location='create-order.html'">← Edit Order</button>
+          </div>
+        </div><!-- /checkout-left -->
+
+        <!-- RIGHT COLUMN -->
+        <div class="checkout-right">
+          <div class="summary-card">
+            <div class="summary-card__title">Order Summary</div>
+            <div class="summary-rows" id="review-summary-rows">
+              <div class="summary-row">
+                <span class="lbl">Parts subtotal</span>
+                <span class="val" id="rs-subtotal">$0.00</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl">Shipping &amp; Handling</span>
+                <span class="val" id="rs-shipping">$24.99</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl">Estimated Tax (8%)</span>
+                <span class="val" id="rs-tax">$0.00</span>
+              </div>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="total-row">
+              <span class="total-label">Total</span>
+              <span class="total-amount" id="rs-total">$0.00</span>
+            </div>
+            <div class="secured-note">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Secured by MyOkuma Enterprise Grade Encryption</span>
+            </div>
+          </div>
+
+          <div class="help-card">
+            <div class="help-card__title">Need Help?</div>
+            <div class="help-card__text">Contact OKUMA America Parts Support at 1-800-MY-OKUMA or email parts@okuma.com</div>
+          </div>
+        </div><!-- /checkout-right -->
+
+      </div><!-- /checkout-body -->
+    </div><!-- /page-inner -->
+  </main>
+
+  <script>
+    (function () {
+      var draft = JSON.parse(localStorage.getItem('okmOrderDraft') || '{}');
+
+      // Info cards
+      function set(id, val) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = val || '—';
+      }
+      set('rc-customer',    draft.customer);
+      set('rc-acct',        draft.acct ? 'Account #' + draft.acct : '');
+      set('rc-shipto',      draft.shipTo);
+      set('rc-shipto-addr', draft.shipToAddr);
+      set('rc-machine',     draft.machine);
+
+      // Parts table
+      var tbody = document.getElementById('review-parts-body');
+      var parts = draft.parts || [];
+      if (parts.length) {
+        tbody.innerHTML = parts.map(function (p) {
+          var lineTotal = (p.price * p.qty).toFixed(2);
+          return '<tr>' +
+            '<td class="td-pn">'   + p.id + '</td>' +
+            '<td class="td-desc">' + p.desc + '</td>' +
+            '<td class="right">'   + p.qty + '</td>' +
+            '<td class="right td-price">$' + p.price.toFixed(2) + '</td>' +
+            '<td class="right td-total">$' + lineTotal + '</td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      // Summary sidebar
+      set('rs-subtotal', '$' + (draft.subtotal || 0).toFixed(2));
+      set('rs-shipping',  '$' + (draft.shipping || 24.99).toFixed(2));
+      set('rs-tax',       '$' + (draft.tax || 0).toFixed(2));
+      set('rs-total',     '$' + (draft.total || 0).toFixed(2));
+    })();
+  </script>
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+
+
+  <script src="components.js"></script>
+
+</body>
+</html>

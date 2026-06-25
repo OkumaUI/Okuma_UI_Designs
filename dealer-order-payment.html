@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Details – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      color: #1A1A1A;
+      min-height: 100vh;
+    }
+
+    /* ─── PAGE LAYOUT ──────────────────────────────────────────── */
+    .page-content { display: flex; justify-content: center; padding: 0 0 64px; }
+    .page-inner {
+      width: 1200px; max-width: 100%;
+      padding: 0 120px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    /* ─── STEPPER ───────────────────────────────────────────────── */
+    .stepper {
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px; padding: 40px 0;
+    }
+    .step { display: flex; align-items: center; gap: 10px; }
+    .step-circle {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 12px; font-weight: 700;
+    }
+    .step-circle.active   { background: #005EB8; border: 1px solid #005EB8; color: #fff; }
+    .step-circle.complete { background: #10B981; border: 1px solid #10B981; color: #fff; }
+    .step-circle.inactive { background: #fff; border: 1px solid #6E6E6E; color: #6E6E6E; }
+    .step-label { font-size: 14px; white-space: nowrap; }
+    .step-label.active   { font-weight: 700; color: #005EB8; }
+    .step-label.complete { font-weight: 500; color: #6B7280; }
+    .step-label.inactive { font-weight: 500; color: #6B7280; }
+    .step-connector { width: 60px; height: 1px; flex-shrink: 0; }
+    .step-connector.done    { background: #005EB8; }
+    .step-connector.pending { background: #E5E5E5; }
+
+    /* ─── CHECKOUT BODY ────────────────────────────────────────── */
+    .checkout-body { width: 960px; max-width: 100%; display: flex; gap: 32px; align-items: flex-start; }
+    .checkout-left { width: 488px; flex-shrink: 1; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
+
+    .page-title { font-size: 32px; font-weight: 800; color: #2C2A29; line-height: 1; }
+
+    /* ─── SECTION ───────────────────────────────────────────────── */
+    .section { display: flex; flex-direction: column; gap: 16px; border: 0; padding: 0; margin: 0; min-width: 0; }
+    .section-label {
+      font-size: 12px; font-weight: 700; color: #6B7280;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+
+    .radio-native { position: absolute; opacity: 0; width: 0; height: 0; margin: 0; pointer-events: none; }
+    .radio-circle {
+      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+      background: #fff; display: flex; align-items: center; justify-content: center;
+    }
+    .radio-circle.selected  { border: 6px solid #005EB8; }
+    .radio-circle.unselected{ border: 1px solid #6E6E6E; }
+
+    /* ─── PAYMENT CARDS ─────────────────────────────────────────── */
+    .pay-card { border-radius: 4px; cursor: pointer; transition: border-color 0.15s, background 0.15s; position: relative; }
+    .pay-card:has(input:focus-visible) { outline: 2px solid #005EB8; outline-offset: 2px; }
+    .pay-card.selected      { background: #fff; border: 2px solid #005EB8; padding: 24px; }
+    .pay-card.collapsed     { background: #fff; border: 1px solid #E5E5E5; padding: 20px; }
+    .pay-card.collapsed-grey{ background: #F7F8F9; border: 1px solid #E5E5E5; padding: 20px; }
+
+    .pay-head { display: flex; justify-content: space-between; align-items: center; }
+    .pay-head-left { display: flex; align-items: center; gap: 16px; }
+    .pay-head-title { font-size: 16px; font-weight: 700; color: #000; }
+
+    .pay-logos { display: flex; align-items: center; gap: 12px; }
+    .logo-amex  { height: 20px; width: 32px; border-radius: 2px; object-fit: cover; display: block; }
+    .logo-mc    { width: 32px; height: 20px; border-radius: 2px; background: #fff; position: relative; }
+    .logo-mc::before, .logo-mc::after {
+      content: ''; position: absolute; top: 50%; transform: translateY(-50%);
+      width: 14px; height: 14px; border-radius: 50%;
+    }
+    .logo-mc::before { left: 3px; background: #EB001B; }
+    .logo-mc::after  { right: 3px; background: #F79E1B; opacity: 0.9; }
+    .logo-visa {
+      width: 32px; height: 20px; border-radius: 2px; background: #0B308E;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; font-style: italic;
+    }
+    .logo-paypal {
+      border-radius: 999px; border: 1px solid #003087; background: #fff;
+      padding: 4px 8px; color: #003087; font-size: 11px; font-weight: 700; line-height: 1;
+    }
+
+    /* ─── FORM FIELDS ───────────────────────────────────────────── */
+    .form-block { display: flex; flex-direction: column; gap: 24px; margin-top: 24px; }
+    .field-group { display: flex; flex-direction: column; gap: 8px; }
+    .field-label { font-size: 13px; font-weight: 700; color: #2C2A29; }
+    .field-input {
+      height: 44px; border: 1px solid #6E6E6E; border-radius: 2px; padding: 0 12px;
+      font-size: 14px; font-family: inherit; color: #2C2A29; width: 100%;
+      transition: border-color 0.15s;
+    }
+    .field-input:focus { border-color: #005EB8; outline: none; }
+    .field-input::placeholder { color: #6E6E6E; }
+    .field-row { display: flex; gap: 16px; }
+    .field-row .field-group { flex: 1; min-width: 0; }
+
+    .billing-row { display: flex; align-items: center; gap: 10px; }
+    .billing-checkbox-native { position: absolute; opacity: 0; width: 0; height: 0; margin: 0; pointer-events: none; }
+    .checkbox-custom {
+      width: 18px; height: 18px; border-radius: 3px; background: #005EB8;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer;
+    }
+    .billing-checkbox-native:not(:checked) + .checkbox-custom { background: #fff; border: 1px solid #6E6E6E; }
+    .billing-checkbox-native:not(:checked) + .checkbox-custom svg { display: none; }
+    .billing-row:has(input:focus-visible) .checkbox-custom { outline: 2px solid #005EB8; outline-offset: 2px; }
+    .billing-label { font-size: 14px; font-weight: 400; color: #2C2A29; cursor: pointer; }
+
+    .po-field-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 4px; padding: 24px;
+    }
+
+    /* ─── SECURITY NOTICE ───────────────────────────────────────── */
+    .security-notice {
+      background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 4px;
+      padding: 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .security-notice span { font-size: 13px; font-weight: 400; color: #0369A1; line-height: 1.3; }
+
+    /* ─── CTA ───────────────────────────────────────────────────── */
+    .btn-primary {
+      background: #005EB8; height: 56px; width: 100%; border-radius: 4px;
+      font-size: 16px; font-weight: 700; color: #fff; border: none; cursor: pointer;
+      font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 12px;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #0052A3; }
+    .btn-back {
+      height: 44px; width: 100%;
+      background: transparent; border: 1px solid #D1D5DB; border-radius: 4px;
+      color: #6B7280; font-family: inherit; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-back:hover { border-color: #9CA3AF; color: #2C2A29; }
+
+    /* ─── RIGHT SIDEBAR ─────────────────────────────────────────── */
+    .checkout-right { width: 440px; flex-shrink: 1; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+    .summary-card {
+      background: #fff; border: 1px solid #E5E5E5; border-radius: 4px;
+      padding: 24px; display: flex; flex-direction: column; gap: 20px;
+    }
+    .summary-card__title { font-size: 16px; font-weight: 700; color: #2C2A29; }
+    .summary-rows { display: flex; flex-direction: column; gap: 12px; }
+    .summary-row { display: flex; justify-content: space-between; align-items: center; }
+    .summary-row .lbl { font-size: 13px; font-weight: 400; color: #6B7280; }
+    .summary-row .val { font-size: 13px; font-weight: 600; color: #2C2A29; }
+    .summary-divider { height: 1px; background: #E5E5E5; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; }
+    .total-label  { font-size: 15px; font-weight: 700; color: #2C2A29; }
+    .total-amount { font-size: 22px; font-weight: 800; color: #005EB8; }
+    .secured-note { display: flex; align-items: center; gap: 8px; }
+    .secured-note span { font-size: 11px; font-weight: 400; color: #9CA3AF; }
+
+    .help-card {
+      background: #F7F8F9; border-radius: 4px; padding: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .help-card__title { font-size: 13px; font-weight: 700; color: #2C2A29; }
+    .help-card__text  { font-size: 12px; font-weight: 400; color: #6B7280; line-height: 1.4; }
+
+    img, svg { max-width: 100%; }
+
+    /* ─── CTA STACK ─────────────────────────────────────────────── */
+    .cta-stack { display: flex; flex-direction: column; gap: 12px; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 1199px) {
+      .page-inner { padding: 0 32px; }
+      .checkout-body { flex-direction: column; }
+      .checkout-left { width: 100%; }
+      .checkout-right { width: 100%; }
+    }
+
+    @media (max-width: 1024px) {
+      .page-inner { padding: 0 24px; }
+    }
+    @media (max-width: 768px) {
+      .page-inner { padding: 0 16px; }
+      .page-content { padding-bottom: 40px; padding-top: 56px; }
+      .stepper {
+        gap: 8px; padding: 24px 0; overflow-x: auto; justify-content: space-between;
+        scrollbar-width: none; -ms-overflow-style: none;
+      }
+      .stepper::-webkit-scrollbar { display: none; }
+      .step-connector { flex: 1; width: auto; }
+      .page-title { font-size: 26px; }
+      .pay-card.selected, .pay-card.collapsed, .pay-card.collapsed-grey { padding: 16px; }
+      .security-notice { align-items: flex-start; }
+      .form-block { margin-top: 16px; gap: 16px; }
+      #cc-cvv { max-width: 120px; }
+    }
+    @media (min-width: 769px) {
+      .page-content { padding-top: 92px; }
+    }
+    @media (max-width: 480px) {
+      .stepper { gap: 6px; padding: 16px 0; }
+      .step-label { font-size: 12px; }
+      .step-connector { flex: 1; width: auto; }
+      .field-row { flex-direction: column; gap: 16px; }
+      .page-title { font-size: 22px; line-height: 1.15; }
+      .pay-head { flex-wrap: wrap; gap: 8px; }
+      .pay-logos { margin-top: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <div class="page-content">
+    <div class="page-inner">
+
+      <!-- STEPPER -->
+      <div class="stepper">
+        <div class="step">
+          <div class="step-circle complete">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span class="step-label complete">Review Order</span>
+        </div>
+        <div class="step-connector done"></div>
+        <div class="step">
+          <div class="step-circle active">2</div>
+          <span class="step-label active">Payment Details</span>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">3</div>
+          <span class="step-label inactive">Confirmation</span>
+        </div>
+      </div>
+
+      <!-- CHECKOUT BODY -->
+      <div class="checkout-body">
+
+        <!-- LEFT COLUMN -->
+        <div class="checkout-left">
+          <h1 class="page-title">Payment Details</h1>
+
+          <fieldset class="section">
+            <legend class="section-label">Select Payment Type</legend>
+
+            <!-- CREDIT / DEBIT CARD -->
+            <div class="pay-card selected" id="card-card">
+              <label class="pay-head" for="card-radio">
+                <span class="pay-head-left">
+                  <input type="radio" class="radio-native" name="payment" id="card-radio" value="card" checked>
+                  <span class="radio-circle selected" aria-hidden="true"></span>
+                  <span class="pay-head-title">Credit or Debit Card</span>
+                </span>
+                <span class="pay-logos">
+                  <img class="logo-amex" src="pay-amex.png" alt="American Express">
+                  <span class="logo-mc"  role="img" aria-label="Mastercard"></span>
+                  <span class="logo-visa" role="img" aria-label="Visa">VISA</span>
+                  <span class="logo-paypal" role="img" aria-label="PayPal">PayPal</span>
+                </span>
+              </label>
+
+              <div class="form-block" id="card-form">
+                <div class="field-group">
+                  <label class="field-label" for="cc-number">Card Number</label>
+                  <input type="text" class="field-input" id="cc-number" value="**** **** **** 4521" autocomplete="cc-number">
+                </div>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label class="field-label" for="cc-exp">Expiration (MM/YY)</label>
+                    <input type="text" class="field-input" id="cc-exp" placeholder="MM/YY" autocomplete="cc-exp">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="cc-cvv">CVV</label>
+                    <input type="text" class="field-input" id="cc-cvv" placeholder="123" autocomplete="cc-csc">
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="cc-name">Cardholder Name</label>
+                  <input type="text" class="field-input" id="cc-name" value="JAMES R. WAREHOUSE" autocomplete="cc-name">
+                </div>
+                <div class="billing-row">
+                  <input type="checkbox" class="billing-checkbox-native" id="billing-same" checked>
+                  <label class="checkbox-custom" for="billing-same">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </label>
+                  <label class="billing-label" for="billing-same">Billing address matches shipping address</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- PURCHASE ORDER -->
+            <div class="pay-card collapsed-grey" id="card-po">
+              <label class="pay-head" for="po-radio">
+                <span class="pay-head-left">
+                  <input type="radio" class="radio-native" name="payment" id="po-radio" value="po">
+                  <span class="radio-circle unselected" aria-hidden="true"></span>
+                  <span class="pay-head-title">Purchase Order (PO)</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="po-field-card" id="po-form" style="display:none;">
+              <div class="field-group">
+                <label class="field-label" for="po-number">Enter PO Number</label>
+                <input type="text" class="field-input" id="po-number" placeholder="e.g. PO-2026-00123">
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Security notice -->
+          <div class="security-notice">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#005EB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="4" y="11" width="16" height="10" rx="2"/>
+              <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+            </svg>
+            <span>Your payment information is encrypted and secure. Okuma does not store full CVV data.</span>
+          </div>
+
+          <!-- CTAs -->
+          <div class="cta-stack">
+            <button class="btn-primary" onclick="completeOrder()">
+              Complete Order
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3" y1="8" x2="13" y2="8"/><polyline points="8.5 3.5 13 8 8.5 12.5"/>
+              </svg>
+            </button>
+            <button class="btn-back" onclick="window.location='dealer-order-review.html'">← Back to Review</button>
+          </div>
+        </div><!-- /checkout-left -->
+
+        <!-- RIGHT COLUMN -->
+        <div class="checkout-right">
+          <div class="summary-card">
+            <div class="summary-card__title">Order Summary</div>
+            <div class="summary-rows">
+              <div class="summary-row">
+                <span class="lbl">Parts subtotal</span>
+                <span class="val" id="ps-subtotal">$0.00</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl">Shipping &amp; Handling</span>
+                <span class="val" id="ps-shipping">$24.99</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl">Estimated Tax (8%)</span>
+                <span class="val" id="ps-tax">$0.00</span>
+              </div>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="total-row">
+              <span class="total-label">Total</span>
+              <span class="total-amount" id="ps-total">$0.00</span>
+            </div>
+            <div class="secured-note">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Secured by MyOkuma Enterprise Grade Encryption</span>
+            </div>
+          </div>
+
+          <div class="help-card">
+            <div class="help-card__title">Need Help?</div>
+            <div class="help-card__text">Contact OKUMA America Parts Support at 1-800-MY-OKUMA or email parts@okuma.com</div>
+          </div>
+        </div><!-- /checkout-right -->
+
+      </div><!-- /checkout-body -->
+    </div><!-- /page-inner -->
+  </div>
+
+  <script>
+    // Populate summary sidebar from draft
+    (function () {
+      var draft = JSON.parse(localStorage.getItem('okmOrderDraft') || '{}');
+      function set(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+      set('ps-subtotal', '$' + (draft.subtotal || 0).toFixed(2));
+      set('ps-shipping',  '$' + (draft.shipping || 24.99).toFixed(2));
+      set('ps-tax',       '$' + (draft.tax || 0).toFixed(2));
+      set('ps-total',     '$' + (draft.total || 0).toFixed(2));
+    })();
+
+    var selectedPayment = 'card';
+
+    function circleFor(inputId) {
+      var input = document.getElementById(inputId);
+      return input ? input.nextElementSibling : null;
+    }
+
+    function switchTab(tab) {
+      var cardCard = document.getElementById('card-card');
+      var poCard   = document.getElementById('card-po');
+      var cardCircle = circleFor('card-radio');
+      var poCircle   = circleFor('po-radio');
+      var cardForm = document.getElementById('card-form');
+      var poForm   = document.getElementById('po-form');
+      if (tab === 'card') {
+        cardCard.className = 'pay-card selected';
+        cardForm.style.display = 'flex';
+        cardCircle.className = 'radio-circle selected';
+        poCard.className = 'pay-card collapsed-grey';
+        poCircle.className = 'radio-circle unselected';
+        poForm.style.display = 'none';
+      } else {
+        cardCard.className = 'pay-card collapsed';
+        cardForm.style.display = 'none';
+        cardCircle.className = 'radio-circle unselected';
+        poCard.className = 'pay-card selected';
+        poCircle.className = 'radio-circle selected';
+        poForm.style.display = 'block';
+      }
+      selectedPayment = tab;
+    }
+
+    document.querySelectorAll('input[name="payment"]').forEach(function (r) {
+      r.addEventListener('change', function () { switchTab(this.value); });
+    });
+
+    function completeOrder() {
+      // Save payment method type to draft
+      var draft = JSON.parse(localStorage.getItem('okmOrderDraft') || '{}');
+      if (selectedPayment === 'card') {
+        draft.paymentMethod = 'Visa ending in 4521';
+        draft.paymentType   = 'card';
+      } else {
+        draft.paymentMethod = 'PO #' + (document.getElementById('po-number').value || '—');
+        draft.paymentType   = 'po';
+      }
+      // Generate order reference
+      draft.orderRef = '#DLR-2026-' + String(Math.floor(10000 + Math.random() * 90000));
+      localStorage.setItem('okmOrderDraft', JSON.stringify(draft));
+      window.location = 'dealer-order-confirmation.html';
+    }
+  </script>
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+
+
+  <script src="components.js"></script>
+
+</body>
+</html>

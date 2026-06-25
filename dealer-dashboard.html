@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dealer Dashboard – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── MAIN AREA ── */
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Welcome banner */
+    .welcome { display: flex; flex-direction: column; gap: 8px; }
+    .welcome__title { font-size: 28px; font-weight: 700; color: #1A1A1A; line-height: 1; }
+    .welcome__sub { font-size: 14px; font-weight: 400; color: #4B4B4B; }
+
+    /* Customer context bar (state 2) */
+    .welcome__context {
+      font-size: 13px;
+      font-weight: 400;
+      color: #717171;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .welcome__context-sep { margin: 0 10px; color: #C4C4C4; }
+
+    /* KPI row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .kpi-tile {
+      min-width: 0;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .kpi-tile__label { font-size: 12px; font-weight: 700; color: #717171; text-transform: uppercase; }
+    .kpi-tile__num { font-size: 32px; font-weight: 700; color: #0B308E; line-height: 1; }
+
+    /* Section */
+    .section { display: flex; flex-direction: column; }
+    .section__head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+    .section__title { font-size: 18px; font-weight: 700; color: #1A1A1A; }
+    .section__link { font-size: 13px; font-weight: 700; color: #005EB8; text-decoration: none; }
+    .section__link:hover { text-decoration: underline; }
+
+    /* Machine grid */
+    .machine-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .machine-card {
+      min-width: 0;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .machine-card__photo {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+      background: #E8EAED;
+    }
+    .machine-card__body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .machine-card__name { font-size: 16px; font-weight: 700; color: #1A1A1A; }
+    .machine-card__serial {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #717171;
+      margin-top: 8px;
+    }
+    .machine-card__divider { height: 1px; background: #DEDEDE; }
+    .machine-card__foot { display: flex; align-items: center; justify-content: space-between; }
+    .machine-card__reg-label { font-size: 10px; font-weight: 400; color: #717171; text-transform: uppercase; }
+    .machine-card__reg-date { font-size: 12px; font-weight: 400; color: #000; margin-top: 8px; }
+    .btn-browse {
+      border: 1px solid #005EB8;
+      border-radius: 2px;
+      background: transparent;
+      color: #005EB8;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-browse:hover { background: #005EB8; color: #fff; }
+
+    /* Quick links */
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .quick-links--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .quick-links--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .link-card {
+      min-width: 0;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .link-card:hover { border-color: #005EB8; box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
+    .link-card svg { width: 24px; height: 24px; color: #0B308E; }
+    .link-card__label { font-size: 12px; font-weight: 700; color: #1A1A1A; text-align: center; }
+
+    /* Orders table */
+    .orders-wrap { border: 1px solid #DEDEDE; border-radius: 4px; overflow: visible; margin-top: 16px; }
+    .orders-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+    .orders-table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    .col-for   { width: 160px; font-weight: 400; }
+    .ordered-for-self     { color: #9E9E9E; font-style: italic; }
+    .ordered-for-customer { color: #1A1A1A; font-weight: 500; }
+    .orders-table thead tr { background: #F5F5F5; }
+    .orders-table th {
+      font-size: 11px;
+      font-weight: 700;
+      color: #717171;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 13px 16px;
+      border-bottom: 1px solid #DEDEDE;
+      white-space: nowrap;
+    }
+    .orders-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #DEDEDE;
+      vertical-align: middle;
+      font-size: 13px;
+      color: #000;
+    }
+    .orders-table tbody tr:last-child td { border-bottom: none; }
+    .col-order { width: 160px; font-weight: 700; }
+    .col-date  { width: 140px; font-weight: 400; }
+    .col-items { font-weight: 400; }
+    .col-total { width: 120px; font-weight: 700; }
+    .col-status { width: 140px; }
+    .col-view  { width: 80px; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 2px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .status-badge--processing { background: #FFF9EF; border: 0.5px solid #FFB549; color: #FFB549; }
+    .status-badge--processing .dot { background: #FFB549; }
+    .status-badge--shipped { background: #F0FCFD; border: 0.5px solid #68D2DF; color: #68D2DF; }
+    .status-badge--shipped .dot { background: #68D2DF; }
+    .status-badge--delivered { background: #F4F9F1; border: 0.5px solid #74AA50; color: #74AA50; }
+    .status-badge--delivered .dot { background: #74AA50; }
+
+    .order-view-link { font-size: 12px; font-weight: 700; color: #005EB8; text-decoration: none; }
+    .order-view-link:hover { text-decoration: underline; }
+
+    /* State wrappers — space every section evenly */
+    #state-all,
+    #state-customer {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    img, svg { max-width: 100%; }
+
+    @media (max-width: 1024px) {
+      .quick-links { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .quick-links--5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .quick-links--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 768px) {
+      .main-area { padding: 16px; gap: 24px; }
+      .quick-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .quick-links--5, .quick-links--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .welcome__title { font-size: 24px; }
+      .kpi-tile__num { font-size: 28px; }
+      #state-all, #state-customer { gap: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .main-area { padding: 12px; gap: 16px; }
+      .welcome__title { font-size: 20px; }
+      .kpi-tile__num { font-size: 24px; }
+      .machine-grid { grid-template-columns: minmax(0, 1fr); }
+      .kpi-row { grid-template-columns: minmax(0, 1fr); }
+      .quick-links--5, .quick-links--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #state-all, #state-customer { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <div class="app-body-shell">
+    <div id="okuma-sidebar" data-active="dashboard"></div>
+
+    <main class="main-area" id="main">
+
+      <!-- ═══════════════════════════════════
+           STATE 1 — ALL CUSTOMERS (default)
+      ═══════════════════════════════════ -->
+      <div id="state-all">
+
+        <!-- Welcome -->
+        <div class="welcome">
+          <h1 class="welcome__title">Good morning, Jonathan</h1>
+          <p class="welcome__sub">• 2 shipments arriving today across all customer</p>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-row">
+          <div class="kpi-tile">
+            <div class="kpi-tile__label">Open orders</div>
+            <div class="kpi-tile__num">47</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-tile__label">My Customers</div>
+            <div class="kpi-tile__num">5</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-tile__label">machines managed</div>
+            <div class="kpi-tile__num">13</div>
+          </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <section class="section">
+          <div class="section__head">
+            <h2 class="section__title">Recent Orders</h2>
+            <a href="my-orders.html" class="section__link">View All Orders →</a>
+          </div>
+          <div class="orders-wrap">
+            <div class="orders-scroll">
+              <table class="orders-table">
+                <thead>
+                  <tr>
+                    <th class="col-order">Order #</th>
+                    <th class="col-date">Date</th>
+                    <th class="col-for">Ordered For</th>
+                    <th class="col-items">Items</th>
+                    <th class="col-total">Total</th>
+                    <th class="col-status">Status</th>
+                    <th class="col-view"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="col-order">OKU-2026-00418</td>
+                    <td class="col-date">Feb 22, 2026</td>
+                    <td class="col-for"><span class="ordered-for-customer">ABC Industries</span></td>
+                    <td class="col-items">Spindle Bearing (2), Coolant Pump</td>
+                    <td class="col-total">$842.25</td>
+                    <td class="col-status"><span class="status-badge status-badge--processing"><span class="dot"></span>Processing</span></td>
+                    <td class="col-view"><a href="#" class="order-view-link">View</a></td>
+                  </tr>
+                  <tr>
+                    <td class="col-order">OKU-2026-00392</td>
+                    <td class="col-date">Feb 18, 2026</td>
+                    <td class="col-for"><span class="ordered-for-self">Self</span></td>
+                    <td class="col-items">Drive Belt (5), Tool Changer Cam</td>
+                    <td class="col-total">$1,204.00</td>
+                    <td class="col-status"><span class="status-badge status-badge--shipped"><span class="dot"></span>Shipped</span></td>
+                    <td class="col-view"><a href="#" class="order-view-link">View</a></td>
+                  </tr>
+                  <tr>
+                    <td class="col-order">OKU-2026-00355</td>
+                    <td class="col-date">Feb 10, 2026</td>
+                    <td class="col-for"><span class="ordered-for-customer">Delta Components</span></td>
+                    <td class="col-items">Hydraulic Filter Kit</td>
+                    <td class="col-total">$412.00</td>
+                    <td class="col-status"><span class="status-badge status-badge--delivered"><span class="dot"></span>Delivered</span></td>
+                    <td class="col-view"><a href="#" class="order-view-link">View</a></td>
+                  </tr>
+                  <tr>
+                    <td class="col-order">OKU-2026-00310</td>
+                    <td class="col-date">Feb 02, 2026</td>
+                    <td class="col-for"><span class="ordered-for-self">Self</span></td>
+                    <td class="col-items">Proximity Sensor, Limit Switch</td>
+                    <td class="col-total">$124.50</td>
+                    <td class="col-status"><span class="status-badge status-badge--delivered"><span class="dot"></span>Delivered</span></td>
+                    <td class="col-view"><a href="#" class="order-view-link">View</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Links -->
+        <div class="quick-links quick-links--5">
+          <a href="create-order.html?mode=stock" class="link-card">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="4" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="3" y="10" width="18" height="4" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="3" y="16" width="11" height="4" rx="1" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span class="link-card__label">Stock Order</span>
+          </a>
+          <a href="cart.html" class="link-card">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 2h2.5l2.5 12.5a1.8 1.8 0 001.8 1.5h9a1.8 1.8 0 001.77-1.5L21 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9.5" cy="20" r="1.5" fill="currentColor"/>
+              <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+            </svg>
+            <span class="link-card__label">View Cart</span>
+          </a>
+          <a href="#" class="link-card">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 2h9l5 5v15a0 0 0 010 0H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M14 2v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="link-card__label">Request a Quote</span>
+          </a>
+          <a href="my-orders.html" class="link-card">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 2h9l5 5v15a0 0 0 010 0H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M14 2v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="link-card__label">Order History</span>
+          </a>
+          <a href="#" class="link-card">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 12h3l3-7 4 16 3-9h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="link-card__label">Track an Order</span>
+          </a>
+        </div>
+
+      </div><!-- /state-all -->
+
+
+      <!-- ═══════════════════════════════════
+           STATE 2 — CUSTOMER SELECTED
+      ═══════════════════════════════════ -->
+      <div id="state-customer" style="display:none">
+
+        <!-- Welcome + context bar -->
+        <div class="welcome">
+          <h1 class="welcome__title">Good morning, Jonathan</h1>
+          <div class="welcome__context" id="custContextBar">
+            <span id="custCtxName">ABC Industries</span>
+            <span class="welcome__context-sep">|</span>
+            <span id="custCtxAccount">Account #AC-4421</span>
+            <span class="welcome__context-sep">|</span>
+            <span id="custCtxAddress">418 Innovation Drive, Detroit, MI 48126, USA</span>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-row">
+          <div class="kpi-tile">
+            <div class="kpi-tile__label">Customer's Open Orders</div>
+            <div class="kpi-tile__num" id="custKpi1Num">47</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-tile__label">Customer's Open Quotes</div>
+            <div class="kpi-tile__num" id="custKpi2Num">3</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-tile__label">Customer's Registered Machines</div>
+            <div class="kpi-tile__num" id="custKpi3Num">5</div>
+          </div>
+        </div>
+
+        <!-- Customer's Registered Machines -->
+        <section class="section">
+          <div class="section__head">
+            <h2 class="section__title">Customer's Registered Machines</h2>
+            <a href="#" class="section__link">View All →</a>
+          </div>
+          <div class="machine-grid" id="custMachineGrid">
+            <!-- populated by JS -->
+          </div>
+        </section>
+
+        <!-- Quick Links -->
+        <div class="quick-links quick-links--4">
+          <a href="cart.html" class="link-card">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 2h2.5l2.5 12.5a1.8 1.8 0 001.8 1.5h9a1.8 1.8 0 001.77-1.5L21 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9.5" cy="20" r="1.5" fill="currentColor"/>
+              <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+            </svg>
+            <span class="link-card__label">View Cart</span>
+          </a>
+          <a href="#" class="link-card">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 2h9l5 5v15a0 0 0 010 0H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M14 2v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="link-card__label">Request a Quote</span>
+          </a>
+          <a href="my-orders.html" class="link-card">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 2h9l5 5v15a0 0 0 010 0H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M14 2v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="link-card__label">Order History</span>
+          </a>
+          <a href="#" class="link-card">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 12h3l3-7 4 16 3-9h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="link-card__label">Track an Order</span>
+          </a>
+        </div>
+
+        <!-- Customer's Recent Orders -->
+        <section class="section">
+          <div class="section__head">
+            <h2 class="section__title">Customer's Recent Orders</h2>
+            <a href="my-orders.html" class="section__link">View All Orders →</a>
+          </div>
+          <div class="orders-wrap">
+            <div class="orders-scroll">
+              <table class="orders-table">
+                <thead>
+                  <tr>
+                    <th class="col-order">Order #</th>
+                    <th class="col-date">Date</th>
+                    <th class="col-items">Items</th>
+                    <th class="col-total">Total</th>
+                    <th class="col-status">Status</th>
+                    <th class="col-view"></th>
+                  </tr>
+                </thead>
+                <tbody id="custOrdersTbody">
+                  <!-- populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /state-customer -->
+
+    </main>
+  </div>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+
+  <script src="components.js"></script>
+  <script>
+    (function () {
+
+      /* ── customer data ── */
+      var CUST_DATA = {
+        'ABC Industries': {
+          account: 'AC-4421',
+          address: '418 Innovation Drive, Detroit, MI 48126, USA',
+          kpi: { orders: 47, quotes: 3, machines: 5, lastReg: '10 Feb 2025' },
+          machines: [
+            { name: 'LU300-M',       serial: 'L3-4421-R',  img: 'dash-machine-lu300m.png',  reg: '12 Oct 2024' },
+            { name: 'MULTUS U3000',  serial: 'MU-9102-L',  img: 'dash-machine-multus.png',  reg: '05 Jan 2025' },
+            { name: 'LB2000 EX III', serial: 'LB-4431-M',  img: 'dash-machine-lb2000.png',  reg: '18 Feb 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00418', date: 'Feb 22, 2026', items: 'Spindle Bearing (2), Coolant Pump',  total: '$842.25',   status: 'processing' },
+            { num: 'OKU-2026-00392', date: 'Feb 18, 2026', items: 'Drive Belt (5), Tool Changer Cam',   total: '$1,204.00', status: 'shipped' },
+            { num: 'OKU-2026-00355', date: 'Feb 10, 2026', items: 'Hydraulic Filter Kit',               total: '$412.00',   status: 'delivered' },
+            { num: 'OKU-2026-00310', date: 'Feb 02, 2026', items: 'Proximity Sensor, Limit Switch',     total: '$124.50',   status: 'delivered' }
+          ]
+        },
+        'Smith Manufacturing': {
+          account: 'SM-2891',
+          address: '782 Industrial Blvd, Cincinnati, OH 45201, USA',
+          kpi: { orders: 12, quotes: 1, machines: 2, lastReg: '18 Nov 2024' },
+          machines: [
+            { name: 'GENOS L200E',       serial: 'GL-2891-A', img: 'dash-machine-lu300m.png', reg: '22 Aug 2024' },
+            { name: 'SPACE TURN LB3000', serial: 'ST-7743-B', img: 'dash-machine-multus.png', reg: '18 Nov 2024' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00502', date: 'Mar 08, 2026', items: 'Chuck Jaw Set (3)',      total: '$326.00', status: 'processing' },
+            { num: 'OKU-2026-00477', date: 'Feb 25, 2026', items: 'Oil Seal Kit',           total: '$88.50',  status: 'delivered' },
+            { num: 'OKU-2026-00444', date: 'Feb 14, 2026', items: 'Coolant Hose Assembly',  total: '$215.00', status: 'delivered' },
+            { num: 'OKU-2026-00388', date: 'Feb 01, 2026', items: 'Encoder Cable',          total: '$54.00',  status: 'delivered' }
+          ]
+        },
+        'Pacific Precision': {
+          account: 'PP-5517',
+          address: '2140 Tech Park Drive, San Jose, CA 95110, USA',
+          kpi: { orders: 63, quotes: 5, machines: 6, lastReg: '03 Mar 2025' },
+          machines: [
+            { name: 'MB-56V AII',   serial: 'MB-5517-C', img: 'dash-machine-lu300m.png', reg: '10 Jun 2024' },
+            { name: 'LU300-M',      serial: 'L3-5517-D', img: 'dash-machine-multus.png', reg: '14 Sep 2024' },
+            { name: 'MULTUS U3000', serial: 'MU-5517-E', img: 'dash-machine-lb2000.png', reg: '03 Mar 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00519', date: 'Mar 10, 2026', items: 'Ball Screw Nut, Linear Guide', total: '$1,840.00', status: 'shipped' },
+            { num: 'OKU-2026-00498', date: 'Mar 03, 2026', items: 'Spindle Motor Belt (2)',        total: '$480.00',   status: 'delivered' },
+            { num: 'OKU-2026-00456', date: 'Feb 20, 2026', items: 'Lubrication Unit Filter',       total: '$94.00',    status: 'delivered' },
+            { num: 'OKU-2026-00421', date: 'Feb 08, 2026', items: 'Tool Pot Assembly',              total: '$276.50',   status: 'delivered' }
+          ]
+        },
+        'Delta Components': {
+          account: 'DC-3302',
+          address: '900 Commerce Street, Dallas, TX 75201, USA',
+          kpi: { orders: 21, quotes: 2, machines: 3, lastReg: '27 Jan 2025' },
+          machines: [
+            { name: 'LB2000 EX III', serial: 'LB-3302-F', img: 'dash-machine-lb2000.png', reg: '09 May 2024' },
+            { name: 'GENOS L200E',   serial: 'GL-3302-G', img: 'dash-machine-lu300m.png', reg: '27 Jan 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00488', date: 'Feb 27, 2026', items: 'Coolant Pump Motor',    total: '$540.00', status: 'processing' },
+            { num: 'OKU-2026-00461', date: 'Feb 19, 2026', items: 'ATC Cam Follower Set',  total: '$312.00', status: 'shipped' },
+            { num: 'OKU-2026-00430', date: 'Feb 11, 2026', items: 'Z-Axis Servo Belt',     total: '$148.00', status: 'delivered' },
+            { num: 'OKU-2026-00395', date: 'Feb 03, 2026', items: 'Pressure Gauge',        total: '$62.50',  status: 'delivered' }
+          ]
+        },
+        'Apex Machining': {
+          account: 'AM-7789',
+          address: '3315 West Fullerton Ave, Chicago, IL 60647, USA',
+          kpi: { orders: 34, quotes: 4, machines: 5, lastReg: '14 Apr 2025' },
+          machines: [
+            { name: 'MB-56V AII',        serial: 'MB-7789-H', img: 'dash-machine-multus.png', reg: '18 Feb 2024' },
+            { name: 'MULTUS U3000',      serial: 'MU-7789-I', img: 'dash-machine-lb2000.png', reg: '14 Apr 2025' },
+            { name: 'SPACE TURN LB3000', serial: 'ST-7789-J', img: 'dash-machine-lu300m.png', reg: '21 Jul 2024' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00511', date: 'Mar 07, 2026', items: 'Spindle Bearing Kit (4)',     total: '$1,120.00', status: 'shipped' },
+            { num: 'OKU-2026-00484', date: 'Feb 26, 2026', items: 'Door Lock Switch',             total: '$43.00',    status: 'delivered' },
+            { num: 'OKU-2026-00452', date: 'Feb 17, 2026', items: 'Lubrication Pump Assembly',   total: '$385.00',   status: 'delivered' },
+            { num: 'OKU-2026-00418', date: 'Feb 06, 2026', items: 'Coolant Nozzle Set (6)',       total: '$94.50',    status: 'delivered' }
+          ]
+        }
+      };
+
+      /* ── DOM refs ── */
+      var stateAll    = document.getElementById('state-all');
+      var stateCust   = document.getElementById('state-customer');
+      var custCtxName = document.getElementById('custCtxName');
+      var custCtxAcct = document.getElementById('custCtxAccount');
+      var custCtxAddr = document.getElementById('custCtxAddress');
+      var kpi1Num     = document.getElementById('custKpi1Num');
+      var kpi2Num     = document.getElementById('custKpi2Num');
+      var kpi3Num     = document.getElementById('custKpi3Num');
+      var machGrid    = document.getElementById('custMachineGrid');
+      var ordersTbody = document.getElementById('custOrdersTbody');
+
+      /* ── helpers ── */
+      var BADGE = { processing: 'status-badge--processing', shipped: 'status-badge--shipped', delivered: 'status-badge--delivered' };
+      function statusBadge(s) {
+        return '<span class="status-badge ' + (BADGE[s] || '') + '"><span class="dot"></span>' +
+          s.charAt(0).toUpperCase() + s.slice(1) + '</span>';
+      }
+
+      function showCustomer(name) {
+        var d = CUST_DATA[name];
+        if (!d) { showAll(); return; }
+
+        custCtxName.textContent = name;
+        custCtxAcct.textContent = 'Account #' + d.account;
+        custCtxAddr.textContent = d.address;
+
+        kpi1Num.textContent = d.kpi.orders;
+        kpi2Num.textContent = d.kpi.quotes;
+        kpi3Num.textContent = d.kpi.machines;
+
+        machGrid.innerHTML = d.machines.map(function (m) {
+          return '<div class="machine-card">' +
+            '<img class="machine-card__photo" src="' + m.img + '" alt="' + m.name + '" onerror="this.src=\'\'">'+
+            '<div class="machine-card__body">' +
+              '<div>' +
+                '<div class="machine-card__name">' + m.name + '</div>' +
+                '<div class="machine-card__serial">Serial: ' + m.serial + '</div>' +
+              '</div>' +
+              '<div class="machine-card__divider"></div>' +
+              '<div class="machine-card__foot">' +
+                '<div>' +
+                  '<div class="machine-card__reg-label">Registered</div>' +
+                  '<div class="machine-card__reg-date">' + m.reg + '</div>' +
+                '</div>' +
+                '<button class="btn-browse" onclick="browseMachineBook(\'' + m.name + '\', \'' + m.serial + '\')">Browse Parts Book</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+
+        ordersTbody.innerHTML = d.orders.map(function (o) {
+          return '<tr>' +
+            '<td class="col-order">' + o.num + '</td>' +
+            '<td class="col-date">' + o.date + '</td>' +
+            '<td class="col-items">' + o.items + '</td>' +
+            '<td class="col-total">' + o.total + '</td>' +
+            '<td class="col-status">' + statusBadge(o.status) + '</td>' +
+            '<td class="col-view"><a href="#" class="order-view-link">View</a></td>' +
+          '</tr>';
+        }).join('');
+
+        stateAll.style.display  = 'none';
+        stateCust.style.display = '';
+      }
+
+      function showAll() {
+        stateAll.style.display  = '';
+        stateCust.style.display = 'none';
+      }
+
+      /* ── browse parts book from a specific machine card ── */
+      window.browseMachineBook = function (name, serial) {
+        localStorage.setItem('okmCatalogueMachine', name);
+        localStorage.setItem('okmCatalogueMachineSerial', serial);
+        window.location = 'parts-catalogue.html';
+      };
+
+      /* ── initial state ── */
+      var saved = localStorage.getItem('okmSelectedCustomer') || '';
+      if (saved) { showCustomer(saved); } else { showAll(); }
+
+      /* ── react to customer picker ── */
+      window.addEventListener('okuma:customerChanged', function (e) {
+        var name = e.detail && e.detail.name;
+        if (name) { showCustomer(name); } else { showAll(); }
+      });
+
+    })();
+  </script>
+
+</body>
+</html>

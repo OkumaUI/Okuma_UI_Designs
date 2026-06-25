@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmation – Okuma</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: #F7F8F9;
+      min-height: 100vh;
+    }
+
+    /* ─── MAIN CONTENT ────────────────────────────────────────── */
+    .page-content {
+      display: flex;
+      justify-content: center;
+      padding: calc(92px + 24px) 24px 80px;
+    }
+
+    /* ─── CONFIRMATION CARD ───────────────────────────────────── */
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.063);
+      width: 100%;
+      max-width: 720px;
+      padding: 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ─── SECTION 1: Icon + Title ─────────────────────────────── */
+    .card__hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .card__icon-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #E6FFFA;
+      border: 2px solid #38B2AC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card__icon-inner {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #38B2AC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card__icon-inner svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .card__title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #2C2A29;
+      line-height: 1.2;
+    }
+
+    .card__subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: #6B7280;
+      line-height: 1.5;
+    }
+
+    /* ─── SECTION 2: Reference Number ────────────────────────── */
+    .card__reference {
+      background: #005EB8;
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .card__ref-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card__ref-number {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── SECTION 3: Estimated Delivery ──────────────────────── */
+    .card__delivery {
+      background: #F0FDF4;
+      border-radius: 4px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card__delivery-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: #166534;
+    }
+
+    .card__delivery-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #166534;
+    }
+
+    /* ─── DIVIDER ─────────────────────────────────────────────── */
+    .card__divider {
+      height: 1px;
+      background: #E5E5E5;
+      margin: 0;
+    }
+
+    /* ─── SECTION 4: Shipping Address ────────────────────────── */
+    .card__section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card__section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #2C2A29;
+    }
+
+    .card__section-line {
+      font-size: 14px;
+      font-weight: 400;
+      color: #2C2A29;
+      line-height: 1.5;
+    }
+
+    .card__section-line--muted {
+      color: #6B7280;
+    }
+
+    /* ─── SECTION 5: Order Summary ────────────────────────────── */
+    .card__summary {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card__summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .card__summary-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: #6B7280;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card__summary-value {
+      font-size: 14px;
+      font-weight: 400;
+      color: #2C2A29;
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .card__summary-value--green {
+      color: #208831;
+      font-weight: 500;
+    }
+
+    .card__summary-divider {
+      height: 1px;
+      background: #E5E5E5;
+      margin: 4px 0;
+    }
+
+    .card__summary-total-label {
+      font-size: 18px;
+      font-weight: 800;
+      color: #2C2A29;
+    }
+
+    .card__summary-total-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: #005EB8;
+    }
+
+    /* ─── SECTION 6: Buttons ──────────────────────────────────── */
+    .card__actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 160px;
+      height: 48px;
+      border-radius: 4px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.15s;
+    }
+
+    .btn:hover { opacity: 0.88; }
+
+    .btn--primary {
+      background: #005EB8;
+      color: #fff;
+      border: none;
+    }
+
+    .btn--outline {
+      background: #fff;
+      color: #005EB8;
+      border: 1.5px solid #005EB8;
+    }
+
+    /* ─── SECTION 7: Download Link ────────────────────────────── */
+    .card__download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #005EB8;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .card__download:hover { text-decoration: underline; }
+
+    .card__download-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    img, svg { max-width: 100%; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .page-content { padding: calc(60px + 20px) 16px 56px; }
+      .card { padding: 40px 24px; gap: 24px; }
+      .card__title { font-size: 26px; }
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 32px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .page-content { padding: calc(56px + 16px) 16px 48px; }
+      .card { padding: 28px 16px; }
+      .card__title { font-size: 22px; }
+      .card__ref-number { font-size: 20px; }
+      .card__reference { padding: 16px 12px; gap: 2px; }
+      .card__delivery { padding: 14px 12px; }
+      .card__summary-total-label { font-size: 16px; }
+      .card__summary-total-value { font-size: 17px; }
+      /* stack the two CTAs */
+      .card__actions { flex-direction: column; }
+      .btn { flex: none; width: 100%; height: 48px; min-width: 0; }
+    }
+
+    @media (max-width: 414px) {
+      .card { padding: 24px 14px; }
+      .card__ref-number { font-size: 18px; letter-spacing: 0; }
+      .card__title { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── TOP NAV ──────────────────────────────────────────────── -->
+  <div id="okuma-header"></div>
+
+  <!-- ─── PAGE CONTENT ─────────────────────────────────────────── -->
+  <main class="page-content">
+    <div class="card">
+
+      <!-- 1. Hero: icon + title + subtitle -->
+      <div class="card__hero">
+        <div class="card__icon-wrap">
+          <div class="card__icon-inner">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M5 12.5L10 17.5L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <h1 class="card__title">Order Confirmed!</h1>
+          <p class="card__subtitle" style="margin-top:8px;">Thank you, James. Your order has been placed successfully.</p>
+        </div>
+      </div>
+
+      <!-- 2. Reference number -->
+      <div class="card__reference">
+        <span class="card__ref-label">Reference Number</span>
+        <span class="card__ref-number">#OKU-2026-00421</span>
+      </div>
+
+      <!-- 3. Estimated delivery -->
+      <div class="card__delivery">
+        <svg class="card__delivery-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="4" width="16" height="14" rx="2" stroke="#166534" stroke-width="1.5"/>
+          <path d="M2 8h16" stroke="#166534" stroke-width="1.5"/>
+          <path d="M6 2v4M14 2v4" stroke="#166534" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="card__delivery-text">Delivery details will be confirmed via email once your order is processed.</span>
+      </div>
+
+      <!-- Divider -->
+      <div class="card__divider"></div>
+
+      <!-- 4. Ordered for -->
+      <div class="card__section">
+        <p class="card__section-title">Ordered For</p>
+        <p class="card__section-line">ABC Industries</p>
+        <p class="card__section-line card__section-line--muted">Contact: Robert Chan · robert.chan@abcindustries.com</p>
+      </div>
+
+      <!-- Divider -->
+      <div class="card__divider"></div>
+
+      <!-- 5. Shipping address -->
+      <div class="card__section">
+        <p class="card__section-title">Shipping Address</p>
+        <p class="card__section-line">Okuma HQ - Warehouse B</p>
+        <p class="card__section-line card__section-line--muted">11900 Cottonwood Street, Charlotte, NC 28214, USA</p>
+      </div>
+
+      <!-- 5. Order summary -->
+      <div class="card__summary">
+        <p class="card__section-title">Order Summary</p>
+
+        <div class="card__summary-row">
+          <span class="card__summary-label">Items (3)</span>
+          <span class="card__summary-value">$742.50</span>
+        </div>
+        <div class="card__summary-row">
+          <span class="card__summary-label">Express Shipping</span>
+          <span class="card__summary-value">$24.99</span>
+        </div>
+        <div class="card__summary-row">
+          <span class="card__summary-label">Tax</span>
+          <span class="card__summary-value">$59.40</span>
+        </div>
+        <div class="card__summary-row">
+          <span class="card__summary-label">Discount (NEW10)</span>
+          <span class="card__summary-value card__summary-value--green">(-) $42.50</span>
+        </div>
+
+        <div class="card__summary-divider"></div>
+
+        <div class="card__summary-row">
+          <span class="card__summary-total-label">Total Charged</span>
+          <span class="card__summary-total-value">$826.89</span>
+        </div>
+      </div>
+
+      <!-- 6. Action buttons -->
+      <div class="card__actions">
+        <button class="btn btn--primary" onclick="window.location='dashboard.html'">View Order Details</button>
+        <button class="btn btn--outline" onclick="window.location='dashboard.html'">Continue Shopping</button>
+      </div>
+
+      <!-- 7. Download link -->
+      <a href="#" class="card__download">
+        <svg class="card__download-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 1v9M4.5 7L8 11l3.5-4" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M1 12v1.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5V12" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Download Order Confirmation PDF
+      </a>
+
+    </div>
+  </main>
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+
+
+  <script src="components.js"></script>
+
+</body>
+</html>

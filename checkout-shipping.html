@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout: Shipping – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+    }
+
+    /* ===== PAGE LAYOUT ===== */
+    .page-content { display: flex; justify-content: center; padding-top: 92px; }
+    .page-inner { width: 1200px; max-width: 100%; padding: 0 120px; display: flex; flex-direction: column; align-items: center; }
+
+    /* ===== STEPPER ===== */
+    .stepper {
+      width: 960px; max-width: 100%;
+      padding: 40px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+    .step { display: flex; align-items: center; gap: 10px; }
+    .step-circle {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .step-circle.active { background: #005EB8; border: 1px solid #005EB8; color: #FFFFFF; }
+    .step-circle.complete { background: #10B981; border: 1px solid #005EB8; color: #FFFFFF; }
+    .step-circle.inactive { background: #FFFFFF; border: 1px solid #6E6E6E; color: #6E6E6E; }
+    .step-label { font-size: 14px; white-space: nowrap; }
+    .step-label.active { font-weight: 700; color: #005EB8; }
+    .step-label.inactive { font-weight: 500; color: #6B7280; }
+    .step-connector { width: 60px; height: 1px; flex-shrink: 0; }
+    .step-connector.done { background: #005EB8; }
+    .step-connector.pending { background: #E5E5E5; }
+
+    /* ===== CHECKOUT BODY ===== */
+    .checkout-body {
+      width: 960px; max-width: 100%;
+      padding-bottom: 40px;
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+    .checkout-left { width: 488px; flex-shrink: 1; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
+
+    .page-title { font-size: 32px; font-weight: 800; color: #2C2A29; line-height: 1; }
+
+    .section { display: flex; flex-direction: column; gap: 16px; border: 0; padding: 0; margin: 0; min-width: 0; }
+    .section-label {
+      font-size: 12px; font-weight: 700; color: #6B7280;
+      letter-spacing: 0.04em; text-transform: uppercase; padding: 0;
+    }
+    fieldset.section > legend + * { margin-top: 8px; }
+
+    /* ===== RADIO CARDS ===== */
+    /* visually-hidden native radio (kept focusable + keyboard-operable) */
+    .radio-native {
+      position: absolute; opacity: 0; width: 0; height: 0; margin: 0; pointer-events: none;
+    }
+    .radio-circle {
+      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+      background: #FFFFFF; display: flex; align-items: center; justify-content: center;
+      border: 1px solid #6E6E6E; transition: border-width 0.1s;
+    }
+    /* selected ring driven by the native radio's :checked state */
+    .addr-card input:checked ~ .radio-circle,
+    .ship-card input:checked ~ .radio-circle { border: 6px solid #005EB8; }
+
+    .addr-card, .ship-card {
+      background: #FFFFFF; border-radius: 4px; padding: 20px;
+      display: flex; align-items: center; gap: 16px; cursor: pointer;
+      border: 1px solid #E5E5E5; position: relative;
+      transition: border-color 0.15s;
+    }
+    .addr-card:has(input:checked), .ship-card:has(input:checked) { border: 2px solid #005EB8; }
+    /* keyboard focus ring on the card when the hidden radio is focused */
+    .addr-card:has(input:focus-visible), .ship-card:has(input:focus-visible) {
+      outline: 2px solid #005EB8; outline-offset: 2px;
+    }
+
+    .addr-text { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .addr-name { font-size: 15px; font-weight: 700; color: #2C2A29; line-height: 1; }
+    .addr-tag { font-size: 14px; font-weight: 400; color: #6B7280; line-height: 1; }
+    .addr-line { font-size: 13px; font-weight: 400; color: #6B7280; line-height: 1.4; }
+
+    .ship-icon { color: #2C2A29; flex-shrink: 0; }
+    .ship-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .ship-name { font-size: 15px; font-weight: 700; color: #2C2A29; line-height: 1; }
+    .ship-days { font-size: 14px; font-weight: 400; color: #6B7280; line-height: 1; }
+    .ship-price { font-size: 16px; font-weight: 700; color: #2C2A29; }
+
+    /* ===== SHIPPING ACCOUNT ===== */
+    .acct-box {
+      background: #fff;
+      border: 1px solid #E5E5E5;
+      border-radius: 4px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .acct-row { display: flex; gap: 12px; align-items: flex-end; }
+    .acct-field { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .acct-field label { font-size: 12px; font-weight: 700; color: #6B7280; }
+    .acct-select {
+      height: 40px; border: 1px solid #D1D5DB; border-radius: 4px;
+      padding: 0 12px; font-family: inherit; font-size: 14px; color: #2C2A29;
+      background: #fff; outline: none; cursor: pointer; width: 100%;
+    }
+    .acct-select:focus { border-color: #005EB8; }
+    .acct-number-wrap { display: none; flex-direction: column; gap: 6px; }
+    .acct-number-wrap.show { display: flex; }
+    .acct-number-wrap label { font-size: 12px; font-weight: 700; color: #6B7280; }
+    .acct-number-input {
+      height: 40px; border: 1px solid #D1D5DB; border-radius: 4px;
+      padding: 0 12px; font-family: inherit; font-size: 14px; color: #2C2A29;
+      background: #fff; outline: none; width: 100%;
+    }
+    .acct-number-input:focus { border-color: #005EB8; }
+    .acct-number-input::placeholder { color: #9E9E9E; }
+    .acct-note {
+      font-size: 12px; color: #208831; font-weight: 500;
+      display: none; align-items: center; gap: 6px;
+    }
+    .acct-note.show { display: flex; }
+
+    /* ===== SPECIAL INSTRUCTIONS ===== */
+    .special-block { display: flex; flex-direction: column; gap: 8px; }
+    .special-title { font-size: 13px; font-weight: 700; color: #2C2A29; }
+    .special-textarea {
+      width: 100%; height: 100px; border: 1px solid #6E6E6E; border-radius: 2px;
+      padding: 12px; font-size: 14px; font-family: inherit; color: #2C2A29;
+      resize: vertical;
+    }
+    .special-textarea:focus { border-color: #005EB8; }
+    .special-textarea::placeholder { color: #9E9E9E; }
+
+    /* ===== CTA ===== */
+    .cta-block { display: flex; flex-direction: column; gap: 16px; }
+    .btn-primary {
+      background: #005EB8; height: 56px; width: 100%; border-radius: 4px;
+      font-size: 16px; font-weight: 700; color: #FFFFFF; border: none; cursor: pointer;
+      font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 12px;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #0052A3; }
+    .btn-secondary {
+      background: transparent; border: 1px solid #005EB8; color: #005EB8;
+      height: 38px; width: 100%; border-radius: 2px; font-size: 14px; font-weight: 700;
+      cursor: pointer; font-family: inherit; transition: background 0.15s;
+    }
+    .btn-secondary:hover { background: #EBF3FF; }
+
+    /* ===== ORDER SUMMARY SIDEBAR ===== */
+    .checkout-right { width: 440px; flex-shrink: 1; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+    .summary-card {
+      background: #FFFFFF; border: 1px solid #E5E5E5; border-radius: 4px;
+      padding: 24px; display: flex; flex-direction: column; gap: 24px;
+    }
+    .summary-header { display: flex; justify-content: space-between; align-items: center; }
+    .summary-title { font-size: 18px; font-weight: 700; color: #2C2A29; }
+    .edit-cart-link { font-size: 13px; font-weight: 700; color: #005EB8; text-decoration: none; }
+    .edit-cart-link:hover { text-decoration: underline; }
+    .summary-rows { display: flex; flex-direction: column; gap: 16px; }
+    .summary-row { display: flex; justify-content: space-between; align-items: center; }
+    .summary-row .lbl { font-size: 14px; font-weight: 400; color: #6B7280; }
+    .summary-row .val { font-size: 14px; font-weight: 500; color: #2C2A29; }
+    .summary-row .val.discount { color: #208831; }
+    .summary-divider { height: 1px; background: #E5E5E5; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; }
+    .total-label { font-size: 16px; font-weight: 700; color: #2C2A29; }
+    .total-amount { font-size: 24px; font-weight: 800; color: #005EB8; }
+    .secured-note { display: flex; align-items: center; gap: 8px; padding-top: 8px; }
+    .secured-note span { font-size: 12px; font-weight: 400; color: #6B7280; }
+
+    .help-card {
+      background: #F7F8F9; border-radius: 4px; padding: 20px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .help-title { font-size: 13px; font-weight: 700; color: #2C2A29; }
+    .help-text { font-size: 12px; font-weight: 400; color: #6B7280; line-height: 1.4; }
+
+    img, svg { max-width: 100%; }
+
+    .cards-grid { display: flex; flex-direction: column; gap: 10px; }
+
+    /* ===== RESPONSIVE ===== */
+    /* Between 1025-1199px the 960px layout needs 240px of side-padding but only ~900px
+       is available, so we stack early to prevent overflow. */
+    @media (max-width: 1199px) {
+      .page-inner { padding: 0 24px; }
+      .checkout-body { width: 100%; flex-direction: column; gap: 32px; }
+      .checkout-left { width: 100%; }
+      .checkout-right { width: 100%; }
+    }
+
+    @media (max-width: 1024px) {
+      .page-inner { width: 100%; padding: 0 24px; }
+      .stepper { width: 100%; }
+    }
+
+    @media (max-width: 768px) {
+      .page-content { padding-top: 40px; }
+      .page-inner { padding: 0 24px; }
+      .stepper {
+        justify-content: space-between;
+        gap: 4px;
+        padding: 24px 0;
+      }
+      .step { gap: 6px; }
+      .step-connector { flex: 1; width: auto; }
+      .page-title { font-size: 26px; }
+
+      /* Tablet typography — bump small text up 1–2px */
+      .section-label  { font-size: 13px; }
+      .addr-name      { font-size: 16px; }
+      .addr-tag       { font-size: 15px; }
+      .addr-line      { font-size: 14px; }
+      .ship-name      { font-size: 16px; }
+      .ship-days      { font-size: 15px; }
+      .ship-price     { font-size: 17px; }
+      .special-title  { font-size: 14px; }
+      .summary-title  { font-size: 20px; }
+      .summary-row .lbl,
+      .summary-row .val { font-size: 15px; }
+      .total-label    { font-size: 17px; }
+      .total-amount   { font-size: 26px; }
+      .help-title     { font-size: 14px; }
+      .help-text      { font-size: 13px; }
+      .secured-note span { font-size: 13px; }
+
+      /* 2-column grid on the wrapper div — avoids fieldset grid quirks */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      /* Cards stretch to the tallest sibling in each row */
+      .addr-card, .ship-card {
+        padding: 16px;
+        gap: 12px;
+        height: 100%;
+      }
+
+      /* CTA buttons → 50 / 50, same height */
+      .cta-block { flex-direction: row; gap: 12px; }
+      .btn-primary  { flex: 1; width: auto; }
+      .btn-secondary { flex: 1; width: auto; height: 56px; }
+    }
+
+    @media (max-width: 480px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .cta-block { flex-direction: column; gap: 12px; }
+      .btn-primary  { flex: none; width: 100%; }
+      .btn-secondary { flex: none; width: 100%; height: 56px; }
+      .stepper { gap: 4px; }
+      .step-label { font-size: 12px; }
+      .step-connector { flex: 1; width: auto; }
+      .page-title { font-size: 22px; }
+      /* Ship card: tighten gap and prevent price from wrapping */
+      .ship-card { gap: 8px; }
+      .ship-icon { width: 24px; height: 24px; }
+      .ship-price { white-space: nowrap; flex-shrink: 0; }
+      /* Summary sidebar typography */
+      .total-amount { font-size: 20px; }
+      .summary-title { font-size: 16px; }
+      /* Summary card spacing */
+      .summary-card { padding: 16px; }
+    }
+
+    @media (max-width: 414px) {
+      .step-label { font-size: 11px; }
+      .stepper { gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <div id="okuma-header"></div>
+
+  <!-- ===== PAGE CONTENT ===== -->
+  <div class="page-content">
+    <div class="page-inner">
+
+      <!-- STEPPER -->
+      <div class="stepper">
+        <div class="step">
+          <div class="step-circle active">1</div>
+          <div class="step-label active">Shipping</div>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">2</div>
+          <div class="step-label inactive">Payment</div>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">3</div>
+          <div class="step-label inactive">Review Order</div>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">4</div>
+          <div class="step-label inactive">Confirmation</div>
+        </div>
+      </div>
+
+      <!-- CHECKOUT BODY -->
+      <div class="checkout-body">
+
+        <!-- LEFT COLUMN -->
+        <div class="checkout-left">
+          <h1 class="page-title">Shipping Details</h1>
+
+          <!-- Saved Addresses -->
+          <fieldset class="section">
+            <legend class="section-label">Saved Addresses</legend>
+
+            <div class="cards-grid">
+              <label class="addr-card" for="addr-0">
+                <input type="radio" class="radio-native" name="address" id="addr-0" value="0" checked>
+                <span class="radio-circle" aria-hidden="true"></span>
+                <span class="addr-text">
+                  <span class="addr-name">Okuma HQ - Warehouse B</span>
+                  <span class="addr-tag">Primary Address</span>
+                  <span class="addr-line">11900 Cottonwood Street, Charlotte, NC 28214, USA</span>
+                </span>
+              </label>
+
+              <label class="addr-card" for="addr-1">
+                <input type="radio" class="radio-native" name="address" id="addr-1" value="1">
+                <span class="radio-circle" aria-hidden="true"></span>
+                <span class="addr-text">
+                  <span class="addr-name">Service Depot North</span>
+                  <span class="addr-line">455 Innovation Drive, Detroit, MI 48126, USA</span>
+                </span>
+              </label>
+            </div>
+
+          </fieldset>
+
+          <!-- Carrier & Billing -->
+          <div class="section">
+            <div class="section-label">Carrier &amp; Billing</div>
+            <div class="acct-box">
+              <div class="acct-row">
+                <div class="acct-field">
+                  <label for="acct-carrier">Carrier</label>
+                  <select class="acct-select" id="acct-carrier" onchange="onCarrierChange()">
+                    <option value="okuma">Prepaid</option>
+                    <option value="fedex">FedEx</option>
+                    <option value="ups">UPS</option>
+                    <option value="usps">USPS</option>
+                  </select>
+                </div>
+              </div>
+              <div class="acct-number-wrap" id="acctNumberWrap">
+                <label for="acct-number">Account Number</label>
+                <input type="text" class="acct-number-input" id="acct-number"
+                       placeholder="Enter your carrier account number"
+                       oninput="onAcctNumberChange()">
+              </div>
+              <div class="acct-note" id="acctNote">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#208831" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 7 5.5 10.5 12 4"/></svg>
+                Shipping will be charged to your carrier account and added to this order.
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping Method -->
+          <fieldset class="section">
+            <legend class="section-label">Shipping Method</legend>
+
+            <div class="cards-grid">
+              <label class="ship-card" for="ship-0">
+                <input type="radio" class="radio-native" name="shipping" id="ship-0" value="0">
+                <span class="radio-circle" aria-hidden="true"></span>
+                <svg class="ship-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="1" y="3" width="15" height="13" rx="1"/>
+                  <path d="M16 8h4l3 3v5h-7V8z"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+                <span class="ship-info">
+                  <span class="ship-name">Standard Ground</span>
+                  <span class="ship-days">5–7 business days</span>
+                </span>
+                <span class="ship-price">Free</span>
+              </label>
+
+              <label class="ship-card" for="ship-1">
+                <input type="radio" class="radio-native" name="shipping" id="ship-1" value="1" checked>
+                <span class="radio-circle" aria-hidden="true"></span>
+                <svg class="ship-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="1" y="3" width="15" height="13" rx="1"/>
+                  <path d="M16 8h4l3 3v5h-7V8z"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+                <span class="ship-info">
+                  <span class="ship-name">Express Shipping</span>
+                  <span class="ship-days">2–3 business days</span>
+                </span>
+                <span class="ship-price">$24.99</span>
+              </label>
+
+              <label class="ship-card" for="ship-2">
+                <input type="radio" class="radio-native" name="shipping" id="ship-2" value="2">
+                <span class="radio-circle" aria-hidden="true"></span>
+                <svg class="ship-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 2 11 13"/>
+                  <path d="M22 2 15 22l-4-9-9-4 20-7z"/>
+                </svg>
+                <span class="ship-info">
+                  <span class="ship-name">Overnight Delivery</span>
+                  <span class="ship-days">1 business day</span>
+                </span>
+                <span class="ship-price">$49.99</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Special Instructions -->
+          <div class="special-block">
+            <label class="special-title" for="special-instructions">Special Instructions (Optional)</label>
+            <textarea class="special-textarea" id="special-instructions" name="special-instructions" placeholder="e.g., Gate code, specific loading dock, etc."></textarea>
+          </div>
+
+          <!-- CTA -->
+          <div class="cta-block">
+            <button class="btn-primary" onclick="window.location='checkout-payment.html'">
+              Continue to Payment Details
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3" y1="8" x2="13" y2="8"/><polyline points="8.5 3.5 13 8 8.5 12.5"/>
+              </svg>
+            </button>
+            <button class="btn-secondary" onclick="window.location='parts-catalogue.html'">Back to Parts Book</button>
+          </div>
+        </div><!-- /checkout-left -->
+
+        <!-- RIGHT COLUMN -->
+        <div class="checkout-right">
+          <div class="summary-card">
+            <div class="summary-header">
+              <span class="summary-title">Order Summary</span>
+              <a href="cart.html" class="edit-cart-link">Edit Cart</a>
+            </div>
+
+            <div class="summary-rows">
+              <div class="summary-row">
+                <span class="lbl">Items (3)</span>
+                <span class="val">$742.50</span>
+              </div>
+              <div class="summary-row" id="summary-shipping-row">
+                <span class="lbl">Shipping &amp; Handling</span>
+                <span class="val">$24.99</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl">Tax (Estimated)</span>
+                <span class="val">$59.40</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl">Discount (NEW10)</span>
+                <span class="val discount">(-) $42.50</span>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="total-row">
+              <span class="total-label">Total</span>
+              <span class="total-amount">$826.89</span>
+            </div>
+
+            <div class="secured-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Secured by MyOkuma Enterprise Grade Encryption</span>
+            </div>
+          </div>
+
+          <div class="help-card">
+            <div class="help-title">Need Help?</div>
+            <div class="help-text">Contact OKUMA America Parts Support at 1-800-MY-OKUMA or email parts@okuma.com</div>
+          </div>
+        </div><!-- /checkout-right -->
+
+      </div><!-- /checkout-body -->
+    </div><!-- /page-inner -->
+  </div><!-- /page-content -->
+
+  <script>
+    var selectedAddress  = 0;
+    var selectedShipping = 1;
+    var addrCount = 2;
+
+    // Default state: "I will pay myself" selected — hide shipping charge
+    document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); });
+
+    document.querySelectorAll('input[name="address"]').forEach(function (r) {
+      r.addEventListener('change', function () { selectedAddress = parseInt(this.value, 10); });
+    });
+    document.querySelectorAll('input[name="shipping"]').forEach(function (r) {
+      r.addEventListener('change', function () { selectedShipping = parseInt(this.value, 10); });
+    });
+
+    /* ── Carrier & Billing ── */
+    function onCarrierChange() {
+      var carrier = document.getElementById('acct-carrier').value;
+      var wrap    = document.getElementById('acctNumberWrap');
+      var note    = document.getElementById('acctNote');
+      var input   = document.getElementById('acct-number');
+
+      if (carrier === 'okuma') {
+        // "I will pay myself" — no account number needed, no shipping charge
+        wrap.classList.remove('show');
+        note.classList.remove('show');
+        input.value = '';
+        setShippingChargeVisible(false);
+      } else {
+        // Using a carrier account — show account number field, add shipping to cart
+        wrap.classList.add('show');
+        note.classList.add('show');
+        setShippingChargeVisible(true);
+      }
+    }
+
+    function onAcctNumberChange() {
+      // Account number input is informational only; visibility is driven by carrier selection
+    }
+
+    function setShippingChargeVisible(visible) {
+      var row = document.getElementById('summary-shipping-row');
+      if (!row) return;
+      row.style.display = visible ? '' : 'none';
+      // Update total display
+      var totalEl = document.querySelector('.total-amount');
+      if (totalEl) {
+        totalEl.textContent = visible ? '$826.89' : '$802.90+';
+      }
+    }
+  </script>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div id="okuma-auth-footer"></div>
+
+
+  <script src="components.js"></script>
+
+</body>
+</html>

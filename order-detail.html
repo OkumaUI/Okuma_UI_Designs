@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Detail – Okuma Parts Portal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      padding: 32px 32px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+    .breadcrumb a { color: #717171; text-decoration: none; }
+    .breadcrumb a:hover { color: #1A1A1A; }
+    .breadcrumb__sep { color: #717171; }
+    .breadcrumb__current { color: #1A1A1A; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
+
+    /* ── PAGE HEADER ── */
+    .page-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .page-head__back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid #DEDEDE;
+      background: #fff;
+      color: #1A1A1A;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .page-head__back:hover { border-color: #005EB8; background: #F0F6FF; color: #005EB8; }
+    .page-head__back svg { width: 16px; height: 16px; }
+
+    .page-head__titles { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .page-head__title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1A1A1A;
+      letter-spacing: -0.3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .page-head__subtitle {
+      font-size: 13px;
+      color: #717171;
+    }
+
+    /* ── PLACEHOLDER CARD ── */
+    .placeholder-card {
+      background: #FAFAFA;
+      border: 1.5px dashed #DEDEDE;
+      border-radius: 10px;
+      padding: 72px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .placeholder-card__icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #EEF3FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #005EB8;
+      flex-shrink: 0;
+    }
+    .placeholder-card__icon svg { width: 26px; height: 26px; }
+
+    .placeholder-card__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #005EB8;
+      background: #EEF3FF;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .placeholder-card__title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1A1A1A;
+    }
+
+    .placeholder-card__body {
+      font-size: 14px;
+      color: #717171;
+      line-height: 1.6;
+      max-width: 420px;
+    }
+
+    .placeholder-card__order-num {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1A1A1A;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 6px;
+      padding: 8px 20px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.5px;
+    }
+
+    .placeholder-card__back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #005EB8;
+      text-decoration: none;
+    }
+    .placeholder-card__back-link:hover { text-decoration: underline; }
+    .placeholder-card__back-link svg { width: 13px; height: 13px; }
+
+    @media (max-width: 768px) {
+      .main-area { padding: 16px 16px 48px; }
+      .placeholder-card { padding: 48px 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .main-area { padding: 12px 12px 40px; }
+      .placeholder-card { padding: 32px 16px; }
+      .placeholder-card__title { font-size: 17px; }
+      .placeholder-card__body { font-size: 13px; }
+      .page-head__title { font-size: 17px; }
+    }
+
+    @media (max-width: 414px) {
+      .main-area { padding: 12px 12px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <div class="app-body-shell">
+    <div id="okuma-sidebar" data-active="orders"></div>
+
+    <main class="main-area">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="dashboard.html">Home</a>
+        <span class="breadcrumb__sep">/</span>
+        <a href="my-orders.html">My Orders</a>
+        <span class="breadcrumb__sep">/</span>
+        <span class="breadcrumb__current" id="breadcrumbOrderId">Order Detail</span>
+      </nav>
+
+      <!-- Page header -->
+      <div class="page-head">
+        <a href="my-orders.html" class="page-head__back" aria-label="Back to My Orders">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <div class="page-head__titles">
+          <h1 class="page-head__title" id="pageTitle">Order Detail</h1>
+          <span class="page-head__subtitle" id="pageSubtitle">Loading…</span>
+        </div>
+      </div>
+
+      <!-- Placeholder -->
+      <div class="placeholder-card">
+        <div class="placeholder-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M8 12h8M8 8h5M8 16h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="placeholder-card__label">Coming Soon</span>
+        <p class="placeholder-card__title">This screen is yet to be built</p>
+        <p class="placeholder-card__body">
+          The Order Detail view will show a full breakdown of the order — line items, shipping info, status timeline, and invoice download. Check back once this screen is designed and implemented.
+        </p>
+        <div class="placeholder-card__order-num" id="orderNumDisplay">—</div>
+        <a href="my-orders.html" class="placeholder-card__back-link">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to My Orders
+        </a>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="okuma-auth-footer"></div>
+
+  <script src="components.js"></script>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+
+      if (id) {
+        document.getElementById('breadcrumbOrderId').textContent = id;
+        document.getElementById('pageTitle').textContent = id;
+        document.getElementById('pageSubtitle').textContent = 'Order Detail';
+        document.getElementById('orderNumDisplay').textContent = id;
+      } else {
+        document.getElementById('pageSubtitle').textContent = 'Order Detail';
+        document.getElementById('orderNumDisplay').textContent = 'No order ID provided';
+      }
+
+      document.title = (id ? id + ' – ' : '') + 'Order Detail – Okuma Parts Portal';
+    })();
+  </script>
+
+</body>
+</html>

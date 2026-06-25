@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Documents – Register | Okuma</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #F5F5F5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #1A1A1A;
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px 80px;
+    }
+
+    /* WIZARD CARD */
+    .wizard-card {
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* WIZARD STEP HEADER */
+    .wizard-steps {
+      height: auto;
+      min-height: 80px;
+      border-bottom: 1px solid #E0E0E0;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #fff;
+    }
+
+    .wizard-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wizard-step__number {
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .wizard-step__number--active {
+      background: #005EB8;
+      color: #fff;
+    }
+
+    .wizard-step__number--inactive {
+      background: #F5F5F5;
+      color: rgba(49,52,64,0.7);
+    }
+
+    .wizard-step__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .wizard-step__label--active {
+      color: #005EB8;
+    }
+
+    .wizard-step__label--inactive {
+      color: rgba(49,52,64,0.7);
+    }
+
+    /* WIZARD BODY */
+    .wizard-body {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .wizard-section-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: #2C2A29;
+    }
+
+    /* CONTENT CONTAINER */
+    .upload-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .upload-intro__line1 {
+      font-size: 14px;
+      font-weight: 400;
+      color: #6E6E6E;
+      line-height: 1.6;
+    }
+
+    .upload-intro__line2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #2C2A29;
+      margin-top: 2px;
+    }
+
+    /* DROP ZONE */
+    .drop-zone {
+      background: #FAFAFA;
+      border: 2px dashed #9E9E9E;
+      border-radius: 4px;
+      padding: 40px 24px;
+      margin: 24px 0 20px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: border-color 0.15s, background 0.15s;
+      outline: none;
+    }
+
+    .drop-zone--active {
+      border-color: #005EB8;
+      background: #F0F6FF;
+    }
+
+    .drop-zone__icon {
+      color: #9E9E9E;
+    }
+
+    .drop-zone__title {
+      font-size: 15px;
+      font-weight: 500;
+      color: #2C2A29;
+      margin-top: 12px;
+    }
+
+    .drop-zone__subtitle {
+      font-size: 13px;
+      font-weight: 400;
+      color: #6E6E6E;
+      margin-top: 6px;
+    }
+
+    /* UPLOADED FILE ROW */
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .file-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #E0E0E0;
+      border-radius: 4px;
+    }
+
+    .file-row__icon {
+      color: #6B7280;
+      flex-shrink: 0;
+    }
+
+    .file-row__name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #2C2A29;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-row__size {
+      font-size: 13px;
+      color: #6E6E6E;
+      margin-left: auto;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .file-row__remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #9E9E9E;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      transition: color 0.15s;
+    }
+
+    .file-row__remove:hover {
+      color: #4B4B4B;
+    }
+
+    /* CTA AREA */
+    .cta-area {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      background: #005EB8;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.7px;
+      cursor: pointer;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: #004fa0;
+    }
+
+    .terms-line {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: #6E6E6E;
+    }
+
+    .terms-line a {
+      color: #005EB8;
+      text-decoration: none;
+    }
+
+    .terms-line a:hover {
+      text-decoration: underline;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: normal;
+      color: #005EB8;
+      text-decoration: none;
+      margin-top: 16px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Safety net: never let media overflow the viewport */
+    img, svg { max-width: 100%; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .content { padding-left: 16px; padding-right: 16px; }
+      .wizard-card { width: 100%; max-width: 720px; }
+    }
+
+    @media (max-width: 768px) {
+      .content { padding-top: 24px; padding-bottom: 48px; }
+      .wizard-steps {
+        height: auto;
+        padding: 16px 20px;
+        padding-bottom: 20px;
+        gap: 20px;
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .wizard-steps::-webkit-scrollbar { display: none; }
+      .wizard-step { flex-shrink: 0; }
+      .wizard-body { padding: 24px 20px; gap: 24px; }
+      .drop-zone { padding: 32px 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .wizard-body { padding: 20px 16px; }
+      .wizard-steps { padding: 14px 16px; }
+      .drop-zone { padding: 20px 12px; }
+    }
+
+    @media (max-width: 414px) {
+      .content { padding-top: 16px; padding-bottom: 32px; }
+      .drop-zone { padding: 16px 12px; }
+      .wizard-section-title { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div id="okuma-auth-header"></div>
+
+  <!-- CONTENT -->
+  <main class="content">
+    <div class="wizard-card">
+
+      <!-- STEP HEADER -->
+      <div class="wizard-steps">
+        <div class="wizard-step">
+          <div class="wizard-step__number wizard-step__number--inactive">1</div>
+          <span class="wizard-step__label wizard-step__label--inactive">Company Details</span>
+        </div>
+        <div class="wizard-step">
+          <div class="wizard-step__number wizard-step__number--inactive">2</div>
+          <span class="wizard-step__label wizard-step__label--inactive">Machine Verification</span>
+        </div>
+        <div class="wizard-step">
+          <div class="wizard-step__number wizard-step__number--inactive">3</div>
+          <span class="wizard-step__label wizard-step__label--inactive">Account Type</span>
+        </div>
+        <div class="wizard-step">
+          <div class="wizard-step__number wizard-step__number--active">4</div>
+          <span class="wizard-step__label wizard-step__label--active">Upload Documents</span>
+        </div>
+      </div>
+
+      <!-- WIZARD BODY -->
+      <div class="wizard-body">
+
+        <h1 class="wizard-section-title">Upload Documents</h1>
+
+        <div class="upload-container">
+          <div class="upload-intro">
+            <p class="upload-intro__line1">Upload your machine purchase documentation for account verification.</p>
+            <p class="upload-intro__line2">Accepted formats: PDF, JPG, PNG.</p>
+          </div>
+
+        <!-- Drop Zone -->
+        <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Upload files by clicking or dragging and dropping">
+          <!-- Cloud upload SVG icon -->
+          <svg class="drop-zone__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 16 12 12 8 16"></polyline>
+            <line x1="12" y1="12" x2="12" y2="21"></line>
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+          </svg>
+          <div class="drop-zone__title">Drag and drop files here</div>
+          <div class="drop-zone__subtitle">or click to browse</div>
+          <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none;">
+        </div>
+
+        <!-- File List -->
+        <div class="file-list" id="fileList"></div>
+
+        <!-- CTA -->
+        <div class="cta-area">
+          <button class="btn-primary" onclick="window.location='register-submitted.html'">Submit Registration</button>
+          <p class="terms-line">By registering you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+          <a href="register-step3.html" class="back-link">← Back</a>
+        </div>
+        </div><!-- /upload-container -->
+
+      </div><!-- /wizard-body -->
+    </div><!-- /wizard-card -->
+  </main>
+
+  <!-- FOOTER -->
+  <div id="okuma-auth-footer"></div>
+
+  <script src="components.js"></script>
+
+  <script>
+    var dropZone = document.getElementById('dropZone');
+    var fileInput = document.getElementById('fileInput');
+    var fileList = document.getElementById('fileList');
+
+    // Click to browse
+    dropZone.addEventListener('click', function() {
+      fileInput.click();
+    });
+
+    // Keyboard accessibility
+    dropZone.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        fileInput.click();
+      }
+    });
+
+    // Dragover
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      dropZone.classList.add('drop-zone--active');
+    });
+
+    // Dragleave
+    dropZone.addEventListener('dragleave', function(e) {
+      if (!dropZone.contains(e.relatedTarget)) {
+        dropZone.classList.remove('drop-zone--active');
+      }
+    });
+
+    // Drop
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      dropZone.classList.remove('drop-zone--active');
+      var files = e.dataTransfer.files;
+      handleFiles(files);
+    });
+
+    // File input change
+    fileInput.addEventListener('change', function() {
+      handleFiles(fileInput.files);
+      fileInput.value = '';
+    });
+
+    function handleFiles(files) {
+      for (var i = 0; i < files.length; i++) {
+        addFileRow(files[i]);
+      }
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function addFileRow(file) {
+      var row = document.createElement('div');
+      row.className = 'file-row';
+
+      var iconSvg = '<svg class="file-row__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>';
+
+      var nameSpan = '<span class="file-row__name">' + escapeHtml(file.name) + '</span>';
+      var sizeSpan = '<span class="file-row__size">' + formatFileSize(file.size) + '</span>';
+      var removeBtn = '<button class="file-row__remove" aria-label="Remove file" type="button">'
+        + '<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'
+        + '</button>';
+
+      row.innerHTML = iconSvg + nameSpan + sizeSpan + removeBtn;
+
+      row.querySelector('.file-row__remove').addEventListener('click', function() {
+        row.remove();
+      });
+
+      fileList.appendChild(row);
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+  </script>
+
+</body>
+</html>
