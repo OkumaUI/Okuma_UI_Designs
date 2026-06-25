@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parts Catalogue – Okuma Parts Portal</title>
+  <title>Parts Catalogue -“ Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -22,7 +20,7 @@
       flex-direction: column;
     }
 
-    /* ── MAIN CONTENT AREA ── */
+    /* â”€â”€ MAIN CONTENT AREA â”€â”€ */
     .content-area {
       flex: 1;
       background: #FAFAFA;
@@ -33,9 +31,9 @@
       overflow-y: auto;
     }
 
-    /* ══════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        BREADCRUMB
-    ══════════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .breadcrumb {
       display: flex;
       align-items: center;
@@ -59,9 +57,9 @@
       font-weight: 500;
     }
 
-    /* ══════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        MACHINE TITLE SECTION
-    ══════════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .machine-section {
       display: flex;
       flex-direction: column;
@@ -138,9 +136,9 @@
       color: #4B4B4B;
     }
 
-    /* ══════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        FILTER BAR
-    ══════════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .filter-bar {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -199,9 +197,9 @@
 
     .filter-select option { color: #1A1A1A; }
 
-    /* ══════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        EXPLODED DIAGRAM VIEWER
-    ══════════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .diagram-viewer {
       background: #F5F5F5;
       border: 1px solid #0B308E;
@@ -263,7 +261,7 @@
 
     #diagram-inner.no-transition { transition: none; }
 
-    /* Real diagram image — show the upper exploded GENERAL VIEW.
+    /* Real diagram image - show the upper exploded GENERAL VIEW.
        Source is portrait (1202x1546). We scale it wide and anchor it to the
        top, letting the container's overflow:hidden crop the lower drawing.
        A small negative top pulls the "GENERAL VIEW" title band out of view. */
@@ -520,7 +518,7 @@
     }
     #popup-alt-btn:hover { background: #EEF4FF; }
 
-    /* ── ALTERNATIVES MODAL ── */
+    /* â”€â”€ ALTERNATIVES MODAL â”€â”€ */
     #alt-modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.5);
@@ -538,7 +536,7 @@
     }
     .alt-modal__body { padding: 28px 28px 0; display: flex; flex-direction: column; gap: 20px; }
 
-    /* Original part — muted row */
+    /* Original part - muted row */
     .alt-original {
       display: flex; align-items: center; justify-content: space-between;
       gap: 12px; padding: 14px 16px;
@@ -630,9 +628,9 @@
     }
     .alt-quote-link:hover { text-decoration: underline; }
 
-    /* ══════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SHEET HEADING
-    ══════════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .sheet-heading {
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 28px;
@@ -641,9 +639,9 @@
       line-height: 1;
     }
 
-    /* ══════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        PARTS TABLE
-    ══════════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     #parts-table-wrapper {
       background: white;
       border: 1px solid #DEDEDE;
@@ -825,9 +823,9 @@
     }
     .alt-tertiary-btn:hover { text-decoration: underline; }
 
-    /* ══════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        CART MODAL
-    ══════════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     #cart-modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -1031,7 +1029,7 @@
 
     .btn-view-cart:hover { background: #0B308E; }
 
-    /* ── QUOTE MODAL ── */
+    /* â”€â”€ QUOTE MODAL â”€â”€ */
     #quote-modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.5);
@@ -1087,9 +1085,9 @@
     }
     .quote-modal__cta:hover { background: #0B308E; }
 
-    /* ══════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SAFETY NET + PARTS TABLE SCROLL CONTAINER
-    ══════════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .content-area img, .content-area svg { max-width: 100%; }
     /* The diagram image fills the container; zoom/pan is handled by #diagram-inner transform. */
 
@@ -1100,9 +1098,9 @@
     }
     .parts-table { min-width: 1010px; }
 
-    /* ══════════════════════════════════════════
-       RESPONSIVE  —  breakpoints: 1024 / 768 / 640 / 480
-    ══════════════════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       RESPONSIVE  -  breakpoints: 1024 / 768 / 640 / 480
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
     /* Tablet: filters drop to 2 columns */
     @media (max-width: 1024px) {
@@ -1141,17 +1139,17 @@
 </head>
 <body>
 
-  <!-- ══════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        HEADER
-  ══════════════════════════════════════════ -->
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-header"></div>
 
-  <!-- ══════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        MAIN LAYOUT
-  ══════════════════════════════════════════ -->
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="app-body-shell">
 
-    <!-- Left Sidebar (collapsible — hover to expand) -->
+    <!-- Left Sidebar (collapsible - hover to expand) -->
     <div id="okuma-sidebar" data-active="parts"></div>
 
     <!-- Main Content Area -->
@@ -1301,7 +1299,7 @@
               <button id="sheet-popup-select" type="button">Select Sheet</button>
             </div>
 
-            <!-- Numbered Pins — positions are set by positionPartPins() using image-relative ix/iy fractions -->
+            <!-- Numbered Pins - positions are set by positionPartPins() using image-relative ix/iy fractions -->
             <button type="button" class="pin in-stock"     data-pin="1" data-ix="0.33" data-iy="0.30" title="Part 1" aria-label="Part 1">1</button>
             <button type="button" class="pin in-stock"     data-pin="2" data-ix="0.37" data-iy="0.60" title="Part 2" aria-label="Part 2">2</button>
             <button type="button" class="pin out-of-stock" data-pin="3" data-ix="0.36" data-iy="0.46" title="Part 3" aria-label="Part 3">3</button>
@@ -1321,7 +1319,7 @@
                 <button id="popup-plus" type="button">+</button>
               </div>
               <button id="popup-add-btn" type="button">Add to Cart</button>
-              <button id="popup-alt-btn" type="button">Suggested Alternatives ›</button>
+              <button id="popup-alt-btn" type="button">Suggested Alternatives -º</button>
             </div>
           </div>
         </div>
@@ -1362,9 +1360,9 @@
     </main>
   </div>
 
-  <!-- ══════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        CART MODAL
-  ══════════════════════════════════════════ -->
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="cart-modal-overlay">
     <div id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-modal-title">
       <div class="modal-header">
@@ -1435,16 +1433,16 @@
 
       <div class="alt-modal__body">
 
-        <!-- Original part — out of stock -->
+        <!-- Original part - out of stock -->
         <div>
           <div class="alt-section-label" style="margin-bottom:10px;">Original Part</div>
           <div class="alt-original" id="alt-original-row">
             <div class="alt-original__left">
-              <span class="alt-original__pn" id="alt-orig-pn">—</span>
-              <span class="alt-original__name" id="alt-orig-name">—</span>
+              <span class="alt-original__pn" id="alt-orig-pn">-</span>
+              <span class="alt-original__name" id="alt-orig-name">-</span>
             </div>
             <div class="alt-original__right">
-              <span class="alt-original__price" id="alt-orig-price">—</span>
+              <span class="alt-original__price" id="alt-orig-price">-</span>
               <span class="badge-oos">Out of Stock</span>
             </div>
           </div>
@@ -1460,7 +1458,7 @@
 
       <div class="alt-modal__footer">
         <button class="alt-quote-link" id="alt-to-quote-btn" type="button">
-          Request a Quote for the original part instead →
+          Request a Quote for the original part instead â†’
         </button>
       </div>
     </div>
@@ -1491,7 +1489,7 @@
         </div>
         <span class="quote-modal__chip">Coming Soon</span>
         <p class="quote-modal__title">Design is coming soon</p>
-        <div class="quote-modal__part-ref" id="quote-part-ref">—</div>
+        <div class="quote-modal__part-ref" id="quote-part-ref">-</div>
         <p class="quote-modal__body">
           The Request a Quote flow is yet to be designed. This will allow you to submit out-of-stock parts for a pricing quote from Okuma.
         </p>
@@ -1500,15 +1498,16 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        JAVASCRIPT
-  ══════════════════════════════════════════ -->
-  <!-- ══════════════ FOOTER ══════════════ -->
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
   <script src="components.js"></script>
   <script>
-    // ── Parts Data — pins map by callout number; rows match active render (PG Cover (7)) ──
+    // â”€â”€ Parts Data - pins map by callout number; rows match active render (PG Cover (7)) â”€â”€
     const partsData = [
       { id: 1, num: 1, partNum: '112-0140-10',   name: 'Joint',                   compat: 'Verified',            price: 247.50,  inStock: true,  action: 'Add To Cart'  },
       { id: 2, num: 2, partNum: '525-0100-11',   name: 'Plate',                   compat: 'Verified',            price: 412.00,  inStock: true,  action: 'Add To Cart'  },
@@ -1523,103 +1522,103 @@
     const rowQtys = {};
     partsData.forEach(p => { rowQtys[p.id] = 1; });
 
-    // ── State ──
+    // â”€â”€ State â”€â”€
     let selectedPartId = null;
     let popupQty = 1;
     let modalQty = 1;
     let modalPartId = null;
 
-    // ── Zoom / Pan state ──
+    // â”€â”€ Zoom / Pan state â”€â”€
     let scale = 1;
     let translateX = 0;
     let translateY = 0;
     let isPanning = false;
     let startX, startY, startTX, startTY;
 
-    // ── Sheet data keyed by parent group number ──
+    // â”€â”€ Sheet data keyed by parent group number â”€â”€
     const SHEETS_BY_GROUP = {
       '1':  [
-        { value: 's1-1', label: 'Sheet 1 — Lower Base' },
-        { value: 's1-2', label: 'Sheet 2 — W-Axis Ball-Screw C.D.550' },
-        { value: 's1-3', label: 'Sheet 3 — ZA-Axis Ball-Screw C.D.550' },
-        { value: 's1-4', label: 'Sheet 4 — Bed C.D.550' },
-        { value: 's1-5', label: 'Sheet 5 — W-Axis Ball-Screw C.D.750' },
-        { value: 's1-6', label: 'Sheet 6 — ZA-Axis Ball-Screw C.D.750' },
-        { value: 's1-7', label: 'Sheet 7 — Bed C.D.750' },
+        { value: 's1-1', label: 'Sheet 1 - Lower Base' },
+        { value: 's1-2', label: 'Sheet 2 - W-Axis Ball-Screw C.D.550' },
+        { value: 's1-3', label: 'Sheet 3 - ZA-Axis Ball-Screw C.D.550' },
+        { value: 's1-4', label: 'Sheet 4 - Bed C.D.550' },
+        { value: 's1-5', label: 'Sheet 5 - W-Axis Ball-Screw C.D.750' },
+        { value: 's1-6', label: 'Sheet 6 - ZA-Axis Ball-Screw C.D.750' },
+        { value: 's1-7', label: 'Sheet 7 - Bed C.D.750' },
       ],
       '2':  [
-        { value: 's2-1', label: 'Sheet 1 — Headstock Assembly(STD)' },
-        { value: 's2-2', label: 'Sheet 2 — Headstock Assembly(B.D)' },
-        { value: 's2-3', label: 'Sheet 3 — Spindle Unit' },
-        { value: 's2-4', label: 'Sheet 4 — Bearing Housing Group' },
-        { value: 's2-5', label: 'Sheet 5 — High-Accuracy Headstock(STD)' },
-        { value: 's2-6', label: 'Sheet 6 — High-Accuracy Headstock(B.D)' },
+        { value: 's2-1', label: 'Sheet 1 - Headstock Assembly(STD)' },
+        { value: 's2-2', label: 'Sheet 2 - Headstock Assembly(B.D)' },
+        { value: 's2-3', label: 'Sheet 3 - Spindle Unit' },
+        { value: 's2-4', label: 'Sheet 4 - Bearing Housing Group' },
+        { value: 's2-5', label: 'Sheet 5 - High-Accuracy Headstock(STD)' },
+        { value: 's2-6', label: 'Sheet 6 - High-Accuracy Headstock(B.D)' },
       ],
       '3':  [
-        { value: 's3-1', label: 'Sheet 1 — Column Main Assembly' },
-        { value: 's3-2', label: 'Sheet 2 — Saddle Main Assembly' },
-        { value: 's3-3', label: 'Sheet 3 — Cross-Slide Assembly' },
-        { value: 's3-4', label: 'Sheet 4 — Y-Axis Ball-Screw Group' },
-        { value: 's3-5', label: 'Sheet 5 — Guide Way Group' },
+        { value: 's3-1', label: 'Sheet 1 - Column Main Assembly' },
+        { value: 's3-2', label: 'Sheet 2 - Saddle Main Assembly' },
+        { value: 's3-3', label: 'Sheet 3 - Cross-Slide Assembly' },
+        { value: 's3-4', label: 'Sheet 4 - Y-Axis Ball-Screw Group' },
+        { value: 's3-5', label: 'Sheet 5 - Guide Way Group' },
       ],
       '4':  [
-        { value: 's4-1', label: 'Sheet 1 — Turret Base Unit' },
-        { value: 's4-2', label: 'Sheet 2 — Turret Head Assembly' },
-        { value: 's4-3', label: 'Sheet 3 — B-Axis Drive Unit' },
-        { value: 's4-4', label: 'Sheet 4 — Tool Indexing Mechanism' },
-        { value: 's4-5', label: 'Sheet 5 — Turret Coupling Group' },
+        { value: 's4-1', label: 'Sheet 1 - Turret Base Unit' },
+        { value: 's4-2', label: 'Sheet 2 - Turret Head Assembly' },
+        { value: 's4-3', label: 'Sheet 3 - B-Axis Drive Unit' },
+        { value: 's4-4', label: 'Sheet 4 - Tool Indexing Mechanism' },
+        { value: 's4-5', label: 'Sheet 5 - Turret Coupling Group' },
       ],
       '5':  [
-        { value: 's5-1', label: 'Sheet 1 — Tailstock Body Assembly' },
-        { value: 's5-2', label: 'Sheet 2 — Tailstock Sleeve Unit' },
-        { value: 's5-3', label: 'Sheet 3 — Quill Assembly' },
-        { value: 's5-4', label: 'Sheet 4 — Centre Unit' },
-        { value: 's5-5', label: 'Sheet 5 — Tailstock Clamping Group' },
+        { value: 's5-1', label: 'Sheet 1 - Tailstock Body Assembly' },
+        { value: 's5-2', label: 'Sheet 2 - Tailstock Sleeve Unit' },
+        { value: 's5-3', label: 'Sheet 3 - Quill Assembly' },
+        { value: 's5-4', label: 'Sheet 4 - Centre Unit' },
+        { value: 's5-5', label: 'Sheet 5 - Tailstock Clamping Group' },
       ],
       '6':  [
-        { value: 's6-1', label: 'Sheet 1 — Sub Spindle Unit — Main Assembly' },
-        { value: 's6-2', label: 'Sheet 2 — Sub Spindle Chuck Group' },
-        { value: 's6-3', label: 'Sheet 3 — Through-Hole Unit' },
-        { value: 's6-4', label: 'Sheet 4 — C2-Axis Drive Group' },
-        { value: 's6-5', label: 'Sheet 5 — Spindle Bearing Group' },
+        { value: 's6-1', label: 'Sheet 1 - Sub Spindle Unit - Main Assembly' },
+        { value: 's6-2', label: 'Sheet 2 - Sub Spindle Chuck Group' },
+        { value: 's6-3', label: 'Sheet 3 - Through-Hole Unit' },
+        { value: 's6-4', label: 'Sheet 4 - C2-Axis Drive Group' },
+        { value: 's6-5', label: 'Sheet 5 - Spindle Bearing Group' },
       ],
       '7':  [
-        { value: 's7-1', label: 'Sheet 1 — Tool Magazine Assembly' },
-        { value: 's7-2', label: 'Sheet 2 — ATC Arm Unit' },
-        { value: 's7-3', label: 'Sheet 3 — Tool Change Mechanism' },
-        { value: 's7-4', label: 'Sheet 4 — Tool Holder Clamp Group' },
-        { value: 's7-5', label: 'Sheet 5 — Magazine Drive Group' },
+        { value: 's7-1', label: 'Sheet 1 - Tool Magazine Assembly' },
+        { value: 's7-2', label: 'Sheet 2 - ATC Arm Unit' },
+        { value: 's7-3', label: 'Sheet 3 - Tool Change Mechanism' },
+        { value: 's7-4', label: 'Sheet 4 - Tool Holder Clamp Group' },
+        { value: 's7-5', label: 'Sheet 5 - Magazine Drive Group' },
       ],
       '8':  [
-        { value: 's8-1', label: 'Sheet 1 — Front Cover Assembly' },
-        { value: 's8-2', label: 'Sheet 2 — Rear Cover Assembly' },
-        { value: 's8-3', label: 'Sheet 3 — Chip Guard Group' },
-        { value: 's8-4', label: 'Sheet 4 — Door Unit' },
-        { value: 's8-5', label: 'Sheet 5 — Splash Guard Group' },
+        { value: 's8-1', label: 'Sheet 1 - Front Cover Assembly' },
+        { value: 's8-2', label: 'Sheet 2 - Rear Cover Assembly' },
+        { value: 's8-3', label: 'Sheet 3 - Chip Guard Group' },
+        { value: 's8-4', label: 'Sheet 4 - Door Unit' },
+        { value: 's8-5', label: 'Sheet 5 - Splash Guard Group' },
       ],
       '9':  [
-        { value: 's9-1', label: 'Sheet 1 — Coolant Piping — Main' },
-        { value: 's9-2', label: 'Sheet 2 — Hydraulic Piping — Main' },
-        { value: 's9-3', label: 'Sheet 3 — Pneumatic Piping — Main' },
-        { value: 's9-4', label: 'Sheet 4 — Lubrication Piping Group' },
-        { value: 's9-5', label: 'Sheet 5 — Coolant Tank Unit' },
+        { value: 's9-1', label: 'Sheet 1 - Coolant Piping - Main' },
+        { value: 's9-2', label: 'Sheet 2 - Hydraulic Piping - Main' },
+        { value: 's9-3', label: 'Sheet 3 - Pneumatic Piping - Main' },
+        { value: 's9-4', label: 'Sheet 4 - Lubrication Piping Group' },
+        { value: 's9-5', label: 'Sheet 5 - Coolant Tank Unit' },
       ],
       '10': [
-        { value: 's10-1', label: 'Sheet 1 — Electrical Cabinet Assembly' },
-        { value: 's10-2', label: 'Sheet 2 — Operation Panel Group' },
-        { value: 's10-3', label: 'Sheet 3 — Foot Switch Unit' },
-        { value: 's10-4', label: 'Sheet 4 — Work Lamp Group' },
+        { value: 's10-1', label: 'Sheet 1 - Electrical Cabinet Assembly' },
+        { value: 's10-2', label: 'Sheet 2 - Operation Panel Group' },
+        { value: 's10-3', label: 'Sheet 3 - Foot Switch Unit' },
+        { value: 's10-4', label: 'Sheet 4 - Work Lamp Group' },
       ],
       '99': [
-        { value: 's99-1', label: 'Sheet 1 — Servo Motor Spec List' },
-        { value: 's99-2', label: 'Sheet 2 — Spindle Motor Spec List' },
-        { value: 's99-3', label: 'Sheet 3 — Linear Guide Spec List' },
-        { value: 's99-4', label: 'Sheet 4 — Ball Screw Spec List' },
-        { value: 's99-5', label: 'Sheet 5 — Bearing Spec List' },
+        { value: 's99-1', label: 'Sheet 1 - Servo Motor Spec List' },
+        { value: 's99-2', label: 'Sheet 2 - Spindle Motor Spec List' },
+        { value: 's99-3', label: 'Sheet 3 - Linear Guide Spec List' },
+        { value: 's99-4', label: 'Sheet 4 - Ball Screw Spec List' },
+        { value: 's99-5', label: 'Sheet 5 - Bearing Spec List' },
       ],
     };
 
-    // ── DOM refs ──
+    // â”€â”€ DOM refs â”€â”€
     const selBook    = document.getElementById('sel-book');
     const selGroup   = document.getElementById('sel-group');
     const selSheet   = document.getElementById('sel-sheet');
@@ -1647,7 +1646,7 @@
     const zoomIn         = document.getElementById('zoom-in');
     const zoomOut        = document.getElementById('zoom-out');
 
-    // ── Order mode (dealer create-order flow) ──
+    // â”€â”€ Order mode (dealer create-order flow) â”€â”€
     const isOrderMode = localStorage.getItem('okmOrderMode') === 'order';
 
     if (isOrderMode) {
@@ -1657,7 +1656,7 @@
       });
       // Change popup button label
       popupAddBtn.textContent = 'Add to Order';
-      // Change modal title and View Cart → View Order
+      // Change modal title and View Cart â†’ View Order
       document.getElementById('cart-modal-title').textContent = 'Added to Order';
       const btnVC = document.querySelector('.btn-view-cart');
       if (btnVC) {
@@ -1666,12 +1665,12 @@
       }
     }
 
-    // ── Alternatives map (partNum → array of alternative part IDs) ──
+    // â”€â”€ Alternatives map (partNum â†’ array of alternative part IDs) â”€â”€
     const ALTERNATIVES_MAP = {
-      'C5010-080201': [6, 7]   // BOLT 8X20 → BOLT 12X30, BOLT 12X45
+      'C5010-080201': [6, 7]   // BOLT 8X20 â†’ BOLT 12X30, BOLT 12X45
     };
 
-    // ── Build Table Rows ──
+    // â”€â”€ Build Table Rows â”€â”€
     function buildTable() {
       const tbody = document.getElementById('parts-tbody');
       tbody.innerHTML = '';
@@ -1712,7 +1711,7 @@
 
     buildTable();
 
-    // ── Dropdown Cascade ──
+    // â”€â”€ Dropdown Cascade â”€â”€
     function setPlaceholderState(sel) {
       if (sel.value === '') sel.classList.add('is-placeholder');
       else sel.classList.remove('is-placeholder');
@@ -1763,12 +1762,12 @@
       updateViewerState();
     });
 
-    // ── Group sheet pin positions ──
-    // ix / iy are fractions of the IMAGE (0–1), not the container.
+    // â”€â”€ Group sheet pin positions â”€â”€
+    // ix / iy are fractions of the IMAGE (0-“1), not the container.
     // They are computed against the actual rendered image bounds at runtime
     // so they land precisely on the SHEET No.X callout text in the drawing.
     var GROUP_SHEET_PINS = {
-      '1': [ // Bed Group — positions match SHEET No.X text labels in the drawing
+      '1': [ // Bed Group - positions match SHEET No.X text labels in the drawing
         { num: '1', value: 's1-1', ix: 0.23,  iy: 0.68  },
         { num: '2', value: 's1-2', ix: 0.529, iy: 0.261 },
         { num: '3', value: 's1-3', ix: 0.29,  iy: 0.34  },
@@ -1830,7 +1829,7 @@
       pins.forEach(function (pin) {
         var sheet = sheets.find(function (s) { return s.value === pin.value; });
         if (!sheet) return;
-        var desc = sheet.label.replace(/^Sheet\s+\d+\s+[—\-]+\s*/i, '');
+        var desc = sheet.label.replace(/^Sheet\s+\d+\s+[-\-]+\s*/i, '');
         var pos  = pinContainerPct(pin.ix, pin.iy);
         var btn  = document.createElement('button');
         btn.type        = 'button';
@@ -1883,7 +1882,7 @@
       }
     }
 
-    // ── Part pin positioning (image-relative, same letterbox-aware approach) ──
+    // â”€â”€ Part pin positioning (image-relative, same letterbox-aware approach) â”€â”€
     function getPartsImgBounds() {
       var img     = document.getElementById('parts-diagram-img');
       var wrapper = document.getElementById('diagram-wrapper');
@@ -2002,7 +2001,7 @@
       const headingEl = document.getElementById('sheet-heading');
       headingEl.style.display = '';
       const rawLabel = selSheet.selectedIndex > 0 ? selSheet.options[selSheet.selectedIndex].text : '';
-      const sheetName = rawLabel.replace(/^Sheet \d+ — /i, '') || rawLabel;
+      const sheetName = rawLabel.replace(/^Sheet \d+ - /i, '') || rawLabel;
       headingEl.textContent = sheetName + ' (' + partsData.length + ')';
       positionPartPins();
     }
@@ -2016,7 +2015,7 @@
       hidePopup();
     }
 
-    // ── Default: all dropdowns blank; user picks Book → Group → Sheet ──
+    // â”€â”€ Default: all dropdowns blank; user picks Book â†’ Group â†’ Sheet â”€â”€
     function applyDefault() {
       selBook.value   = '';
       selGroup.disabled = true;  selGroup.value = '';
@@ -2026,7 +2025,7 @@
     }
     applyDefault();
 
-    // ── Pre-select book when arriving from dashboard modal ──
+    // â”€â”€ Pre-select book when arriving from dashboard modal â”€â”€
     (function () {
       var preBook = localStorage.getItem('okmPartsBook');
       if (preBook) {
@@ -2039,7 +2038,7 @@
       }
     })();
 
-    // ── Sync page title / breadcrumb to the global default-machine picker ──
+    // â”€â”€ Sync page title / breadcrumb to the global default-machine picker â”€â”€
     (function () {
       function applyMachineContext() {
         var name     = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
@@ -2051,19 +2050,19 @@
         var crumbEl   = document.querySelector('.machine-name-crumb');
         if (titleEl)   titleEl.textContent = m.name;
         if (detailsEl) detailsEl.textContent =
-          'Serial: ' + m.serial + '  |  Stock Condition: ' + m.condition;
+          'Serial: ' + m.serial + 'Â Â |Â Â Stock Condition: ' + m.condition;
         if (crumbEl)   crumbEl.textContent = m.name;
-        document.title = m.name + ' – Parts Catalogue – Okuma Parts Portal';
+        document.title = m.name + ' -“ Parts Catalogue -“ Okuma Parts Portal';
       }
       applyMachineContext();
       window.addEventListener('okuma:machineChanged', applyMachineContext);
     })();
 
-    // ── Override machine display when arriving from a specific machine card ──
+    // â”€â”€ Override machine display when arriving from a specific machine card â”€â”€
     (function () {
       var cardMachine = localStorage.getItem('okmCatalogueMachine');
       if (!cardMachine) return;
-      var cardSerial = localStorage.getItem('okmCatalogueMachineSerial') || '—';
+      var cardSerial = localStorage.getItem('okmCatalogueMachineSerial') || '-';
       localStorage.removeItem('okmCatalogueMachine');
       localStorage.removeItem('okmCatalogueMachineSerial');
       var titleEl   = document.querySelector('.machine-title');
@@ -2072,10 +2071,10 @@
       if (titleEl)   titleEl.textContent = cardMachine;
       if (detailsEl) detailsEl.textContent = 'Serial: ' + cardSerial + '  |  Stock Condition: Active';
       if (crumbEl)   crumbEl.textContent = cardMachine;
-      document.title = cardMachine + ' – Parts Catalogue – Okuma Parts Portal';
+      document.title = cardMachine + ' -“ Parts Catalogue -“ Okuma Parts Portal';
     })();
 
-    // ── Override machine display when entering from Create Order step 4 ──
+    // â”€â”€ Override machine display when entering from Create Order step 4 â”€â”€
     if (isOrderMode) {
       const orderMachineName   = localStorage.getItem('okmOrderMachine') || '';
       const orderMachineSerial = localStorage.getItem('okmOrderMachineSerial') || '';
@@ -2085,13 +2084,13 @@
         const crumbEl   = document.querySelector('.machine-name-crumb');
         if (titleEl)   titleEl.textContent = orderMachineName;
         if (detailsEl) detailsEl.textContent =
-          'Serial: ' + (orderMachineSerial || '—') + '  |  Stock Condition: Active';
+          'Serial: ' + (orderMachineSerial || '-') + '  |  Stock Condition: Active';
         if (crumbEl)   crumbEl.textContent = orderMachineName;
-        document.title = orderMachineName + ' – Parts Catalogue – Okuma Parts Portal';
+        document.title = orderMachineName + ' -“ Parts Catalogue -“ Okuma Parts Portal';
       }
     }
 
-    // ── Zoom ──
+    // â”€â”€ Zoom â”€â”€
     function applyTransform(transition) {
       if (transition === false) diagramInner.classList.add('no-transition');
       else diagramInner.classList.remove('no-transition');
@@ -2117,7 +2116,7 @@
       }
     }, { passive: false });
 
-    // ── Pan ──
+    // â”€â”€ Pan â”€â”€
     diagramWrapper.addEventListener('mousedown', (e) => {
       if (e.target.closest('.pin') || e.target.closest('#part-popup')) return;
       isPanning = true;
@@ -2150,7 +2149,7 @@
       }
     });
 
-    // ── Pin Click ──
+    // â”€â”€ Pin Click â”€â”€
     document.querySelectorAll('.pin').forEach(pin => {
       pin.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -2176,14 +2175,14 @@
       const hasAlts = !part.inStock && (ALTERNATIVES_MAP[part.partNum] || []).length > 0;
       popupAltBtn.style.display = hasAlts ? 'block' : 'none';
       popup.style.display = 'block';
-      // pins are positioned in % — resolve to px relative to inner
+      // pins are positioned in % - resolve to px relative to inner
       const innerW = diagramInner.offsetWidth;
       const innerH = diagramInner.offsetHeight;
       const pinLeft = (parseFloat(pinEl.style.left) / 100) * innerW;
       const pinTop  = (parseFloat(pinEl.style.top)  / 100) * innerH;
       const scaledLeft = pinLeft * scale + translateX;
       const scaledTop  = pinTop  * scale + translateY;
-      // Convert diagram-wrapper coords → viewport coords (popup is position:fixed)
+      // Convert diagram-wrapper coords â†’ viewport coords (popup is position:fixed)
       const wRect = diagramWrapper.getBoundingClientRect();
       const vpLeft = wRect.left + scaledLeft;
       const vpTop  = wRect.top  + scaledTop;
@@ -2229,7 +2228,7 @@
       });
     }
 
-    // ── Table Row Click ──
+    // â”€â”€ Table Row Click â”€â”€
     document.getElementById('parts-tbody').addEventListener('click', (e) => {
       // Stepper button
       if (e.target.classList.contains('row-step-btn')) {
@@ -2293,7 +2292,7 @@
       if (row) row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // ── Popup Qty Stepper ──
+    // â”€â”€ Popup Qty Stepper â”€â”€
     popupMinus.addEventListener('click', (e) => {
       e.stopPropagation();
       popupQty = Math.max(1, popupQty - 1);
@@ -2306,7 +2305,7 @@
       popupQtyEl.textContent = popupQty;
     });
 
-    // ── Add To Cart / Add to Quote (popup) ──
+    // â”€â”€ Add To Cart / Add to Quote (popup) â”€â”€
     popupAddBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (!selectedPartId) return;
@@ -2319,7 +2318,7 @@
       }
     });
 
-    // ── Alternatives modal ──
+    // â”€â”€ Alternatives modal â”€â”€
     const altModalOverlay = document.getElementById('alt-modal-overlay');
     const altPartsList    = document.getElementById('alt-parts-list');
     const altOrigPn       = document.getElementById('alt-orig-pn');
@@ -2395,7 +2394,7 @@
     document.getElementById('alt-modal-close').addEventListener('click', closeAltModal);
     altModalOverlay.addEventListener('click', e => { if (e.target === altModalOverlay) closeAltModal(); });
 
-    // "Request a Quote" footer link → close alt modal and open quote modal
+    // "Request a Quote" footer link â†’ close alt modal and open quote modal
     document.getElementById('alt-to-quote-btn').addEventListener('click', () => {
       closeAltModal();
       const part = partsData.find(p => p.id === selectedPartId);
@@ -2410,12 +2409,12 @@
       if (part) openAltModal(part);
     });
 
-    // ── Quote modal ──
+    // â”€â”€ Quote modal â”€â”€
     const quoteModalOverlay = document.getElementById('quote-modal-overlay');
     const quotePartRef      = document.getElementById('quote-part-ref');
 
     function openQuoteModal(part) {
-      quotePartRef.textContent = part.partNum + ' — ' + part.name;
+      quotePartRef.textContent = part.partNum + ' - ' + part.name;
       quoteModalOverlay.style.display = 'flex';
       document.body.style.overflow = 'hidden';
     }
@@ -2431,7 +2430,7 @@
       if (e.target === quoteModalOverlay) closeQuoteModal();
     });
 
-    // ── Modal logic ──
+    // â”€â”€ Modal logic â”€â”€
     function refreshModalPrices() {
       const part = partsData.find(p => p.id === modalPartId);
       if (!part) return;
@@ -2445,7 +2444,7 @@
       modalSubtotal.textContent = 'Subtotal: $' + totalOrig.toFixed(2);
     }
 
-    // Element that opened the modal — focus returns here on close (WCAG 2.4.3)
+    // Element that opened the modal - focus returns here on close (WCAG 2.4.3)
     let cartModalTrigger = null;
 
     function savePendingPart(part, qty) {
@@ -2497,7 +2496,7 @@
       }
     });
 
-    // ── Select Sheet button ──
+    // â”€â”€ Select Sheet button â”€â”€
     document.getElementById('sheet-popup-select').addEventListener('click', function (e) {
       e.stopPropagation();
       if (!_activeSheetValue) return;
@@ -2507,7 +2506,7 @@
       updateViewerState();
     });
 
-    // ── Close part popup when clicking outside ──
+    // â”€â”€ Close part popup when clicking outside â”€â”€
     document.addEventListener('click', (e) => {
       if (popup.style.display === 'none') return;
       if (e.target.closest('#part-popup') || e.target.closest('.pin:not(.sheet-pin)')) return;
@@ -2516,7 +2515,7 @@
 
     popup.addEventListener('click', (e) => e.stopPropagation());
 
-    // ── Close sheet popup when clicking outside ──
+    // â”€â”€ Close sheet popup when clicking outside â”€â”€
     document.addEventListener('click', function (e) {
       var sp = document.getElementById('sheet-popup');
       if (!sp || sp.style.display === 'none') return;

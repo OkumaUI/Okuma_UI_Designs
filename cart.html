@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Cart – Okuma Parts Portal</title>
+  <title>Your Cart -“ Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -58,7 +56,7 @@
     .cart-head .col-desc,
     .cart-row .col-desc { flex: 1; min-width: 0; }
     .cart-head .col-machine,
-    .cart-row .col-machine { width: 150px; flex-shrink: 0; }
+    .cart-row .col-machine { width: 130px; flex-shrink: 0; }
     .cart-head .col-price,
     .cart-row .col-price { width: 80px; flex-shrink: 0; }
     .cart-head .col-qty,
@@ -299,12 +297,19 @@
     /* Safety net: nothing exceeds the viewport */
     main img, main svg { max-width: 100%; }
 
-    /* ══════════════════════════════════════════
-       RESPONSIVE  —  breakpoints: 900 (stack) / 768 / 640 (card rows) / 480
-    ══════════════════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       RESPONSIVE  -  breakpoints: 1100 (stack) / 768 / 640 (card rows) / 480
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+    /* Medium screens: tighten padding + right panel before stacking */
+    @media (max-width: 1350px) and (min-width: 1101px) {
+      main { padding: 32px; }
+      .cart-layout { gap: 32px; }
+      .cart-right { width: 340px; }
+    }
 
     /* Stack the two columns: Order Summary drops below the items, full-width */
-    @media (max-width: 900px) {
+    @media (max-width: 1100px) {
       .cart-layout { flex-direction: column; align-items: stretch; gap: 32px; }
       .cart-right { width: 100%; flex-shrink: 1; }
     }
@@ -322,7 +327,7 @@
       main { padding: 16px; }
       .page-title { font-size: 24px; }
 
-      /* Hide column headers entirely — card layout makes them redundant and they overflow at 414px */
+      /* Hide column headers entirely - card layout makes them redundant and they overflow at 414px */
       .cart-head { display: none; }
 
       /* Larger touch targets for qty stepper buttons (min 40px per WCAG 2.5.5) */
@@ -378,7 +383,7 @@
       .cart-row { padding: 16px 0; }
     }
 
-    /* 414px — narrowest common mobile viewport (iPhone XR) */
+    /* 414px - narrowest common mobile viewport (iPhone XR) */
     @media (max-width: 414px) {
       .page-title { font-size: 22px; }
       .cart-row { padding: 14px 0; }
@@ -703,8 +708,9 @@
     // Initial render
     recalcSummary();
   </script>
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
 
   <script src="components.js"></script>
@@ -715,7 +721,7 @@
       if (!cust) return;
       var h1 = document.querySelector('.page-title');
       if (h1) h1.textContent = cust + ' Cart';
-      document.title = cust + ' Cart – Okuma Parts Portal';
+      document.title = cust + ' Cart -“ Okuma Parts Portal';
     })();
   </script>
 </body>

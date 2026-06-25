@@ -360,10 +360,8 @@
             <a href="forgot-password.html">Forgot Password?</a>
           </div>
         </div>
-          <!-- Error message -->
-        <p id="loginError" style="display:none;color:#D32F2F;font-size:13px;margin-top:12px;text-align:center;" role="alert">
-          Incorrect email or password. Please try again.
-        </p>
+        <!-- Error message -->
+        <p id="loginError" style="display:none;color:#C0392B;font-size:13px;margin-top:12px;text-align:center;">Invalid email or password</p>
 
         <!-- Sign In button -->
         <button type="button" class="btn--primary" id="signInBtn">Sign In</button>
@@ -381,7 +379,13 @@
   <script src="auth.js"></script>
   <script>
     (function() {
-      /* Password show/hide toggle */
+      // If already logged in, redirect away from login page
+      var _existing = okuma_getUser();
+      if (_existing) {
+        window.location.replace(_existing.role === 'dealer' ? 'dealer-dashboard.html' : 'dashboard.html');
+      }
+
+      // Eye toggle
       var btn = document.getElementById('eye-toggle');
       var inp = document.getElementById('password');
       var iconShow = document.getElementById('eye-show');
@@ -394,25 +398,19 @@
         btn.setAttribute('aria-label', isText ? 'Show password' : 'Hide password');
       });
 
-      /* Sign-in */
-      function attemptLogin() {
-        var email    = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
-        var errorEl  = document.getElementById('loginError');
-        var user = OkumaAuth.validate(email, password);
-        if (user) {
-          errorEl.style.display = 'none';
-          OkumaAuth.login(user);
-        } else {
-          errorEl.style.display = 'block';
+      // Sign in
+      document.getElementById('signInBtn').addEventListener('click', function() {
+        var email = (document.getElementById('email').value || '').trim();
+        var password = document.getElementById('password').value || '';
+        var errEl = document.getElementById('loginError');
+        var user = okunmaLogin(email, password);
+        if (!user) {
+          errEl.style.display = 'block';
+          return;
         }
-      }
-
-      document.getElementById('signInBtn').addEventListener('click', attemptLogin);
-
-      /* Allow Enter key in either field to submit */
-      document.getElementById('email').addEventListener('keydown', function(e) { if (e.key === 'Enter') attemptLogin(); });
-      document.getElementById('password').addEventListener('keydown', function(e) { if (e.key === 'Enter') attemptLogin(); });
+        errEl.style.display = 'none';
+        window.location.replace(user.role === 'dealer' ? 'dealer-dashboard.html' : 'dashboard.html');
+      });
     })();
   </script>
 

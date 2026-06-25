@@ -1,21 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dealer Dashboard – Okuma Parts Portal</title>
+  <title>Dealer Dashboard -“ Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>
-    (function() {
-      var user = OkumaAuth.checkAuth();
-      /* Customers don't belong here; send them to their dashboard */
-      if (user && user.role === 'customer') { window.location.replace('dashboard.html'); }
-    })();
-  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -28,7 +20,7 @@
       flex-direction: column;
     }
 
-    /* ── MAIN AREA ── */
+    /* â”€â”€ MAIN AREA â”€â”€ */
     .main-area {
       flex: 1;
       min-width: 0;
@@ -57,7 +49,7 @@
     /* KPI row */
     .kpi-row {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 20px;
     }
     .kpi-tile {
@@ -212,7 +204,7 @@
     .order-view-link { font-size: 12px; font-weight: 700; color: #005EB8; text-decoration: none; }
     .order-view-link:hover { text-decoration: underline; }
 
-    /* State wrappers — space every section evenly */
+    /* State wrappers - space every section evenly */
     #state-all,
     #state-customer {
       display: flex;
@@ -245,6 +237,97 @@
       .quick-links--5, .quick-links--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       #state-all, #state-customer { gap: 16px; }
     }
+
+    /* â”€â”€ Address Request Queue â”€â”€ */
+    .addr-req-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #92400E;
+      background: #FFFBEB; border: 1px solid #FCD34D;
+      border-radius: 10px; padding: 1px 8px; margin-left: 10px; vertical-align: middle;
+    }
+    .addr-req-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+    .addr-req-card {
+      border: 1.5px solid #E0E0E0; border-radius: 4px;
+      padding: 16px 20px; display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 16px;
+      background: #fff;
+    }
+    .addr-req-card.is-approved { border-color: #86EFAC; background: #F0FDF4; }
+    .addr-req-card.is-rejected-done { border-color: #FCA5A5; background: #FEF2F2; opacity: 0.7; }
+    .addr-req-card__body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .addr-req-card__label { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+    .addr-req-card__line { font-size: 13px; color: #717171; }
+    .addr-req-card__meta { font-size: 12px; color: #9E9E9E; margin-top: 2px; }
+    .addr-req-card__status { font-size: 12px; font-weight: 700; margin-top: 6px; }
+    .addr-req-card__status--approved { color: #166534; }
+    .addr-req-card__status--rejected { color: #991B1B; }
+    .addr-req-card__actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .addr-req-approve {
+      height: 34px; padding: 0 16px; background: #005EB8; color: #fff;
+      border: none; border-radius: 4px; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .addr-req-approve:hover { background: #0052A3; }
+    .addr-req-reject {
+      height: 34px; padding: 0 14px; background: transparent;
+      border: 1px solid #9E9E9E; border-radius: 4px; font-size: 13px;
+      font-weight: 500; color: #4B4B4B; cursor: pointer;
+    }
+    .addr-req-reject:hover { border-color: #AD0000; color: #AD0000; }
+    /* Reject reason inline */
+    .addr-req-reason-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .addr-req-reason-input {
+      flex: 1; height: 34px; border: 1px solid #D1D5DB; border-radius: 4px;
+      padding: 0 10px; font-family: inherit; font-size: 13px; color: #2C2A29; outline: none;
+    }
+    .addr-req-reason-input:focus { border-color: #AD0000; }
+    .addr-req-confirm-reject {
+      height: 34px; padding: 0 14px; background: #AD0000; color: #fff;
+      border: none; border-radius: 4px; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .addr-req-confirm-reject:hover { background: #8B0000; }
+    .addr-req-cancel-reject {
+      height: 34px; padding: 0 10px; background: transparent;
+      border: none; font-size: 13px; color: #717171; cursor: pointer;
+    }
+    .addr-req-empty { font-size: 14px; color: #9E9E9E; padding: 16px 0; }
+
+    /* â”€â”€ Approve Confirmation Modal â”€â”€ */
+    .approve-modal-overlay {
+      display: none; position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,.45); z-index: 9999;
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .approve-modal-overlay.open { display: flex; }
+    .approve-modal {
+      background: #fff; border-radius: 8px;
+      padding: 32px 28px 24px; width: 480px; max-width: 100%;
+      box-shadow: 0 8px 40px rgba(0,0,0,.18);
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .approve-modal__title { font-size: 18px; font-weight: 700; color: #1A1A1A; }
+    .approve-modal__body { font-size: 14px; color: #4B4B4B; line-height: 1.5; }
+    .approve-modal__card {
+      background: #F5F7FA; border: 1px solid #E0E0E0; border-radius: 6px;
+      padding: 14px 16px; display: flex; flex-direction: column; gap: 4px;
+    }
+    .approve-modal__card-label { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+    .approve-modal__card-meta { font-size: 12px; color: #717171; margin-top: 1px; }
+    .approve-modal__card-address { font-size: 13px; color: #4B4B4B; margin-top: 4px; }
+    .approve-modal__actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 4px; }
+    .approve-modal__cancel {
+      height: 40px; padding: 0 20px; background: transparent;
+      border: 1px solid #6E6E6E; border-radius: 4px; font-family: inherit;
+      font-size: 14px; font-weight: 500; color: #4B4B4B; cursor: pointer;
+    }
+    .approve-modal__cancel:hover { background: #F0F0F0; }
+    .approve-modal__confirm {
+      height: 40px; padding: 0 24px; background: #005EB8; color: #fff;
+      border: none; border-radius: 4px; font-family: inherit; font-size: 14px;
+      font-weight: 700; cursor: pointer; transition: background 0.15s;
+    }
+    .approve-modal__confirm:hover { background: #0052A3; }
   </style>
 </head>
 <body>
@@ -256,15 +339,15 @@
 
     <main class="main-area" id="main">
 
-      <!-- ═══════════════════════════════════
-           STATE 1 — ALL CUSTOMERS (default)
-      ═══════════════════════════════════ -->
+      <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+           STATE 1 - ALL CUSTOMERS (default)
+      â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
       <div id="state-all">
 
         <!-- Welcome -->
         <div class="welcome">
           <h1 class="welcome__title">Good morning, Jonathan</h1>
-          <p class="welcome__sub">• 2 shipments arriving today across all customer</p>
+          <p class="welcome__sub">-¢ 2 shipments arriving today across all customer</p>
         </div>
 
         <!-- KPIs -->
@@ -283,11 +366,35 @@
           </div>
         </div>
 
+        <!-- Address Approval Requests -->
+        <section class="section" id="globalAddrReqSection">
+          <div class="section__head">
+            <h2 class="section__title">Address Approval Requests <span class="addr-req-badge" id="globalAddrReqBadge">2 Pending</span></h2>
+          </div>
+          <div class="orders-wrap" style="margin-top:16px;">
+            <div class="orders-scroll">
+              <table class="orders-table" id="globalAddrReqTable">
+                <thead>
+                  <tr>
+                    <th style="width:160px">Customer</th>
+                    <th style="width:130px">Date Submitted</th>
+                    <th>Address</th>
+                    <th style="width:190px;white-space:nowrap;"></th>
+                  </tr>
+                </thead>
+                <tbody id="globalAddrReqTbody">
+                  <!-- populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
         <!-- Recent Orders -->
         <section class="section">
           <div class="section__head">
             <h2 class="section__title">Recent Orders</h2>
-            <a href="my-orders.html" class="section__link">View All Orders →</a>
+            <a href="my-orders.html" class="section__link">View All Orders â†’</a>
           </div>
           <div class="orders-wrap">
             <div class="orders-scroll">
@@ -389,9 +496,9 @@
       </div><!-- /state-all -->
 
 
-      <!-- ═══════════════════════════════════
-           STATE 2 — CUSTOMER SELECTED
-      ═══════════════════════════════════ -->
+      <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+           STATE 2 - CUSTOMER SELECTED
+      â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
       <div id="state-customer" style="display:none">
 
         <!-- Welcome + context bar -->
@@ -405,6 +512,16 @@
             <span id="custCtxAddress">418 Innovation Drive, Detroit, MI 48126, USA</span>
           </div>
         </div>
+
+        <!-- Address Requests -->
+        <section class="section" id="addrReqSection">
+          <div class="section__head">
+            <h2 class="section__title">Address Requests <span class="addr-req-badge" id="addrReqBadge">1 Pending</span></h2>
+          </div>
+          <div class="addr-req-list" id="addrReqList">
+            <!-- populated by JS -->
+          </div>
+        </section>
 
         <!-- KPIs -->
         <div class="kpi-row">
@@ -426,7 +543,7 @@
         <section class="section">
           <div class="section__head">
             <h2 class="section__title">Customer's Registered Machines</h2>
-            <a href="#" class="section__link">View All →</a>
+            <a href="#" class="section__link">View All â†’</a>
           </div>
           <div class="machine-grid" id="custMachineGrid">
             <!-- populated by JS -->
@@ -469,7 +586,7 @@
         <section class="section">
           <div class="section__head">
             <h2 class="section__title">Customer's Recent Orders</h2>
-            <a href="my-orders.html" class="section__link">View All Orders →</a>
+            <a href="my-orders.html" class="section__link">View All Orders â†’</a>
           </div>
           <div class="orders-wrap">
             <div class="orders-scroll">
@@ -497,14 +614,30 @@
     </main>
   </div>
 
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+
+  <!-- Approve Confirmation Modal -->
+  <div class="approve-modal-overlay" id="approveModalOverlay">
+    <div class="approve-modal" role="dialog" aria-modal="true" aria-labelledby="approveModalTitle">
+      <span class="approve-modal__title" id="approveModalTitle">Confirm Address Approval</span>
+      <p class="approve-modal__body">You are about to approve the following address request. Once confirmed, the customer will be able to use this address for orders.</p>
+      <div class="approve-modal__card" id="approveModalCard">
+        <!-- populated by JS -->
+      </div>
+      <div class="approve-modal__actions">
+        <button type="button" class="approve-modal__cancel" id="approveModalCancel">Cancel</button>
+        <button type="button" class="approve-modal__confirm" id="approveModalConfirm">Confirm Approval</button>
+      </div>
+    </div>
+  </div>
+  <script src="auth.js"></script>
 
   <script src="components.js"></script>
   <script>
     (function () {
 
-      /* ── customer data ── */
+      /* â”€â”€ customer data â”€â”€ */
       var CUST_DATA = {
         'ABC Industries': {
           account: 'AC-4421',
@@ -586,7 +719,7 @@
         }
       };
 
-      /* ── DOM refs ── */
+      /* â”€â”€ DOM refs â”€â”€ */
       var stateAll    = document.getElementById('state-all');
       var stateCust   = document.getElementById('state-customer');
       var custCtxName = document.getElementById('custCtxName');
@@ -598,7 +731,7 @@
       var machGrid    = document.getElementById('custMachineGrid');
       var ordersTbody = document.getElementById('custOrdersTbody');
 
-      /* ── helpers ── */
+      /* â”€â”€ helpers â”€â”€ */
       var BADGE = { processing: 'status-badge--processing', shipped: 'status-badge--shipped', delivered: 'status-badge--delivered' };
       function statusBadge(s) {
         return '<span class="status-badge ' + (BADGE[s] || '') + '"><span class="dot"></span>' +
@@ -657,25 +790,219 @@
         stateCust.style.display = 'none';
       }
 
-      /* ── browse parts book from a specific machine card ── */
+      /* â”€â”€ browse parts book from a specific machine card â”€â”€ */
       window.browseMachineBook = function (name, serial) {
         localStorage.setItem('okmCatalogueMachine', name);
         localStorage.setItem('okmCatalogueMachineSerial', serial);
         window.location = 'parts-catalogue.html';
       };
 
-      /* ── initial state ── */
+      /* â”€â”€ Address Request Queue â”€â”€ */
+      var ADDR_REQUESTS = [
+        { customer: 'ABC Industries',   label: 'New Assembly Plant',   street: '800 Industrial Pkwy', city: 'Columbus',  state: 'OH', zip: '43215', date: '24 Jun 2026', status: 'pending' },
+        { customer: 'Delta Components', label: 'West Coast Warehouse', street: '1420 Harbor Blvd',    city: 'Long Beach', state: 'CA', zip: '90802', date: '22 Jun 2026', status: 'pending' },
+      ];
+
+      var addrReqList        = document.getElementById('addrReqList');
+      var addrReqBadge       = document.getElementById('addrReqBadge');
+      var globalAddrReqTbody = document.getElementById('globalAddrReqTbody');
+      var globalAddrReqBadge = document.getElementById('globalAddrReqBadge');
+
+      function renderGlobalAddrRequests() {
+        var section = document.getElementById('globalAddrReqSection');
+        if (ADDR_REQUESTS.length === 0) {
+          if (section) section.style.display = 'none';
+          return;
+        }
+        if (section) section.style.display = '';
+
+        var pending = ADDR_REQUESTS.filter(function (r) { return r.status === 'pending'; });
+        if (globalAddrReqBadge) {
+          globalAddrReqBadge.textContent = pending.length > 0 ? (pending.length + ' Pending') : 'None';
+          globalAddrReqBadge.style.display = pending.length > 0 ? '' : 'none';
+        }
+        if (!globalAddrReqTbody) return;
+
+        globalAddrReqTbody.innerHTML = ADDR_REQUESTS.map(function (r, i) {
+          var full = r.street + ', ' + r.city + ', ' + r.state + ' ' + r.zip + ', USA';
+          var actionCell;
+          if (r.status === 'approved') {
+            actionCell = '<span style="font-size:13px;font-weight:700;color:#166534;">âœ“ Approved</span>';
+          } else if (r.status === 'rejected') {
+            actionCell = '<span style="font-size:13px;font-weight:700;color:#991B1B;">âœ— Rejected' + (r.rejectReason ? ': ' + r.rejectReason : '') + '</span>';
+          } else {
+            actionCell =
+              '<div id="global-addr-actions-' + i + '" style="display:flex;align-items:center;gap:8px;">' +
+                '<button class="addr-req-approve" onclick="window._approveAddr(' + i + ')">Approve</button>' +
+                '<button class="addr-req-reject" onclick="window._openGlobalRejectRow(' + i + ')">Reject</button>' +
+              '</div>' +
+              '<div id="global-addr-reject-row-' + i + '" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;">' +
+                '<input type="text" class="addr-req-reason-input" id="global-addr-reject-input-' + i + '" placeholder="Reason (optional)" style="max-width:180px;">' +
+                '<button class="addr-req-confirm-reject" onclick="window._confirmGlobalReject(' + i + ')">Confirm</button>' +
+                '<button class="addr-req-cancel-reject" onclick="window._cancelGlobalRejectRow(' + i + ')">Cancel</button>' +
+              '</div>';
+          }
+          return '<tr id="global-addr-row-' + i + '">' +
+            '<td style="font-weight:600;">' + r.customer + '</td>' +
+            '<td>' + r.date + '</td>' +
+            '<td>' +
+              '<span style="font-size:14px;font-weight:700;color:#1A1A1A;">' + r.label + '</span><br>' +
+              '<span style="font-size:12px;color:#717171;">' + full + '</span>' +
+            '</td>' +
+            '<td style="white-space:nowrap;">' + actionCell + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      window._openGlobalRejectRow = function (idx) {
+        var actions = document.getElementById('global-addr-actions-' + idx);
+        var row = document.getElementById('global-addr-reject-row-' + idx);
+        if (actions) actions.style.display = 'none';
+        if (row) row.style.display = 'flex';
+      };
+
+      window._cancelGlobalRejectRow = function (idx) {
+        var actions = document.getElementById('global-addr-actions-' + idx);
+        var row = document.getElementById('global-addr-reject-row-' + idx);
+        if (actions) actions.style.display = 'flex';
+        if (row) row.style.display = 'none';
+      };
+
+      window._confirmGlobalReject = function (idx) {
+        removeRequestAndRefresh(idx);
+      };
+
+      function renderAddrRequests() {
+        var custSection = document.getElementById('addrReqSection');
+        if (ADDR_REQUESTS.length === 0) {
+          if (custSection) custSection.style.display = 'none';
+          return;
+        }
+        if (custSection) custSection.style.display = '';
+
+        var pending = ADDR_REQUESTS.filter(function (r) { return r.status === 'pending'; }).length;
+        addrReqBadge.textContent = pending > 0 ? (pending + ' Pending') : 'None Pending';
+        addrReqBadge.style.display = pending > 0 ? '' : 'none';
+
+        addrReqList.innerHTML = ADDR_REQUESTS.map(function (r, i) {
+          var full = r.street + ', ' + r.city + ', ' + r.state + ' ' + r.zip + ', USA';
+          var cardClass = 'addr-req-card' + (r.status === 'approved' ? ' is-approved' : r.status === 'rejected' ? ' is-rejected-done' : '');
+          var statusHtml = '';
+          if (r.status === 'approved') {
+            statusHtml = '<span class="addr-req-card__status addr-req-card__status--approved">âœ“ Approved</span>';
+          } else if (r.status === 'rejected') {
+            statusHtml = '<span class="addr-req-card__status addr-req-card__status--rejected">âœ— Rejected' + (r.rejectReason ? ': ' + r.rejectReason : '') + '</span>';
+          }
+          var actionsHtml = r.status === 'pending'
+            ? '<div class="addr-req-card__actions">' +
+                '<button class="addr-req-approve" onclick="window._approveAddr(' + i + ')">Approve</button>' +
+                '<button class="addr-req-reject" onclick="window._openRejectRow(' + i + ')">Reject</button>' +
+              '</div>'
+            : '';
+          var rejectRowHtml = '<div class="addr-req-reason-row" id="addr-reject-row-' + i + '" style="display:none;">' +
+            '<input type="text" class="addr-req-reason-input" id="addr-reject-input-' + i + '" placeholder="Reason for rejection (optional)">' +
+            '<button class="addr-req-confirm-reject" onclick="window._confirmReject(' + i + ')">Confirm Reject</button>' +
+            '<button class="addr-req-cancel-reject" onclick="window._cancelRejectRow(' + i + ')">Cancel</button>' +
+          '</div>';
+
+          return '<div class="' + cardClass + '" id="addr-req-card-' + i + '">' +
+            '<div class="addr-req-card__body">' +
+              '<span class="addr-req-card__label">' + r.label + '</span>' +
+              '<span class="addr-req-card__line">' + full + '</span>' +
+              '<span class="addr-req-card__meta">Submitted by ' + r.customer + ' Â· ' + r.date + '</span>' +
+              statusHtml +
+              rejectRowHtml +
+            '</div>' +
+            actionsHtml +
+          '</div>';
+        }).join('');
+      }
+
+      /* â”€â”€ Approve confirmation modal â”€â”€ */
+      var pendingApproveIdx = -1;
+      var approveOverlay  = document.getElementById('approveModalOverlay');
+      var approveCard     = document.getElementById('approveModalCard');
+      var approveConfirm  = document.getElementById('approveModalConfirm');
+      var approveCancel   = document.getElementById('approveModalCancel');
+
+      function openApproveModal(idx) {
+        pendingApproveIdx = idx;
+        var r    = ADDR_REQUESTS[idx];
+        var full = r.street + ', ' + r.city + ', ' + r.state + ' ' + r.zip + ', USA';
+        approveCard.innerHTML =
+          '<span class="approve-modal__card-label">' + r.label + '</span>' +
+          '<span class="approve-modal__card-meta">' + r.customer + ' Â· Submitted ' + r.date + '</span>' +
+          '<span class="approve-modal__card-address">' + full + '</span>';
+        approveOverlay.classList.add('open');
+      }
+
+      function closeApproveModal() {
+        approveOverlay.classList.remove('open');
+        pendingApproveIdx = -1;
+      }
+
+      function removeRequestAndRefresh(idx) {
+        ADDR_REQUESTS.splice(idx, 1);
+        renderAddrRequests();
+        renderGlobalAddrRequests();
+      }
+
+      approveConfirm.addEventListener('click', function () {
+        if (pendingApproveIdx < 0) return;
+        removeRequestAndRefresh(pendingApproveIdx);
+        closeApproveModal();
+      });
+
+      approveCancel.addEventListener('click', closeApproveModal);
+      approveOverlay.addEventListener('click', function (e) {
+        if (e.target === approveOverlay) closeApproveModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && approveOverlay.classList.contains('open')) closeApproveModal();
+      });
+
+      window._approveAddr = function (idx) { openApproveModal(idx); };
+
+      window._openRejectRow = function (idx) {
+        var row = document.getElementById('addr-reject-row-' + idx);
+        if (row) { row.style.display = 'flex'; }
+        var card = document.getElementById('addr-req-card-' + idx);
+        if (card) {
+          var actions = card.querySelector('.addr-req-card__actions');
+          if (actions) actions.style.display = 'none';
+        }
+      };
+
+      window._cancelRejectRow = function (idx) {
+        var row = document.getElementById('addr-reject-row-' + idx);
+        if (row) { row.style.display = 'none'; }
+        var card = document.getElementById('addr-req-card-' + idx);
+        if (card) {
+          var actions = card.querySelector('.addr-req-card__actions');
+          if (actions) actions.style.display = '';
+        }
+      };
+
+      window._confirmReject = function (idx) {
+        removeRequestAndRefresh(idx);
+      };
+
+      /* â”€â”€ initial state â”€â”€ */
       var saved = localStorage.getItem('okmSelectedCustomer') || '';
       if (saved) { showCustomer(saved); } else { showAll(); }
 
-      /* ── react to customer picker ── */
+      /* â”€â”€ react to customer picker â”€â”€ */
       window.addEventListener('okuma:customerChanged', function (e) {
         var name = e.detail && e.detail.name;
-        if (name) { showCustomer(name); } else { showAll(); }
+        if (name) { showCustomer(name); renderAddrRequests(); } else { showAll(); }
       });
+
+      renderAddrRequests();
+      renderGlobalAddrRequests();
 
     })();
   </script>
+
 
 </body>
 </html>

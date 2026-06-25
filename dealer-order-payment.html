@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payment Details – Okuma Parts Portal</title>
+  <title>Payment Details -“ Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -19,7 +17,7 @@
       min-height: 100vh;
     }
 
-    /* ─── PAGE LAYOUT ──────────────────────────────────────────── */
+    /* â”€â”€â”€ PAGE LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .page-content { display: flex; justify-content: center; padding: 0 0 64px; }
     .page-inner {
       width: 1200px; max-width: 100%;
@@ -27,7 +25,7 @@
       display: flex; flex-direction: column; align-items: center;
     }
 
-    /* ─── STEPPER ───────────────────────────────────────────────── */
+    /* â”€â”€â”€ STEPPER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .stepper {
       display: flex; align-items: center; justify-content: center;
       gap: 12px; padding: 40px 0;
@@ -49,13 +47,13 @@
     .step-connector.done    { background: #005EB8; }
     .step-connector.pending { background: #E5E5E5; }
 
-    /* ─── CHECKOUT BODY ────────────────────────────────────────── */
+    /* â”€â”€â”€ CHECKOUT BODY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .checkout-body { width: 960px; max-width: 100%; display: flex; gap: 32px; align-items: flex-start; }
     .checkout-left { width: 488px; flex-shrink: 1; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
 
     .page-title { font-size: 32px; font-weight: 800; color: #2C2A29; line-height: 1; }
 
-    /* ─── SECTION ───────────────────────────────────────────────── */
+    /* â”€â”€â”€ SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .section { display: flex; flex-direction: column; gap: 16px; border: 0; padding: 0; margin: 0; min-width: 0; }
     .section-label {
       font-size: 12px; font-weight: 700; color: #6B7280;
@@ -70,7 +68,7 @@
     .radio-circle.selected  { border: 6px solid #005EB8; }
     .radio-circle.unselected{ border: 1px solid #6E6E6E; }
 
-    /* ─── PAYMENT CARDS ─────────────────────────────────────────── */
+    /* â”€â”€â”€ PAYMENT CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .pay-card { border-radius: 4px; cursor: pointer; transition: border-color 0.15s, background 0.15s; position: relative; }
     .pay-card:has(input:focus-visible) { outline: 2px solid #005EB8; outline-offset: 2px; }
     .pay-card.selected      { background: #fff; border: 2px solid #005EB8; padding: 24px; }
@@ -100,7 +98,7 @@
       padding: 4px 8px; color: #003087; font-size: 11px; font-weight: 700; line-height: 1;
     }
 
-    /* ─── FORM FIELDS ───────────────────────────────────────────── */
+    /* â”€â”€â”€ FORM FIELDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .form-block { display: flex; flex-direction: column; gap: 24px; margin-top: 24px; }
     .field-group { display: flex; flex-direction: column; gap: 8px; }
     .field-label { font-size: 13px; font-weight: 700; color: #2C2A29; }
@@ -129,14 +127,14 @@
       background: #fff; border: 1px solid #E5E5E5; border-radius: 4px; padding: 24px;
     }
 
-    /* ─── SECURITY NOTICE ───────────────────────────────────────── */
+    /* â”€â”€â”€ SECURITY NOTICE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .security-notice {
       background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 4px;
       padding: 16px; display: flex; align-items: center; gap: 12px;
     }
     .security-notice span { font-size: 13px; font-weight: 400; color: #0369A1; line-height: 1.3; }
 
-    /* ─── CTA ───────────────────────────────────────────────────── */
+    /* â”€â”€â”€ CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .btn-primary {
       background: #005EB8; height: 56px; width: 100%; border-radius: 4px;
       font-size: 16px; font-weight: 700; color: #fff; border: none; cursor: pointer;
@@ -152,7 +150,7 @@
     }
     .btn-back:hover { border-color: #9CA3AF; color: #2C2A29; }
 
-    /* ─── RIGHT SIDEBAR ─────────────────────────────────────────── */
+    /* â”€â”€â”€ RIGHT SIDEBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .checkout-right { width: 440px; flex-shrink: 1; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
     .summary-card {
       background: #fff; border: 1px solid #E5E5E5; border-radius: 4px;
@@ -179,10 +177,10 @@
 
     img, svg { max-width: 100%; }
 
-    /* ─── CTA STACK ─────────────────────────────────────────────── */
+    /* â”€â”€â”€ CTA STACK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .cta-stack { display: flex; flex-direction: column; gap: 12px; }
 
-    /* ─── RESPONSIVE ──────────────────────────────────────────── */
+    /* â”€â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     @media (max-width: 1199px) {
       .page-inner { padding: 0 32px; }
       .checkout-body { flex-direction: column; }
@@ -342,7 +340,7 @@
                 <line x1="3" y1="8" x2="13" y2="8"/><polyline points="8.5 3.5 13 8 8.5 12.5"/>
               </svg>
             </button>
-            <button class="btn-back" onclick="window.location='dealer-order-review.html'">← Back to Review</button>
+            <button class="btn-back" onclick="window.location='dealer-order-review.html'">â† Back to Review</button>
           </div>
         </div><!-- /checkout-left -->
 
@@ -441,7 +439,7 @@
         draft.paymentMethod = 'Visa ending in 4521';
         draft.paymentType   = 'card';
       } else {
-        draft.paymentMethod = 'PO #' + (document.getElementById('po-number').value || '—');
+        draft.paymentMethod = 'PO #' + (document.getElementById('po-number').value || '-');
         draft.paymentType   = 'po';
       }
       // Generate order reference
@@ -450,8 +448,9 @@
       window.location = 'dealer-order-confirmation.html';
     }
   </script>
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
 
   <script src="components.js"></script>

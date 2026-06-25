@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout: Payment – Okuma Parts Portal</title>
+  <title>Checkout: Payment -“ Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -20,7 +18,7 @@
     }
 
     /* ===== PAGE LAYOUT ===== */
-    .page-content { display: flex; justify-content: center; padding-bottom: 48px; }
+    .page-content { display: flex; justify-content: center; padding-top: 40px; padding-bottom: 48px; }
     .page-inner { width: 1200px; max-width: 100%; padding: 0 120px; display: flex; flex-direction: column; align-items: center; }
 
     /* ===== STEPPER ===== */
@@ -148,7 +146,7 @@
       width: 18px; height: 18px; border-radius: 3px; background: #005EB8;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer;
     }
-    /* unchecked state: white box, grey border, hidden tick — driven by native checkbox */
+    /* unchecked state: white box, grey border, hidden tick - driven by native checkbox */
     .billing-checkbox-native:not(:checked) + .checkbox-custom { background: #FFFFFF; border: 1px solid #6E6E6E; }
     .billing-checkbox-native:not(:checked) + .checkbox-custom svg { display: none; }
     .billing-row:has(input:focus-visible) .checkbox-custom { outline: 2px solid #005EB8; outline-offset: 2px; }
@@ -280,6 +278,63 @@
 
     img, svg { max-width: 100%; }
 
+    /* ===== CART ACCORDION ===== */
+    .cart-acc {
+      width: 960px; max-width: 100%;
+      border: 1px solid #E5E5E5;
+      border-radius: 4px;
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+    .cart-acc__trigger {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; gap: 16px;
+      background: none; border: none; width: 100%; text-align: left;
+      font-family: inherit; cursor: pointer;
+      transition: background 0.12s;
+    }
+    .cart-acc__trigger:hover { background: #F9FAFB; }
+    .cart-acc__left  { display: flex; align-items: center; gap: 10px; }
+    .cart-acc__icon  { color: #6B7280; flex-shrink: 0; }
+    .cart-acc__label { font-size: 14px; font-weight: 700; color: #2C2A29; }
+    .cart-acc__count { font-size: 13px; font-weight: 400; color: #6B7280; }
+    .cart-acc__right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .cart-acc__total { font-size: 15px; font-weight: 700; color: #005EB8; }
+    .cart-acc__chevron {
+      width: 16px; height: 16px; color: #6B7280; flex-shrink: 0;
+      transition: transform 0.22s ease;
+    }
+    .cart-acc.open .cart-acc__chevron { transform: rotate(180deg); }
+    .cart-acc__body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.28s ease;
+    }
+    .cart-acc.open .cart-acc__body { max-height: 480px; }
+    .cart-acc__inner { border-top: 1px solid #E5E5E5; padding: 16px 20px 20px; }
+    .acc-table { display: flex; flex-direction: column; }
+    .acc-table__head {
+      display: flex; align-items: center; gap: 16px;
+      padding-bottom: 10px; border-bottom: 1px solid #EFEFEF;
+    }
+    .acc-table__row {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 12px 0; border-bottom: 1px solid #F5F5F5;
+    }
+    .acc-table__row:last-child { border-bottom: none; }
+    .acc-hcol { font-size: 11px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.3px; }
+    .acc-col-part  { flex: 1; min-width: 0; }
+    .acc-col-mach  { width: 150px; flex-shrink: 0; }
+    .acc-col-qty   { width: 36px;  flex-shrink: 0; text-align: center; }
+    .acc-col-price { width: 90px;  flex-shrink: 0; text-align: right; }
+    .acc-part-name   { font-size: 13px; font-weight: 700; color: #2C2A29; line-height: 1.3; }
+    .acc-part-pn     { font-size: 11px; color: #6B7280; margin-top: 2px; }
+    .acc-mach-name   { font-size: 12px; font-weight: 600; color: #2C2A29; line-height: 1.3; }
+    .acc-mach-serial { font-size: 11px; color: #6B7280; margin-top: 2px; }
+    .acc-qty         { font-size: 13px; font-weight: 500; color: #2C2A29; display: block; padding-top: 2px; }
+    .acc-price       { font-size: 13px; font-weight: 700; color: #2C2A29; display: block; padding-top: 2px; }
+    .acc-price--sale { color: #AD0000; }
+    .acc-price-orig  { font-size: 11px; color: #9E9E9E; text-decoration: line-through; display: block; margin-top: 1px; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1199px) {
       .checkout-body { width: 100%; flex-direction: column; gap: 32px; }
@@ -326,6 +381,7 @@
       .pay-head { flex-wrap: wrap; gap: 8px; }
       .bill-addr-modal { padding: 20px 16px 16px; }
       .cta-block { grid-template-columns: 1fr; }
+      .acc-col-mach { display: none; }
     }
   </style>
 </head>
@@ -337,6 +393,83 @@
   <!-- ===== PAGE CONTENT ===== -->
   <div class="page-content">
     <div class="page-inner">
+
+      <!-- CART SUMMARY ACCORDION -->
+      <div class="cart-acc" id="cartAcc">
+        <button class="cart-acc__trigger" onclick="toggleCartAcc()" aria-expanded="false" aria-controls="cartAccBody">
+          <div class="cart-acc__left">
+            <svg class="cart-acc__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            <span class="cart-acc__label">Your Cart</span>
+            <span class="cart-acc__count"> 3 items added</span>
+          </div>
+          <div class="cart-acc__right">
+            <span class="cart-acc__total">$742.50</span>
+            <svg class="cart-acc__chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="4 6 8 10 12 6"/>
+            </svg>
+          </div>
+        </button>
+
+        <div class="cart-acc__body" id="cartAccBody" role="region" aria-label="Cart items">
+          <div class="cart-acc__inner">
+            <div class="acc-table">
+              <div class="acc-table__head">
+                <div class="acc-col-part"><span class="acc-hcol">Part</span></div>
+                <div class="acc-col-mach"><span class="acc-hcol">Machine</span></div>
+                <div class="acc-col-qty"><span class="acc-hcol">Qty</span></div>
+                <div class="acc-col-price"><span class="acc-hcol">Price</span></div>
+              </div>
+              <div class="acc-table__row">
+                <div class="acc-col-part">
+                  <div class="acc-part-name">Plate</div>
+                  <div class="acc-part-pn">525-0100-11</div>
+                </div>
+                <div class="acc-col-mach">
+                  <div class="acc-mach-name">LU300-M</div>
+                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
+                </div>
+                <div class="acc-col-qty"><span class="acc-qty">2</span></div>
+                <div class="acc-col-price">
+                  <span class="acc-price acc-price--sale">$405.00</span>
+                  <span class="acc-price-orig">$495.00</span>
+                </div>
+              </div>
+              <div class="acc-table__row">
+                <div class="acc-col-part">
+                  <div class="acc-part-name">Coolant Pump Assembly</div>
+                  <div class="acc-part-pn">E4809-045-017-A</div>
+                </div>
+                <div class="acc-col-mach">
+                  <div class="acc-mach-name">LU300-M</div>
+                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
+                </div>
+                <div class="acc-col-qty"><span class="acc-qty">1</span></div>
+                <div class="acc-col-price">
+                  <span class="acc-price">$185.00</span>
+                </div>
+              </div>
+              <div class="acc-table__row">
+                <div class="acc-col-part">
+                  <div class="acc-part-name">Servo Drive Belt</div>
+                  <div class="acc-part-pn">E4809-045-017-A</div>
+                </div>
+                <div class="acc-col-mach">
+                  <div class="acc-mach-name">LU300-M</div>
+                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
+                </div>
+                <div class="acc-col-qty"><span class="acc-qty">1</span></div>
+                <div class="acc-col-price">
+                  <span class="acc-price">$62.50</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- STEPPER -->
       <div class="stepper">
@@ -657,12 +790,12 @@
     });
     // Billing checkbox visual (tick + border) is handled purely in CSS via :checked.
 
-    // ── Billing same-as-shipping toggle ──
+    // â”€â”€ Billing same-as-shipping toggle â”€â”€
     document.getElementById('billing-same').addEventListener('change', function () {
       document.getElementById('billAddressSection').style.display = this.checked ? 'none' : 'flex';
     });
 
-    // ── Add billing address modal ──
+    // â”€â”€ Add billing address modal â”€â”€
     var billOverlay  = document.getElementById('billAddrModalOverlay');
     var billCloseBtn = document.getElementById('billAddrModalClose');
     var billCancelBtn = document.getElementById('billAddrCancelBtn');
@@ -717,11 +850,28 @@
       closeBillModal();
     });
   </script>
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
 
   <script src="components.js"></script>
+  <script>
+    function toggleCartAcc() {
+      var acc = document.getElementById('cartAcc');
+      var trigger = acc.querySelector('.cart-acc__trigger');
+      var isOpen = acc.classList.toggle('open');
+      trigger.setAttribute('aria-expanded', String(isOpen));
+    }
+
+    (function () {
+      if (localStorage.getItem('okmUserRole') !== 'dealer') return;
+      var cust = localStorage.getItem('okmSelectedCustomer');
+      if (!cust) return;
+      var label = document.querySelector('.cart-acc__label');
+      if (label) label.textContent = cust + "'s Cart";
+    })();
+  </script>
 
 </body>
 </html>

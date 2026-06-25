@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checkout: Review Order – Okuma Parts Portal</title>
+  <title>Checkout: Review Order -“ Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -20,11 +18,11 @@
       min-height: 100vh;
     }
 
-    /* ─── PAGE CONTENT ────────────────────────────────────────── */
+    /* â”€â”€â”€ PAGE CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .page-content {
       display: flex;
       justify-content: center;
-      padding: 92px 0 48px;
+      padding: 40px 0 48px;
     }
     .page-inner {
       width: 1200px;
@@ -36,7 +34,7 @@
       overflow-x: hidden;
     }
 
-    /* ─── STEPPER ─────────────────────────────────────────────── */
+    /* â”€â”€â”€ STEPPER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .stepper {
       display: flex;
       align-items: center;
@@ -72,7 +70,7 @@
     .step-connector.done { background: #005EB8; }
     .step-connector.pending { background: #E5E5E5; }
 
-    /* ─── CHECKOUT LAYOUT ─────────────────────────────────────── */
+    /* â”€â”€â”€ CHECKOUT LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .checkout-layout { display: flex; gap: 32px; align-items: flex-start; width: 960px; max-width: 100%; }
     .checkout-left { width: 488px; max-width: 100%; flex-shrink: 0; display: flex; flex-direction: column; gap: 20px; }
 
@@ -83,7 +81,7 @@
       line-height: 1.15;
     }
 
-    /* ─── SUMMARY CARDS (shipping + payment) ──────────────────── */
+    /* â”€â”€â”€ SUMMARY CARDS (shipping + payment) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .summary-cards { display: flex; gap: 32px; }
     .summary-card {
       flex: 1;
@@ -120,7 +118,7 @@
     .pay-mc .circ--orange { right: 0; background: #F79E1B; mix-blend-mode: multiply; }
     .pay-card-name { font-size: 14px; font-weight: 700; color: #2C2A29; }
 
-    /* ─── INFO BANNER ────────────────────────────────────────── */
+    /* â”€â”€â”€ INFO BANNER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .info-banner {
       display: flex;
       align-items: flex-start;
@@ -136,7 +134,7 @@
     }
     .info-banner svg { flex-shrink: 0; margin-top: 1px; }
 
-    /* ─── ORDER ITEMS ─────────────────────────────────────────── */
+    /* â”€â”€â”€ ORDER ITEMS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .order-items { display: flex; flex-direction: column; gap: 16px; }
     .order-items__heading {
       font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase;
@@ -176,7 +174,7 @@
       font-size: 14px; font-weight: 700; color: #2C2A29;
     }
 
-    /* ─── TERMS + PLACE ORDER ─────────────────────────────────── */
+    /* â”€â”€â”€ TERMS + PLACE ORDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .checkout-cta { display: flex; flex-direction: column; gap: 16px; }
     .terms-row { display: flex; align-items: flex-start; gap: 12px; }
     .terms-checkbox-native {
@@ -205,7 +203,7 @@
       background: #D1D5DB; color: #9E9E9E; cursor: not-allowed;
     }
 
-    /* ─── ORDER SUMMARY SIDEBAR ───────────────────────────────── */
+    /* â”€â”€â”€ ORDER SUMMARY SIDEBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .checkout-right { width: 440px; max-width: 100%; flex-shrink: 0; display: flex; flex-direction: column; gap: 24px; }
     .order-summary-card {
       background: #fff; border: 1px solid #E5E5E5; border-radius: 4px;
@@ -240,6 +238,32 @@
 
     img, svg { max-width: 100%; }
 
+    /* ===== ORDERING FOR CARD (dealer flow only) ===== */
+    .ordering-for-card {
+      display: none;
+      align-items: center;
+      gap: 20px;
+      background: #F0F6FF;
+      border: 1px solid #BDD3F5;
+      border-left: 4px solid #005EB8;
+      border-radius: 4px;
+      padding: 14px 18px;
+    }
+    .ordering-for-card.visible { display: flex; }
+    .ofc-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: #005EB8; color: #fff;
+      font-size: 14px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ofc-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .ofc-label { font-size: 11px; font-weight: 700; color: #1A4A8A; text-transform: uppercase; letter-spacing: 0.04em; }
+    .ofc-name  { font-size: 15px; font-weight: 700; color: #1A1A1A; line-height: 1.2; }
+    .ofc-meta  { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
+    .ofc-meta-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #4B6A9B; }
+    .ofc-meta-item svg { flex-shrink: 0; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1199px) {
       .checkout-layout { width: 100%; flex-direction: column; gap: 32px; }
@@ -272,12 +296,12 @@
       .order-item__info { width: auto; flex: 1; }
       .order-item__price { width: auto; }
       .review-title { font-size: 28px; }
-      /* hide the table header row on mobile — item rows wrap so it no longer aligns */
+      /* hide the table header row on mobile - item rows wrap so it no longer aligns */
       .order-items__header { display: none; }
       /* reduce gaps for mobile density */
       .checkout-left { gap: 16px; }
 
-      /* Tablet typography — bump small text up 1–2px */
+      /* Tablet typography - bump small text up 1-“2px */
       .summary-card__label { font-size: 13px; }
       .summary-card__name  { font-size: 15px; }
       .summary-card__addr  { font-size: 14px; }
@@ -326,10 +350,10 @@
 </head>
 <body>
 
-  <!-- ─── HEADER ───────────────────────────────────────────────── -->
+  <!-- â”€â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div id="okuma-header"></div>
 
-  <!-- ─── PAGE CONTENT ─────────────────────────────────────────── -->
+  <!-- â”€â”€â”€ PAGE CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <main class="page-content">
     <div class="page-inner">
 
@@ -370,6 +394,25 @@
         <!-- LEFT COLUMN -->
         <div class="checkout-left">
           <h1 class="review-title">Review Your Order</h1>
+
+          <!-- Ordering For card - dealer flow only, populated by JS -->
+          <div class="ordering-for-card" id="orderingForCard">
+            <div class="ofc-avatar" id="ofcInitials">-</div>
+            <div class="ofc-body">
+              <div class="ofc-label">Ordering for</div>
+              <div class="ofc-name" id="ofcName">-</div>
+              <div class="ofc-meta">
+                <span class="ofc-meta-item">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <span id="ofcEmail">-</span>
+                </span>
+                <span class="ofc-meta-item">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+                  <span id="ofcPhone">-</span>
+                </span>
+              </div>
+            </div>
+          </div>
 
           <!-- Shipping + Payment summary cards -->
           <div class="summary-cards">
@@ -547,9 +590,49 @@
     document.getElementById('terms-agree').addEventListener('change', function () {
       document.getElementById('placeOrderBtn').disabled = !this.checked;
     });
+
+    // Dealer flow: show "Ordering for" card
+    (function () {
+      if (localStorage.getItem('okmUserRole') !== 'dealer') return;
+      var cust = localStorage.getItem('okmSelectedCustomer');
+      if (!cust) return;
+
+      var CONTACTS = {
+        'ABC Industries':        { email: 'orders@abcindustries.com',       phone: '+1 (704) 555-0182' },
+        'Apex Machining':        { email: 'purchasing@apexmachining.com',   phone: '+1 (312) 555-0247' },
+        'Borland Systems':       { email: 'parts@borlandsystems.com',       phone: '+1 (602) 555-0391' },
+        'Century Fabrication':   { email: 'supply@centuryfab.com',          phone: '+1 (214) 555-0114' },
+        'Delta Components':      { email: 'orders@deltacomponents.com',     phone: '+1 (404) 555-0278' },
+        'East Coast Tooling':    { email: 'procurement@ectooling.com',      phone: '+1 (617) 555-0356' },
+        'Franklin Engineering':  { email: 'parts@franklineng.com',          phone: '+1 (503) 555-0193' },
+        'Global Parts Supply':   { email: 'orders@globalpartssupply.com',   phone: '+1 (469) 555-0422' },
+        'Harmon Industries':     { email: 'supply@harmonind.com',           phone: '+1 (513) 555-0267' },
+        'Industrial Solutions':  { email: 'purchasing@indsolutions.com',    phone: '+1 (216) 555-0138' },
+        'Johnson Metal Works':   { email: 'orders@johnsonmetalworks.com',   phone: '+1 (414) 555-0309' },
+        'Keystone Precision':    { email: 'parts@keystoneprecision.com',    phone: '+1 (610) 555-0174' },
+        'Lakeland Manufacturing':{ email: 'supply@lakelandmfg.com',         phone: '+1 (407) 555-0261' },
+        'Meridian Toolworks':    { email: 'orders@meridiantoolworks.com',   phone: '+1 (801) 555-0345' },
+        'Pacific Precision':     { email: 'purchasing@pacificprecision.com',phone: '+1 (206) 555-0188' },
+        'Smith Manufacturing':   { email: 'parts@smithmfg.com',             phone: '+1 (317) 555-0423' },
+        'Summit Precision':      { email: 'orders@summitprecision.com',     phone: '+1 (720) 555-0152' },
+        'Tri-State Machining':   { email: 'supply@tristate-machining.com',  phone: '+1 (973) 555-0297' },
+        'United Fabricators':    { email: 'purchasing@unitedfab.com',       phone: '+1 (832) 555-0341' },
+        'Westfield Components':  { email: 'orders@westfieldcomp.com',       phone: '+1 (858) 555-0216' }
+      };
+
+      var info = CONTACTS[cust] || { email: 'contact@' + cust.toLowerCase().replace(/\s+/g, '') + '.com', phone: '+1 (800) 555-0100' };
+      var initials = cust.split(' ').slice(0, 2).map(function (w) { return w[0]; }).join('');
+
+      document.getElementById('ofcInitials').textContent = initials;
+      document.getElementById('ofcName').textContent     = cust;
+      document.getElementById('ofcEmail').textContent    = info.email;
+      document.getElementById('ofcPhone').textContent    = info.phone;
+      document.getElementById('orderingForCard').classList.add('visible');
+    })();
   </script>
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
 
   <script src="components.js"></script>

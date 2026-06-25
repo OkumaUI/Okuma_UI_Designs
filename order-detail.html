@@ -1,12 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order Detail – Okuma Parts Portal</title>
+  <title>Order Detail -“ Okuma Parts Portal</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,7 +27,7 @@
       gap: 0;
     }
 
-    /* ── BREADCRUMB ── */
+    /* â”€â”€ BREADCRUMB â”€â”€ */
     .breadcrumb {
       display: flex;
       align-items: center;
@@ -42,7 +40,7 @@
     .breadcrumb__sep { color: #717171; }
     .breadcrumb__current { color: #1A1A1A; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
 
-    /* ── PAGE HEADER ── */
+    /* â”€â”€ PAGE HEADER â”€â”€ */
     .page-head {
       display: flex;
       align-items: center;
@@ -82,7 +80,7 @@
       color: #717171;
     }
 
-    /* ── PLACEHOLDER CARD ── */
+    /* â”€â”€ PLACEHOLDER CARD â”€â”€ */
     .placeholder-card {
       background: #FAFAFA;
       border: 1.5px dashed #DEDEDE;
@@ -203,7 +201,7 @@
         </a>
         <div class="page-head__titles">
           <h1 class="page-head__title" id="pageTitle">Order Detail</h1>
-          <span class="page-head__subtitle" id="pageSubtitle">Loading…</span>
+          <span class="page-head__subtitle" id="pageSubtitle">Loading-¦</span>
         </div>
       </div>
 
@@ -218,9 +216,9 @@
         <span class="placeholder-card__label">Coming Soon</span>
         <p class="placeholder-card__title">This screen is yet to be built</p>
         <p class="placeholder-card__body">
-          The Order Detail view will show a full breakdown of the order — line items, shipping info, status timeline, and invoice download. Check back once this screen is designed and implemented.
+          The Order Detail view will show a full breakdown of the order - line items, shipping info, status timeline, and invoice download. Check back once this screen is designed and implemented.
         </p>
-        <div class="placeholder-card__order-num" id="orderNumDisplay">—</div>
+        <div class="placeholder-card__order-num" id="orderNumDisplay">-</div>
         <a href="my-orders.html" class="placeholder-card__back-link">
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -233,6 +231,7 @@
   </div>
 
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
   <script src="components.js"></script>
   <script>
@@ -250,7 +249,7 @@
         document.getElementById('orderNumDisplay').textContent = 'No order ID provided';
       }
 
-      document.title = (id ? id + ' – ' : '') + 'Order Detail – Okuma Parts Portal';
+      document.title = (id ? id + ' -“ ' : '') + 'Order Detail -“ Okuma Parts Portal';
     })();
   </script>
 

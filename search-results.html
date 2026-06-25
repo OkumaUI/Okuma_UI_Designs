@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Results — Okuma Parts Portal</title>
+  <title>Search Results - Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -22,7 +20,7 @@
       flex-direction: column;
     }
 
-    /* ── MAIN AREA ── */
+    /* â”€â”€ MAIN AREA â”€â”€ */
     .main-area { flex: 1; min-width: 0; padding: 32px; overflow-x: hidden; }
 
     /* Page head */
@@ -32,7 +30,7 @@
     /* Two-column layout */
     .sr-layout { display: flex; gap: 28px; margin-top: 28px; align-items: flex-start; min-width: 0; overflow-x: hidden; }
 
-    /* ── FILTERS PANEL (LEFT) ── */
+    /* â”€â”€ FILTERS PANEL (LEFT) â”€â”€ */
     .filters {
       width: 240px;
       flex-shrink: 0;
@@ -92,7 +90,7 @@
     .price-row__min { font-size: 12px; font-weight: 400; color: #717171; }
     .price-row__max { font-size: 12px; font-weight: 500; color: #1A1A1A; }
 
-    /* ── RESULTS AREA (RIGHT) ── */
+    /* â”€â”€ RESULTS AREA (RIGHT) â”€â”€ */
     .results { flex: 1; min-width: 0; }
 
     /* Sort bar */
@@ -110,7 +108,7 @@
 
     .cards-grid { display: flex; flex-direction: column; gap: 8px; }
 
-    /* ── PART CARD — 3-zone grid layout ── */
+    /* â”€â”€ PART CARD - 3-zone grid layout â”€â”€ */
     .part-card {
       background: #fff;
       border: 1px solid #E5E5E5;
@@ -124,7 +122,7 @@
     }
     .part-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.09); }
 
-    /* Zone 1 — Identity */
+    /* Zone 1 - Identity */
     .part-card__identity {
       padding: 18px 20px; min-width: 0;
       display: flex; flex-direction: column; gap: 5px;
@@ -147,7 +145,7 @@
     .part-card__attr svg { width: 12px; height: 12px; flex-shrink: 0; color: #9E9E9E; }
     .attr-sep { color: #D1D5DB; font-size: 12px; }
 
-    /* Zone 2 — Availability */
+    /* Zone 2 - Availability */
     .part-card__avail {
       padding: 18px 16px; display: flex; flex-direction: column;
       align-items: flex-start; gap: 4px;
@@ -168,7 +166,7 @@
       font-size: 11px; font-weight: 400; color: #9E9E9E; line-height: 1.4; padding-left: 13px;
     }
 
-    /* Zone 3 — Price + CTA */
+    /* Zone 3 - Price + CTA */
     .part-card__action {
       padding: 18px 20px; display: flex; flex-direction: column;
       align-items: flex-end; gap: 10px; align-self: stretch; justify-content: center;
@@ -224,7 +222,7 @@
 
     img, svg { max-width: 100%; }
 
-    /* ══ RESPONSIVE ══ */
+    /* â•â• RESPONSIVE â•â• */
     @media (max-width: 900px) {
       .main-area { padding: 20px; }
       .sr-layout { flex-direction: column; gap: 20px; }
@@ -253,10 +251,10 @@
 </head>
 <body>
 
-  <!-- ────────────── HEADER ────────────── -->
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div id="okuma-header"></div>
 
-  <!-- ────────────── PAGE ────────────── -->
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div class="app-body-shell">
 
     <!-- SIDEBAR (no active item) -->
@@ -287,6 +285,7 @@
               <label class="check"><input type="checkbox" data-filter="category" value="Coolant System"><span class="check__label">Coolant System</span></label>
               <label class="check"><input type="checkbox" data-filter="category" value="Axis Drive"><span class="check__label">Axis Drive</span></label>
               <label class="check"><input type="checkbox" data-filter="category" value="Electrical Cabinet"><span class="check__label">Electrical Cabinet</span></label>
+              <label class="check"><input type="checkbox" data-filter="category" value="Tooling &amp; Fixtures"><span class="check__label">Tooling &amp; Fixtures</span></label>
             </div>
           </div>
 
@@ -294,6 +293,7 @@
           <div class="filters__section filters__section--mc">
             <div class="filters__section-label">Machine Compatibility</div>
             <div class="filters__opts" id="mcOpts">
+              <label class="check"><input type="checkbox" data-filter="machine" value="LU300-M"><span class="check__label">LU300-M</span></label>
               <label class="check"><input type="checkbox" data-filter="machine" value="GENOS M560-V"><span class="check__label">GENOS M560-V</span></label>
               <label class="check"><input type="checkbox" data-filter="machine" value="MULTUS U3000"><span class="check__label">MULTUS U3000</span></label>
               <label class="check"><input type="checkbox" data-filter="machine" value="LB2000 EX III"><span class="check__label">LB2000 EX III</span></label>
@@ -319,7 +319,7 @@
               <option value="relevance">Sort: Relevance</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
-              <option value="name-asc">Name: A – Z</option>
+              <option value="name-asc">Name: A -“ Z</option>
             </select>
           </div>
           <div class="cards-grid" id="cardsGrid"></div>
@@ -329,36 +329,57 @@
       </div>
     </main>
   </div>
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
 
   <script src="components.js"></script>
 
-  <!-- ────────────── PAGE LOGIC ────────────── -->
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ PAGE LOGIC â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <script>
     (function () {
       'use strict';
 
-      /* Parts dataset */
+      /* Parts dataset - 30 parts across 4 machines */
       var PARTS = [
-        { name: 'Spindle Bearing Unit',    number: 'E4809-045-017-A', category: 'Spindle Assembly',   machine: 'GENOS M560-V',  price: 247.50, originalPrice: 329.00, img: 'product-spindle-bearing.png', inStock: true },
-        { name: 'Spindle Bearing Unit',    number: 'E4809-045-033-B', category: 'Spindle Assembly',   machine: 'MULTUS U3000',  price: 247.50, img: 'product-spindle-bearing.png', inStock: true },
-        { name: 'Angular Contact Bearing', number: 'E4809-045-008-C', category: 'Spindle Assembly',   machine: 'LB2000 EX III', price: 312.00, img: 'product-plate-bearing.png',    inStock: true },
-        { name: 'Spindle Housing Seal',    number: 'E4809-061-021-A', category: 'Spindle Assembly',   machine: 'GENOS M560-V',  price: 189.00, img: 'product-oring-seal.png',       inStock: false },
-        { name: 'O-Ring Seal Kit',         number: 'E4809-045-090-K', category: 'Spindle Assembly',   machine: 'GENOS M560-V',  price: 42.50,  originalPrice: 65.00, img: 'product-oring-seal.png', inStock: true },
-        { name: 'Spindle Bearing Unit',    number: 'E4809-061-022-B', category: 'Spindle Assembly',   machine: 'LB2000 EX III', price: 247.50, img: 'product-spindle-bearing.png', inStock: true },
-        { name: 'Coolant Pump Assembly',   number: 'C4809-045-022-B', category: 'Coolant System',     machine: 'MULTUS U3000',  price: 185.00, img: 'product-coolant-pump.png',     inStock: true },
-        { name: 'Coolant Nozzle Kit',      number: 'C4809-058-001-A', category: 'Coolant System',     machine: 'GENOS M560-V',  price: 64.00,  originalPrice: 89.00, img: 'product-coolant-pump.png', inStock: true },
-        { name: 'Hydraulic Filter Kit',    number: 'C4809-058-077-E', category: 'Coolant System',     machine: 'MULTUS U3000',  price: 98.00,  img: 'product-coolant-pump.png',     inStock: true },
-        { name: 'Servo Drive Belt',        number: 'A4809-072-014-D', category: 'Axis Drive',         machine: 'LB2000 EX III', price: 62.50,  originalPrice: 89.00, img: 'product-servo-belt.png', inStock: true },
-        { name: 'Servo Drive Unit',        number: 'A4809-072-101-A', category: 'Axis Drive',         machine: 'MULTUS U3000',  price: 342.50, img: 'product-servo-belt.png',       inStock: true },
-        { name: 'Ball Screw Assembly',     number: 'A4809-072-205-C', category: 'Axis Drive',         machine: 'LB2000 EX III', price: 498.00, img: 'product-plate-bearing.png',    inStock: true },
-        { name: 'Control Relay Module',    number: 'EC809-033-011-A', category: 'Electrical Cabinet', machine: 'MULTUS U3000',  price: 128.00, img: 'product-servo-belt.png',       inStock: true },
-        { name: 'Proximity Sensor',        number: 'EC809-033-044-B', category: 'Electrical Cabinet', machine: 'GENOS M560-V',  price: 76.00,  img: 'product-oring-seal.png',       inStock: true }
+        /* LU300-M */
+        { name: 'Spindle Bearing Unit',       number: 'E4809-045-017-A', category: 'Spindle Assembly',   machine: 'LU300-M',       price: 247.50, originalPrice: 329.00, inStock: true },
+        { name: 'Angular Contact Bearing',    number: 'E4809-045-008-C', category: 'Spindle Assembly',   machine: 'LU300-M',       price: 312.00, inStock: true },
+        { name: 'Spindle Housing Seal',       number: 'E4809-061-021-A', category: 'Spindle Assembly',   machine: 'LU300-M',       price: 189.00, inStock: false },
+        { name: 'O-Ring Seal Kit',            number: 'E4809-045-090-K', category: 'Spindle Assembly',   machine: 'LU300-M',       price: 42.50,  originalPrice: 65.00, inStock: true },
+        { name: 'Coolant Pump Assembly',      number: 'C4809-045-022-B', category: 'Coolant System',     machine: 'LU300-M',       price: 185.00, inStock: true },
+        { name: 'Coolant Nozzle Kit',         number: 'C4809-058-001-A', category: 'Coolant System',     machine: 'LU300-M',       price: 64.00,  originalPrice: 89.00, inStock: true },
+        { name: 'Hydraulic Filter Kit',       number: 'C4809-058-077-E', category: 'Coolant System',     machine: 'LU300-M',       price: 98.00,  inStock: true },
+        { name: 'Servo Drive Belt',           number: 'A4809-072-014-D', category: 'Axis Drive',         machine: 'LU300-M',       price: 62.50,  originalPrice: 89.00, inStock: true },
+        { name: 'Ball Screw Assembly',        number: 'A4809-072-205-C', category: 'Axis Drive',         machine: 'LU300-M',       price: 498.00, inStock: true },
+        { name: 'X-Axis Linear Guide Rail',   number: 'A4809-072-310-A', category: 'Axis Drive',         machine: 'LU300-M',       price: 376.00, inStock: true },
+        { name: 'Turret Drive Motor',         number: 'A4809-072-450-B', category: 'Axis Drive',         machine: 'LU300-M',       price: 548.00, originalPrice: 680.00, inStock: true },
+        { name: 'Control Relay Module',       number: 'EC809-033-011-A', category: 'Electrical Cabinet', machine: 'LU300-M',       price: 128.00, inStock: true },
+        { name: 'Proximity Sensor',           number: 'EC809-033-044-B', category: 'Electrical Cabinet', machine: 'LU300-M',       price: 76.00,  inStock: true },
+        { name: 'Power Supply Board',         number: 'EC809-033-088-C', category: 'Electrical Cabinet', machine: 'LU300-M',       price: 214.00, inStock: false },
+        { name: 'Tool Presetter Arm',         number: 'T4809-091-017-A', category: 'Tooling & Fixtures', machine: 'LU300-M',       price: 155.00, inStock: true },
+        { name: 'Steady Rest Pad Kit',        number: 'T4809-091-033-B', category: 'Tooling & Fixtures', machine: 'LU300-M',       price: 88.00,  originalPrice: 110.00, inStock: true },
+        /* GENOS M560-V */
+        { name: 'Spindle Bearing Unit',       number: 'E4809-045-033-B', category: 'Spindle Assembly',   machine: 'GENOS M560-V',  price: 247.50, inStock: true },
+        { name: 'O-Ring Seal Kit',            number: 'E4809-045-091-K', category: 'Spindle Assembly',   machine: 'GENOS M560-V',  price: 42.50,  inStock: true },
+        { name: 'Coolant Tank Filter',        number: 'C4809-058-120-A', category: 'Coolant System',     machine: 'GENOS M560-V',  price: 49.00,  originalPrice: 72.00, inStock: true },
+        { name: 'Servo Drive Unit',           number: 'A4809-072-101-A', category: 'Axis Drive',         machine: 'GENOS M560-V',  price: 342.50, inStock: true },
+        { name: 'ATC Cam Follower',           number: 'T4809-091-055-C', category: 'Tooling & Fixtures', machine: 'GENOS M560-V',  price: 92.00,  inStock: true },
+        /* MULTUS U3000 */
+        { name: 'Spindle Bearing Unit',       number: 'E4809-061-022-B', category: 'Spindle Assembly',   machine: 'MULTUS U3000',  price: 247.50, inStock: true },
+        { name: 'High-Pressure Coolant Pump', number: 'C4809-058-200-A', category: 'Coolant System',     machine: 'MULTUS U3000',  price: 268.00, inStock: true },
+        { name: 'Y-Axis Servo Motor',         number: 'A4809-072-520-D', category: 'Axis Drive',         machine: 'MULTUS U3000',  price: 615.00, originalPrice: 780.00, inStock: true },
+        { name: 'Control Relay Module',       number: 'EC809-033-012-B', category: 'Electrical Cabinet', machine: 'MULTUS U3000',  price: 128.00, inStock: false },
+        /* LB2000 EX III */
+        { name: 'Angular Contact Bearing',    number: 'E4809-045-009-D', category: 'Spindle Assembly',   machine: 'LB2000 EX III', price: 312.00, inStock: true },
+        { name: 'Coolant Nozzle Kit',         number: 'C4809-058-002-B', category: 'Coolant System',     machine: 'LB2000 EX III', price: 64.00,  inStock: true },
+        { name: 'Servo Drive Belt',           number: 'A4809-072-015-E', category: 'Axis Drive',         machine: 'LB2000 EX III', price: 62.50,  inStock: true },
+        { name: 'Ball Screw Assembly',        number: 'A4809-072-206-D', category: 'Axis Drive',         machine: 'LB2000 EX III', price: 498.00, inStock: true },
+        { name: 'Proximity Sensor',           number: 'EC809-033-045-C', category: 'Electrical Cabinet', machine: 'LB2000 EX III', price: 76.00,  inStock: true }
       ];
 
-      var PAGE_SIZE = 4;
+      var PAGE_SIZE = 6;
 
       /* State */
       var query = '';
@@ -405,10 +426,11 @@
       }
 
       var CAT_COLORS = {
-        'Spindle Assembly': '#005EB8',
-        'Coolant System':   '#0EA5E9',
-        'Axis Drive':       '#7C3AED',
-        'Electrical':       '#F59E0B'
+        'Spindle Assembly':   '#005EB8',
+        'Coolant System':     '#0EA5E9',
+        'Axis Drive':         '#7C3AED',
+        'Electrical Cabinet': '#F59E0B',
+        'Tooling & Fixtures': '#059669'
       };
 
       function cardHTML(p) {
@@ -416,7 +438,7 @@
 
         var availZone = p.inStock
           ? '<div class="avail-status"><span class="avail-dot avail-dot--in"></span><span class="avail-text avail-text--in">In Stock</span></div>' +
-            '<div class="avail-sub">Ships in 1–3 business days</div>'
+            '<div class="avail-sub">Ships in 1-“3 business days</div>'
           : '<div class="avail-status"><span class="avail-dot avail-dot--out"></span><span class="avail-text avail-text--out">Out of Stock</span></div>' +
             '<div class="avail-sub">Contact sales for availability</div>';
 
@@ -471,7 +493,7 @@
             if (btn.dataset.busy === '1') return;
             btn.dataset.busy = '1';
             var orig = btn.innerHTML;
-            btn.innerHTML = '<span>✓ Added</span>';
+            btn.innerHTML = '<span>âœ“ Added</span>';
             setTimeout(function () {
               btn.innerHTML = orig;
               btn.dataset.busy = '';
@@ -505,7 +527,7 @@
           return b;
         }
 
-        /* ← Previous */
+        /* â† Previous */
         var prevBtn = makeBtn(
           '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Previous',
           currentPage > 1 ? currentPage - 1 : null,
@@ -519,16 +541,16 @@
         for (var i = 1; i <= totalPages; i++) {
           if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
             pages.push(i);
-          } else if (pages[pages.length - 1] !== '…') {
-            pages.push('…');
+          } else if (pages[pages.length - 1] !== '-¦') {
+            pages.push('-¦');
           }
         }
 
         pages.forEach(function(p) {
-          if (p === '…') {
+          if (p === '-¦') {
             var span = document.createElement('span');
             span.className = 'page-ellipsis';
-            span.textContent = '…';
+            span.textContent = '-¦';
             elPag.appendChild(span);
           } else {
             var b = makeBtn(p, p, p === currentPage ? ' active' : '');
@@ -536,7 +558,7 @@
           }
         });
 
-        /* Next → */
+        /* Next â†’ */
         var nextBtn = makeBtn(
           'Next <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
           currentPage < totalPages ? currentPage + 1 : null,
@@ -587,8 +609,14 @@
         var q = query.toLowerCase();
         queryFiltered = PARTS.filter(function (p) {
           return p.name.toLowerCase().indexOf(q) !== -1 ||
-                 p.number.toLowerCase().indexOf(q) !== -1;
+                 p.number.toLowerCase().indexOf(q) !== -1 ||
+                 p.category.toLowerCase().indexOf(q) !== -1 ||
+                 p.machine.toLowerCase().indexOf(q) !== -1;
         });
+        /* Fallback: show all parts if nothing matched the query */
+        if (queryFiltered.length === 0) {
+          queryFiltered = PARTS.slice();
+        }
       } else {
         elTitle.textContent = 'All Parts';
         queryFiltered = PARTS.slice();

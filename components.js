@@ -18,12 +18,9 @@
   'use strict';
 
   /* ---------- APP HEADER (nav 92px + sub-bar 29px) ---------- */
-  function _getSessionUser() {
-    try { return JSON.parse(sessionStorage.getItem('okuma_user') || 'null'); } catch (e) { return null; }
-  }
+  var _okuma_user = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
   function appHeaderHTML() {
-    var _u = _getSessionUser();
-    var isDealer = (_u && _u.role === 'dealer');
+    var isDealer = (_okuma_user && _okuma_user.role === 'dealer');
     var machPickHTML =
       '<div class="machine-picker" id="machinePicker">' +
         '<button class="machine-picker__btn" id="machinePickerBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Change default machine">' +
@@ -95,20 +92,20 @@
           </div>
           <div class="nav__user">
             <button class="nav__user-trigger" id="userMenuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="userMenu">
-              <span class="nav__user-name">John Doe</span>
+              <span class="nav__user-name">${_okuma_user ? _okuma_user.email : 'Guest'}</span>
               <span class="nav__avatar"><img src="avatar.png" alt=""></span>
             </button>
             <div class="user-menu" id="userMenu" role="menu" aria-label="Account">
               <div class="user-menu__head">
-                <div class="user-menu__name">John Smith</div>
-                <div class="user-menu__org">ACME Precision Manufacturing</div>
+                <div class="user-menu__name">${_okuma_user ? _okuma_user.email : 'Guest'}</div>
+                <div class="user-menu__org">${_okuma_user ? (_okuma_user.role === 'dealer' ? 'Dealer Account' : 'Customer Account') : ''}</div>
               </div>
               <a href="profile.html" class="user-menu__item" role="menuitem">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="4.5" r="2.5" stroke="#005EB8" stroke-width="1.3"/><path d="M2.5 12c0-2.2 2-3.8 4.5-3.8s4.5 1.6 4.5 3.8" stroke="#005EB8" stroke-width="1.3" stroke-linecap="round"/></svg>
                 My Account
               </a>
               <div class="user-menu__sep"></div>
-              <a href="#" class="user-menu__item" role="menuitem" onclick="event.preventDefault();OkumaAuth&&OkumaAuth.logout();">
+              <a href="#" onclick="if(typeof okuma_logout==='function'){okuma_logout();}else{sessionStorage.removeItem('okuma_session');window.location.replace('login.html');}return false;" class="user-menu__item" role="menuitem">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5.5 12H2.5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round"/><path d="M9 9.5L12 7 9 4.5M12 7H5.5" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Logout
               </a>
@@ -124,7 +121,7 @@
   }
 
   /* ---------- SIDEBAR (desktop: hover-expand rail; mobile: drawer) ---------- */
-  var _dashHref = (_getSessionUser() && _getSessionUser().role === 'dealer') ? 'dealer-dashboard.html' : 'dashboard.html';
+  var _dashHref = (_okuma_user && _okuma_user.role === 'dealer') ? 'dealer-dashboard.html' : 'dashboard.html';
   var SIDEBAR_ITEMS = [
     { key: 'dashboard', label: 'Dashboard', href: _dashHref,
       icon: '<rect x="2" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="2" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>' },
@@ -253,6 +250,9 @@
     el.parentNode.removeChild(el);
     return true;
   }
+
+  /* Protect every page that loads components.js (auth.js must be loaded first) */
+  if (typeof okuma_checkAuth === 'function') { okuma_checkAuth(); }
 
   var sb = document.getElementById('okuma-sidebar');
   var hasSidebar = !!sb;
@@ -549,7 +549,7 @@
 
   if (pickerBtn && pickerMenu && pickerLabel) {
     var savedMachine = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
-    var isMachDealer = localStorage.getItem('okmUserRole') === 'dealer';
+    var isMachDealer = (_okuma_user && _okuma_user.role === 'dealer');
 
     var CUSTOMER_MACHINES = {
       'ABC Industries':      ['LU300-M', 'MULTUS U3000', 'LB2000 EX III'],
