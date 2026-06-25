@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Account – Okuma Parts Portal</title>
+  <title>My Account -“ Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     body {
       background: #F5F5F5;
@@ -28,9 +26,9 @@
       gap: 24px;
     }
 
-    /* ══════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        PROFILE HERO CARD
-    ══════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .profile-hero {
       background: #fff;
       border: 1px solid #E0E0E0;
@@ -47,7 +45,7 @@
       flex-wrap: wrap;
     }
 
-    /* ── Avatar ── */
+    /* â”€â”€ Avatar â”€â”€ */
     .avatar-wrap {
       position: relative;
       flex-shrink: 0;
@@ -96,7 +94,7 @@
       opacity: 1;
     }
 
-    /* ── Identity text ── */
+    /* â”€â”€ Identity text â”€â”€ */
     .profile-identity {
       flex: 1;
       min-width: 0;
@@ -159,9 +157,9 @@
       color: #9E9E9E;
     }
 
-    /* ══════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        TAB CONTAINER
-    ══════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .profile-tabs {
       background: #fff;
       border: 1px solid #E0E0E0;
@@ -170,7 +168,7 @@
       overflow: hidden;
     }
 
-    /* ── Tab list ── */
+    /* â”€â”€ Tab list â”€â”€ */
     .tab-list {
       display: flex;
       border-bottom: 1px solid #E0E0E0;
@@ -211,12 +209,12 @@
       border-radius: 2px;
     }
 
-    /* ── Tab panels ── */
+    /* â”€â”€ Tab panels â”€â”€ */
     .tab-panel { padding: 32px; }
 
-    /* ══════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        FORM LAYOUT HELPERS
-    ══════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .form-col { display: flex; flex-direction: column; gap: 20px; }
 
     .form-grid-2 {
@@ -409,9 +407,9 @@
       color: #9E9E9E;
     }
 
-    /* ══════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SECURITY TAB
-    ══════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .section-divider {
       height: 1px;
       background: #E0E0E0;
@@ -470,9 +468,9 @@
       padding: 2px 9px;
     }
 
-    /* ══════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        ADDRESS BOOK TAB
-    ══════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .addr-book-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     @media (max-width: 768px) { .addr-book-list { grid-template-columns: 1fr; } }
 
@@ -574,9 +572,38 @@
     }
     .addr-modal__cancel:hover { background: #F0F0F0; }
 
-    /* ══════════════════════════════════════
+    /* Address status badges */
+    .addr-book-card__tag--verified {
+      color: #166534; background: #F0FDF4; border-color: #86EFAC;
+    }
+    .addr-book-card__tag--pending {
+      color: #92400E; background: #FFFBEB; border-color: #FCD34D;
+    }
+    .addr-book-card__tag--rejected {
+      color: #991B1B; background: #FEF2F2; border-color: #FCA5A5;
+    }
+    .addr-book-card.is-pending {
+      opacity: 0.8; border-color: #D1D5DB; background: #FAFAFA; cursor: default;
+    }
+    .addr-book-card.is-rejected { border-color: #FCA5A5; }
+    .addr-pending-note {
+      font-size: 12px; color: #92400E; margin-top: 4px; font-style: italic;
+    }
+    .addr-rejected-note { font-size: 12px; color: #991B1B; margin-top: 4px; }
+    .addr-withdraw-btn {
+      font-size: 12px; font-weight: 400; color: #9E9E9E;
+      background: none; border: none; cursor: pointer; padding: 4px 0;
+    }
+    .addr-withdraw-btn:hover { color: #AD0000; }
+    .addr-resubmit-btn {
+      font-size: 13px; font-weight: 700; color: #005EB8;
+      background: none; border: none; cursor: pointer; padding: 4px 0;
+    }
+    .addr-resubmit-btn:hover { text-decoration: underline; }
+
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        MY MACHINES TAB
-    ══════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .machines-list {
       display: flex;
       flex-direction: column;
@@ -714,9 +741,9 @@
       color: #74AA50;
     }
 
-    /* ══════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        RESPONSIVE
-    ══════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     @media (max-width: 1024px) {
       .main-area   { padding: 24px; }
       .profile-hero__body { padding: 0 24px 24px; }
@@ -806,10 +833,10 @@
 </head>
 <body>
 
-  <!-- ══════════════ HEADER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• HEADER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-header"></div>
 
-  <!-- ══════════════ PAGE ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• PAGE â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="app-body-shell">
 
     <!-- SIDEBAR -->
@@ -818,9 +845,9 @@
     <!-- MAIN -->
     <main class="main-area" id="main" tabindex="-1" aria-label="My Account">
 
-      <!-- ─────────────────────────────
+      <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
            PROFILE HERO
-      ───────────────────────────── -->
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
       <section class="profile-hero" aria-label="Profile overview">
 
         <div class="profile-hero__body">
@@ -830,7 +857,7 @@
             <img id="profileAvatar"
                  class="avatar-wrap__img"
                  src="avatar.png"
-                 alt="Jonathan Davies — profile photo">
+                 alt="Jonathan Davies - profile photo">
             <button class="avatar-wrap__btn"
                     id="avatarBtn"
                     type="button"
@@ -862,9 +889,9 @@
         </div>
       </section>
 
-      <!-- ─────────────────────────────
+      <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
            TABS
-      ───────────────────────────── -->
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
       <div class="profile-tabs">
 
         <!-- Tab list -->
@@ -887,9 +914,9 @@
           </button>
         </div>
 
-        <!-- ══════════════════════════════
-             PANEL 1 — Personal Info
-        ══════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             PANEL 1 - Personal Info
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <div role="tabpanel" id="panel-personal" class="tab-panel"
              aria-labelledby="tab-personal" tabindex="0">
           <form novalidate aria-label="Personal information form" id="formPersonal">
@@ -964,9 +991,9 @@
           </form>
         </div>
 
-        <!-- ══════════════════════════════
-             PANEL 2 — Security
-        ══════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             PANEL 2 - Security
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <div role="tabpanel" id="panel-security" class="tab-panel"
              aria-labelledby="tab-security" tabindex="0" hidden>
 
@@ -1089,9 +1116,9 @@
 
         </div>
 
-        <!-- ══════════════════════════════
-             PANEL 4 — My Machines
-        ══════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             PANEL 4 - My Machines
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <div role="tabpanel" id="panel-machines" class="tab-panel"
              aria-labelledby="tab-machines" tabindex="0" hidden>
 
@@ -1111,7 +1138,7 @@
                   Verified
                 </span>
                 <a href="parts-catalogue.html" class="text-link" aria-label="Browse parts for LU300-M">
-                  Browse Parts →
+                  Browse Parts â†’
                 </a>
               </div>
             </div>
@@ -1130,7 +1157,7 @@
                   Verified
                 </span>
                 <a href="parts-catalogue.html" class="text-link" aria-label="Browse parts for MULTUS U3000">
-                  Browse Parts →
+                  Browse Parts â†’
                 </a>
               </div>
             </div>
@@ -1149,7 +1176,7 @@
                   Verified
                 </span>
                 <a href="parts-catalogue.html" class="text-link" aria-label="Browse parts for LB2000 EX III">
-                  Browse Parts →
+                  Browse Parts â†’
                 </a>
               </div>
             </div>
@@ -1158,42 +1185,15 @@
 
         </div><!-- /panel-machines -->
 
-        <!-- ══════════════════════════════
-             PANEL 5 — Address Book
-        ══════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             PANEL 5 - Address Book
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <div role="tabpanel" id="panel-addresses" class="tab-panel"
              aria-labelledby="tab-addresses" tabindex="0" hidden>
 
           <div class="addr-book-list" id="addrBookList">
 
-            <!-- Address 1 (default) -->
-            <label class="addr-book-card is-default" for="addr-radio-0">
-              <input type="radio" class="addr-radio-native" name="default-addr" id="addr-radio-0" value="0" checked>
-              <span class="addr-radio-circle" aria-hidden="true"></span>
-              <div class="addr-book-card__body">
-                <span class="addr-book-card__label">Okuma HQ – Warehouse B</span>
-                <span class="addr-book-card__tag">Default</span>
-                <span class="addr-book-card__line">11900 Cottonwood Street, Charlotte, NC 28214, USA</span>
-              </div>
-              <div class="addr-book-card__actions">
-                <button type="button" class="addr-edit-btn" data-idx="0" onclick="event.preventDefault(); openAddrModal(0)">Edit</button>
-                <button type="button" class="addr-delete-btn" data-idx="0" onclick="event.preventDefault(); deleteAddr(0)">Remove</button>
-              </div>
-            </label>
-
-            <!-- Address 2 -->
-            <label class="addr-book-card" for="addr-radio-1">
-              <input type="radio" class="addr-radio-native" name="default-addr" id="addr-radio-1" value="1">
-              <span class="addr-radio-circle" aria-hidden="true"></span>
-              <div class="addr-book-card__body">
-                <span class="addr-book-card__label">Service Depot North</span>
-                <span class="addr-book-card__line">455 Innovation Drive, Detroit, MI 48126, USA</span>
-              </div>
-              <div class="addr-book-card__actions">
-                <button type="button" class="addr-edit-btn" data-idx="1" onclick="event.preventDefault(); openAddrModal(1)">Edit</button>
-                <button type="button" class="addr-delete-btn" data-idx="1" onclick="event.preventDefault(); deleteAddr(1)">Remove</button>
-              </div>
-            </label>
+            <!-- Populated by JS -->
 
           </div>
 
@@ -1202,7 +1202,7 @@
               <circle cx="8" cy="8" r="7" stroke="#005EB8" stroke-width="1.5"/>
               <path d="M8 5v6M5 8h6" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
-            Add New Address
+            Request New Address
           </button>
 
         </div><!-- /panel-addresses -->
@@ -1211,7 +1211,7 @@
         <div class="addr-modal-overlay" id="addrModalOverlay">
           <div class="addr-modal" role="dialog" aria-modal="true" aria-labelledby="addrModalTitle">
             <div class="addr-modal__head">
-              <span class="addr-modal__title" id="addrModalTitle">Add Address</span>
+              <span class="addr-modal__title" id="addrModalTitle">Request New Address</span>
               <button type="button" class="addr-modal__close" id="addrModalClose" aria-label="Close">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
               </button>
@@ -1242,13 +1242,9 @@
                 <input type="text" id="am-zip" placeholder="00000">
               </div>
             </div>
-            <div class="addr-form-default">
-              <input type="checkbox" id="am-default">
-              <label for="am-default">Set as default address</label>
-            </div>
             <div class="addr-modal__actions">
               <button type="button" class="addr-modal__cancel" id="addrModalCancel">Cancel</button>
-              <button type="button" class="addr-modal__save" id="addrModalSave">Save Address</button>
+              <button type="button" class="addr-modal__save" id="addrModalSave">Submit Request</button>
             </div>
           </div>
         </div>
@@ -1271,18 +1267,19 @@
   <div id="liveRegion" aria-live="polite" aria-atomic="true"
        style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;"></div>
 
-  <!-- ══════════════ SCRIPTS ══════════════ -->
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• SCRIPTS â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
   <script src="components.js"></script>
   <script>
   (function () {
     'use strict';
 
-    /* ══════════════════════════════
-       TABS — roving tabindex + ARIA
-    ══════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       TABS - roving tabindex + ARIA
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     var tabs   = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
     var panels = Array.prototype.slice.call(document.querySelectorAll('[role="tabpanel"]'));
 
@@ -1319,9 +1316,9 @@
       });
     });
 
-    /* ══════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        AVATAR UPLOAD
-    ══════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     var avatarBtn   = document.getElementById('avatarBtn');
     var avatarInput = document.getElementById('avatarInput');
     var avatarImg   = document.getElementById('profileAvatar');
@@ -1346,9 +1343,9 @@
       reader.readAsDataURL(file);
     });
 
-    /* ══════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        PASSWORD EYE TOGGLE
-    ══════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     var EYE_OPEN = '<ellipse cx="9" cy="9" rx="8" ry="5.5" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>';
     var EYE_SHUT = '<path d="M2 2l14 14M7.3 7.4A2.5 2.5 0 0010.6 10.7M5.1 5.2C2.9 6.5 1 9 1 9s3 6 8 6c1.8 0 3.4-.6 4.8-1.6M8.3 3.1A8 8 0 0117 9s-.8 1.5-2.1 2.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
 
@@ -1364,9 +1361,9 @@
       });
     });
 
-    /* ══════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        PASSWORD STRENGTH
-    ══════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     var newPwInput   = document.getElementById('newPw');
     var strengthSegs = [
       document.getElementById('str1'),
@@ -1404,9 +1401,9 @@
       }
     });
 
-    /* ══════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        FORM SAVE (prototype)
-    ══════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     function wireForm(formId, btnId, confirmId) {
       var form    = document.getElementById(formId);
       var btn     = document.getElementById(btnId);
@@ -1416,7 +1413,7 @@
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         var orig = btn.textContent;
-        btn.textContent = 'Saving…';
+        btn.textContent = 'Saving-¦';
         btn.disabled = true;
 
         setTimeout(function () {
@@ -1433,9 +1430,9 @@
 
     wireForm('formSecurity', 'saveSecurityBtn', 'confirmSecurity');
 
-    /* ══════════════════════════════
-       PERSONAL INFO — EDIT MODE
-    ══════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       PERSONAL INFO - EDIT MODE
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     var PERSONAL_FIELDS = ['firstName', 'lastName', 'jobTitle', 'phone'];
     var editBtn      = document.getElementById('editPersonalBtn');
     var saveBtn      = document.getElementById('savePersonalBtn');
@@ -1482,9 +1479,9 @@
       setTimeout(function () { toast.classList.remove('show'); }, 3000);
     }
 
-    /* ══════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        ARIA LIVE ANNOUNCEMENTS
-    ══════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     function announce(msg) {
       var region = document.getElementById('liveRegion');
       region.textContent = '';
@@ -1496,13 +1493,14 @@
   </script>
 
   <script>
-  /* ══════════════════════════════════════
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
      ADDRESS BOOK
-  ══════════════════════════════════════ */
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
   (function () {
     var ADDRS = [
-      { label: 'Okuma HQ – Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte', state: 'NC', zip: '28214', isDefault: true },
-      { label: 'Service Depot North',    street: '455 Innovation Drive',    city: 'Detroit',   state: 'MI', zip: '48126', isDefault: false },
+      { label: 'Okuma HQ -“ Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte', state: 'NC', zip: '28214', isDefault: true,  status: 'verified' },
+      { label: 'Service Depot North',    street: '455 Innovation Drive',    city: 'Detroit',   state: 'MI', zip: '48126', isDefault: false, status: 'verified' },
+      { label: 'New Assembly Plant',     street: '800 Industrial Pkwy',     city: 'Columbus',  state: 'OH', zip: '43215', isDefault: false, status: 'pending'  },
     ];
     var editingIdx = -1;
 
@@ -1514,25 +1512,56 @@
     var addBtn     = document.getElementById('addrAddBtn');
     var list       = document.getElementById('addrBookList');
 
+    var PENCIL_SVG = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var TRASH_SVG  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 5h10M5.5 5V3h3v2M3.5 5l.5 7h6l.5-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
     function renderList() {
       list.innerHTML = ADDRS.map(function (a, i) {
         var full = a.street + ', ' + a.city + ', ' + a.state + ' ' + a.zip + ', USA';
+
+        if (a.status === 'pending') {
+          return '<div class="addr-book-card is-pending">' +
+            '<div class="addr-book-card__body">' +
+              '<span class="addr-book-card__label">' + a.label + '</span>' +
+              '<span class="addr-book-card__tag addr-book-card__tag--pending">Pending Approval</span>' +
+              '<span class="addr-book-card__line">' + full + '</span>' +
+              '<span class="addr-pending-note">Awaiting dealer approval - cannot be used for orders until approved.</span>' +
+            '</div>' +
+            '<div class="addr-book-card__actions">' +
+              '<button type="button" class="addr-withdraw-btn" onclick="window._addrWithdraw(' + i + ')">' + TRASH_SVG + ' Withdraw</button>' +
+            '</div>' +
+          '</div>';
+        }
+
+        if (a.status === 'rejected') {
+          return '<div class="addr-book-card is-rejected">' +
+            '<div class="addr-book-card__body">' +
+              '<span class="addr-book-card__label">' + a.label + '</span>' +
+              '<span class="addr-book-card__tag addr-book-card__tag--rejected">Rejected</span>' +
+              '<span class="addr-book-card__line">' + full + '</span>' +
+              (a.rejectReason ? '<span class="addr-rejected-note">Reason: ' + a.rejectReason + '</span>' : '') +
+            '</div>' +
+            '<div class="addr-book-card__actions">' +
+              '<button type="button" class="addr-resubmit-btn" onclick="window._addrResubmit(' + i + ')">' + PENCIL_SVG + ' Re-submit</button>' +
+              '<button type="button" class="addr-withdraw-btn" onclick="window._addrWithdraw(' + i + ')">' + TRASH_SVG + ' Remove</button>' +
+            '</div>' +
+          '</div>';
+        }
+
+        // verified
         return '<label class="addr-book-card' + (a.isDefault ? ' is-default' : '') + '" for="addr-radio-' + i + '">' +
           '<input type="radio" class="addr-radio-native" name="default-addr" id="addr-radio-' + i + '" value="' + i + '"' + (a.isDefault ? ' checked' : '') + '>' +
           '<span class="addr-radio-circle" aria-hidden="true"></span>' +
           '<div class="addr-book-card__body">' +
             '<span class="addr-book-card__label">' + a.label + '</span>' +
-            (a.isDefault ? '<span class="addr-book-card__tag">Default</span>' : '') +
+            (a.isDefault
+              ? '<span class="addr-book-card__tag">Default</span>'
+              : '<span class="addr-book-card__tag addr-book-card__tag--verified">Verified</span>') +
             '<span class="addr-book-card__line">' + full + '</span>' +
           '</div>' +
           '<div class="addr-book-card__actions">' +
-            '<button type="button" class="addr-edit-btn" onclick="event.preventDefault();window._addrEdit(' + i + ')">' +
-              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-              'Edit' +
-            '</button>' +
             '<button type="button" class="addr-delete-btn" onclick="event.preventDefault();window._addrDelete(' + i + ')">' +
-              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 5h10M5.5 5V3h3v2M3.5 5l.5 7h6l.5-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-              'Remove' +
+              TRASH_SVG + 'Remove' +
             '</button>' +
           '</div>' +
         '</label>';
@@ -1547,24 +1576,38 @@
       });
     }
 
-    window._addrEdit = function (idx) { openModal(idx); };
     window._addrDelete = function (idx) {
-      if (ADDRS.length <= 1) return;
+      var verified = ADDRS.filter(function (a) { return a.status === 'verified'; });
+      if (verified.length <= 1 && ADDRS[idx].status === 'verified') return;
       ADDRS.splice(idx, 1);
-      if (!ADDRS.some(function (a) { return a.isDefault; })) ADDRS[0].isDefault = true;
+      var hasDefault = ADDRS.some(function (a) { return a.isDefault && a.status === 'verified'; });
+      if (!hasDefault) {
+        var first = ADDRS.find(function (a) { return a.status === 'verified'; });
+        if (first) first.isDefault = true;
+      }
       renderList();
     };
 
+    window._addrWithdraw = function (idx) {
+      ADDRS.splice(idx, 1);
+      renderList();
+    };
+
+    window._addrResubmit = function (idx) {
+      openModal(idx);
+    };
+
     function openModal(idx) {
-      editingIdx = (idx === undefined ? -1 : idx);
-      modalTitle.textContent = editingIdx >= 0 ? 'Edit Address' : 'Add Address';
+      editingIdx = (idx !== undefined ? idx : -1);
+      var isResubmit = editingIdx >= 0 && ADDRS[editingIdx].status === 'rejected';
+      modalTitle.textContent = isResubmit ? 'Re-submit Address Request' : 'Request New Address';
+      saveBtn.textContent    = isResubmit ? 'Re-submit Request' : 'Submit Request';
       var a = editingIdx >= 0 ? ADDRS[editingIdx] : {};
       document.getElementById('am-label').value  = a.label  || '';
       document.getElementById('am-street').value = a.street || '';
       document.getElementById('am-city').value   = a.city   || '';
       document.getElementById('am-state').value  = a.state  || '';
       document.getElementById('am-zip').value    = a.zip    || '';
-      document.getElementById('am-default').checked = a.isDefault || false;
       overlay.classList.add('open');
       document.getElementById('am-label').focus();
     }
@@ -1588,17 +1631,13 @@
       var city   = document.getElementById('am-city').value.trim();
       var state  = document.getElementById('am-state').value.trim();
       var zip    = document.getElementById('am-zip').value.trim();
-      var isDef  = document.getElementById('am-default').checked;
       if (!label || !street || !city || !state || !zip) return;
 
-      if (isDef) ADDRS.forEach(function (a) { a.isDefault = false; });
-
       if (editingIdx >= 0) {
-        ADDRS[editingIdx] = { label: label, street: street, city: city, state: state, zip: zip, isDefault: isDef };
+        ADDRS[editingIdx] = { label: label, street: street, city: city, state: state, zip: zip, isDefault: false, status: 'pending' };
       } else {
-        ADDRS.push({ label: label, street: street, city: city, state: state, zip: zip, isDefault: isDef });
+        ADDRS.push({ label: label, street: street, city: city, state: state, zip: zip, isDefault: false, status: 'pending' });
       }
-      if (!ADDRS.some(function (a) { return a.isDefault; })) ADDRS[0].isDefault = true;
       renderList();
       closeModal();
     });

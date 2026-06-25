@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Review Your Order – Okuma Parts Portal</title>
+  <title>Review Your Order -“ Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -20,7 +18,7 @@
       min-height: 100vh;
     }
 
-    /* ─── PAGE LAYOUT ──────────────────────────────────────────── */
+    /* â”€â”€â”€ PAGE LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .page-content { display: flex; justify-content: center; padding: 92px 0 64px; overflow-x: hidden; }
     .page-inner {
       width: 1200px; max-width: 100%;
@@ -31,7 +29,7 @@
       .page-inner { padding: 0 120px; }
     }
 
-    /* ─── STEPPER ───────────────────────────────────────────────── */
+    /* â”€â”€â”€ STEPPER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .stepper {
       display: flex; align-items: center; justify-content: center;
       gap: 12px; padding: 40px 0;
@@ -52,13 +50,13 @@
     .step-connector.done    { background: #005EB8; }
     .step-connector.pending { background: #E5E5E5; }
 
-    /* ─── CHECKOUT BODY ────────────────────────────────────────── */
+    /* â”€â”€â”€ CHECKOUT BODY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .checkout-body { width: 960px; max-width: 100%; display: flex; gap: 32px; align-items: flex-start; }
     .checkout-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
 
     .page-title { font-size: 32px; font-weight: 800; color: #2C2A29; line-height: 1; }
 
-    /* ─── INFO CARDS ROW (Customer / Ship-to / Machine) ─────────── */
+    /* â”€â”€â”€ INFO CARDS ROW (Customer / Ship-to / Machine) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .info-cards { display: flex; gap: 16px; }
     .info-card {
       flex: 1; border: 1px solid #E5E5E5; border-radius: 4px;
@@ -77,7 +75,7 @@
     .info-card__name { font-size: 14px; font-weight: 700; color: #2C2A29; line-height: 1.3; }
     .info-card__sub  { font-size: 12px; font-weight: 400; color: #6B7280; line-height: 1.4; }
 
-    /* ─── PARTS LIST ────────────────────────────────────────────── */
+    /* â”€â”€â”€ PARTS LIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .parts-section { display: flex; flex-direction: column; gap: 12px; }
     .parts-section__heading {
       font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase;
@@ -106,7 +104,7 @@
       font-size: 14px; color: #9E9E9E;
     }
 
-    /* ─── TERMS + CTA ───────────────────────────────────────────── */
+    /* â”€â”€â”€ TERMS + CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .checkout-cta { display: flex; flex-direction: column; gap: 16px; }
     .terms-row { display: flex; align-items: flex-start; gap: 12px; }
     .terms-checkbox-native {
@@ -144,7 +142,7 @@
     }
     .btn-back:hover { border-color: #9CA3AF; color: #2C2A29; }
 
-    /* ─── RIGHT SIDEBAR ─────────────────────────────────────────── */
+    /* â”€â”€â”€ RIGHT SIDEBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .checkout-right { width: 312px; flex-shrink: 0; display: flex; flex-direction: column; gap: 24px; }
     .summary-card {
       background: #fff; border: 1px solid #E5E5E5; border-radius: 4px;
@@ -171,7 +169,7 @@
 
     img, svg { max-width: 100%; }
 
-    /* ─── RESPONSIVE ──────────────────────────────────────────── */
+    /* â”€â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     @media (max-width: 1024px) {
       .page-inner { padding: 0 24px; }
       .checkout-body { flex-direction: column; }
@@ -228,29 +226,29 @@
         <div class="checkout-left">
           <h1 class="page-title">Review Your Order</h1>
 
-          <!-- Info cards: Customer · Ship-to · Machine -->
+          <!-- Info cards: Customer Â· Ship-to Â· Machine -->
           <div class="info-cards">
             <div class="info-card">
               <div class="info-card__head">
                 <span class="info-card__label">Customer</span>
                 <a href="create-order.html" class="info-card__edit">Edit</a>
               </div>
-              <div class="info-card__name" id="rc-customer">—</div>
-              <div class="info-card__sub"  id="rc-acct">—</div>
+              <div class="info-card__name" id="rc-customer">-</div>
+              <div class="info-card__sub"  id="rc-acct">-</div>
             </div>
             <div class="info-card">
               <div class="info-card__head">
                 <span class="info-card__label">Ship To</span>
                 <a href="create-order.html" class="info-card__edit">Edit</a>
               </div>
-              <div class="info-card__name" id="rc-shipto">—</div>
-              <div class="info-card__sub"  id="rc-shipto-addr">—</div>
+              <div class="info-card__name" id="rc-shipto">-</div>
+              <div class="info-card__sub"  id="rc-shipto-addr">-</div>
             </div>
             <div class="info-card">
               <div class="info-card__head">
                 <span class="info-card__label">Machine</span>
               </div>
-              <div class="info-card__name" id="rc-machine">—</div>
+              <div class="info-card__name" id="rc-machine">-</div>
             </div>
           </div>
 
@@ -295,7 +293,7 @@
                 <line x1="3" y1="8" x2="13" y2="8"/><polyline points="8.5 3.5 13 8 8.5 12.5"/>
               </svg>
             </button>
-            <button class="btn-back" onclick="window.location='create-order.html'">← Edit Order</button>
+            <button class="btn-back" onclick="window.location='create-order.html'">â† Edit Order</button>
           </div>
         </div><!-- /checkout-left -->
 
@@ -347,7 +345,7 @@
       // Info cards
       function set(id, val) {
         var el = document.getElementById(id);
-        if (el) el.textContent = val || '—';
+        if (el) el.textContent = val || '-';
       }
       set('rc-customer',    draft.customer);
       set('rc-acct',        draft.acct ? 'Account #' + draft.acct : '');
@@ -378,8 +376,9 @@
       set('rs-total',     '$' + (draft.total || 0).toFixed(2));
     })();
   </script>
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
 
   <script src="components.js"></script>

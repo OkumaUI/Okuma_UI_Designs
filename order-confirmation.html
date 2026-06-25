@@ -1,12 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Order Confirmation – Okuma</title>
+  <title>Order Confirmation -“ Okuma</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,14 +14,14 @@
       min-height: 100vh;
     }
 
-    /* ─── MAIN CONTENT ────────────────────────────────────────── */
+    /* â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .page-content {
       display: flex;
       justify-content: center;
-      padding: calc(92px + 24px) 24px 80px;
+      padding: 40px 24px 80px;
     }
 
-    /* ─── CONFIRMATION CARD ───────────────────────────────────── */
+    /* â”€â”€â”€ CONFIRMATION CARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card {
       background: #fff;
       border-radius: 8px;
@@ -36,7 +34,7 @@
       gap: 32px;
     }
 
-    /* ─── SECTION 1: Icon + Title ─────────────────────────────── */
+    /* â”€â”€â”€ SECTION 1: Icon + Title â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card__hero {
       display: flex;
       flex-direction: column;
@@ -85,7 +83,7 @@
       line-height: 1.5;
     }
 
-    /* ─── SECTION 2: Reference Number ────────────────────────── */
+    /* â”€â”€â”€ SECTION 2: Reference Number â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card__reference {
       background: #005EB8;
       border-radius: 4px;
@@ -112,7 +110,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* ─── SECTION 3: Estimated Delivery ──────────────────────── */
+    /* â”€â”€â”€ SECTION 3: Estimated Delivery â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card__delivery {
       background: #F0FDF4;
       border-radius: 4px;
@@ -135,14 +133,14 @@
       color: #166534;
     }
 
-    /* ─── DIVIDER ─────────────────────────────────────────────── */
+    /* â”€â”€â”€ DIVIDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card__divider {
       height: 1px;
       background: #E5E5E5;
       margin: 0;
     }
 
-    /* ─── SECTION 4: Shipping Address ────────────────────────── */
+    /* â”€â”€â”€ SECTION 4: Shipping Address â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card__section {
       display: flex;
       flex-direction: column;
@@ -166,7 +164,7 @@
       color: #6B7280;
     }
 
-    /* ─── SECTION 5: Order Summary ────────────────────────────── */
+    /* â”€â”€â”€ SECTION 5: Order Summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card__summary {
       display: flex;
       flex-direction: column;
@@ -220,7 +218,7 @@
       color: #005EB8;
     }
 
-    /* ─── SECTION 6: Buttons ──────────────────────────────────── */
+    /* â”€â”€â”€ SECTION 6: Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card__actions {
       display: flex;
       gap: 16px;
@@ -256,7 +254,7 @@
       border: 1.5px solid #005EB8;
     }
 
-    /* ─── SECTION 7: Download Link ────────────────────────────── */
+    /* â”€â”€â”€ SECTION 7: Download Link â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card__download {
       display: flex;
       align-items: center;
@@ -275,6 +273,36 @@
       height: 16px;
       flex-shrink: 0;
     }
+
+    /* â”€â”€â”€ ORDER ITEMS TABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .items-table { display: flex; flex-direction: column; }
+    .items-table__head {
+      display: flex; align-items: center; gap: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #E5E5E5;
+    }
+    .items-table__row {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid #F0F0F0;
+    }
+    .items-table__row:last-child { border-bottom: none; }
+    .it-hcol {
+      font-size: 11px; font-weight: 700; color: #9E9E9E;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .it-col-part    { flex: 1; min-width: 0; }
+    .it-col-machine { width: 140px; flex-shrink: 0; }
+    .it-col-qty     { width: 36px;  flex-shrink: 0; text-align: center; }
+    .it-col-price   { width: 80px;  flex-shrink: 0; text-align: right; }
+    .it-part-name   { font-size: 13px; font-weight: 700; color: #2C2A29; line-height: 1.3; }
+    .it-part-pn     { font-size: 11px; color: #6B7280; margin-top: 2px; }
+    .it-mach-name   { font-size: 12px; font-weight: 600; color: #2C2A29; line-height: 1.3; }
+    .it-mach-serial { font-size: 11px; color: #6B7280; margin-top: 2px; }
+    .it-qty         { font-size: 13px; font-weight: 500; color: #2C2A29; text-align: center; display: block; padding-top: 2px; }
+    .it-price       { font-size: 13px; font-weight: 700; color: #2C2A29; display: block; padding-top: 2px; }
+    .it-price--sale { color: #AD0000; }
+    .it-price-orig  { font-size: 11px; font-weight: 400; color: #9E9E9E; text-decoration: line-through; display: block; margin-top: 2px; }
 
     img, svg { max-width: 100%; }
 
@@ -301,6 +329,8 @@
       /* stack the two CTAs */
       .card__actions { flex-direction: column; }
       .btn { flex: none; width: 100%; height: 48px; min-width: 0; }
+      /* hide machine column on very narrow screens */
+      .it-col-machine { display: none; }
     }
 
     @media (max-width: 414px) {
@@ -312,10 +342,10 @@
 </head>
 <body>
 
-  <!-- ─── TOP NAV ──────────────────────────────────────────────── -->
+  <!-- â”€â”€â”€ TOP NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div id="okuma-header"></div>
 
-  <!-- ─── PAGE CONTENT ─────────────────────────────────────────── -->
+  <!-- â”€â”€â”€ PAGE CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <main class="page-content">
     <div class="card">
 
@@ -347,7 +377,7 @@
           <path d="M2 8h16" stroke="#166534" stroke-width="1.5"/>
           <path d="M6 2v4M14 2v4" stroke="#166534" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <span class="card__delivery-text">Delivery details will be confirmed via email once your order is processed.</span>
+        <span class="card__delivery-text">Delivery details will be confirmed with the customer once the order is processed.</span>
       </div>
 
       <!-- Divider -->
@@ -357,7 +387,7 @@
       <div class="card__section">
         <p class="card__section-title">Ordered For</p>
         <p class="card__section-line">ABC Industries</p>
-        <p class="card__section-line card__section-line--muted">Contact: Robert Chan · robert.chan@abcindustries.com</p>
+        <p class="card__section-line card__section-line--muted">Contact: Robert Chan robert.chan@abcindustries.com</p>
       </div>
 
       <!-- Divider -->
@@ -370,7 +400,77 @@
         <p class="card__section-line card__section-line--muted">11900 Cottonwood Street, Charlotte, NC 28214, USA</p>
       </div>
 
-      <!-- 5. Order summary -->
+      <!-- Divider -->
+      <div class="card__divider"></div>
+
+      <!-- 6. Items ordered -->
+      <div class="card__section">
+        <p class="card__section-title">Items Ordered</p>
+
+        <div class="items-table">
+          <!-- Header -->
+          <div class="items-table__head">
+            <div class="it-col-part"><span class="it-hcol">Part</span></div>
+            <div class="it-col-machine"><span class="it-hcol">Machine</span></div>
+            <div class="it-col-qty"><span class="it-hcol">Qty</span></div>
+            <div class="it-col-price"><span class="it-hcol">Price</span></div>
+          </div>
+
+          <!-- Plate (on sale) -->
+          <div class="items-table__row">
+            <div class="it-col-part">
+              <div class="it-part-name">Plate</div>
+              <div class="it-part-pn">525-0100-11</div>
+            </div>
+            <div class="it-col-machine">
+              <div class="it-mach-name">LU300-M</div>
+              <div class="it-mach-serial">S/N: M5-2891-K</div>
+            </div>
+            <div class="it-col-qty"><span class="it-qty">2</span></div>
+            <div class="it-col-price">
+              <span class="it-price it-price--sale">$405.00</span>
+              <span class="it-price-orig">$495.00</span>
+            </div>
+          </div>
+
+          <!-- Coolant Pump Assembly -->
+          <div class="items-table__row">
+            <div class="it-col-part">
+              <div class="it-part-name">Coolant Pump Assembly</div>
+              <div class="it-part-pn">E4809-045-017-A</div>
+            </div>
+            <div class="it-col-machine">
+              <div class="it-mach-name">LU300-M</div>
+              <div class="it-mach-serial">S/N: M5-2891-K</div>
+            </div>
+            <div class="it-col-qty"><span class="it-qty">1</span></div>
+            <div class="it-col-price">
+              <span class="it-price">$185.00</span>
+            </div>
+          </div>
+
+          <!-- Servo Drive Belt -->
+          <div class="items-table__row">
+            <div class="it-col-part">
+              <div class="it-part-name">Servo Drive Belt</div>
+              <div class="it-part-pn">E4809-045-017-A</div>
+            </div>
+            <div class="it-col-machine">
+              <div class="it-mach-name">LU300-M</div>
+              <div class="it-mach-serial">S/N: M5-2891-K</div>
+            </div>
+            <div class="it-col-qty"><span class="it-qty">1</span></div>
+            <div class="it-col-price">
+              <span class="it-price">$62.50</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="card__divider"></div>
+
+      <!-- 7. Order summary -->
       <div class="card__summary">
         <p class="card__section-title">Order Summary</p>
 
@@ -416,8 +516,9 @@
 
     </div>
   </main>
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
 
   <script src="components.js"></script>

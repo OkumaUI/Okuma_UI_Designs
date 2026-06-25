@@ -1,12 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Orders – Okuma Parts Portal</title>
+  <title>My Orders -“ Okuma Parts Portal</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,7 +27,7 @@
       gap: 0;
     }
 
-    /* ── BREADCRUMB ── */
+    /* â”€â”€ BREADCRUMB â”€â”€ */
     .breadcrumb {
       display: flex;
       align-items: center;
@@ -43,7 +41,7 @@
     .breadcrumb__sep { color: #C4C4C4; }
     .breadcrumb__current { color: #1A1A1A; }
 
-    /* ── PAGE HEADER ── */
+    /* â”€â”€ PAGE HEADER â”€â”€ */
     .page-head {
       display: flex;
       align-items: center;
@@ -74,7 +72,7 @@
     .btn-stock-order:hover { background: #0B308E; }
     .btn-stock-order svg { width: 16px; height: 16px; }
 
-    /* ── TOOLBAR ── */
+    /* â”€â”€ TOOLBAR â”€â”€ */
     .orders-toolbar {
       display: flex;
       align-items: center;
@@ -136,7 +134,7 @@
       color: #717171;
     }
 
-    /* ── TABLE WRAPPER ── */
+    /* â”€â”€ TABLE WRAPPER â”€â”€ */
     .orders-card {
       border: 1px solid #DEDEDE;
       border-radius: 4px;
@@ -198,7 +196,7 @@
 
     .col-total-val { font-weight: 700; }
 
-    /* ── STATUS BADGES ── */
+    /* â”€â”€ STATUS BADGES â”€â”€ */
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -219,7 +217,7 @@
     .status-badge--cancelled  { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #9E9E9E; }
     .status-badge--cancelled .dot { background: #9E9E9E; }
 
-    /* ── VIEW DETAILS LINK ── */
+    /* â”€â”€ VIEW DETAILS LINK â”€â”€ */
     .view-details-link {
       display: inline-flex;
       align-items: center;
@@ -233,7 +231,7 @@
     .view-details-link:hover { text-decoration: underline; }
     .view-details-link svg { width: 12px; height: 12px; flex-shrink: 0; }
 
-    /* ── TABLE FOOTER ── */
+    /* â”€â”€ TABLE FOOTER â”€â”€ */
     .orders-foot {
       display: flex;
       align-items: center;
@@ -247,7 +245,7 @@
       color: #717171;
     }
 
-    /* ── PAGINATION ── */
+    /* â”€â”€ PAGINATION â”€â”€ */
     .pagination {
       display: flex;
       align-items: center;
@@ -283,7 +281,7 @@
     }
     .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* ── EMPTY STATE ── */
+    /* â”€â”€ EMPTY STATE â”€â”€ */
     .empty-state {
       padding: 64px 20px;
       text-align: center;
@@ -293,7 +291,7 @@
 
     img, svg { max-width: 100%; }
 
-    /* ── Tablet landscape: reduce main-area bottom padding ── */
+    /* â”€â”€ Tablet landscape: reduce main-area bottom padding â”€â”€ */
     @media (min-width: 769px) and (max-width: 1199px) {
       .main-area { padding: 24px 24px 48px; }
     }
@@ -312,7 +310,7 @@
       .page-head__title { font-size: 26px; }
     }
 
-    /* ── Wrap page header earlier so title + button don't crowd ── */
+    /* â”€â”€ Wrap page header earlier so title + button don't crowd â”€â”€ */
     @media (max-width: 600px) {
       .page-head { flex-wrap: wrap; gap: 12px; }
       .btn-stock-order { width: 100%; justify-content: center; }
@@ -433,6 +431,7 @@
 
   <!-- FOOTER -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
   <script src="components.js"></script>
   <script>

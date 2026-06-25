@@ -1,21 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard – Okuma Parts Portal</title>
+  <title>Dashboard -“ Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>
-    (function() {
-      var user = OkumaAuth.checkAuth();
-      /* Dealers land on dealer-dashboard; redirect them there */
-      if (user && user.role === 'dealer') { window.location.replace('dealer-dashboard.html'); }
-    })();
-  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -28,7 +20,7 @@
       flex-direction: column;
     }
 
-    /* ── MAIN AREA ── */
+    /* â”€â”€ MAIN AREA â”€â”€ */
     .main-area {
       flex: 1;
       min-width: 0; /* allow the flex item to shrink so children (e.g. the orders table) can scroll instead of widening the page */
@@ -302,17 +294,17 @@
     /* Safety net: never let media exceed the viewport */
     img, svg { max-width: 100%; }
 
-    /* ══════════════════════════════════════════
-       RESPONSIVE  —  breakpoints aligned with chrome (1024 / 768 / 480)
-    ══════════════════════════════════════════ */
-    /* Tablet: kpi-summary-row 50/50 grid, machine 3→2, quick-links 5→3 */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       RESPONSIVE  -  breakpoints aligned with chrome (1024 / 768 / 480)
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* Tablet: kpi-summary-row 50/50 grid, machine 3â†’2, quick-links 5â†’3 */
     @media (max-width: 1024px) {
       .kpi-summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
       .machine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .quick-links { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
-    /* Mobile: everything stacks; reduce page padding 32→16 */
+    /* Mobile: everything stacks; reduce page padding 32â†’16 */
     @media (max-width: 768px) {
       .main-area { padding: 16px; gap: 24px; }
       .kpi-row { grid-template-columns: minmax(0, 1fr); }
@@ -344,9 +336,9 @@
       .book-option.is-selected { padding: 11px; }
     }
 
-    /* ══════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        BROWSE PARTS BOOK MODAL
-    ══════════════════════════════════════════ */
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -462,10 +454,10 @@
 </head>
 <body>
 
-  <!-- ══════════════ HEADER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• HEADER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-header"></div>
 
-  <!-- ══════════════ PAGE ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• PAGE â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="app-body-shell">
 
     <!-- SIDEBAR -->
@@ -525,7 +517,7 @@
           <!-- Machine -->
           <div class="account-summary__block">
             <span class="account-summary__label">Default Machine</span>
-            <span class="account-summary__value">LU300-M &nbsp;·&nbsp; Serial: M5-2891-K</span>
+            <span class="account-summary__value">LU300-M &nbsp;Â·&nbsp; Serial: M5-2891-K</span>
             <span class="account-summary__value" style="color:#717171;font-size:12px;">Last Serviced: Oct 12, 2024</span>
           </div>
 
@@ -548,7 +540,7 @@
       <section class="section">
         <div class="section__head">
           <h2 class="section__title">My Registered Machines</h2>
-          <a href="#" class="section__link">View All →</a>
+          <a href="#" class="section__link">View All â†’</a>
         </div>
 
         <div class="machine-grid">
@@ -658,7 +650,7 @@
       <section class="section">
         <div class="section__head">
           <h2 class="section__title">Recent Orders</h2>
-          <a href="#" class="section__link">View All Orders →</a>
+          <a href="#" class="section__link">View All Orders â†’</a>
         </div>
 
         <div class="orders-wrap">
@@ -716,10 +708,10 @@
     </main>
   </div>
 
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
 
-  <!-- ══════════════ BROWSE PARTS BOOK MODAL ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• BROWSE PARTS BOOK MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="modal-overlay" id="partsModalOverlay" onclick="handleOverlayClick(event)">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <!-- Header -->
@@ -766,7 +758,8 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCRIPTS ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• SCRIPTS â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <script src="auth.js"></script>
   <script src="components.js"></script>
   <script>
     function openModal(model, serial) {

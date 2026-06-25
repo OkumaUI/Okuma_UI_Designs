@@ -1,55 +1,61 @@
 /* ════════════════════════════════════════════════════════════════
-   Okuma Parts Portal — Auth guard
-   Usage (every protected page, before any other scripts):
-     <script src="auth.js"></script>
+   Okuma Parts Portal — Auth
+   Include via <script src="auth.js"> on every page before components.js
    ════════════════════════════════════════════════════════════════ */
-(function () {
-  'use strict';
+var OKUMA_USERS = [
+  { email: 'customer@okuma.com', password: 'customer123', role: 'customer' },
+  { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer'   }
+];
 
-  var SESSION_KEY = 'okuma_user';
-
-  /* Hardcoded credentials — login page only uses these via OkumaAuth.validate() */
-  var CREDENTIALS = [
-    { email: 'customer@okuma.com', password: 'customer123', role: 'customer' },
-    { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer'   }
-  ];
-
-  function checkAuth() {
-    var raw = sessionStorage.getItem(SESSION_KEY);
-    if (!raw) { window.location.replace('login.html'); return null; }
-    try {
-      var user = JSON.parse(raw);
-      if (!user || !user.email || !user.role) throw new Error('invalid');
-      return user;
-    } catch (e) {
-      sessionStorage.removeItem(SESSION_KEY);
-      window.location.replace('login.html');
-      return null;
+function okunmaLogin(email, password) {
+  var e = (email || '').trim().toLowerCase();
+  for (var i = 0; i < OKUMA_USERS.length; i++) {
+    if (OKUMA_USERS[i].email === e && OKUMA_USERS[i].password === password) {
+      var u = OKUMA_USERS[i];
+      sessionStorage.setItem('okuma_session', JSON.stringify({
+        email: u.email, password: u.password, role: u.role
+      }));
+      return { email: u.email, role: u.role };
     }
   }
+  return null;
+}
 
-  function logout() {
-    sessionStorage.removeItem(SESSION_KEY);
+function okuma_checkAuth() {
+  try {
+    var raw = sessionStorage.getItem('okuma_session');
+    if (!raw) { window.location.replace('login.html'); return null; }
+    var s = JSON.parse(raw);
+    for (var i = 0; i < OKUMA_USERS.length; i++) {
+      if (OKUMA_USERS[i].email === s.email && OKUMA_USERS[i].password === s.password) {
+        return { email: OKUMA_USERS[i].email, role: OKUMA_USERS[i].role };
+      }
+    }
+    sessionStorage.removeItem('okuma_session');
     window.location.replace('login.html');
+    return null;
+  } catch (e) {
+    sessionStorage.removeItem('okuma_session');
+    window.location.replace('login.html');
+    return null;
   }
+}
 
-  /* Returns matching user object on success, null on failure */
-  function validate(email, password) {
-    var e = (email || '').trim().toLowerCase();
-    var p = password || '';
-    for (var i = 0; i < CREDENTIALS.length; i++) {
-      if (CREDENTIALS[i].email === e && CREDENTIALS[i].password === p) {
-        return { email: CREDENTIALS[i].email, role: CREDENTIALS[i].role };
+function okuma_getUser() {
+  try {
+    var raw = sessionStorage.getItem('okuma_session');
+    if (!raw) return null;
+    var s = JSON.parse(raw);
+    for (var i = 0; i < OKUMA_USERS.length; i++) {
+      if (OKUMA_USERS[i].email === s.email && OKUMA_USERS[i].password === s.password) {
+        return { email: OKUMA_USERS[i].email, role: OKUMA_USERS[i].role };
       }
     }
     return null;
-  }
+  } catch (e) { return null; }
+}
 
-  /* Persist a validated user and redirect to dashboard */
-  function login(user) {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
-    window.location.replace('dashboard.html');
-  }
-
-  window.OkumaAuth = { checkAuth: checkAuth, logout: logout, validate: validate, login: login };
-})();
+function okuma_logout() {
+  sessionStorage.removeItem('okuma_session');
+  window.location.replace('login.html');
+}

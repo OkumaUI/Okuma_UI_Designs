@@ -1,13 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="refresh" content="0; url=parts-catalogue.html">
-  <title>Parts Book â Okuma Parts Portal</title>
+  <title>Parts Book Ã¢-Â“ Okuma Parts Portal</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="auth.js"></script>
-  <script>OkumaAuth.checkAuth();</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -20,7 +18,7 @@
       flex-direction: column;
     }
 
-    /* ââ MAIN AREA ââ */
+    /* Ã¢Â”-Ã¢Â”- MAIN AREA Ã¢Â”-Ã¢Â”- */
     .main-area {
       flex: 1;
       min-width: 0; /* allow the flex item to shrink instead of widening the page */
@@ -110,7 +108,7 @@
     /* No results */
     .no-machines { font-size: 14px; font-weight: 400; color: #717171; }
 
-    /* Machine grid: 2 rows Ã 3 cols */
+    /* Machine grid: 2 rows ÃƒÂ— 3 cols */
     .machine-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -199,10 +197,10 @@
     /* Safety net: never let media exceed the viewport */
     img, svg { max-width: 100%; }
 
-    /* ══════════════════════════════════════════
-       RESPONSIVE  —  breakpoints aligned with chrome (1024 / 768 / 480)
-    ══════════════════════════════════════════ */
-    /* Tablet: machine grid 3→2 */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       RESPONSIVE  -  breakpoints aligned with chrome (1024 / 768 / 480)
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* Tablet: machine grid 3â†’2 */
     @media (max-width: 1024px) {
       .machine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
@@ -243,10 +241,10 @@
 </head>
 <body>
 
-  <!-- ââââââââââââââ HEADER ââââââââââââââ -->
+  <!-- Ã¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•Â HEADER Ã¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•Â -->
   <div id="okuma-header"></div>
 
-  <!-- ââââââââââââââ PAGE ââââââââââââââ -->
+  <!-- Ã¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•Â PAGE Ã¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•ÂÃ¢Â•Â -->
   <div class="app-body-shell">
 
     <!-- SIDEBAR -->
@@ -314,8 +312,8 @@
             </svg>
           </div>
           <div class="filter-menu">
-            <div class="filter-menu__item" data-value="az">Name (A–Z)</div>
-            <div class="filter-menu__item" data-value="za">Name (Z–A)</div>
+            <div class="filter-menu__item" data-value="az">Name (A-“Z)</div>
+            <div class="filter-menu__item" data-value="za">Name (Z-“A)</div>
           </div>
         </div>
       </div>
@@ -323,12 +321,12 @@
       <!-- No results message -->
       <p class="no-machines" id="noMachines" hidden>No machines found</p>
 
-      <!-- Machine grid (2 rows Ã 3 cols) -->
+      <!-- Machine grid (2 rows ÃƒÂ— 3 cols) -->
       <div class="machine-grid" id="machineGrid">
 
         <!-- 1. LU300-M -->
         <a href="parts-catalogue.html" class="machine-card" data-name="LU300-M" data-type="Machining Centre" data-year="2024">
-          <div class="machine-card__media"><img class="machine-card__photo" src="machine-lu300m.png" alt="LU300-M"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-lu300m.png" alt="LU300-M"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue â†’</span></div></div>
           <div class="machine-card__body">
             <div class="machine-card__name">LU300-M</div>
             <div class="machine-card__meta">
@@ -340,7 +338,7 @@
 
         <!-- 2. MULTUS U3000 -->
         <a href="parts-catalogue.html" class="machine-card" data-name="MULTUS U3000" data-type="Multitasking" data-year="2025">
-          <div class="machine-card__media"><img class="machine-card__photo" src="machine-multus-u3000.png" alt="MULTUS U3000"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-multus-u3000.png" alt="MULTUS U3000"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue â†’</span></div></div>
           <div class="machine-card__body">
             <div class="machine-card__name">MULTUS U3000</div>
             <div class="machine-card__meta">
@@ -352,7 +350,7 @@
 
         <!-- 3. LB2000 EX III -->
         <a href="parts-catalogue.html" class="machine-card" data-name="LB2000 EX III" data-type="Lathe" data-year="2025">
-          <div class="machine-card__media"><img class="machine-card__photo" src="machine-lb2000.png" alt="LB2000 EX III"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-lb2000.png" alt="LB2000 EX III"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue â†’</span></div></div>
           <div class="machine-card__body">
             <div class="machine-card__name">LB2000 EX III</div>
             <div class="machine-card__meta">
@@ -364,7 +362,7 @@
 
         <!-- 4. GENOS L200E -->
         <a href="parts-catalogue.html" class="machine-card" data-name="GENOS L200E" data-type="Lathe" data-year="2023">
-          <div class="machine-card__media"><img class="machine-card__photo" src="machine-genos-l200e.png" alt="GENOS L200E"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-genos-l200e.png" alt="GENOS L200E"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue â†’</span></div></div>
           <div class="machine-card__body">
             <div class="machine-card__name">GENOS L200E</div>
             <div class="machine-card__meta">
@@ -376,7 +374,7 @@
 
         <!-- 5. SPACE TURN LB3000 -->
         <a href="parts-catalogue.html" class="machine-card" data-name="SPACE TURN LB3000" data-type="Lathe" data-year="2024">
-          <div class="machine-card__media"><img class="machine-card__photo" src="machine-spaceturn-lb3000.png" alt="SPACE TURN LB3000"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-spaceturn-lb3000.png" alt="SPACE TURN LB3000"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue â†’</span></div></div>
           <div class="machine-card__body">
             <div class="machine-card__name">SPACE TURN LB3000</div>
             <div class="machine-card__meta">
@@ -388,7 +386,7 @@
 
         <!-- 6. MB-56V AII -->
         <a href="parts-catalogue.html" class="machine-card" data-name="MB-56V AII" data-type="Machining Centre" data-year="2022">
-          <div class="machine-card__media"><img class="machine-card__photo" src="machine-mb56v.png" alt="MB-56V AII"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue →</span></div></div>
+          <div class="machine-card__media"><img class="machine-card__photo" src="machine-mb56v.png" alt="MB-56V AII"><div class="machine-card__overlay"><span class="machine-card__cta">Browse Catalogue â†’</span></div></div>
           <div class="machine-card__body">
             <div class="machine-card__name">MB-56V AII</div>
             <div class="machine-card__meta">
@@ -524,8 +522,9 @@
       }
     })();
   </script>
-  <!-- ══════════════ FOOTER ══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
 
 
   <script src="components.js"></script>
