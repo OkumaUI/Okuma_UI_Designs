@@ -149,6 +149,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      position: relative;
     }
 
     .filter-label {
@@ -247,6 +248,7 @@
       overflow: hidden;
       cursor: grab;
       user-select: none;
+      touch-action: none;
     }
 
     #diagram-wrapper.dragging { cursor: grabbing; }
@@ -1095,6 +1097,21 @@
     .parts-table-scroll {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y;
+      position: relative;
+    }
+    /* Fade-right hint — signals there are more columns to swipe to */
+    .parts-table-scroll::after {
+      content: '';
+      position: sticky;
+      right: 0;
+      top: 0;
+      display: block;
+      width: 40px;
+      height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.85));
+      pointer-events: none;
+      float: right;
     }
     .parts-table { min-width: 1010px; }
 
@@ -1116,6 +1133,8 @@
       .sheet-heading { font-size: 22px; }
       .diagram-viewer { height: 380px; }
       .lock-text { font-size: 18px; }
+      /* font-size 16px prevents iOS from auto-zooming the page on select focus */
+      .filter-select { font-size: 16px; }
       /* Modal: reduced padding, header sits flush */
       .modal-body { padding: 20px; gap: 20px; }
       .modal-header { padding: 16px 20px; }
@@ -1125,6 +1144,13 @@
     /* Small mobile: single-column filters; stack modal part row */
     @media (max-width: 640px) {
       .filter-bar { grid-template-columns: 1fr; gap: 16px; }
+      /* font-size 16px prevents iOS from auto-zooming the page on select focus */
+      .filter-select {
+        font-size: 16px;
+        height: 40px;
+        padding: 0 36px 0 12px;
+      }
+      .filter-label { font-size: 12px; }
     }
 
     @media (max-width: 480px) {
@@ -1135,6 +1161,61 @@
       .modal-cta-row { flex-direction: column; }
       .btn-continue, .btn-view-cart { width: 100%; flex: none; }
     }
+
+    /* ── Custom mobile dropdown (≤640px, injected by JS) ─────────── */
+    .csd-btn {
+      width: 100%;
+      height: 40px;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      padding: 0 36px 0 12px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: left;
+      color: #000;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234B4B4B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .csd-btn:disabled { background-color: #F5F5F5; opacity: 0.55; cursor: not-allowed; }
+    .csd-panel {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      margin-top: 2px;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+      max-height: 220px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      z-index: 300;
+    }
+    .csd-panel.open { display: block; }
+    .csd-group-label {
+      padding: 8px 14px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #2C2A29;
+      background: #F5F5F5;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .csd-item {
+      padding: 11px 14px;
+      font-size: 14px;
+      color: #1A1A1A;
+      cursor: pointer;
+      border-top: 1px solid #F0F0F0;
+    }
+    .csd-item:first-child { border-top: none; }
+    .csd-item.csd-indented { padding-left: 22px; }
+    .csd-item.csd-placeholder { color: #757575; cursor: default; }
+    .csd-item:not(.csd-placeholder):hover { background: #EEF4FF; }
   </style>
 </head>
 <body>
@@ -1308,19 +1389,7 @@
             <button type="button" class="pin in-stock"     data-pin="6" data-ix="0.42" data-iy="0.40" title="Part 6" aria-label="Part 6">6</button>
             <button type="button" class="pin in-stock"     data-pin="7" data-ix="0.53" data-iy="0.44" title="Part 7" aria-label="Part 7">7</button>
 
-            <!-- Part Popup -->
-            <div id="part-popup">
-              <div id="popup-part-num"></div>
-              <div id="popup-desc"></div>
-              <div id="popup-price" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:6px;"></div>
-              <div class="popup-stepper">
-                <button id="popup-minus" type="button">&minus;</button>
-                <span id="popup-qty">1</span>
-                <button id="popup-plus" type="button">+</button>
-              </div>
-              <button id="popup-add-btn" type="button">Add to Cart</button>
-              <button id="popup-alt-btn" type="button">Suggested Alternatives -º</button>
-            </div>
+            <!-- Part Popup has been moved to <body> to avoid CSS-transform containment -->
           </div>
         </div>
 
@@ -1502,6 +1571,21 @@
        JAVASCRIPT
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Part Popup — must be a direct child of body so position:fixed anchors to the viewport,
+       not to the transformed #diagram-inner ancestor -->
+  <div id="part-popup">
+    <div id="popup-part-num"></div>
+    <div id="popup-desc"></div>
+    <div id="popup-price" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:6px;"></div>
+    <div class="popup-stepper">
+      <button id="popup-minus" type="button">&minus;</button>
+      <span id="popup-qty">1</span>
+      <button id="popup-plus" type="button">+</button>
+    </div>
+    <button id="popup-add-btn" type="button">Add to Cart</button>
+    <button id="popup-alt-btn" type="button">Suggested Alternatives -º</button>
+  </div>
+
   <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>
 
@@ -2116,37 +2200,36 @@
       }
     }, { passive: false });
 
-    // â”€â”€ Pan â”€â”€
-    diagramWrapper.addEventListener('mousedown', (e) => {
+    // ── Pan (Pointer Events — works for mouse, touch, and laptop touchscreen) ──
+    diagramWrapper.addEventListener('pointerdown', (e) => {
       if (e.target.closest('.pin') || e.target.closest('#part-popup')) return;
       isPanning = true;
       startX = e.clientX;
       startY = e.clientY;
       startTX = translateX;
       startTY = translateY;
+      diagramWrapper.setPointerCapture(e.pointerId);
       diagramWrapper.classList.add('dragging');
       diagramInner.classList.add('no-transition');
     });
 
-    document.addEventListener('mousemove', (e) => {
+    diagramWrapper.addEventListener('pointermove', (e) => {
       if (!isPanning) return;
       translateX = startTX + (e.clientX - startX);
       translateY = startTY + (e.clientY - startY);
       applyTransform(false);
     });
 
-    document.addEventListener('mouseup', () => {
+    diagramWrapper.addEventListener('pointerup', () => {
       if (isPanning) {
         isPanning = false;
         diagramWrapper.classList.remove('dragging');
       }
     });
 
-    diagramWrapper.addEventListener('mouseleave', () => {
-      if (isPanning) {
-        isPanning = false;
-        diagramWrapper.classList.remove('dragging');
-      }
+    diagramWrapper.addEventListener('pointercancel', () => {
+      isPanning = false;
+      diagramWrapper.classList.remove('dragging');
     });
 
     // â”€â”€ Pin Click â”€â”€
@@ -2532,6 +2615,81 @@
         if (cartOverlay.style.display !== 'flex') hidePopup();
       }
     });
+
+    // ── Custom dropdown for mobile (≤640px) ──────────────────────────
+    (function () {
+      if (window.innerWidth > 640) return;
+
+      document.querySelectorAll('.filter-select').forEach(function (sel) {
+        var grp = sel.closest('.filter-group');
+        if (!grp) return;
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'csd-btn';
+
+        var panel = document.createElement('div');
+        panel.className = 'csd-panel';
+
+        function syncBtn() {
+          var opt = sel.options[sel.selectedIndex];
+          btn.textContent = opt ? opt.text.replace(/ /g, ' ').trim() : '';
+          btn.disabled = sel.disabled;
+          btn.style.color = (!opt || opt.value === '') ? '#757575' : '#000';
+        }
+
+        function buildPanel() {
+          panel.innerHTML = '';
+          Array.from(sel.children).forEach(function (child) {
+            if (child.tagName === 'OPTGROUP') {
+              var lbl = document.createElement('div');
+              lbl.className = 'csd-group-label';
+              lbl.textContent = child.label;
+              panel.appendChild(lbl);
+              Array.from(child.children).forEach(function (opt) {
+                panel.appendChild(makeItem(opt, true));
+              });
+            } else if (child.tagName === 'OPTION') {
+              panel.appendChild(makeItem(child, false));
+            }
+          });
+        }
+
+        function makeItem(opt, indented) {
+          var item = document.createElement('div');
+          item.className = 'csd-item' +
+            (indented ? ' csd-indented' : '') +
+            (opt.value === '' ? ' csd-placeholder' : '');
+          item.textContent = opt.text.replace(/ /g, ' ').trim();
+          item.addEventListener('click', function () {
+            if (opt.value === '' || sel.disabled) return;
+            sel.value = opt.value;
+            sel.dispatchEvent(new Event('change'));
+            syncBtn();
+            panel.classList.remove('open');
+          });
+          return item;
+        }
+
+        btn.addEventListener('click', function () {
+          if (btn.disabled) return;
+          buildPanel();
+          panel.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function (e) {
+          if (!grp.contains(e.target)) panel.classList.remove('open');
+        });
+
+        // Keep button in sync when native select is updated by existing JS
+        new MutationObserver(syncBtn).observe(sel, { attributes: true, childList: true, subtree: true });
+
+        sel.style.display = 'none';
+        grp.appendChild(btn);
+        grp.appendChild(panel);
+        syncBtn();
+      });
+    })();
   </script>
 
 </body>

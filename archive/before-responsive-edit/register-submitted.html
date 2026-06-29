@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Submitted – Register | Okuma</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #F5F5F5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #1A1A1A;
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+      padding-bottom: 80px;
+    }
+
+    /* CONFIRMATION CARD */
+    .confirm-card {
+      width: 560px;
+      box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ICON CIRCLE */
+    .icon-circle {
+      width: 72px;
+      height: 72px;
+      background: #F0F6FF;
+      border-radius: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* TITLE */
+    .confirm-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2C2A29;
+      text-align: center;
+      line-height: 1.5;
+      margin-top: 24px;
+    }
+
+    /* INFO BOX */
+    .info-box {
+      background: #F0F6FF;
+      border: 1px solid #005EB8;
+      border-radius: 4px;
+      padding: 16px;
+      margin: 12px 0 24px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #2C2A29;
+      text-align: center;
+      align-self: stretch;
+      line-height: 1.6;
+    }
+
+    /* BACK TO LOGIN BUTTON */
+    .btn-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #005EB8;
+      height: 45px;
+      width: 185px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.7px;
+      cursor: pointer;
+      border: none;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      transition: background 0.15s;
+    }
+
+    .btn-login:hover {
+      background: #004fa0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div id="okuma-auth-header"></div>
+
+  <!-- CONTENT -->
+  <main class="content">
+    <div class="confirm-card">
+
+      <!-- Check icon circle -->
+      <div class="icon-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#005EB8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+
+      <!-- Title -->
+      <h1 class="confirm-title">Registration Submitted!</h1>
+
+      <!-- Info box -->
+      <div class="info-box">
+        We'll review your details and send a confirmation to your email within 1 business day.
+      </div>
+
+      <!-- Back to login -->
+      <button class="btn-login" onclick="window.location='login.html'">Back To Login</button>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <div id="okuma-auth-footer"></div>
+
+  <script src="components.js"></script>
+</body>
+</html>
