@@ -17,23 +17,35 @@
 (function () {
   'use strict';
 
+  /* ---------- MACHINE DATA ---------- */
+  var _MACHINE_LIST = [
+    { name: 'LU300-M',           model: 'M560-V',    serial: 'M5-2891-K', installDate: 'Mar 15, 2021' },
+    { name: 'MULTUS U3000',      model: 'U3000-M',   serial: 'MU-9102-L', installDate: 'Jul 08, 2022' },
+    { name: 'LB2000 EX III',     model: 'LB2000-EX', serial: 'LB-4431-M', installDate: 'Nov 22, 2023' },
+    { name: 'GENOS L200E',       model: 'L200E',     serial: 'L2-1108-A', installDate: 'Feb 10, 2020' },
+    { name: 'SPACE TURN LB3000', model: 'LB3000',    serial: 'LB-8821-X', installDate: 'Sep 03, 2022' },
+    { name: 'MB-56V AII',        model: 'MB-56V',    serial: 'MB-2234-P', installDate: 'Apr 19, 2023' },
+  ];
+
   /* ---------- APP HEADER (nav 92px + sub-bar 29px) ---------- */
   var _okuma_user = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
   function appHeaderHTML() {
     var isDealer = (_okuma_user && _okuma_user.role === 'dealer');
+    var _machSearchHTML =
+      '<div class="mach-search-wrap">' +
+        '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+        '<input id="machSearchInput" type="text" class="mach-search-input" placeholder="Search by model or serial…" autocomplete="off" aria-label="Search machines">' +
+      '</div>';
+    var _firstMach = _MACHINE_LIST[0];
     var machPickHTML =
       '<div class="machine-picker" id="machinePicker">' +
-        '<button class="machine-picker__btn" id="machinePickerBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Change default machine">' +
-          '<span id="machinePickerLabel">Selected Machine : LU300-M</span>' +
+        '<button class="machine-picker__btn" id="machinePickerBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Change selected machine">' +
+          '<span id="machinePickerLabel">Selected Machine : ' + _firstMach.model + ' ' + _firstMach.serial + '</span>' +
           '<svg class="machine-picker__chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2.5 3.5L5 6L7.5 3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
         '</button>' +
-        '<div class="machine-picker__menu" id="machinePickerMenu" role="listbox" aria-label="Select default machine">' +
-          '<div class="machine-picker__item" role="option" data-machine="LU300-M">LU300-M</div>' +
-          '<div class="machine-picker__item" role="option" data-machine="MULTUS U3000">MULTUS U3000</div>' +
-          '<div class="machine-picker__item" role="option" data-machine="LB2000 EX III">LB2000 EX III</div>' +
-          '<div class="machine-picker__item" role="option" data-machine="GENOS L200E">GENOS L200E</div>' +
-          '<div class="machine-picker__item" role="option" data-machine="SPACE TURN LB3000">SPACE TURN LB3000</div>' +
-          '<div class="machine-picker__item" role="option" data-machine="MB-56V AII">MB-56V AII</div>' +
+        '<div class="machine-picker__menu" id="machinePickerMenu" role="listbox" aria-label="Select machine">' +
+          _machSearchHTML +
+          '<div id="machPickerList"></div>' +
         '</div>' +
       '</div>';
     var custPickHTML =
@@ -62,7 +74,7 @@
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
           <div class="nav__logo">
-            <a href="${isDealer ? 'dealer-dashboard.html' : 'dashboard.html'}" aria-label="Okuma — go to dashboard"><img src="okuma-logo.png" alt="Okuma – Open Possibilities"></a>
+            <a href="${isDealer ? 'dealer-dashboard.html' : 'dashboard.html'}" aria-label="Okuma — go to dashboard"><img src="images/okuma-logo.png" alt="Okuma – Open Possibilities"></a>
           </div>
         </div>
         <ul class="nav__links" style="display:none">
@@ -75,7 +87,7 @@
         </ul>
         <div class="nav__search" id="navSearch" role="search">
           <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="2"/><path d="M12 12L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input type="text" id="navSearchInput" placeholder="Search by part no. or name" autocomplete="off" aria-label="Search parts, machines, catalogues">
+          <input type="text" id="navSearchInput" placeholder="Search by part number or part name" autocomplete="off" aria-label="Search by part number or part name">
           <button class="nav__search-close" id="navSearchClose" aria-label="Close search">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M14 4L4 14M4 4l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
@@ -92,12 +104,12 @@
           </div>
           <div class="nav__user">
             <button class="nav__user-trigger" id="userMenuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="userMenu">
-              <span class="nav__user-name">${_okuma_user ? _okuma_user.email : 'Guest'}</span>
-              <span class="nav__avatar"><img src="avatar.png" alt=""></span>
+              <span class="nav__user-name">${_okuma_user ? (_okuma_user.firstName + ' ' + _okuma_user.lastName) : 'Guest'}</span>
+              <span class="nav__avatar">${_okuma_user ? ((_okuma_user.firstName || '?')[0] + (_okuma_user.lastName || '')[0]).toUpperCase() : '?'}</span>
             </button>
             <div class="user-menu" id="userMenu" role="menu" aria-label="Account">
               <div class="user-menu__head">
-                <div class="user-menu__name">${_okuma_user ? _okuma_user.email : 'Guest'}</div>
+                <div class="user-menu__name">${_okuma_user ? (_okuma_user.firstName + ' ' + _okuma_user.lastName) : 'Guest'}</div>
                 <div class="user-menu__org">${_okuma_user ? (_okuma_user.role === 'dealer' ? 'Dealer Account' : 'Customer Account') : ''}</div>
               </div>
               <a href="profile.html" class="user-menu__item" role="menuitem">
@@ -129,12 +141,10 @@
       icon: '<path d="M4 2h11a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2"/><path d="M7 2v16M10 6h3M10 9h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
     { key: 'orders', label: 'My Orders', href: 'my-orders.html',
       icon: '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 5.5V10l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
-    { key: 'quotes', label: 'My Quotes', href: '#',
+    { key: 'quotes', label: 'My Quotes', href: 'my-quotes.html',
       icon: '<path d="M5 2h6l4 4v12a1 1 0 01-1 1H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M11 2v4h4M7 11h6M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
     { key: 'account', label: 'My Account', href: 'profile.html',
       icon: '<circle cx="10" cy="6.5" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M3 18c0-3.6 3.13-6.5 7-6.5s7 2.9 7 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
-    { key: 'request', label: 'Request a Quote', href: '#',
-      icon: '<rect x="3" y="2" width="14" height="16" rx="1" stroke="currentColor" stroke-width="2"/><path d="M7 6h6M7 9h6M7 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' }
   ];
 
   function sidebarHTML(active) {
@@ -150,7 +160,7 @@
 
   /* ---------- AUTH HEADER + FOOTER ---------- */
   function authHeaderHTML() {
-    return '<header class="auth-header"><a href="login.html" aria-label="Okuma home"><img src="okuma-logo.png" alt="Okuma – Open Possibilities" class="auth-header__logo"></a></header>';
+    return '<header class="auth-header"><a href="login.html" aria-label="Okuma home"><img src="images/okuma-logo.png" alt="Okuma – Open Possibilities" class="auth-header__logo"></a></header>';
   }
   function authFooterHTML() {
     return '<footer class="auth-footer">' +
@@ -168,7 +178,7 @@
       '<div class="footer-body">' +
 
         '<div class="footer-brand">' +
-          '<img src="okuma-logo.png" alt="Okuma" class="footer-logo">' +
+          '<img src="images/okuma-logo.png" alt="Okuma" class="footer-logo">' +
           '<address class="footer-address">' +
             '<strong>OKUMA AMERICA CORPORATION</strong>' +
             '11900 Westhall Drive<br>Charlotte, NC 28278<br><br>P 704.588.7000' +
@@ -292,32 +302,32 @@
   var navSearch      = document.getElementById('navSearch');
 
   var NAV_CATALOGUE = [
-    { id:'MJ-4192-L', desc:'Spindle Bearing Assembly' },
-    { id:'MJ-4193-R', desc:'Spindle Bearing Assembly (Right)' },
-    { id:'BT-0021-X', desc:'Ball Screw Unit — X Axis' },
-    { id:'BT-0022-Z', desc:'Ball Screw Unit — Z Axis' },
-    { id:'CB-1140',   desc:'Control Board PCB Assembly' },
-    { id:'CB-1141',   desc:'Control Board PCB — Servo Drive' },
-    { id:'TC-8810',   desc:'Turret Drive Coupling' },
-    { id:'TC-8811',   desc:'Turret Index Gear' },
-    { id:'PMP-330',   desc:'Coolant Pump — 330W' },
-    { id:'PMP-550',   desc:'Coolant Pump — 550W High Flow' },
-    { id:'FLT-201',   desc:'Hydraulic Filter Element' },
-    { id:'FLT-202',   desc:'Air/Oil Separator Filter' },
-    { id:'DR-5510',   desc:'Z-Axis Linear Guideway Rail' },
-    { id:'DR-5512',   desc:'X-Axis Linear Guideway Rail' },
-    { id:'SL-7700',   desc:'Chuck Jaw Set (3-Jaw Soft)' },
-    { id:'SL-7702',   desc:'Chuck Jaw Set (Hard — 8")' },
-    { id:'SP-0011',   desc:'Spindle Motor — Main' },
-    { id:'SP-0012',   desc:'Spindle Motor — Sub' },
-    { id:'ENC-440',   desc:'Rotary Encoder — Spindle Position' },
-    { id:'ENC-441',   desc:'Linear Encoder — X Axis Scale' },
-    { id:'LB-0090',   desc:'Lubrication Pump Assembly' },
-    { id:'LB-0091',   desc:'Lube Line Distribution Manifold' },
-    { id:'HTR-220',   desc:'Spindle Heat Exchanger Unit' },
-    { id:'CLP-110',   desc:'Hydraulic Clamp Cylinder' },
-    { id:'CLP-112',   desc:'Pneumatic Clamp Actuator' },
-    { id:'ZX-9981-Q', desc:'Servo Amplifier Module' },
+    { id:'MJ-4192-L', desc:'Spindle Bearing Assembly',          machines:['LU300-M', 'LB2000 EX III', 'GENOS L300', 'LB3000 EX II', 'LU15'] },
+    { id:'MJ-4193-R', desc:'Spindle Bearing Assembly (Right)',  machines:['LU300-M', 'LB2000 EX III', 'GENOS L300'] },
+    { id:'BT-0021-X', desc:'Ball Screw Unit — X Axis',         machines:['MULTUS U3000', 'LU300-M', 'MULTUS B300', 'MULTUS U4000', 'GENOS M460'] },
+    { id:'BT-0022-Z', desc:'Ball Screw Unit — Z Axis',         machines:['MULTUS U3000', 'LU300-M', 'MULTUS B300', 'MULTUS U4000'] },
+    { id:'CB-1140',   desc:'Control Board PCB Assembly',        machines:['LU300-M', 'MULTUS U3000', 'LB2000 EX III', 'GENOS L300', 'LB3000 EX II', 'GENOS M460', 'MB-46V AII'] },
+    { id:'CB-1141',   desc:'Control Board PCB — Servo Drive',   machines:['MULTUS U3000', 'MULTUS B300', 'MULTUS U4000', 'GENOS M460'] },
+    { id:'TC-8810',   desc:'Turret Drive Coupling',             machines:['LU300-M', 'LB2000 EX III', 'GENOS L300', 'LB3000 EX II'] },
+    { id:'TC-8811',   desc:'Turret Index Gear',                 machines:['LU300-M', 'LB2000 EX III'] },
+    { id:'PMP-330',   desc:'Coolant Pump — 330W',               machines:['LB2000 EX III', 'LU300-M', 'GENOS L300', 'LU15'] },
+    { id:'PMP-550',   desc:'Coolant Pump — 550W High Flow',     machines:['MULTUS U3000', 'MULTUS B300', 'MULTUS U4000', 'MB-46V AII', 'GENOS M460'] },
+    { id:'FLT-201',   desc:'Hydraulic Filter Element',          machines:['LU300-M', 'MULTUS U3000', 'LB2000 EX III', 'GENOS L300', 'MULTUS B300', 'LB3000 EX II'] },
+    { id:'FLT-202',   desc:'Air/Oil Separator Filter',          machines:['MULTUS U3000', 'LB2000 EX III', 'MULTUS B300'] },
+    { id:'DR-5510',   desc:'Z-Axis Linear Guideway Rail',       machines:['LU300-M', 'MULTUS U3000', 'GENOS M460', 'MB-46V AII'] },
+    { id:'DR-5512',   desc:'X-Axis Linear Guideway Rail',       machines:['LU300-M', 'MULTUS U3000', 'GENOS M460', 'MB-46V AII'] },
+    { id:'SL-7700',   desc:'Chuck Jaw Set (3-Jaw Soft)',        machines:['LB2000 EX III', 'LU300-M', 'GENOS L300', 'LB3000 EX II', 'LU15'] },
+    { id:'SL-7702',   desc:'Chuck Jaw Set (Hard — 8")',         machines:['LB2000 EX III', 'LB3000 EX II', 'GENOS L300'] },
+    { id:'SP-0011',   desc:'Spindle Motor — Main',              machines:['LU300-M', 'MULTUS U3000', 'LB2000 EX III', 'GENOS L300', 'MULTUS B300', 'LB3000 EX II', 'LU15'] },
+    { id:'SP-0012',   desc:'Spindle Motor — Sub',               machines:['MULTUS U3000', 'MULTUS B300', 'MULTUS U4000'] },
+    { id:'ENC-440',   desc:'Rotary Encoder — Spindle Position', machines:['LU300-M', 'LB2000 EX III', 'GENOS L300', 'LB3000 EX II'] },
+    { id:'ENC-441',   desc:'Linear Encoder — X Axis Scale',     machines:['MULTUS U3000', 'LU300-M', 'MULTUS B300', 'GENOS M460'] },
+    { id:'LB-0090',   desc:'Lubrication Pump Assembly',         machines:['LU300-M', 'MULTUS U3000', 'LB2000 EX III', 'GENOS L300', 'MULTUS B300', 'LB3000 EX II', 'GENOS M460'] },
+    { id:'LB-0091',   desc:'Lube Line Distribution Manifold',   machines:['LU300-M', 'LB2000 EX III', 'GENOS L300', 'LB3000 EX II'] },
+    { id:'HTR-220',   desc:'Spindle Heat Exchanger Unit',       machines:['MULTUS U3000', 'MULTUS B300', 'MULTUS U4000'] },
+    { id:'CLP-110',   desc:'Hydraulic Clamp Cylinder',          machines:['LU300-M', 'LB2000 EX III', 'GENOS L300', 'LB3000 EX II', 'LU15'] },
+    { id:'CLP-112',   desc:'Pneumatic Clamp Actuator',          machines:['MULTUS U3000', 'LB2000 EX III', 'MULTUS B300', 'GENOS M460'] },
+    { id:'ZX-9981-Q', desc:'Servo Amplifier Module',            machines:['LU300-M', 'MULTUS U3000', 'LB2000 EX III', 'GENOS L300', 'MULTUS B300', 'GENOS M460', 'MB-46V AII'] },
   ];
 
   function goSearch(q) {
@@ -367,7 +377,7 @@
   }
 
   function renderSuggest(term) {
-    if (!term || term.length < 2) { closeSuggest(); return; }
+    if (!term || term.length < 3) { closeSuggest(); return; }
     var lo = term.toLowerCase();
     var hits = NAV_CATALOGUE.filter(function (p) {
       return p.id.toLowerCase().indexOf(lo) !== -1 || p.desc.toLowerCase().indexOf(lo) !== -1;
@@ -381,17 +391,18 @@
     }
 
     navSuggest.innerHTML = hits.map(function (p, i) {
-      /* Bold the matching portion */
       function hl(str) {
         var idx2 = str.toLowerCase().indexOf(lo);
         if (idx2 === -1) return str;
         return str.slice(0, idx2) + '<strong>' + str.slice(idx2, idx2 + lo.length) + '</strong>' + str.slice(idx2 + lo.length);
       }
       return '<div class="nav-suggest-item" data-q="' + p.id + '" style="' +
-        'padding:9px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:10px;' +
+        'padding:10px 14px;cursor:pointer;display:flex;flex-direction:column;gap:3px;' +
         (i < hits.length - 1 ? 'border-bottom:1px solid #F5F5F5;' : '') + '">' +
-        '<span style="font-family:\'Courier New\',monospace;font-size:11px;font-weight:700;color:#005EB8;white-space:nowrap;">' + hl(p.id) + '</span>' +
-        '<span style="color:#4B4B4B;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + hl(p.desc) + '</span>' +
+        '<span style="font-size:13px;font-weight:600;color:#2C2A29;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + hl(p.desc) + '</span>' +
+        '<span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#757575;">' +
+          '<span style="font-family:\'Courier New\',monospace;font-weight:700;color:#005EB8;">' + hl(p.id) + '</span>' +
+        '</span>' +
       '</div>';
     }).join('');
 
@@ -533,14 +544,9 @@
   ];
 
   /* ---------- shared machine data (consumed by page scripts via window.OKUMA_MACHINES) ---------- */
-  window.OKUMA_MACHINES = [
-    { name: 'LU300-M',           model: 'M560-V',    serial: 'M5-2891-K',  condition: 'Active' },
-    { name: 'MULTUS U3000',      model: 'U3000-M',   serial: 'MU-9102-L',  condition: 'Active' },
-    { name: 'LB2000 EX III',     model: 'LB2000-EX', serial: 'LB-4431-M',  condition: 'Active' },
-    { name: 'GENOS L200E',       model: 'L200E',     serial: 'L2-1108-A',  condition: 'Active' },
-    { name: 'SPACE TURN LB3000', model: 'LB3000',    serial: 'LB-8821-X',  condition: 'Active' },
-    { name: 'MB-56V AII',        model: 'MB-56V',    serial: 'MB-2234-P',  condition: 'Active' },
-  ];
+  window.OKUMA_MACHINES = _MACHINE_LIST.map(function (m) {
+    return { name: m.name, model: m.model, serial: m.serial, installDate: m.installDate, condition: 'Active' };
+  });
 
   /* ---------- behaviors: machine picker (sub-header) ---------- */
   var pickerBtn   = document.getElementById('machinePickerBtn');
@@ -548,8 +554,12 @@
   var pickerLabel = document.getElementById('machinePickerLabel');
 
   if (pickerBtn && pickerMenu && pickerLabel) {
-    var savedMachine = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
-    var isMachDealer = (_okuma_user && _okuma_user.role === 'dealer');
+    var savedMachine    = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
+    var isMachDealer    = (_okuma_user && _okuma_user.role === 'dealer');
+    var machPickerList  = document.getElementById('machPickerList');
+    var machSearchInput = document.getElementById('machSearchInput');
+    var _allowedMachines = null; /* null = all machines visible */
+    var MAX_RECENT_MACH  = 3;
 
     var CUSTOMER_MACHINES = {
       'ABC Industries':      ['LU300-M', 'MULTUS U3000', 'LB2000 EX III'],
@@ -559,27 +569,150 @@
       'Apex Machining':      ['MB-56V AII', 'MULTUS U3000', 'SPACE TURN LB3000'],
     };
 
+    /* ── recent machines helpers ── */
+    function getRecentMachines() {
+      try { return JSON.parse(localStorage.getItem('okmRecentMachines') || '[]'); } catch(e) { return []; }
+    }
+    function addRecentMachine(name) {
+      if (!name) return;
+      var r = getRecentMachines().filter(function(n) { return n !== name; });
+      r.unshift(name);
+      localStorage.setItem('okmRecentMachines', JSON.stringify(r.slice(0, MAX_RECENT_MACH)));
+    }
+
+    /* ── inject machine picker styles + shared switch-modal styles ── */
+    var machStyleEl = document.createElement('style');
+    machStyleEl.textContent =
+      '.mach-section-label{padding:6px 14px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#9E9E9E;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;}' +
+      '.mach-divider{height:1px;background:#F0F0F0;margin:4px 0;}' +
+      '.mach-empty{padding:14px;font-size:13px;color:#9E9E9E;text-align:center;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;}';
+    document.head.appendChild(machStyleEl);
+    /* inject csw modal styles here so they are available on every page (not just dealer) */
+    if (!document.getElementById('okm-csw-styles')) {
+      var cswSharedStyle = document.createElement('style');
+      cswSharedStyle.id = 'okm-csw-styles';
+      cswSharedStyle.textContent =
+        '.csw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;}' +
+        '.csw-overlay.open{display:flex;}' +
+        '.csw-modal{background:#fff;border-radius:8px;padding:32px 28px 24px;max-width:420px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.22);}' +
+        '.csw-icon{width:48px;height:48px;border-radius:50%;background:#FFF3E0;color:#E65100;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;line-height:1;}' +
+        '.csw-title{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:18px;font-weight:700;color:#1A1A1A;margin:0 0 10px;}' +
+        '.csw-body{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:14px;color:#4B4B4B;line-height:1.6;margin:0 0 24px;}' +
+        '.csw-actions{display:flex;gap:12px;justify-content:center;}' +
+        '.csw-btn{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;padding:10px 22px;border-radius:4px;cursor:pointer;transition:background .15s,color .15s;}' +
+        '.csw-btn--cancel{background:transparent;border:1.5px solid #005EB8;color:#005EB8;}' +
+        '.csw-btn--cancel:hover{background:#F0F6FC;}' +
+        '.csw-btn--confirm{background:#005EB8;border:1.5px solid #005EB8;color:#fff;}' +
+        '.csw-btn--confirm:hover{background:#0B308E;}';
+      document.head.appendChild(cswSharedStyle);
+    }
+
+    /* ── machine switch modal ── */
+    var pendingMach  = null;
+    var machSwitchEl = document.createElement('div');
+    machSwitchEl.className = 'csw-overlay';
+    machSwitchEl.id        = 'machSwitchOverlay';
+    machSwitchEl.innerHTML =
+      '<div class="csw-modal" role="dialog" aria-modal="true" aria-labelledby="machSwitchTitle">' +
+        '<div class="csw-icon">!</div>' +
+        '<h2 class="csw-title" id="machSwitchTitle">Switch Machine?</h2>' +
+        '<p class="csw-body" id="machSwitchBody"></p>' +
+        '<div class="csw-actions">' +
+          '<button class="csw-btn csw-btn--cancel" id="machSwitchCancel">Cancel</button>' +
+          '<button class="csw-btn csw-btn--confirm" id="machSwitchConfirm">Switch Machine</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(machSwitchEl);
+    var machSwitchBody    = document.getElementById('machSwitchBody');
+    var machSwitchCancel  = document.getElementById('machSwitchCancel');
+    var machSwitchConfirm = document.getElementById('machSwitchConfirm');
+    function showMachSwitchModal(name) {
+      machSwitchBody.innerHTML = 'Switching to <strong>' + name + '</strong> will update your active machine context across the portal and will clear your cart. Are you sure you want to switch?';
+      machSwitchEl.classList.add('open');
+    }
+    function hideMachSwitchModal() { machSwitchEl.classList.remove('open'); pendingMach = null; }
+    machSwitchCancel.addEventListener('click', hideMachSwitchModal);
+    machSwitchConfirm.addEventListener('click', function () {
+      if (pendingMach) {
+        addRecentMachine(pendingMach);
+        setActiveMachine(pendingMach);
+        window.dispatchEvent(new CustomEvent('okuma:machineChanged', { detail: { name: pendingMach } }));
+      }
+      hideMachSwitchModal();
+    });
+    machSwitchEl.addEventListener('click', function (e) { if (e.target === machSwitchEl) hideMachSwitchModal(); });
+
+    /* ── render machine list ── */
+    function renderMachList(filter) {
+      if (!machPickerList) return;
+      var q       = (filter || '').trim().toLowerCase();
+      var current = localStorage.getItem('okmDefaultMachine') || '';
+      var recents = getRecentMachines();
+      var allVisible = _MACHINE_LIST.filter(function(m) {
+        return !_allowedMachines || _allowedMachines.indexOf(m.name) !== -1;
+      });
+      function itemHTML(m) {
+        return '<div class="machine-picker__item' + (m.name === current ? ' active' : '') +
+          '" role="option" data-machine="' + m.name + '" data-serial="' + m.serial + '" data-model="' + m.model + '">' +
+          '<span class="machine-picker__item-meta">' + m.model + ' &nbsp;·&nbsp; ' + m.serial + '</span>' +
+          '</div>';
+      }
+      var html = '';
+      if (!q) {
+        var recentVisible = recents.filter(function(name) {
+          return allVisible.some(function(m) { return m.name === name; });
+        });
+        if (recentVisible.length) {
+          html += '<div class="mach-section-label">Recent</div>';
+          recentVisible.forEach(function(name) {
+            var m = _MACHINE_LIST.filter(function(x) { return x.name === name; })[0];
+            if (m) html += itemHTML(m);
+          });
+          html += '<div class="mach-divider"></div>';
+        }
+        var rest = allVisible.filter(function(m) { return recentVisible.indexOf(m.name) === -1; });
+        if (rest.length) {
+          if (recentVisible.length) html += '<div class="mach-section-label">All Machines</div>';
+          rest.forEach(function(m) { html += itemHTML(m); });
+        }
+      } else {
+        var matches = allVisible.filter(function(m) {
+          return m.name.toLowerCase().indexOf(q) !== -1 ||
+                 m.serial.toLowerCase().indexOf(q) !== -1 ||
+                 m.model.toLowerCase().indexOf(q) !== -1;
+        });
+        if (matches.length) {
+          matches.forEach(function(m) { html += itemHTML(m); });
+        } else {
+          html += '<div class="mach-empty">No machines found</div>';
+        }
+      }
+      machPickerList.innerHTML = html;
+    }
+
     function machPickerNeedsCustomer() {
       return isMachDealer && !localStorage.getItem('okmSelectedCustomer');
     }
 
     function setActiveMachine(name) {
       localStorage.setItem('okmDefaultMachine', name);
-      pickerLabel.textContent = 'Selected Machine : ' + name;
-      pickerMenu.querySelectorAll('.machine-picker__item').forEach(function (it) {
-        it.classList.toggle('active', it.getAttribute('data-machine') === name);
-      });
+      var machData = _MACHINE_LIST.filter(function (m) { return m.name === name; })[0];
+      pickerLabel.innerHTML = machData
+        ? 'Selected Machine : ' + machData.model + ' ' + machData.serial
+        : 'Selected Machine : ' + name;
+      renderMachList(machSearchInput ? machSearchInput.value : '');
     }
 
     function filterMachineItems(customerName) {
-      var allowed = customerName ? (CUSTOMER_MACHINES[customerName] || []) : null;
-      pickerMenu.querySelectorAll('.machine-picker__item').forEach(function (it) {
-        it.style.display = (!allowed || allowed.indexOf(it.getAttribute('data-machine')) !== -1) ? '' : 'none';
-      });
-      if (allowed) {
+      _allowedMachines = customerName ? (CUSTOMER_MACHINES[customerName] || []) : null;
+      if (_allowedMachines) {
         var current = localStorage.getItem('okmDefaultMachine') || '';
-        if (allowed.indexOf(current) === -1) setActiveMachine(allowed[0]);
+        if (_allowedMachines.indexOf(current) === -1) {
+          setActiveMachine(_allowedMachines[0]);
+          return;
+        }
       }
+      renderMachList(machSearchInput ? machSearchInput.value : '');
     }
 
     function syncMachinePickerLabel() {
@@ -588,15 +721,24 @@
         if (picker) picker.style.visibility = 'hidden';
       } else {
         if (picker) picker.style.visibility = '';
-        pickerLabel.textContent = 'Selected Machine : ' + (localStorage.getItem('okmDefaultMachine') || 'LU300-M');
+        var _curName = localStorage.getItem('okmDefaultMachine') || _MACHINE_LIST[0].name;
+        var _curData = _MACHINE_LIST.filter(function (m) { return m.name === _curName; })[0];
+        pickerLabel.innerHTML = _curData ? 'Selected Machine : ' + _curData.model + ' ' + _curData.serial : 'Selected Machine : ' + _curName;
         pickerBtn.style.opacity = '';
         pickerBtn.style.cursor  = '';
       }
     }
 
-    function openPicker()  { pickerMenu.classList.add('open');    pickerBtn.setAttribute('aria-expanded', 'true');  }
+    function openPicker() {
+      if (machSearchInput) machSearchInput.value = '';
+      renderMachList('');
+      pickerMenu.classList.add('open');
+      pickerBtn.setAttribute('aria-expanded', 'true');
+      if (machSearchInput) setTimeout(function() { machSearchInput.focus(); }, 60);
+    }
     function closePicker() { pickerMenu.classList.remove('open'); pickerBtn.setAttribute('aria-expanded', 'false'); }
 
+    /* ── initialize ── */
     setActiveMachine(savedMachine);
     filterMachineItems(localStorage.getItem('okmSelectedCustomer') || '');
     syncMachinePickerLabel();
@@ -613,22 +755,37 @@
       if (pickerMenu.classList.contains('open')) closePicker(); else openPicker();
     });
 
-    pickerMenu.querySelectorAll('.machine-picker__item').forEach(function (item) {
-      item.addEventListener('click', function (e) {
+    /* Delegated click — show switch-machine modal before committing */
+    if (machPickerList) {
+      machPickerList.addEventListener('click', function (e) {
         e.stopPropagation();
-        var name = item.getAttribute('data-machine');
+        var item = e.target.closest('.machine-picker__item');
+        if (!item) return;
+        var name    = item.getAttribute('data-machine');
+        var current = localStorage.getItem('okmDefaultMachine') || '';
+        if (name === current) { closePicker(); return; }
         closePicker();
-        setActiveMachine(name);
-        window.dispatchEvent(new CustomEvent('okuma:machineChanged', { detail: { name: name } }));
+        pendingMach = name;
+        showMachSwitchModal(name);
       });
-    });
+    }
 
     document.addEventListener('click', function () { closePicker(); });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
+        if (machSwitchEl.classList.contains('open')) { hideMachSwitchModal(); return; }
         if (pickerMenu.classList.contains('open')) { closePicker(); pickerBtn.focus(); }
       }
     });
+
+    /* ── machine search ── */
+    if (machSearchInput) {
+      machSearchInput.addEventListener('input', function () {
+        renderMachList(machSearchInput.value);
+      });
+      machSearchInput.addEventListener('click', function (e) { e.stopPropagation(); });
+      machSearchInput.addEventListener('mousedown', function (e) { e.stopPropagation(); });
+    }
   }
 
   /* ---------- behaviors: customer picker (dealer sub-header) ---------- */
@@ -665,21 +822,9 @@
     }
 
     /* ── inject styles ── */
+    /* csw modal styles are already injected by the machine picker section; skip if present */
     var cswStyleEl = document.createElement('style');
     cswStyleEl.textContent =
-      /* switch-warning modal */
-      '.csw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;}' +
-      '.csw-overlay.open{display:flex;}' +
-      '.csw-modal{background:#fff;border-radius:8px;padding:32px 28px 24px;max-width:420px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.22);}' +
-      '.csw-icon{width:48px;height:48px;border-radius:50%;background:#FFF3E0;color:#E65100;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;line-height:1;}' +
-      '.csw-title{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:18px;font-weight:700;color:#1A1A1A;margin:0 0 10px;}' +
-      '.csw-body{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:14px;color:#4B4B4B;line-height:1.6;margin:0 0 24px;}' +
-      '.csw-actions{display:flex;gap:12px;justify-content:center;}' +
-      '.csw-btn{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;padding:10px 22px;border-radius:4px;cursor:pointer;transition:background .15s,color .15s;}' +
-      '.csw-btn--cancel{background:transparent;border:1.5px solid #005EB8;color:#005EB8;}' +
-      '.csw-btn--cancel:hover{background:#F0F6FC;}' +
-      '.csw-btn--confirm{background:#005EB8;border:1.5px solid #005EB8;color:#fff;}' +
-      '.csw-btn--confirm:hover{background:#0B308E;}' +
       /* searchable picker */
       '.customer-picker__menu{min-width:260px!important;padding:0!important;}' +
       '.cust-stock-item{padding:9px 14px;font-size:13px;font-weight:600;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;color:#1A1A1A;cursor:pointer;border-bottom:1px solid #F0F0F0;}' +

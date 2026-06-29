@@ -24,7 +24,7 @@
     .hero {
       flex: 0 0 50%;
       max-width: 50%;
-      background: url('login-hero.png') center/cover no-repeat, #005EB8;
+      background: url('images/login-hero.png') center/cover no-repeat, #005EB8;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -303,7 +303,7 @@
 
   <!-- ─── LEFT PANEL (HERO) ─────────────────────────────────────── -->
   <div class="hero">
-    <img src="okuma-logo.png" alt="Okuma – Open Possibilities" class="hero__logo" />
+    <img src="images/okuma-logo.png" alt="Okuma – Open Possibilities" class="hero__logo" />
   </div>
 
   <!-- ─── RIGHT PANEL (FORM) ────────────────────────────────────── -->
@@ -389,7 +389,9 @@
       // If already logged in, redirect away from login page
       var _existing = okuma_getUser();
       if (_existing) {
-        window.location.replace(_existing.role === 'dealer' ? 'dealer-dashboard.html' : 'dashboard.html');
+        var _ret = localStorage.getItem('okuma_return_url');
+        localStorage.removeItem('okuma_return_url');
+        window.location.replace(_ret || (_existing.role === 'dealer' ? 'dealer-dashboard.html' : 'dashboard.html'));
       }
 
       // Eye toggle
@@ -416,7 +418,9 @@
           return;
         }
         errEl.style.display = 'none';
-        window.location.replace(user.role === 'dealer' ? 'dealer-dashboard.html' : 'dashboard.html');
+        var returnUrl = localStorage.getItem('okuma_return_url');
+        localStorage.removeItem('okuma_return_url');
+        window.location.replace(returnUrl || (user.role === 'dealer' ? 'dealer-dashboard.html' : 'dashboard.html'));
       });
     })();
   </script>

@@ -3,10 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Account -“ Okuma Parts Portal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>My Account – Okuma Parts Portal</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     body {
@@ -15,6 +12,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
 
     .main-area {
@@ -26,9 +24,7 @@
       gap: 24px;
     }
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       PROFILE HERO CARD
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ── PROFILE HERO ── */
     .profile-hero {
       background: #fff;
       border: 1px solid #E0E0E0;
@@ -36,7 +32,6 @@
       overflow: hidden;
       box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     }
-
     .profile-hero__body {
       padding: 28px 32px;
       display: flex;
@@ -45,481 +40,192 @@
       flex-wrap: wrap;
     }
 
-    /* â”€â”€ Avatar â”€â”€ */
-    .avatar-wrap {
-      position: relative;
-      flex-shrink: 0;
+    /* Avatar */
+    .avatar-wrap { position: relative; flex-shrink: 0; }
+    .avatar-initials {
+      display: flex; align-items: center; justify-content: center;
+      width: 80px; height: 80px; border-radius: 50%;
+      background: #005EB8; color: #fff;
+      font-size: 26px; font-weight: 700; letter-spacing: 1px;
+      flex-shrink: 0; user-select: none;
     }
 
-    .avatar-wrap__img {
-      display: block;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #E0E0E0;
-      background: #C8D8EA;
-    }
-
-    .avatar-wrap__btn {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: transparent;
-      border: 3px solid transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .avatar-wrap__btn:hover,
-    .avatar-wrap__btn:focus-visible {
-      background: rgba(0, 0, 0, 0.45);
-    }
-
-    .avatar-wrap__btn:focus-visible {
-      outline: 2px solid #005EB8;
-      outline-offset: 3px;
-    }
-
-    .avatar-wrap__btn svg {
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .avatar-wrap__btn:hover svg,
-    .avatar-wrap__btn:focus-visible svg {
-      opacity: 1;
-    }
-
-    /* â”€â”€ Identity text â”€â”€ */
+    /* Identity */
     .profile-identity {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
+      flex: 1; min-width: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
     }
-
-    .profile-identity__info {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .profile-identity__name {
-      font-size: 22px;
-      font-weight: 700;
-      color: #2C2A29;
-      line-height: 1.2;
-    }
-
-    .profile-identity__meta {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .profile-identity__title {
-      font-size: 14px;
-      font-weight: 400;
-      color: #717171;
-    }
-
-    .role-badge {
-      display: inline-flex;
-      align-items: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: #005EB8;
-      background: #E5EFF8;
-      border: 1px solid #005EB8;
-      border-radius: 12px;
-      padding: 2px 10px;
+    .profile-identity__info { display: flex; flex-direction: column; gap: 6px; }
+    .profile-identity__name { font-size: 22px; font-weight: 700; color: #2C2A29; line-height: 1.2; }
+    .profile-identity__meta { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .profile-identity__title { font-size: 14px; font-weight: 400; color: #717171; }
+    .profile-identity__company { font-size: 14px; font-weight: 400; color: #4B4B4B; }
+    .profile-identity__since { font-size: 13px; font-weight: 400; color: #9E9E9E; }
+    .role-tag {
+      display: inline-flex; align-items: center;
+      font-size: 11px; font-weight: 700; color: #005EB8;
+      background: #EAF2FF; border: 1px solid #B3D1F5;
+      border-radius: 10px; padding: 2px 10px; letter-spacing: 0.3px;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
     }
 
-    .profile-identity__company {
-      font-size: 14px;
-      font-weight: 400;
-      color: #4B4B4B;
-    }
-
-    .profile-identity__since {
-      font-size: 13px;
-      font-weight: 400;
-      color: #9E9E9E;
-    }
-
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       TAB CONTAINER
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ── TAB CONTAINER ── */
     .profile-tabs {
-      background: #fff;
-      border: 1px solid #E0E0E0;
-      border-radius: 4px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-      overflow: hidden;
+      background: #fff; border: 1px solid #E0E0E0;
+      border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); overflow: hidden;
     }
-
-    /* â”€â”€ Tab list â”€â”€ */
     .tab-list {
-      display: flex;
-      border-bottom: 1px solid #E0E0E0;
-      padding: 0 32px;
-      overflow-x: auto;
-      scrollbar-width: none;
+      display: flex; border-bottom: 1px solid #E0E0E0;
+      padding: 0 32px; overflow-x: auto; scrollbar-width: none; position: relative;
     }
     .tab-list::-webkit-scrollbar { display: none; }
-
+    .tab-list::after {
+      content: ''; position: sticky; right: 0; width: 24px; flex-shrink: 0;
+      background: linear-gradient(to right, transparent, #fff);
+      pointer-events: none; align-self: stretch;
+    }
     .tab-btn {
-      position: relative;
-      flex-shrink: 0;
-      padding: 16px 24px;
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      cursor: pointer;
+      position: relative; flex-shrink: 0; padding: 16px 24px;
+      background: none; border: none; border-bottom: 2px solid transparent;
+      margin-bottom: -1px; cursor: pointer;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 400;
-      color: #4B4B4B;
-      white-space: nowrap;
-      transition: color 0.15s, border-color 0.15s;
+      font-size: 14px; font-weight: 400; color: #4B4B4B;
+      white-space: nowrap; transition: color 0.15s, border-color 0.15s;
     }
-
     .tab-btn:hover { color: #1A1A1A; }
-
-    .tab-btn[aria-selected="true"] {
-      font-weight: 700;
-      color: #005EB8;
-      border-bottom-color: #005EB8;
-    }
-
-    .tab-btn:focus-visible {
-      outline: 2px solid #005EB8;
-      outline-offset: -2px;
-      border-radius: 2px;
-    }
-
-    /* â”€â”€ Tab panels â”€â”€ */
+    .tab-btn[aria-selected="true"] { font-weight: 700; color: #005EB8; border-bottom-color: #005EB8; }
+    .tab-btn:focus-visible { outline: 2px solid #005EB8; outline-offset: -2px; border-radius: 2px; }
     .tab-panel { padding: 32px; }
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       FORM LAYOUT HELPERS
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ── FORM FIELDS ── */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field__label {
+      font-size: 12px; font-weight: 700; color: #6B7280;
+      text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .field__input {
+      height: 44px; border: 1px solid #D1D5DB; border-radius: 4px;
+      padding: 0 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px; color: #1A1A1A; background: #fff; outline: none; width: 100%;
+    }
+    .field__input:focus { border-color: #005EB8; box-shadow: 0 0 0 2px rgba(0,94,184,0.15); }
+    .field__input::placeholder { color: #9E9E9E; }
+
+    /* ── BTN PRIMARY ── */
+    .btn--primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 44px; padding: 0 24px; background: #005EB8; color: #fff;
+      border: none; border-radius: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+      text-decoration: none; white-space: nowrap;
+    }
+    .btn--primary:hover { background: #0B308E; }
+    .btn--primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    /* ── FORM HELPERS ── */
     .form-col { display: flex; flex-direction: column; gap: 20px; }
-
-    .form-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .form-grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 20px;
-    }
-
-    /* Locked (read-only) field */
-    .field--locked .field__input {
-      background: #F7F8F9;
-      color: #717171;
-      cursor: not-allowed;
-      border-color: #E0E0E0;
-    }
-
-    .field__input-wrap {
-      position: relative;
-    }
-
-    .field__input-wrap .field__input {
-      padding-right: 44px;
-    }
-
-    .field__input-icon {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #9E9E9E;
-      pointer-events: none;
-      display: flex;
-    }
-
-    /* Password eye toggle */
-    .field__pw-wrap {
-      position: relative;
-    }
-
-    .field__pw-wrap .field__input {
-      padding-right: 48px;
-    }
+    .field--locked .field__input { background: #F7F8F9; color: #717171; cursor: not-allowed; border-color: #E0E0E0; }
+    .field__input-wrap { position: relative; }
+    .field__input-wrap .field__input { padding-right: 44px; }
+    .field__input-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #9E9E9E; pointer-events: none; display: flex; }
+    .field__pw-wrap { position: relative; }
+    .field__pw-wrap .field__input { padding-right: 48px; }
 
     /* Hide the browser-native password reveal eye (Edge / Chrome on Windows) */
     .field__pw-wrap input[type="password"]::-ms-reveal,
     .field__pw-wrap input[type="password"]::-ms-clear,
     .field__pw-wrap input[type="text"]::-ms-reveal { display: none; }
-
     .field__eye-btn {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #717171;
-      display: flex;
-      align-items: center;
-      padding: 4px;
-      border-radius: 3px;
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: #717171;
+      display: flex; align-items: center; padding: 4px; border-radius: 3px;
     }
-
     .field__eye-btn:hover { color: #1A1A1A; }
     .field__eye-btn:focus-visible { outline: 2px solid #005EB8; outline-offset: 2px; border-radius: 3px; }
-
-    /* Password strength meter */
-    .pw-strength {
-      margin-top: 8px;
-    }
-
-    .pw-strength__bar {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-      margin-bottom: 5px;
-    }
-
-    .pw-strength__seg {
-      height: 4px;
-      border-radius: 2px;
-      background: #E0E0E0;
-      transition: background 0.2s;
-    }
-
-    .pw-strength__text {
-      font-size: 12px;
-      color: #9E9E9E;
-    }
-
-    /* Ensure hidden attribute is always respected even if styles.css overrides button display */
     [hidden] { display: none !important; }
 
-    /* Toast notification */
-    .toast {
-      position: fixed;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #1A1A1A;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 12px 20px;
-      border-radius: 6px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s, transform 0.2s;
-      z-index: 9999;
-      white-space: nowrap;
-      max-width: calc(100vw - 32px);
+    /* ── PASSWORD STRENGTH ── */
+    .pw-strength { margin-top: 8px; }
+    .pw-strength__bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 5px; }
+    .pw-strength__seg { height: 4px; border-radius: 2px; background: #E0E0E0; transition: background 0.2s; }
+    .pw-strength__text { font-size: 12px; color: #9E9E9E; }
+
+    /* ── PASSWORD RULES ── */
+    .pw-rules {
+      display: flex; flex-direction: column; gap: 7px;
+      padding: 14px 16px; background: #F7F8F9;
+      border: 1px solid #E0E0E0; border-radius: 4px; margin-top: 10px;
     }
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-      pointer-events: auto;
+    .pw-rule {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: #9E9E9E; transition: color 0.15s;
+    }
+    .pw-rule.is-met { color: #74AA50; }
+    .pw-rule svg { flex-shrink: 0; }
+    .pw-rule__icon--check { display: none; }
+    .pw-rule.is-met .pw-rule__icon--empty { display: none; }
+    .pw-rule.is-met .pw-rule__icon--check { display: block; }
+
+    /* ── PROFILE DATA ROWS (read-only) ── */
+    .profile-data-list { margin-bottom: 4px; }
+    .profile-data-row {
+      display: flex; align-items: baseline; padding: 13px 0;
+      border-bottom: 1px solid #F0F0F0; gap: 24px;
+    }
+    .profile-data-row:last-child { border-bottom: none; }
+    .profile-data-label {
+      width: 160px; flex-shrink: 0; font-size: 12px; font-weight: 700;
+      color: #717171; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .profile-data-value { font-size: 14px; font-weight: 400; color: #1A1A1A; }
+
+    /* ── SECTION HELPERS ── */
+    .section-divider { height: 1px; background: #E0E0E0; margin: 36px 0; }
+    .section-subhead {
+      font-size: 13px; font-weight: 700; color: #005EB8;
+      text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 24px;
     }
 
-    /* Form action row */
-    .form-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-top: 32px;
-    }
-
-    .btn--save {
-      height: 48px;
-      width: auto;
-      min-width: 160px;
-      padding: 0 32px;
-    }
-
+    /* ── FORM ACTIONS ── */
+    .form-actions { display: flex; align-items: center; gap: 16px; margin-top: 28px; }
+    .btn--save { height: 48px; width: auto; min-width: 160px; padding: 0 32px; }
     .save-confirm {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #2AAB3F;
-      opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: none;
+      display: flex; align-items: center; gap: 6px; font-size: 14px;
+      font-weight: 500; color: #2AAB3F; opacity: 0; transition: opacity 0.2s; pointer-events: none;
     }
-
     .save-confirm.is-visible { opacity: 1; }
 
-    /* Disabled field styling */
-    .field__input:disabled {
-      background: #F7F8F9;
-      color: #4B4B4B;
-      cursor: default;
-      border-color: #E0E0E0;
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1A1A1A; color: #fff; font-size: 14px; font-weight: 500;
+      padding: 12px 20px; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      display: flex; align-items: center; gap: 10px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+      z-index: 9999; white-space: nowrap; max-width: calc(100vw - 32px);
     }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
 
-    /* Cancel button */
-    .btn--cancel {
-      width: 100%;
-      height: 48px;
-      padding: 0 24px;
-      background: transparent;
-      border: 1.5px solid #6B7280;
-      border-radius: 4px;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-      color: #4B4B4B;
-      cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
-    }
-    .btn--cancel:hover { border-color: #1A1A1A; color: #1A1A1A; }
-
-    /* Field hint (non-error helper text) */
-    .field__hint {
-      font-size: 12px;
-      font-weight: 400;
-      color: #9E9E9E;
-    }
-
-    /* Optional label suffix */
-    .field__optional {
-      font-size: 11px;
-      font-weight: 400;
-      text-transform: none;
-      letter-spacing: 0;
-      color: #9E9E9E;
-    }
-
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       SECURITY TAB
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-    .section-divider {
-      height: 1px;
-      background: #E0E0E0;
-      margin: 32px 0;
-    }
-
-    .section-subhead {
-      font-size: 13px;
-      font-weight: 700;
-      color: #717171;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      margin-bottom: 12px;
-    }
-
-    .meta-table {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .meta-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 13px 0;
-      border-bottom: 1px solid #F0F0F0;
-      gap: 16px;
-    }
-
-    .meta-row:last-child { border-bottom: none; }
-
-    .meta-row__label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #717171;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-    }
-
-    .meta-row__value {
-      font-size: 14px;
-      font-weight: 400;
-      color: #2C2A29;
-    }
-
-    .status-badge--active {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 400;
-      color: #74AA50;
-      background: #EBF7F2;
-      border: 1px solid #74AA50;
-      border-radius: 12px;
-      padding: 2px 9px;
-    }
-
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       ADDRESS BOOK TAB
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ── ADDRESS BOOK ── */
     .addr-book-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     @media (max-width: 768px) { .addr-book-list { grid-template-columns: 1fr; } }
-
     .addr-book-card {
       border: 1.5px solid #E0E0E0; border-radius: 4px;
       padding: 18px 20px; display: flex; align-items: flex-start;
-      gap: 14px; transition: border-color 0.15s; position: relative;
+      gap: 14px; position: relative;
     }
-    .addr-book-card.is-default { border-color: #005EB8; }
-
-    .addr-book-card__radio { margin-top: 2px; flex-shrink: 0; }
-    .addr-radio-native { position: absolute; opacity: 0; width: 0; height: 0; }
-    .addr-radio-circle {
-      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
-      border: 1px solid #9E9E9E; background: #fff; display: flex;
-      align-items: center; justify-content: center; cursor: pointer;
-    }
-    .addr-radio-native:checked + .addr-radio-circle { border: 6px solid #005EB8; }
-
+    .addr-book-card.is-pending { opacity: 0.85; border-color: #D1D5DB; background: #FAFAFA; }
     .addr-book-card__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
     .addr-book-card__label { font-size: 15px; font-weight: 700; color: #2C2A29; line-height: 1; }
     .addr-book-card__tag {
-      display: inline-flex; align-items: center;
-      font-size: 11px; font-weight: 700; color: #005EB8;
-      background: #E5EFF8; border: 1px solid #005EB8;
+      display: inline-flex; align-items: center; font-size: 11px; font-weight: 700;
       border-radius: 10px; padding: 1px 8px; margin-top: 2px; width: fit-content;
     }
+    .addr-book-card__tag--pending { color: #92400E; background: #FFFBEB; border: 1px solid #FCD34D; }
     .addr-book-card__line { font-size: 13px; font-weight: 400; color: #717171; line-height: 1.5; }
-
-    .addr-book-card__actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-    .addr-edit-btn {
-      font-size: 13px; font-weight: 700; color: #005EB8;
-      background: none; border: none; cursor: pointer; padding: 4px 0;
-      display: inline-flex; align-items: center; gap: 5px;
-    }
-    .addr-edit-btn:hover { text-decoration: underline; }
-    .addr-delete-btn {
-      font-size: 13px; font-weight: 400; color: #9E9E9E;
-      background: none; border: none; cursor: pointer; padding: 4px 0;
-      display: inline-flex; align-items: center; gap: 5px;
-    }
-    .addr-delete-btn:hover { color: #AD0000; }
-
+    .addr-pending-note { font-size: 12px; color: #92400E; margin-top: 4px; font-style: italic; }
     .addr-add-btn {
       display: inline-flex; align-items: center; gap: 8px;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -530,26 +236,20 @@
 
     /* Address modal */
     .addr-modal-overlay {
-      display: none; position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,.45); z-index: 9999;
-      align-items: flex-start; justify-content: center;
-      padding: 16px; overflow-y: auto;
+      align-items: flex-start; justify-content: center; padding: 16px; overflow-y: auto;
     }
     .addr-modal-overlay.open { display: flex; }
     .addr-modal {
-      background: #fff; border-radius: 8px;
-      padding: 32px 28px 24px; width: 520px; max-width: 100%;
-      box-shadow: 0 8px 40px rgba(0,0,0,.18);
+      background: #fff; border-radius: 8px; padding: 32px 28px 24px;
+      width: 520px; max-width: 100%; box-shadow: 0 8px 40px rgba(0,0,0,.18);
       display: flex; flex-direction: column; gap: 20px;
-      max-height: 85vh; overflow-y: auto;
-      margin: auto 0;
+      max-height: 85vh; overflow-y: auto; margin: auto 0;
     }
     .addr-modal__head { display: flex; align-items: center; justify-content: space-between; }
     .addr-modal__title { font-size: 18px; font-weight: 700; color: #2C2A29; }
-    .addr-modal__close {
-      background: none; border: none; cursor: pointer; color: #6B7280; padding: 4px; line-height: 1;
-    }
+    .addr-modal__close { background: none; border: none; cursor: pointer; color: #6B7280; padding: 4px; line-height: 1; }
     .addr-modal__close:hover { color: #1A1A1A; }
     .addr-form-row { display: flex; gap: 12px; flex-wrap: wrap; }
     .addr-form-field { display: flex; flex-direction: column; gap: 6px; flex: 1; }
@@ -561,9 +261,6 @@
     }
     .addr-form-field input:focus { border-color: #005EB8; }
     .addr-form-field input::placeholder { color: #9E9E9E; }
-    .addr-form-default { display: flex; align-items: center; gap: 10px; }
-    .addr-form-default input[type="checkbox"] { width: 16px; height: 16px; accent-color: #005EB8; cursor: pointer; }
-    .addr-form-default label { font-size: 14px; color: #2C2A29; cursor: pointer; }
     .addr-modal__actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 4px; }
     .addr-modal__save {
       height: 40px; padding: 0 24px; background: #005EB8; color: #fff;
@@ -578,431 +275,216 @@
     }
     .addr-modal__cancel:hover { background: #F0F0F0; }
 
-    /* Address status badges */
-    .addr-book-card__tag--verified {
-      color: #166534; background: #F0FDF4; border-color: #86EFAC;
+    /* ── MY MACHINES ── */
+    .mach-search-field {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 12px; height: 40px;
+      border: 1px solid #DEDEDE; border-radius: 4px; background: #fff;
+      margin-bottom: 16px;
     }
-    .addr-book-card__tag--pending {
-      color: #92400E; background: #FFFBEB; border-color: #FCD34D;
+    .mach-search-field:focus-within { border-color: #005EB8; }
+    .mach-search-field svg { color: #9E9E9E; flex-shrink: 0; }
+    .mach-search-field input {
+      flex: 1; border: none; outline: none; font-size: 13px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #1A1A1A; background: transparent;
     }
-    .addr-book-card__tag--rejected {
-      color: #991B1B; background: #FEF2F2; border-color: #FCA5A5;
-    }
-    .addr-book-card.is-pending {
-      opacity: 0.8; border-color: #D1D5DB; background: #FAFAFA; cursor: default;
-    }
-    .addr-book-card.is-rejected { border-color: #FCA5A5; }
-    .addr-pending-note {
-      font-size: 12px; color: #92400E; margin-top: 4px; font-style: italic;
-    }
-    .addr-rejected-note { font-size: 12px; color: #991B1B; margin-top: 4px; }
-    .addr-withdraw-btn {
-      font-size: 12px; font-weight: 400; color: #9E9E9E;
-      background: none; border: none; cursor: pointer; padding: 4px 0;
-    }
-    .addr-withdraw-btn:hover { color: #AD0000; }
-    .addr-resubmit-btn {
-      font-size: 13px; font-weight: 700; color: #005EB8;
-      background: none; border: none; cursor: pointer; padding: 4px 0;
-    }
-    .addr-resubmit-btn:hover { text-decoration: underline; }
+    .mach-search-field input::placeholder { color: #9E9E9E; }
+    .mach-empty { font-size: 13px; color: #9E9E9E; padding: 16px 0; }
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       MY MACHINES TAB
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-    .machines-list {
-      display: flex;
-      flex-direction: column;
-    }
-
+    .machines-list { display: flex; flex-direction: column; }
     .machine-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 0;
-      border-bottom: 1px solid #E0E0E0;
-      gap: 16px;
-      flex-wrap: wrap;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 0; border-bottom: 1px solid #E0E0E0;
+      gap: 16px; flex-wrap: wrap;
     }
-
     .machine-row:last-child { border-bottom: none; }
-
-    .machine-row__info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .machine-row__name {
-      font-size: 15px;
-      font-weight: 700;
-      color: #2C2A29;
-    }
-
-    .machine-row__serial {
-      font-size: 12px;
-      font-weight: 400;
-      color: #9E9E9E;
-    }
-
-    .machine-row__right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-shrink: 0;
-    }
-
+    .machine-row__info { display: flex; flex-direction: column; gap: 4px; }
+    .machine-row__name { font-size: 15px; font-weight: 700; color: #2C2A29; }
+    .machine-row__serial { font-size: 12px; font-weight: 400; color: #9E9E9E; }
+    .machine-row__right { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
     .verified-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 400;
-      color: #74AA50;
-      background: #EBF7F2;
-      border: 1px solid #74AA50;
-      border-radius: 12px;
-      padding: 2px 9px;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; color: #74AA50;
+      background: #EBF7F2; border: 1px solid #74AA50; border-radius: 12px; padding: 2px 9px;
+      text-transform: uppercase; letter-spacing: 0.3px;
     }
-
+    .pending-install-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; color: #92400E;
+      background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 12px; padding: 2px 9px;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
     .text-link {
-      font-size: 13px;
-      font-weight: 700;
-      color: #005EB8;
-      background: none;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      padding: 4px 0;
+      font-size: 13px; font-weight: 700; color: #005EB8;
+      background: none; border: none; cursor: pointer; text-decoration: none; padding: 4px 0;
     }
-
     .text-link:hover { text-decoration: underline; }
-    .text-link:focus-visible { outline: 2px solid #005EB8; outline-offset: 2px; border-radius: 2px; }
 
-    /* Add Machine expand */
-    .add-machine-row { margin-top: 16px; }
-
-    .add-machine-trigger {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    /* ── BROWSE PARTS BOOK MODAL ── */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); z-index: 1000;
+      display: none; align-items: flex-start; justify-content: center;
+      padding: 16px; overflow-y: auto; overflow-x: hidden;
+    }
+    .modal-overlay.is-open { display: flex; }
+    .modal {
+      width: 100%; max-width: 560px; max-height: 85vh; overflow: auto;
+      background: #fff; border-radius: 2px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+      display: flex; flex-direction: column; margin: auto 0;
+    }
+    .modal__header {
+      height: 60px; background: #005EB8;
+      display: flex; align-items: center; justify-content: space-between; padding: 20px;
+    }
+    .modal__title { font-size: 18px; font-weight: 700; color: #fff; }
+    .modal__close {
+      width: 20px; height: 20px; border: none; background: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; padding: 0;
+    }
+    .modal__body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+    .modal__instruction { font-size: 14px; font-weight: 400; color: #4B4B4B; }
+    .modal__book-list { display: flex; flex-direction: column; gap: 16px; }
+    .book-option {
+      display: flex; align-items: center; gap: 16px;
+      border: 1px solid #E5E5E5; border-radius: 4px; padding: 20px;
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .book-option.is-selected { border: 2px solid #005EB8; padding: 19px; }
+    .book-option__radio {
+      width: 20px; height: 20px; border-radius: 50%; border: 1px solid #757575;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    }
+    .book-option.is-selected .book-option__radio { border: 1px solid #005EB8; }
+    .book-option.is-selected .book-option__radio::after {
+      content: ""; width: 10px; height: 10px; border-radius: 50%; background: #005EB8;
+    }
+    .book-option__info { display: flex; flex-direction: column; gap: 7px; }
+    .book-option__title { font-size: 15px; font-weight: 700; color: #2C2A29; }
+    .book-option__line { font-size: 14px; font-weight: 400; color: #6B7280; }
+    .modal__divider { height: 1px; background: #E0E0E0; }
+    .modal__actions { display: flex; gap: 12px; }
+    .modal-btn {
+      flex: 1; height: 38px; border-radius: 2px;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      color: #005EB8;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px 0;
+      font-size: 14px; font-weight: 500; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
     }
+    .modal-btn--cancel { background: transparent; border: 1px solid #005EB8; color: #005EB8; }
+    .modal-btn--cancel:hover { background: #F0F6FC; }
+    .modal-btn--proceed { background: #005EB8; border: none; color: #fff; }
+    .modal-btn--proceed:hover { background: #0B308E; }
 
-    .add-machine-trigger:hover { text-decoration: underline; }
-    .add-machine-trigger:focus-visible { outline: 2px solid #005EB8; outline-offset: 2px; border-radius: 2px; }
-
-    .add-machine-form {
-      margin-top: 16px;
-      padding: 20px;
-      background: #F7F8F9;
-      border: 1px solid #E0E0E0;
-      border-radius: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .serial-row {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-    }
-
-    .serial-row .field__input { flex: 1; }
-
-    .btn--verify {
-      height: 48px;
-      padding: 0 20px;
-      background: transparent;
-      border: 2px solid #005EB8;
-      border-radius: 4px;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      color: #005EB8;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .btn--verify:hover { background: #005EB8; color: #fff; }
-    .btn--verify:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn--verify:focus-visible { outline: 2px solid #005EB8; outline-offset: 2px; }
-
-    .verify-result {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #74AA50;
-    }
-
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       RESPONSIVE
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
-      .main-area   { padding: 24px; }
+      .main-area { padding: 24px; }
       .profile-hero__body { padding: 0 24px 24px; }
-      .tab-list    { padding: 0 24px; }
-      .tab-panel   { padding: 24px; }
+      .tab-list { padding: 0 24px; }
+      .tab-panel { padding: 24px; }
     }
-
-    /* Security panel form-col max-width (moved from inline style) */
-    #panel-security .form-col { max-width: 480px; }
-
+    #panel-profile .form-col { max-width: 480px; }
     @media (max-width: 768px) {
       .main-area { padding: 16px; gap: 16px; }
-
-      .profile-hero__body {
-        padding: 20px;
-        gap: 16px;
-      }
-
+      .profile-hero__body { padding: 20px; gap: 16px; }
       .avatar-wrap__img { width: 64px; height: 64px; }
-
       .profile-identity { width: 100%; }
       .profile-identity__name { font-size: 20px; }
-
-      .form-grid-2 { grid-template-columns: 1fr; }
-      .form-grid-3 { grid-template-columns: 1fr; }
-
-      .tab-list  { padding: 0 16px; }
-      .tab-btn   { padding: 14px 16px; font-size: 13px; }
+      .tab-list { padding: 0 16px; }
+      .tab-btn { padding: 14px 16px; font-size: 13px; }
       .tab-panel { padding: 20px 16px; }
-
-      /* Reduce section-divider vertical space on tablet */
       .section-divider { margin: 20px 0; }
-
-      /* Reduce form-actions top margin on tablet */
-      .form-actions { margin-top: 20px; }
-
-      /* Modal overlay: offset for sticky header (~56-60px) */
+      .profile-data-label { width: 120px; }
       .addr-modal-overlay { padding: 64px 16px 16px; }
+      .machine-row__right { width: 100%; justify-content: flex-start; }
+      #panel-profile .form-col { max-width: 100%; }
     }
-
     @media (max-width: 480px) {
       .profile-identity__name { font-size: 18px; }
-      .form-actions { flex-direction: column; align-items: flex-start; }
-      .btn--save { width: 100%; padding: 0; }
-      .serial-row { flex-direction: column; }
-      .serial-row .field__input { width: 100%; }
-      .btn--verify { width: 100%; }
-
-      /* Address modal: reduce inner padding on small phones */
       .addr-modal { padding: 20px 16px 16px; }
-
-      /* Address form row: stack fields vertically on mobile */
       .addr-form-row { flex-direction: column; }
-
-      /* Address modal action buttons: stack and fill width */
       .addr-modal__actions { flex-direction: column-reverse; }
-      .addr-modal__save,
-      .addr-modal__cancel { width: 100%; }
-
-      /* Machine row right cluster: full width on its own line */
-      .machine-row__right { width: 100%; justify-content: flex-start; }
-
-      /* Security panel form-col: remove max-width constraint */
-      #panel-security .form-col { max-width: 100%; }
+      .addr-modal__save, .addr-modal__cancel { width: 100%; }
     }
-
-    /* Scroll affordance fade for tab bar + tighter tab padding at 414px */
-    @media (max-width: 414px) {
-      .tab-btn { padding: 12px 12px; font-size: 12px; }
-    }
-
-    /* Tab list scroll affordance: right-side fade hint */
-    .tab-list {
-      position: relative;
-    }
-    .tab-list::after {
-      content: '';
-      position: sticky;
-      right: 0;
-      width: 24px;
-      flex-shrink: 0;
-      background: linear-gradient(to right, transparent, #fff);
-      pointer-events: none;
-      align-self: stretch;
-    }
+    @media (max-width: 414px) { .tab-btn { padding: 12px; font-size: 12px; } }
   </style>
 </head>
 <body>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• HEADER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-header"></div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• PAGE â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="app-body-shell">
-
-    <!-- SIDEBAR -->
     <div id="okuma-sidebar" data-active="account"></div>
 
-    <!-- MAIN -->
     <main class="main-area" id="main" tabindex="-1" aria-label="My Account">
 
-      <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-           PROFILE HERO
-      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <!-- PROFILE HERO -->
       <section class="profile-hero" aria-label="Profile overview">
-
         <div class="profile-hero__body">
-
-          <!-- Avatar -->
           <div class="avatar-wrap">
-            <img id="profileAvatar"
-                 class="avatar-wrap__img"
-                 src="avatar.png"
-                 alt="Jonathan Davies - profile photo">
-            <button class="avatar-wrap__btn"
-                    id="avatarBtn"
-                    type="button"
-                    aria-label="Change profile photo">
-              <!-- Camera / edit icon -->
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-                <path d="M8 3H4a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V9" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="11" cy="11" r="3" stroke="#fff" stroke-width="1.8"/>
-                <path d="M17 2l3 3-7 7-4 1 1-4 7-7z" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <input type="file" id="avatarInput" accept="image/*" class="sr-only"
-                   aria-label="Upload a new profile photo">
+            <div class="avatar-initials" id="profileAvatar" aria-label="Profile initials">JH</div>
           </div>
-
-          <!-- Identity -->
           <div class="profile-identity">
             <div class="profile-identity__info">
-              <h1 class="profile-identity__name">Jonathan Davies</h1>
+              <h1 class="profile-identity__name">Jonathan Hayes</h1>
               <div class="profile-identity__meta">
-                <span class="profile-identity__title">Purchasing Manager</span>
-                <span class="role-badge" aria-label="Account role: Administrator">Admin</span>
+                <span class="role-tag" id="roleTag">Customer</span>
               </div>
               <p class="profile-identity__company">ACME Precision Manufacturing</p>
-              <p class="profile-identity__since">Member since October 2024</p>
             </div>
           </div>
-
         </div>
       </section>
 
-      <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-           TABS
-      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <!-- TABS -->
       <div class="profile-tabs">
 
-        <!-- Tab list -->
         <div role="tablist" class="tab-list" aria-label="Account settings">
-          <button role="tab" class="tab-btn"
-                  id="tab-personal" aria-selected="true"  aria-controls="panel-personal">
-            Personal Info
+          <button role="tab" class="tab-btn" id="tab-profile" aria-selected="true" aria-controls="panel-profile">
+            Profile
           </button>
-          <button role="tab" class="tab-btn"
-                  id="tab-addresses" aria-selected="false" aria-controls="panel-addresses" tabindex="-1">
+          <button role="tab" class="tab-btn" id="tab-addresses" aria-selected="false" aria-controls="panel-addresses" tabindex="-1">
             Address Book
           </button>
-          <button role="tab" class="tab-btn"
-                  id="tab-security" aria-selected="false" aria-controls="panel-security" tabindex="-1">
-            Security
-          </button>
-          <button role="tab" class="tab-btn"
-                  id="tab-machines" aria-selected="false" aria-controls="panel-machines" tabindex="-1">
+          <button role="tab" class="tab-btn" id="tab-machines" aria-selected="false" aria-controls="panel-machines" tabindex="-1">
             My Machines
           </button>
         </div>
 
-        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-             PANEL 1 - Personal Info
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-        <div role="tabpanel" id="panel-personal" class="tab-panel"
-             aria-labelledby="tab-personal" tabindex="0">
-          <form novalidate aria-label="Personal information form" id="formPersonal">
-            <div class="form-col">
+        <!-- ═══ PANEL 1 — Profile (Personal Info + Change Password) ═══ -->
+        <div role="tabpanel" id="panel-profile" class="tab-panel"
+             aria-labelledby="tab-profile" tabindex="0">
 
-              <div class="form-grid-2">
-                <div class="field">
-                  <label class="field__label" for="firstName">First Name</label>
-                  <input class="field__input" id="firstName" name="firstName"
-                         type="text" value="Jonathan"
-                         autocomplete="given-name"
-                         aria-required="true" disabled>
-                </div>
-                <div class="field">
-                  <label class="field__label" for="lastName">Last Name</label>
-                  <input class="field__input" id="lastName" name="lastName"
-                         type="text" value="Davies"
-                         autocomplete="family-name"
-                         aria-required="true" disabled>
-                </div>
-              </div>
-
-              <div class="field">
-                <label class="field__label" for="jobTitle">Job Title</label>
-                <input class="field__input" id="jobTitle" name="jobTitle"
-                       type="text" value="Purchasing Manager"
-                       autocomplete="organization-title"
-                       placeholder="e.g. Purchasing Manager" disabled>
-              </div>
-
-              <div class="field">
-                <label class="field__label" for="phone">Phone Number</label>
-                <input class="field__input" id="phone" name="phone"
-                       type="tel" value="+1 (704) 555-0182"
-                       autocomplete="tel"
-                       placeholder="+1 (___) ___-____" disabled>
-              </div>
-
-              <div class="field field--locked">
-                <label class="field__label" for="email">Email Address</label>
-                <div class="field__input-wrap">
-                  <input class="field__input" id="email" name="email"
-                         type="email" value="j.davies@acmeprecision.com"
-                         readonly aria-readonly="true"
-                         aria-describedby="emailHint"
-                         autocomplete="email">
-                  <span class="field__input-icon" aria-hidden="true">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <rect x="2.75" y="7" width="10.5" height="7.5" rx="1.5" stroke="#9E9E9E" stroke-width="1.4"/>
-                      <path d="M5 7V5.5a3 3 0 016 0V7" stroke="#9E9E9E" stroke-width="1.4" stroke-linecap="round"/>
-                    </svg>
-                  </span>
-                </div>
-                <p id="emailHint" class="field__hint">To change your email address, contact Okuma support.</p>
-              </div>
-
+          <!-- Personal Info (read-only) -->
+          <p class="section-subhead">Personal Information</p>
+          <div class="profile-data-list">
+            <div class="profile-data-row">
+              <span class="profile-data-label">Full Name</span>
+              <span class="profile-data-value">Jonathan Hayes</span>
             </div>
-
-            <div class="form-actions" id="personalActions">
-              <!-- view mode -->
-              <button type="button" class="btn--primary btn--save" id="editPersonalBtn">
-                Edit
-              </button>
-              <!-- edit mode (hidden by default) -->
-              <button type="submit" class="btn--primary btn--save" id="savePersonalBtn" hidden>
-                Save Changes
-              </button>
-              <button type="button" class="btn--cancel" id="cancelPersonalBtn" hidden>
-                Cancel
-              </button>
+            <div class="profile-data-row">
+              <span class="profile-data-label">Job Title</span>
+              <span class="profile-data-value">Purchasing Manager</span>
             </div>
-          </form>
-        </div>
+            <div class="profile-data-row">
+              <span class="profile-data-label">Phone</span>
+              <span class="profile-data-value">+1 (704) 555-0182</span>
+            </div>
+            <div class="profile-data-row">
+              <span class="profile-data-label">Email</span>
+              <span class="profile-data-value">customer@okuma.com</span>
+            </div>
+            <div class="profile-data-row">
+              <span class="profile-data-label">Company</span>
+              <span class="profile-data-value">ACME Precision Manufacturing</span>
+            </div>
+          </div>
 
-        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-             PANEL 2 - Security
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-        <div role="tabpanel" id="panel-security" class="tab-panel"
-             aria-labelledby="tab-security" tabindex="0" hidden>
+          <div class="section-divider" role="separator"></div>
 
+          <!-- Change Password -->
+          <p class="section-subhead">Change Password</p>
           <form novalidate aria-label="Change password form" id="formSecurity">
             <div class="form-col">
 
@@ -1010,40 +492,57 @@
                 <label class="field__label" for="currentPw">Current Password</label>
                 <div class="field__pw-wrap">
                   <input class="field__input" id="currentPw" name="currentPw"
-                         type="password"
-                         autocomplete="current-password"
-                         placeholder="Enter current password"
-                         aria-describedby="currentPwHint">
+                         type="password" autocomplete="current-password"
+                         placeholder="Enter current password">
                   <button type="button" class="field__eye-btn"
-                          aria-label="Show current password"
-                          data-target="currentPw">
+                          aria-label="Show current password" data-target="currentPw">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                       <ellipse cx="9" cy="9" rx="8" ry="5.5" stroke="currentColor" stroke-width="1.5"/>
                       <circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
                     </svg>
                   </button>
                 </div>
-                <span id="currentPwHint" class="sr-only">Enter your existing password to verify your identity before changing it.</span>
               </div>
 
               <div class="field">
                 <label class="field__label" for="newPw">New Password</label>
                 <div class="field__pw-wrap">
                   <input class="field__input" id="newPw" name="newPw"
-                         type="password"
-                         autocomplete="new-password"
-                         placeholder="Min. 8 characters"
-                         aria-describedby="pwStrengthText">
+                         type="password" autocomplete="new-password"
+                         placeholder="Min. 8 characters">
                   <button type="button" class="field__eye-btn"
-                          aria-label="Show new password"
-                          data-target="newPw">
+                          aria-label="Show new password" data-target="newPw">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                       <ellipse cx="9" cy="9" rx="8" ry="5.5" stroke="currentColor" stroke-width="1.5"/>
                       <circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
                     </svg>
                   </button>
                 </div>
-                <div class="pw-strength" aria-live="polite">
+                <!-- Live password rules -->
+                <div class="pw-rules" aria-live="polite">
+                  <div class="pw-rule" id="rule-length">
+                    <svg class="pw-rule__icon pw-rule__icon--empty" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="#BDBDBD" stroke-width="1.5"/></svg>
+                    <svg class="pw-rule__icon pw-rule__icon--check" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="#74AA50" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8 3.2-3.2" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    At least 8 characters
+                  </div>
+                  <div class="pw-rule" id="rule-upper">
+                    <svg class="pw-rule__icon pw-rule__icon--empty" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="#BDBDBD" stroke-width="1.5"/></svg>
+                    <svg class="pw-rule__icon pw-rule__icon--check" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="#74AA50" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8 3.2-3.2" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    At least one uppercase letter (A–Z)
+                  </div>
+                  <div class="pw-rule" id="rule-number">
+                    <svg class="pw-rule__icon pw-rule__icon--empty" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="#BDBDBD" stroke-width="1.5"/></svg>
+                    <svg class="pw-rule__icon pw-rule__icon--check" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="#74AA50" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8 3.2-3.2" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    At least one number (0–9)
+                  </div>
+                  <div class="pw-rule" id="rule-special">
+                    <svg class="pw-rule__icon pw-rule__icon--empty" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="#BDBDBD" stroke-width="1.5"/></svg>
+                    <svg class="pw-rule__icon pw-rule__icon--check" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="#74AA50" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8 3.2-3.2" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    At least one special character (!@#$%^&*)
+                  </div>
+                </div>
+                <!-- Strength bar -->
+                <div class="pw-strength" aria-live="polite" style="margin-top:12px;">
                   <div class="pw-strength__bar" role="presentation" aria-hidden="true">
                     <div class="pw-strength__seg" id="str1"></div>
                     <div class="pw-strength__seg" id="str2"></div>
@@ -1058,12 +557,10 @@
                 <label class="field__label" for="confirmPw">Confirm New Password</label>
                 <div class="field__pw-wrap">
                   <input class="field__input" id="confirmPw" name="confirmPw"
-                         type="password"
-                         autocomplete="new-password"
+                         type="password" autocomplete="new-password"
                          placeholder="Re-enter new password">
                   <button type="button" class="field__eye-btn"
-                          aria-label="Show confirm password"
-                          data-target="confirmPw">
+                          aria-label="Show confirm password" data-target="confirmPw">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                       <ellipse cx="9" cy="9" rx="8" ry="5.5" stroke="currentColor" stroke-width="1.5"/>
                       <circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
@@ -1075,9 +572,7 @@
             </div>
 
             <div class="form-actions">
-              <button type="submit" class="btn--primary btn--save" id="saveSecurityBtn">
-                Update Password
-              </button>
+              <button type="submit" class="btn--primary btn--save" id="saveSecurityBtn">Update Password</button>
               <span class="save-confirm" id="confirmSecurity" role="status" aria-live="polite">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <circle cx="8" cy="8" r="6.5" stroke="#2AAB3F" stroke-width="1.5"/>
@@ -1088,120 +583,13 @@
             </div>
           </form>
 
-          <div class="section-divider" role="separator"></div>
-          <p class="section-subhead">Account Details</p>
+        </div><!-- /panel-profile -->
 
-          <div class="meta-table" aria-label="Account details">
-            <div class="meta-row">
-              <span class="meta-row__label">Account Role</span>
-              <span class="meta-row__value">
-                <span class="role-badge" aria-label="Role: Administrator">Admin</span>
-              </span>
-            </div>
-            <div class="meta-row">
-              <span class="meta-row__label">Account Status</span>
-              <span class="meta-row__value">
-                <span class="status-badge--active">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
-                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Active
-                </span>
-              </span>
-            </div>
-            <div class="meta-row">
-              <span class="meta-row__label">Member Since</span>
-              <span class="meta-row__value">October 2024</span>
-            </div>
-            <div class="meta-row">
-              <span class="meta-row__label">Last Login</span>
-              <span class="meta-row__value">Today, 9:14 AM</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-             PANEL 4 - My Machines
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-        <div role="tabpanel" id="panel-machines" class="tab-panel"
-             aria-labelledby="tab-machines" tabindex="0" hidden>
-
-          <div class="machines-list" aria-label="Your registered machines">
-
-            <div class="machine-row">
-              <div class="machine-row__info">
-                <span class="machine-row__name">LU300-M</span>
-                <span class="machine-row__serial">Serial: M5-2891-K</span>
-              </div>
-              <div class="machine-row__right">
-                <span class="verified-badge">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
-                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Verified
-                </span>
-                <a href="parts-catalogue.html" class="text-link" aria-label="Browse parts for LU300-M">
-                  Browse Parts →
-                </a>
-              </div>
-            </div>
-
-            <div class="machine-row">
-              <div class="machine-row__info">
-                <span class="machine-row__name">MULTUS U3000</span>
-                <span class="machine-row__serial">Serial: MU-9102-L</span>
-              </div>
-              <div class="machine-row__right">
-                <span class="verified-badge">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
-                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Verified
-                </span>
-                <a href="parts-catalogue.html" class="text-link" aria-label="Browse parts for MULTUS U3000">
-                  Browse Parts →
-                </a>
-              </div>
-            </div>
-
-            <div class="machine-row">
-              <div class="machine-row__info">
-                <span class="machine-row__name">LB2000 EX III</span>
-                <span class="machine-row__serial">Serial: LB-4431-M</span>
-              </div>
-              <div class="machine-row__right">
-                <span class="verified-badge">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
-                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Verified
-                </span>
-                <a href="parts-catalogue.html" class="text-link" aria-label="Browse parts for LB2000 EX III">
-                  Browse Parts →
-                </a>
-              </div>
-            </div>
-
-          </div>
-
-        </div><!-- /panel-machines -->
-
-        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-             PANEL 5 - Address Book
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+        <!-- ═══ PANEL 2 — Address Book ═══ -->
         <div role="tabpanel" id="panel-addresses" class="tab-panel"
              aria-labelledby="tab-addresses" tabindex="0" hidden>
 
-          <div class="addr-book-list" id="addrBookList">
-
-            <!-- Populated by JS -->
-
-          </div>
+          <div class="addr-book-list" id="addrBookList"></div>
 
           <button type="button" class="addr-add-btn" id="addrAddBtn" style="margin-top:16px;">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1213,7 +601,7 @@
 
         </div><!-- /panel-addresses -->
 
-        <!-- Address add/edit modal -->
+        <!-- Address request modal -->
         <div class="addr-modal-overlay" id="addrModalOverlay">
           <div class="addr-modal" role="dialog" aria-modal="true" aria-labelledby="addrModalTitle">
             <div class="addr-modal__head">
@@ -1255,12 +643,153 @@
           </div>
         </div>
 
+        <!-- ═══ PANEL 3 — My Machines ═══ -->
+        <div role="tabpanel" id="panel-machines" class="tab-panel"
+             aria-labelledby="tab-machines" tabindex="0" hidden>
+
+          <!-- Search -->
+          <div class="mach-search-field">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
+              <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input type="search" id="machSearch" placeholder="Search by machine name or serial..."
+                   autocomplete="off" oninput="filterMachines(this.value)">
+          </div>
+
+          <div class="machines-list" id="machinesList" aria-label="Your registered machines">
+
+            <div class="machine-row" data-name="LB2000 EX III" data-serial="LB-4431-M">
+              <div class="machine-row__info">
+                <span class="machine-row__name">LB2000 EX III</span>
+                <span class="machine-row__serial">Serial: LB-4431-M &nbsp;·&nbsp; Install Date: Nov 22, 2023</span>
+              </div>
+              <div class="machine-row__right">
+                <span class="verified-badge">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
+                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  INSTALLED
+                </span>
+                <button class="text-link" onclick="openPartsModal('LB2000 EX III', 'LB-4431-M')" aria-label="Browse parts for LB2000 EX III">
+                  Browse Parts →
+                </button>
+              </div>
+            </div>
+
+            <div class="machine-row" data-name="LU300-M" data-serial="M5-2891-K">
+              <div class="machine-row__info">
+                <span class="machine-row__name">LU300-M</span>
+                <span class="machine-row__serial">Serial: M5-2891-K &nbsp;·&nbsp; Install Date: Mar 15, 2022</span>
+              </div>
+              <div class="machine-row__right">
+                <span class="verified-badge">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
+                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  INSTALLED
+                </span>
+                <button class="text-link" onclick="openPartsModal('LU300-M', 'M5-2891-K')" aria-label="Browse parts for LU300-M">
+                  Browse Parts →
+                </button>
+              </div>
+            </div>
+
+            <div class="machine-row" data-name="MULTUS U3000" data-serial="MU-9102-L">
+              <div class="machine-row__info">
+                <span class="machine-row__name">MULTUS U3000</span>
+                <span class="machine-row__serial">Serial: MU-9102-L &nbsp;·&nbsp; Install Date: Jul 08, 2021</span>
+              </div>
+              <div class="machine-row__right">
+                <span class="verified-badge">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
+                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  INSTALLED
+                </span>
+                <button class="text-link" onclick="openPartsModal('MULTUS U3000', 'MU-9102-L')" aria-label="Browse parts for MULTUS U3000">
+                  Browse Parts →
+                </button>
+              </div>
+            </div>
+
+          </div>
+          <p class="mach-empty" id="machEmpty" hidden>No machines match your search.</p>
+
+        </div><!-- /panel-machines -->
+
       </div><!-- /profile-tabs -->
 
     </main>
   </div>
 
-  <!-- Toast -->
+  <!-- Password confirmation modal -->
+  <div class="modal-overlay" id="pwConfirmOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwConfirmTitle" style="max-width:440px;">
+      <div class="modal__header">
+        <h2 class="modal__title" id="pwConfirmTitle">Confirm Password Update</h2>
+        <button class="modal__close" id="pwConfirmClose" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M5 5L15 15M15 5L5 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal__body" style="gap:20px;">
+        <p style="font-size:14px;color:#4B4B4B;line-height:1.6;">
+          Are you sure you want to update your password? You will need to use the new password the next time you sign in.
+        </p>
+        <div class="modal__divider"></div>
+        <div class="modal__actions">
+          <button class="modal-btn modal-btn--cancel" id="pwConfirmCancel">Cancel</button>
+          <button class="modal-btn modal-btn--proceed" id="pwConfirmOk">Update Password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parts Book modal (My Machines) -->
+  <div class="modal-overlay" id="partsModalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal__header">
+        <h2 class="modal__title" id="modalTitle">Browse Parts Book</h2>
+        <button class="modal__close" onclick="closePartsModal()" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M5 5L15 15M15 5L5 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <p class="modal__instruction">Select Parts Book</p>
+        <div class="modal__book-list">
+          <div class="book-option is-selected" onclick="selectBook(this)">
+            <div class="book-option__radio"></div>
+            <div class="book-option__info">
+              <div class="book-option__title" id="bookTitle1">Parts Book 1</div>
+              <div class="book-option__line" id="bookSerial1">Serial: —</div>
+              <div class="book-option__line">Pub No. LE15-221-R1 Jan. 2008</div>
+            </div>
+          </div>
+          <div class="book-option" onclick="selectBook(this)">
+            <div class="book-option__radio"></div>
+            <div class="book-option__info">
+              <div class="book-option__title" id="bookTitle2">Parts Book 2</div>
+              <div class="book-option__line" id="bookSerial2">Serial: —</div>
+              <div class="book-option__line">Pub No. LE15-173-R2 Aug. 2003</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal__divider"></div>
+        <div class="modal__actions">
+          <button class="modal-btn modal-btn--cancel" onclick="closePartsModal()">Cancel</button>
+          <button class="modal-btn modal-btn--proceed" onclick="proceedToBook()">Proceed</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="appToast" role="status" aria-live="polite">
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <circle cx="8" cy="8" r="6.5" stroke="#2AAB3F" stroke-width="1.5"/>
@@ -1269,44 +798,39 @@
     Changes saved successfully
   </div>
 
-  <!-- Accessible live region for announcements -->
   <div id="liveRegion" aria-live="polite" aria-atomic="true"
        style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;"></div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• SCRIPTS â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>
-
   <script src="components.js"></script>
+
   <script>
   (function () {
     'use strict';
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       TABS - roving tabindex + ARIA
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ── TABS ── */
     var tabs   = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
     var panels = Array.prototype.slice.call(document.querySelectorAll('[role="tabpanel"]'));
 
     function activateTab(tab) {
-      /* Deactivate all */
-      tabs.forEach(function (t) {
-        t.setAttribute('aria-selected', 'false');
-        t.setAttribute('tabindex', '-1');
-      });
+      tabs.forEach(function (t) { t.setAttribute('aria-selected', 'false'); t.setAttribute('tabindex', '-1'); });
       panels.forEach(function (p) { p.hidden = true; });
-
-      /* Activate selected */
       tab.setAttribute('aria-selected', 'true');
       tab.removeAttribute('tabindex');
       var panel = document.getElementById(tab.getAttribute('aria-controls'));
       if (panel) panel.hidden = false;
     }
 
+    // Open a specific tab from URL param (e.g. ?tab=machines from dashboard KPI)
+    var _tabParam = new URLSearchParams(window.location.search).get('tab');
+    if (_tabParam) {
+      var _targetTab = document.getElementById('tab-' + _tabParam);
+      if (_targetTab) activateTab(_targetTab);
+    }
+
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () { activateTab(tab); });
-
       tab.addEventListener('keydown', function (e) {
         var idx = tabs.indexOf(tab);
         var next = null;
@@ -1314,201 +838,159 @@
         if (e.key === 'ArrowLeft')  next = tabs[(idx - 1 + tabs.length) % tabs.length];
         if (e.key === 'Home')       next = tabs[0];
         if (e.key === 'End')        next = tabs[tabs.length - 1];
-        if (next) {
-          e.preventDefault();
-          activateTab(next);
-          next.focus();
-        }
+        if (next) { e.preventDefault(); activateTab(next); next.focus(); }
       });
     });
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       AVATAR UPLOAD
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-    var avatarBtn   = document.getElementById('avatarBtn');
-    var avatarInput = document.getElementById('avatarInput');
-    var avatarImg   = document.getElementById('profileAvatar');
+    /* ── ROLE TAG ── */
+    (function() {
+      var role = (localStorage.getItem('okmUserRole') || 'customer').toLowerCase();
+      var tag = document.getElementById('roleTag');
+      if (tag) {
+        var labels = { customer: 'Customer', distributor: 'Distributor', admin: 'Distributor' };
+        tag.textContent = labels[role] || 'Customer';
+      }
+    })();
 
-    avatarBtn.addEventListener('click', function () { avatarInput.click(); });
-
-    /* Keyboard: Enter / Space on the button already fires click,
-       but make Space key explicit for safety */
-    avatarBtn.addEventListener('keydown', function (e) {
-      if (e.key === ' ') { e.preventDefault(); avatarInput.click(); }
-    });
-
-    avatarInput.addEventListener('change', function () {
-      var file = avatarInput.files[0];
-      if (!file) return;
-      var reader = new FileReader();
-      reader.onload = function (ev) {
-        avatarImg.src = ev.target.result;
-        avatarImg.alt = 'Updated profile photo';
-        announce('Profile photo updated.');
-      };
-      reader.readAsDataURL(file);
-    });
-
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       PASSWORD EYE TOGGLE
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ── PASSWORD EYE TOGGLE ── */
     var EYE_OPEN = '<ellipse cx="9" cy="9" rx="8" ry="5.5" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>';
     var EYE_SHUT = '<path d="M2 2l14 14M7.3 7.4A2.5 2.5 0 0010.6 10.7M5.1 5.2C2.9 6.5 1 9 1 9s3 6 8 6c1.8 0 3.4-.6 4.8-1.6M8.3 3.1A8 8 0 0117 9s-.8 1.5-2.1 2.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
-
     document.querySelectorAll('.field__eye-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var input = document.getElementById(btn.getAttribute('data-target'));
         if (!input) return;
         var show = input.type === 'password';
         input.type = show ? 'text' : 'password';
-        btn.setAttribute('aria-label', (show ? 'Hide' : 'Show') + ' ' +
-          btn.getAttribute('aria-label').replace(/^(Show|Hide) /, ''));
         btn.querySelector('svg').innerHTML = show ? EYE_SHUT : EYE_OPEN;
       });
     });
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       PASSWORD STRENGTH
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-    var newPwInput   = document.getElementById('newPw');
-    var strengthSegs = [
-      document.getElementById('str1'),
-      document.getElementById('str2'),
-      document.getElementById('str3'),
-      document.getElementById('str4')
+    /* ── PASSWORD RULES ── */
+    var PW_RULES = [
+      { id: 'rule-length',  test: function(v) { return v.length >= 8; } },
+      { id: 'rule-upper',   test: function(v) { return /[A-Z]/.test(v); } },
+      { id: 'rule-number',  test: function(v) { return /[0-9]/.test(v); } },
+      { id: 'rule-special', test: function(v) { return /[!@#$%^&*]/.test(v); } }
     ];
-    var strengthText = document.getElementById('pwStrengthText');
 
-    var COLORS = { 1: '#AD0000', 2: '#F59E0B', 3: '#005EB8', 4: '#2AAB3F' };
-    var LABELS = { 1: 'Weak', 2: 'Fair', 3: 'Strong', 4: 'Very Strong' };
-
-    function calcScore(pw) {
-      if (!pw) return 0;
-      var s = 0;
-      if (pw.length >= 8)          s++;
-      if (/[A-Z]/.test(pw))        s++;
-      if (/[0-9]/.test(pw))        s++;
-      if (/[^A-Za-z0-9]/.test(pw)) s++;
-      return s;
-    }
-
-    newPwInput.addEventListener('input', function () {
-      var score = calcScore(newPwInput.value);
-      var col   = COLORS[score] || '#E0E0E0';
-      strengthSegs.forEach(function (seg, i) {
-        seg.style.background = i < score ? col : '#E0E0E0';
+    function applyPwRules(val) {
+      val = val || '';
+      var score = 0;
+      PW_RULES.forEach(function(r) {
+        var el = document.getElementById(r.id);
+        if (!el) return;
+        var met = r.test(val);
+        if (met) score++;
+        el.classList.toggle('is-met', met);
       });
-      if (newPwInput.value) {
-        strengthText.textContent = LABELS[score] || 'Weak';
-        strengthText.style.color = col;
-      } else {
-        strengthText.textContent = 'Enter a password';
-        strengthText.style.color = '#9E9E9E';
+      var COLORS = ['', '#AD0000', '#F59E0B', '#005EB8', '#2AAB3F'];
+      var LABELS = ['', 'Weak', 'Fair', 'Strong', 'Very Strong'];
+      var col = val ? (COLORS[score] || '#AD0000') : '#E0E0E0';
+      [1,2,3,4].forEach(function(i) {
+        var seg = document.getElementById('str' + i);
+        if (seg) seg.style.background = i <= score ? col : '#E0E0E0';
+      });
+      var txt = document.getElementById('pwStrengthText');
+      if (txt) {
+        txt.textContent = val ? (LABELS[score] || 'Weak') : 'Enter a password';
+        txt.style.color = val ? col : '#9E9E9E';
       }
-    });
+    }
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       FORM SAVE (prototype)
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-    function wireForm(formId, btnId, confirmId) {
-      var form    = document.getElementById(formId);
-      var btn     = document.getElementById(btnId);
-      var confirm = document.getElementById(confirmId);
-      if (!form || !btn || !confirm) return;
+    var newPwInput = document.getElementById('newPw');
+    if (newPwInput) {
+      newPwInput.addEventListener('input', function() { applyPwRules(this.value); });
+    }
 
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var orig = btn.textContent;
-        btn.textContent = 'Saving-¦';
-        btn.disabled = true;
+    /* ── PASSWORD FORM SUBMIT ── */
+    var formSecurity     = document.getElementById('formSecurity');
+    var pwConfirmOverlay = document.getElementById('pwConfirmOverlay');
+    var pwConfirmClose   = document.getElementById('pwConfirmClose');
+    var pwConfirmCancel  = document.getElementById('pwConfirmCancel');
+    var pwConfirmOk      = document.getElementById('pwConfirmOk');
 
-        setTimeout(function () {
-          btn.textContent = orig;
-          btn.disabled = false;
-          confirm.classList.add('is-visible');
-          announce(confirm.textContent.trim());
-          setTimeout(function () {
-            confirm.classList.remove('is-visible');
-          }, 3000);
-        }, 700);
+    function openPwConfirm()  { pwConfirmOverlay.classList.add('is-open');    document.body.style.overflow = 'hidden'; }
+    function closePwConfirm() { pwConfirmOverlay.classList.remove('is-open'); document.body.style.overflow = ''; }
+
+    function commitPasswordUpdate() {
+      closePwConfirm();
+      var btn     = document.getElementById('saveSecurityBtn');
+      var confirm = document.getElementById('confirmSecurity');
+      btn.textContent = 'Saving…'; btn.disabled = true;
+      setTimeout(function() {
+        btn.textContent = 'Update Password'; btn.disabled = false;
+        document.getElementById('currentPw').value = '';
+        document.getElementById('newPw').value     = '';
+        document.getElementById('confirmPw').value = '';
+        applyPwRules('');
+        confirm.classList.add('is-visible');
+        setTimeout(function() { confirm.classList.remove('is-visible'); }, 3000);
+      }, 600);
+    }
+
+    if (formSecurity)    formSecurity.addEventListener('submit', function(e) { e.preventDefault(); openPwConfirm(); });
+    if (pwConfirmClose)  pwConfirmClose.addEventListener('click', closePwConfirm);
+    if (pwConfirmCancel) pwConfirmCancel.addEventListener('click', closePwConfirm);
+    if (pwConfirmOk)     pwConfirmOk.addEventListener('click', commitPasswordUpdate);
+    if (pwConfirmOverlay) pwConfirmOverlay.addEventListener('click', function(e) { if (e.target === pwConfirmOverlay) closePwConfirm(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && pwConfirmOverlay && pwConfirmOverlay.classList.contains('is-open')) closePwConfirm(); });
+
+    /* ── MACHINE SEARCH ── */
+    window.filterMachines = function(query) {
+      var q = (query || '').toLowerCase().trim();
+      var rows = document.querySelectorAll('#machinesList .machine-row');
+      var visible = 0;
+      rows.forEach(function(row) {
+        var name   = (row.getAttribute('data-name')   || '').toLowerCase();
+        var serial = (row.getAttribute('data-serial')  || '').toLowerCase();
+        var match  = !q || name.indexOf(q) !== -1 || serial.indexOf(q) !== -1;
+        row.style.display = match ? '' : 'none';
+        if (match) visible++;
       });
-    }
+      var empty = document.getElementById('machEmpty');
+      if (empty) empty.hidden = visible > 0;
+    };
 
-    wireForm('formSecurity', 'saveSecurityBtn', 'confirmSecurity');
-
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       PERSONAL INFO - EDIT MODE
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-    var PERSONAL_FIELDS = ['firstName', 'lastName', 'jobTitle', 'phone'];
-    var editBtn      = document.getElementById('editPersonalBtn');
-    var saveBtn      = document.getElementById('savePersonalBtn');
-    var cancelBtn    = document.getElementById('cancelPersonalBtn');
-    var formPersonal = document.getElementById('formPersonal');
-    var savedValues  = {};
-
-    function enterEditMode() {
-      PERSONAL_FIELDS.forEach(function (id) {
-        var el = document.getElementById(id);
-        savedValues[id] = el.value;
-        el.disabled = false;
-      });
-      editBtn.hidden   = true;
-      saveBtn.hidden   = false;
-      cancelBtn.hidden = false;
-      document.getElementById('firstName').focus();
-    }
-
-    function exitEditMode(restore) {
-      PERSONAL_FIELDS.forEach(function (id) {
-        var el = document.getElementById(id);
-        if (restore) el.value = savedValues[id];
-        el.disabled = true;
-      });
-      editBtn.hidden   = false;
-      saveBtn.hidden   = true;
-      cancelBtn.hidden = true;
-    }
-
-    editBtn.addEventListener('click', enterEditMode);
-    cancelBtn.addEventListener('click', function () { exitEditMode(true); });
-
-    formPersonal.addEventListener('submit', function (e) {
-      e.preventDefault();
-      exitEditMode(false);
-      showToast('Changes saved successfully');
-    });
-
-    function showToast(msg) {
-      var toast = document.getElementById('appToast');
-      toast.childNodes[2].textContent = msg;
-      toast.classList.add('show');
-      setTimeout(function () { toast.classList.remove('show'); }, 3000);
-    }
-
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       ARIA LIVE ANNOUNCEMENTS
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-    function announce(msg) {
-      var region = document.getElementById('liveRegion');
-      region.textContent = '';
-      /* Small delay ensures re-render so AT re-reads the region */
-      setTimeout(function () { region.textContent = msg; }, 60);
-    }
+    /* ── PARTS BOOK MODAL ── */
+    window.openPartsModal = function(machineName, serial) {
+      document.getElementById('modalTitle').textContent = machineName + ' — Browse Parts Book';
+      document.getElementById('bookTitle1').textContent = machineName + '- Parts Book 1';
+      document.getElementById('bookTitle2').textContent = machineName + '- Parts Book 2';
+      document.getElementById('bookSerial1').textContent = 'Serial: ' + serial;
+      document.getElementById('bookSerial2').textContent = 'Serial: ' + serial;
+      var opts = document.querySelectorAll('.book-option');
+      opts.forEach(function(o) { o.classList.remove('is-selected'); });
+      if (opts[0]) opts[0].classList.add('is-selected');
+      document.getElementById('partsModalOverlay').classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    };
+    window.closePartsModal = function() {
+      document.getElementById('partsModalOverlay').classList.remove('is-open');
+      document.body.style.overflow = '';
+    };
+    window.handleOverlayClick = function(e) {
+      if (e.target === document.getElementById('partsModalOverlay')) closePartsModal();
+    };
+    window.selectBook = function(el) {
+      document.querySelectorAll('.book-option').forEach(function(o) { o.classList.remove('is-selected'); });
+      el.classList.add('is-selected');
+    };
+    window.proceedToBook = function() {
+      closePartsModal();
+      window.location.href = 'parts-book.html';
+    };
 
   })();
   </script>
 
   <script>
-  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     ADDRESS BOOK
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  /* ── ADDRESS BOOK ── */
   (function () {
     var ADDRS = [
-      { label: 'Okuma HQ -“ Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte', state: 'NC', zip: '28214', isDefault: true,  status: 'verified' },
-      { label: 'Service Depot North',    street: '455 Innovation Drive',    city: 'Detroit',   state: 'MI', zip: '48126', isDefault: false, status: 'verified' },
-      { label: 'New Assembly Plant',     street: '800 Industrial Pkwy',     city: 'Columbus',  state: 'OH', zip: '43215', isDefault: false, status: 'pending'  },
+      { label: 'Warehouse B',       street: '11900 Cottonwood Street', city: 'Charlotte', state: 'NC', zip: '28214', status: 'verified' },
+      { label: 'Service Depot North', street: '455 Innovation Drive',  city: 'Detroit',   state: 'MI', zip: '48126', status: 'verified' },
+      { label: 'New Assembly Plant', street: '800 Industrial Pkwy',    city: 'Columbus',  state: 'OH', zip: '43215', status: 'pending'  },
     ];
-    var editingIdx = -1;
 
     var overlay    = document.getElementById('addrModalOverlay');
     var modalTitle = document.getElementById('addrModalTitle');
@@ -1518,12 +1000,9 @@
     var addBtn     = document.getElementById('addrAddBtn');
     var list       = document.getElementById('addrBookList');
 
-    var PENCIL_SVG = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    var TRASH_SVG  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 5h10M5.5 5V3h3v2M3.5 5l.5 7h6l.5-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
     function renderList() {
       list.innerHTML = ADDRS.map(function (a, i) {
-        var full = a.street + ', ' + a.city + ', ' + a.state + ' ' + a.zip + ', USA';
+        var full = a.street + ', ' + a.city + ', ' + a.state + ' ' + a.zip;
 
         if (a.status === 'pending') {
           return '<div class="addr-book-card is-pending">' +
@@ -1531,103 +1010,40 @@
               '<span class="addr-book-card__label">' + a.label + '</span>' +
               '<span class="addr-book-card__tag addr-book-card__tag--pending">Pending Approval</span>' +
               '<span class="addr-book-card__line">' + full + '</span>' +
-              '<span class="addr-pending-note">Awaiting dealer approval - cannot be used for orders until approved.</span>' +
-            '</div>' +
-            '<div class="addr-book-card__actions">' +
-              '<button type="button" class="addr-withdraw-btn" onclick="window._addrWithdraw(' + i + ')">' + TRASH_SVG + ' Withdraw</button>' +
+              '<span class="addr-pending-note">Awaiting distributor approval — cannot be used for orders until approved.</span>' +
             '</div>' +
           '</div>';
         }
 
-        if (a.status === 'rejected') {
-          return '<div class="addr-book-card is-rejected">' +
-            '<div class="addr-book-card__body">' +
-              '<span class="addr-book-card__label">' + a.label + '</span>' +
-              '<span class="addr-book-card__tag addr-book-card__tag--rejected">Rejected</span>' +
-              '<span class="addr-book-card__line">' + full + '</span>' +
-              (a.rejectReason ? '<span class="addr-rejected-note">Reason: ' + a.rejectReason + '</span>' : '') +
-            '</div>' +
-            '<div class="addr-book-card__actions">' +
-              '<button type="button" class="addr-resubmit-btn" onclick="window._addrResubmit(' + i + ')">' + PENCIL_SVG + ' Re-submit</button>' +
-              '<button type="button" class="addr-withdraw-btn" onclick="window._addrWithdraw(' + i + ')">' + TRASH_SVG + ' Remove</button>' +
-            '</div>' +
-          '</div>';
-        }
-
-        // verified
-        return '<label class="addr-book-card' + (a.isDefault ? ' is-default' : '') + '" for="addr-radio-' + i + '">' +
-          '<input type="radio" class="addr-radio-native" name="default-addr" id="addr-radio-' + i + '" value="' + i + '"' + (a.isDefault ? ' checked' : '') + '>' +
-          '<span class="addr-radio-circle" aria-hidden="true"></span>' +
+        /* verified — no status badge, no remove button */
+        return '<div class="addr-book-card">' +
           '<div class="addr-book-card__body">' +
             '<span class="addr-book-card__label">' + a.label + '</span>' +
-            (a.isDefault
-              ? '<span class="addr-book-card__tag">Default</span>'
-              : '<span class="addr-book-card__tag addr-book-card__tag--verified">Verified</span>') +
             '<span class="addr-book-card__line">' + full + '</span>' +
           '</div>' +
-          '<div class="addr-book-card__actions">' +
-            '<button type="button" class="addr-delete-btn" onclick="event.preventDefault();window._addrDelete(' + i + ')">' +
-              TRASH_SVG + 'Remove' +
-            '</button>' +
-          '</div>' +
-        '</label>';
+        '</div>';
       }).join('');
-
-      list.querySelectorAll('input[name="default-addr"]').forEach(function (r) {
-        r.addEventListener('change', function () {
-          var idx = parseInt(this.value, 10);
-          ADDRS.forEach(function (a, i) { a.isDefault = (i === idx); });
-          renderList();
-        });
-      });
     }
 
-    window._addrDelete = function (idx) {
-      var verified = ADDRS.filter(function (a) { return a.status === 'verified'; });
-      if (verified.length <= 1 && ADDRS[idx].status === 'verified') return;
-      ADDRS.splice(idx, 1);
-      var hasDefault = ADDRS.some(function (a) { return a.isDefault && a.status === 'verified'; });
-      if (!hasDefault) {
-        var first = ADDRS.find(function (a) { return a.status === 'verified'; });
-        if (first) first.isDefault = true;
-      }
-      renderList();
-    };
-
-    window._addrWithdraw = function (idx) {
-      ADDRS.splice(idx, 1);
-      renderList();
-    };
-
-    window._addrResubmit = function (idx) {
-      openModal(idx);
-    };
-
-    function openModal(idx) {
-      editingIdx = (idx !== undefined ? idx : -1);
-      var isResubmit = editingIdx >= 0 && ADDRS[editingIdx].status === 'rejected';
-      modalTitle.textContent = isResubmit ? 'Re-submit Address Request' : 'Request New Address';
-      saveBtn.textContent    = isResubmit ? 'Re-submit Request' : 'Submit Request';
-      var a = editingIdx >= 0 ? ADDRS[editingIdx] : {};
-      document.getElementById('am-label').value  = a.label  || '';
-      document.getElementById('am-street').value = a.street || '';
-      document.getElementById('am-city').value   = a.city   || '';
-      document.getElementById('am-state').value  = a.state  || '';
-      document.getElementById('am-zip').value    = a.zip    || '';
+    function openModal() {
+      modalTitle.textContent = 'Request New Address';
+      saveBtn.textContent    = 'Submit Request';
+      document.getElementById('am-label').value  = '';
+      document.getElementById('am-street').value = '';
+      document.getElementById('am-city').value   = '';
+      document.getElementById('am-state').value  = '';
+      document.getElementById('am-zip').value    = '';
       overlay.classList.add('open');
       document.getElementById('am-label').focus();
     }
 
-    function closeModal() {
-      overlay.classList.remove('open');
-      editingIdx = -1;
-    }
+    function closeModal() { overlay.classList.remove('open'); }
 
-    addBtn.addEventListener('click', function () { openModal(); });
+    addBtn.addEventListener('click', openModal);
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', function (e) {
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
     });
 
@@ -1638,12 +1054,7 @@
       var state  = document.getElementById('am-state').value.trim();
       var zip    = document.getElementById('am-zip').value.trim();
       if (!label || !street || !city || !state || !zip) return;
-
-      if (editingIdx >= 0) {
-        ADDRS[editingIdx] = { label: label, street: street, city: city, state: state, zip: zip, isDefault: false, status: 'pending' };
-      } else {
-        ADDRS.push({ label: label, street: street, city: city, state: state, zip: zip, isDefault: false, status: 'pending' });
-      }
+      ADDRS.push({ label: label, street: street, city: city, state: state, zip: zip, status: 'pending' });
       renderList();
       closeModal();
     });
