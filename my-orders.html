@@ -134,6 +134,32 @@
       color: #717171;
     }
 
+    .clear-filter-bar {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-top: -12px;
+      margin-bottom: 16px;
+    }
+    .clear-filter-bar.visible { display: flex; }
+    .clear-filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1px solid #DEDEDE;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #4B4B4B;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    .clear-filter-btn:hover { border-color: #005EB8; color: #005EB8; background: #F0F6FF; }
+    .clear-filter-btn svg { flex-shrink: 0; }
+
     /* â”€â”€ TABLE WRAPPER â”€â”€ */
     .orders-card {
       border: 1px solid #DEDEDE;
@@ -145,7 +171,8 @@
     .orders-table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
+      table-layout: fixed;
+      min-width: 600px;
     }
     .orders-table thead tr { background: #F5F5F5; }
     .orders-table th {
@@ -167,15 +194,14 @@
       color: #1A1A1A;
     }
     .orders-table tbody tr:last-child td { border-bottom: none; }
-    .orders-table tbody tr:hover { background: #FAFAFA; }
+    .orders-table tbody tr { cursor: pointer; }
+    .orders-table tbody tr:hover { background: #F0F6FF; }
 
-    .col-order   { width: 20%; }
-    .col-date    { width: 14%; }
-    .col-for     { width: 18%; }
-    .col-items   { width: 10%; }
-    .col-total   { width: 12%; }
-    .col-status  { width: 12%; }
-    .col-action  { text-align: right; white-space: nowrap; }
+    .col-order   { width: 28%; }
+    .col-date    { width: 18%; }
+    .col-items   { width: 14%; }
+    .col-total   { width: 18%; }
+    .col-status  { width: 22%; }
 
     .ordered-for-self {
       color: #9E9E9E;
@@ -186,13 +212,11 @@
       font-weight: 500;
     }
 
-    .order-num-link {
+    .order-num-label {
       font-size: 13px;
       font-weight: 700;
       color: #005EB8;
-      text-decoration: none;
     }
-    .order-num-link:hover { text-decoration: underline; }
 
     .col-total-val { font-weight: 700; }
 
@@ -216,20 +240,6 @@
     .status-badge--delivered .dot { background: #74AA50; }
     .status-badge--cancelled  { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #9E9E9E; }
     .status-badge--cancelled .dot { background: #9E9E9E; }
-
-    /* â”€â”€ VIEW DETAILS LINK â”€â”€ */
-    .view-details-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 13px;
-      font-weight: 700;
-      color: #005EB8;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .view-details-link:hover { text-decoration: underline; }
-    .view-details-link svg { width: 12px; height: 12px; flex-shrink: 0; }
 
     /* â”€â”€ TABLE FOOTER â”€â”€ */
     .orders-foot {
@@ -369,7 +379,7 @@
             class="search-input"
             type="search"
             id="orderSearch"
-            placeholder="Search by Order # or Date..."
+            placeholder="Search by Order #"
             autocomplete="off"
             oninput="applyFilters()"
           />
@@ -377,6 +387,7 @@
         <div class="filter-wrap">
           <select class="filter-select" id="statusFilter" onchange="applyFilters()">
             <option value="">Filter by Status</option>
+            <option value="open">Open</option>
             <option value="processing">Processing</option>
             <option value="shipped">Shipped</option>
             <option value="delivered">Delivered</option>
@@ -391,13 +402,21 @@
             <option value="newest">Sort by</option>
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
-            <option value="total-high">Total: High to Low</option>
-            <option value="total-low">Total: Low to High</option>
           </select>
           <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
+      </div>
+
+      <!-- Clear filter bar -->
+      <div class="clear-filter-bar" id="clearFilterBar">
+        <button class="clear-filter-btn" id="clearFilterBtn" type="button">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <path d="M1 1l8 8M9 1L1 9"/>
+          </svg>
+          Clear Filter
+        </button>
       </div>
 
       <!-- Orders table -->
@@ -408,11 +427,9 @@
               <tr>
                 <th class="col-order">Order #</th>
                 <th class="col-date">Date Placed</th>
-                <th class="col-for">Ordered For</th>
                 <th class="col-items">Items</th>
                 <th class="col-total">Total</th>
                 <th class="col-status">Status</th>
-                <th class="col-action" style="text-align:right;">Action</th>
               </tr>
             </thead>
             <tbody id="ordersTbody">
@@ -475,33 +492,22 @@
         return '<span class="status-badge ' + (BADGE_CLASS[s] || '') + '"><span class="dot"></span>' + label + '</span>';
       }
 
-      function viewDetailsIcon() {
-        return '<svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-          '<path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-          '</svg>';
-      }
-
       function render() {
         var tbody = document.getElementById('ordersTbody');
         var start = (currentPage - 1) * PAGE_SIZE;
         var pageItems = filteredOrders.slice(start, start + PAGE_SIZE);
 
         if (filteredOrders.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state">No orders found matching your search.</div></td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">No orders found matching your search.</div></td></tr>';
         } else {
           tbody.innerHTML = pageItems.map(function (o) {
             var itemLabel = o.items === 1 ? '1 item' : o.items + ' items';
-            var forCell = o.orderedFor
-              ? '<span class="ordered-for-customer">' + o.orderedFor + '</span>'
-              : '<span class="ordered-for-self">Self</span>';
-            return '<tr>' +
-              '<td class="col-order"><a href="order-detail.html?id=' + o.num + '" class="order-num-link">' + o.num + '</a></td>' +
+            return '<tr onclick="window.location=\'order-detail.html?id=' + o.num + '\'">' +
+              '<td class="col-order"><span class="order-num-label">' + o.num + '</span></td>' +
               '<td class="col-date">' + o.date + '</td>' +
-              '<td class="col-for">' + forCell + '</td>' +
               '<td class="col-items">' + itemLabel + '</td>' +
               '<td class="col-total"><span class="col-total-val">' + formatTotal(o.total) + '</span></td>' +
               '<td class="col-status">' + statusBadge(o.status) + '</td>' +
-              '<td class="col-action"><a href="order-detail.html?id=' + o.num + '" class="view-details-link">View Details ' + viewDetailsIcon() + '</a></td>' +
               '</tr>';
           }).join('');
         }
@@ -560,20 +566,29 @@
 
         filteredOrders = ALL_ORDERS.filter(function (o) {
           var matchQuery  = !query  || o.num.toLowerCase().includes(query) || o.date.toLowerCase().includes(query) || (o.orderedFor && o.orderedFor.toLowerCase().includes(query));
-          var matchStatus = !status || o.status === status;
+          var matchStatus = !status || (status === 'open' ? (o.status === 'processing' || o.status === 'shipped') : o.status === status);
           return matchQuery && matchStatus;
         });
 
-        if (sort === 'oldest')     { filteredOrders.sort(function (a, b) { return a.dateSort - b.dateSort; }); }
-        else if (sort === 'total-high') { filteredOrders.sort(function (a, b) { return b.total - a.total; }); }
-        else if (sort === 'total-low')  { filteredOrders.sort(function (a, b) { return a.total - b.total; }); }
+        if (sort === 'oldest') { filteredOrders.sort(function (a, b) { return a.dateSort - b.dateSort; }); }
         else { filteredOrders.sort(function (a, b) { return b.dateSort - a.dateSort; }); }
 
         currentPage = 1;
         render();
+
+        var clearBar = document.getElementById('clearFilterBar');
+        if (clearBar) clearBar.classList.toggle('visible', !!status);
       }
 
       window.applyFilters = applyFilters;
+
+      var clearFilterBtn = document.getElementById('clearFilterBtn');
+      if (clearFilterBtn) {
+        clearFilterBtn.addEventListener('click', function () {
+          document.getElementById('statusFilter').value = '';
+          applyFilters();
+        });
+      }
 
       // Hide Stock Order CTA for non-dealer users
       if (localStorage.getItem('okmUserRole') !== 'dealer') {
@@ -581,8 +596,15 @@
         if (stockBtn) stockBtn.style.display = 'none';
       }
 
+      // Apply filter from URL param (e.g. ?filter=open from dashboard KPI)
+      var _urlParam = new URLSearchParams(window.location.search).get('filter');
+      if (_urlParam) {
+        var sf = document.getElementById('statusFilter');
+        if (sf) { sf.value = _urlParam; }
+      }
+
       // Initial render
-      render();
+      applyFilters();
 
     })();
   </script>

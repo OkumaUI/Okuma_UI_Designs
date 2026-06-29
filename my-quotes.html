@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Quotes – Okuma Parts Portal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      padding: 32px 32px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #717171;
+      margin-bottom: 20px;
+    }
+    .breadcrumb a { color: #717171; text-decoration: none; }
+    .breadcrumb a:hover { color: #005EB8; text-decoration: underline; }
+    .breadcrumb__sep { color: #C4C4C4; }
+    .breadcrumb__current { color: #1A1A1A; }
+
+    /* ── PAGE HEADER ── */
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .page-head__title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1A1A1A;
+      line-height: 1;
+    }
+
+    /* ── TOOLBAR ── */
+    .quotes-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .search-wrap {
+      flex: 1;
+      position: relative;
+    }
+    .search-wrap__icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9E9E9E;
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      height: 42px;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      padding: 0 16px 0 42px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: #1A1A1A;
+      background: #fff;
+    }
+    .search-input::placeholder { color: #9E9E9E; }
+    .search-input:focus { outline: none; border-color: #005EB8; }
+
+    .filter-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .filter-select {
+      height: 42px;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      padding: 0 36px 0 14px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1A1A1A;
+      background: #fff;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      min-width: 160px;
+    }
+    .filter-select:focus { outline: none; border-color: #005EB8; }
+    .filter-wrap__chevron {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #717171;
+    }
+
+    /* ── TABLE WRAPPER ── */
+    .quotes-card {
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .quotes-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    .quotes-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      min-width: 860px;
+    }
+    .quotes-table thead tr { background: #F5F5F5; }
+    .quotes-table th {
+      font-size: 11px;
+      font-weight: 700;
+      color: #717171;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: left;
+      padding: 13px 20px;
+      border-bottom: 1px solid #DEDEDE;
+      white-space: nowrap;
+    }
+    .quotes-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid #DEDEDE;
+      vertical-align: middle;
+      font-size: 13px;
+      color: #1A1A1A;
+    }
+    .quotes-table tbody tr:last-child td { border-bottom: none; }
+    .quotes-table tbody tr:hover { background: #FAFAFA; }
+
+    .col-quote   { width: 22%; }
+    .col-date    { width: 16%; }
+    .col-expiry  { width: 18%; }
+    .col-items   { width: 10%; }
+    .col-total   { width: 16%; }
+    .col-status  { width: 18%; }
+
+    .quotes-table tbody tr { cursor: pointer; }
+    .quotes-table tbody tr:hover { background: #F0F6FF; }
+
+    .quote-num-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #005EB8;
+    }
+
+    .col-total-val { font-weight: 700; }
+    .col-total-pending { color: #9E9E9E; font-style: italic; font-weight: 400; }
+
+    /* ── EXPIRY URGENCY ── */
+    .expiry-val { font-size: 13px; }
+    .expiry-val--safe   { color: #74AA50; font-weight: 600; }
+    .expiry-val--warn   { color: #E08A00; font-weight: 600; }
+    .expiry-val--urgent { color: #D04B4B; font-weight: 700; }
+    .expiry-val--plain  { color: #717171; }
+
+    .expiry-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 2px;
+      padding: 1px 5px;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+    .expiry-tag--urgent { background: #FDECEA; color: #D04B4B; }
+    .expiry-tag--warn   { background: #FFF4E0; color: #E08A00; }
+
+    /* ── STATUS BADGES ── */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 2px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+    .status-badge--submitted    { background: #EEF4FF; border: 0.5px solid #4A90D9; color: #4A90D9; }
+    .status-badge--submitted .dot { background: #4A90D9; }
+    .status-badge--under-review { background: #FFF9EF; border: 0.5px solid #FFB549; color: #E08A00; }
+    .status-badge--under-review .dot { background: #FFB549; }
+    .status-badge--quoted       { background: #EDF9FA; border: 0.5px solid #2DB8C5; color: #2099A5; }
+    .status-badge--quoted .dot { background: #2DB8C5; }
+    .status-badge--approved     { background: #F4F9F1; border: 0.5px solid #74AA50; color: #74AA50; }
+    .status-badge--approved .dot { background: #74AA50; }
+    .status-badge--ordered      { background: #EDFAF0; border: 0.5px solid #3D9A5A; color: #3D9A5A; }
+    .status-badge--ordered .dot { background: #3D9A5A; }
+    .status-badge--expired      { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #9E9E9E; }
+    .status-badge--expired .dot { background: #9E9E9E; }
+    .status-badge--declined     { background: #FFF5F5; border: 0.5px solid #D04B4B; color: #D04B4B; }
+    .status-badge--declined .dot { background: #D04B4B; }
+
+    /* ── TABLE FOOTER ── */
+    .quotes-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-top: 1px solid #DEDEDE;
+      background: #fff;
+    }
+    .quotes-count {
+      font-size: 13px;
+      color: #717171;
+    }
+
+    /* ── PAGINATION ── */
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .page-btn {
+      min-width: 32px;
+      height: 32px;
+      border: 1px solid #DEDEDE;
+      border-radius: 2px;
+      background: #fff;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1A1A1A;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+    .page-btn:hover:not(:disabled):not(.page-btn--active) {
+      border-color: #005EB8;
+      color: #005EB8;
+    }
+    .page-btn--active {
+      background: #005EB8;
+      border-color: #005EB8;
+      color: #fff;
+      font-weight: 700;
+      cursor: default;
+    }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      padding: 64px 20px;
+      text-align: center;
+      color: #717171;
+      font-size: 14px;
+    }
+
+    img, svg { max-width: 100%; }
+
+    @media (min-width: 769px) and (max-width: 1199px) {
+      .main-area { padding: 24px 24px 48px; }
+    }
+    @media (max-width: 768px) {
+      .main-area { padding: 16px 16px 48px; }
+      .quotes-toolbar { flex-wrap: wrap; }
+      .filter-wrap { flex: 1; }
+      .filter-select { width: 100%; min-width: 0; }
+      .quotes-foot { flex-wrap: wrap; gap: 12px; }
+      .quotes-table th { font-size: 10px; padding: 10px 14px; }
+      .quotes-table td { font-size: 12px; padding: 12px 14px; }
+      .page-head__title { font-size: 26px; }
+    }
+    @media (max-width: 480px) {
+      .page-head__title { font-size: 22px; }
+      .search-wrap { flex: 0 0 100%; }
+      .filter-select { min-width: 0; width: 100%; }
+      .filter-wrap { flex: 1 1 calc(50% - 6px); }
+      .quotes-table th,
+      .quotes-table td { padding: 10px 12px; font-size: 12px; }
+      .quotes-foot { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <div class="app-body-shell">
+    <div id="okuma-sidebar" data-active="quotes"></div>
+
+    <main class="main-area">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="dashboard.html">Home</a>
+        <span class="breadcrumb__sep">/</span>
+        <span class="breadcrumb__current">My Quotes</span>
+      </nav>
+
+      <!-- Page header -->
+      <div class="page-head">
+        <h1 class="page-head__title">My Quotes</h1>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="quotes-toolbar">
+        <div class="search-wrap">
+          <svg class="search-wrap__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
+            <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input
+            class="search-input"
+            type="search"
+            id="quoteSearch"
+            placeholder="Search by Quote #"
+            autocomplete="off"
+            oninput="applyFilters()"
+          />
+        </div>
+        <div class="filter-wrap">
+          <select class="filter-select" id="statusFilter" onchange="applyFilters()">
+            <option value="">Filter by Status</option>
+            <option value="submitted">Submitted</option>
+            <option value="under-review">Under Review</option>
+            <option value="quoted">Quoted</option>
+            <option value="approved">Approved</option>
+            <option value="ordered">Ordered</option>
+            <option value="expired">Expired</option>
+            <option value="declined">Declined</option>
+          </select>
+          <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="filter-wrap">
+          <select class="filter-select" id="sortFilter" onchange="applyFilters()">
+            <option value="newest">Sort by</option>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+          <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Quotes table -->
+      <div class="quotes-card">
+        <div class="quotes-scroll">
+          <table class="quotes-table" id="quotesTable">
+            <thead>
+              <tr>
+                <th class="col-quote">Quote #</th>
+                <th class="col-date">Date Submitted</th>
+                <th class="col-expiry">Expiry Date</th>
+                <th class="col-items">Items</th>
+                <th class="col-total">Total</th>
+                <th class="col-status">Status</th>
+              </tr>
+            </thead>
+            <tbody id="quotesTbody">
+              <!-- populated by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="quotes-foot">
+          <span class="quotes-count" id="quotesCount">Showing 0 quotes</span>
+          <div class="pagination" id="quotesPagination"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
+  <script src="components.js"></script>
+  <script>
+    (function () {
+
+      /* today = 2026-06-26, used to compute expiry urgency */
+      var TODAY = 20260626;
+
+      function daysDiff(expirySort) {
+        /* rough day diff without Date arithmetic */
+        var ey = Math.floor(expirySort / 10000);
+        var em = Math.floor((expirySort % 10000) / 100);
+        var ed = expirySort % 100;
+        var ty = Math.floor(TODAY / 10000);
+        var tm = Math.floor((TODAY % 10000) / 100);
+        var td = TODAY % 100;
+        return (ey - ty) * 365 + (em - tm) * 30 + (ed - td);
+      }
+
+      var ALL_QUOTES = [
+        { num: 'QUO-2026-00089', submitted: 'Jun 18, 2026', submittedSort: 20260618, expiry: 'Jul 25, 2026', expirySort: 20260725, items: 4,  total: 2840.00, status: 'quoted'       },
+        { num: 'QUO-2026-00085', submitted: 'Jun 15, 2026', submittedSort: 20260615, expiry: 'Jun 29, 2026', expirySort: 20260629, items: 2,  total: 612.50,  status: 'approved'     },
+        { num: 'QUO-2026-00081', submitted: 'Jun 10, 2026', submittedSort: 20260610, expiry: 'Jul 03, 2026', expirySort: 20260703, items: 6,  total: 5100.00, status: 'quoted'       },
+        { num: 'QUO-2026-00077', submitted: 'Jun 05, 2026', submittedSort: 20260605, expiry: 'Jul 10, 2026', expirySort: 20260710, items: 1,  total: null,    status: 'under-review' },
+        { num: 'QUO-2026-00072', submitted: 'May 28, 2026', submittedSort: 20260528, expiry: 'Jun 27, 2026', expirySort: 20260627, items: 3,  total: 1450.00, status: 'quoted'       },
+        { num: 'QUO-2026-00068', submitted: 'May 20, 2026', submittedSort: 20260520, expiry: null,           expirySort: 0,        items: 5,  total: null,    status: 'submitted'    },
+        { num: 'QUO-2026-00061', submitted: 'May 10, 2026', submittedSort: 20260510, expiry: 'Jun 09, 2026', expirySort: 20260609, items: 2,  total: 324.00,  status: 'expired'      },
+        { num: 'QUO-2026-00054', submitted: 'Apr 25, 2026', submittedSort: 20260425, expiry: 'May 25, 2026', expirySort: 20260525, items: 7,  total: 3900.00, status: 'ordered'      },
+        { num: 'QUO-2026-00047', submitted: 'Apr 12, 2026', submittedSort: 20260412, expiry: 'May 12, 2026', expirySort: 20260512, items: 3,  total: 780.00,  status: 'declined'     },
+        { num: 'QUO-2026-00039', submitted: 'Mar 30, 2026', submittedSort: 20260330, expiry: 'Apr 29, 2026', expirySort: 20260429, items: 4,  total: 2100.00, status: 'ordered'      },
+        { num: 'QUO-2026-00031', submitted: 'Mar 10, 2026', submittedSort: 20260310, expiry: 'Apr 09, 2026', expirySort: 20260409, items: 2,  total: 415.00,  status: 'expired'      },
+        { num: 'QUO-2025-00198', submitted: 'Dec 05, 2025', submittedSort: 20251205, expiry: 'Jan 04, 2026', expirySort: 20260104, items: 5,  total: 1820.00, status: 'ordered'      }
+      ];
+
+      var PAGE_SIZE = 8;
+      var currentPage = 1;
+      var filteredQuotes = ALL_QUOTES.slice();
+
+      var BADGE_CLASS = {
+        'submitted':    'status-badge--submitted',
+        'under-review': 'status-badge--under-review',
+        'quoted':       'status-badge--quoted',
+        'approved':     'status-badge--approved',
+        'ordered':      'status-badge--ordered',
+        'expired':      'status-badge--expired',
+        'declined':     'status-badge--declined'
+      };
+
+      var STATUS_LABEL = {
+        'submitted':    'Submitted',
+        'under-review': 'Under Review',
+        'quoted':       'Quoted',
+        'approved':     'Approved',
+        'ordered':      'Ordered',
+        'expired':      'Expired',
+        'declined':     'Declined'
+      };
+
+      function formatTotal(n) {
+        return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+
+      function statusBadge(s) {
+        return '<span class="status-badge ' + (BADGE_CLASS[s] || '') + '"><span class="dot"></span>' + (STATUS_LABEL[s] || s) + '</span>';
+      }
+
+      function expiryCell(q) {
+        if (!q.expiry) return '<span class="expiry-val expiry-val--plain">—</span>';
+        var inactive = q.status === 'ordered' || q.status === 'declined';
+        if (inactive) return '<span class="expiry-val expiry-val--plain">' + q.expiry + '</span>';
+        if (q.status === 'expired') return '<span class="expiry-val expiry-val--plain">' + q.expiry + '</span>';
+        var days = daysDiff(q.expirySort);
+        if (days <= 0) return '<span class="expiry-val expiry-val--plain">' + q.expiry + '</span>';
+        if (days <= 6) {
+          return '<span class="expiry-val expiry-val--urgent">' + q.expiry + '</span>' +
+                 '<span class="expiry-tag expiry-tag--urgent">' + days + 'd left</span>';
+        }
+        if (days <= 14) {
+          return '<span class="expiry-val expiry-val--warn">' + q.expiry + '</span>' +
+                 '<span class="expiry-tag expiry-tag--warn">' + days + 'd left</span>';
+        }
+        return '<span class="expiry-val expiry-val--safe">' + q.expiry + '</span>';
+      }
+
+      function render() {
+        var tbody = document.getElementById('quotesTbody');
+        var start = (currentPage - 1) * PAGE_SIZE;
+        var pageItems = filteredQuotes.slice(start, start + PAGE_SIZE);
+
+        if (filteredQuotes.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state">No quotes found matching your search.</div></td></tr>';
+        } else {
+          tbody.innerHTML = pageItems.map(function (q) {
+            var itemLabel = q.items === 1 ? '1 item' : q.items + ' items';
+            var totalCell = q.total !== null
+              ? '<span class="col-total-val">' + formatTotal(q.total) + '</span>'
+              : '<span class="col-total-pending">Pending</span>';
+            return '<tr onclick="window.location=\'quote-detail.html?id=' + q.num + '\'">' +
+              '<td class="col-quote"><span class="quote-num-label">' + q.num + '</span></td>' +
+              '<td class="col-date">' + q.submitted + '</td>' +
+              '<td class="col-expiry">' + expiryCell(q) + '</td>' +
+              '<td class="col-items">' + itemLabel + '</td>' +
+              '<td class="col-total">' + totalCell + '</td>' +
+              '<td class="col-status">' + statusBadge(q.status) + '</td>' +
+              '</tr>';
+          }).join('');
+        }
+
+        var countEl = document.getElementById('quotesCount');
+        countEl.textContent = 'Showing ' + filteredQuotes.length + ' of ' + ALL_QUOTES.length + ' quotes';
+
+        renderPagination();
+      }
+
+      function renderPagination() {
+        var container = document.getElementById('quotesPagination');
+        var totalPages = Math.ceil(filteredQuotes.length / PAGE_SIZE);
+        if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+        var html = '';
+        html += '<button class="page-btn" onclick="goPage(' + (currentPage - 1) + ')"' +
+          (currentPage === 1 ? ' disabled' : '') + '>' +
+          '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 3L5 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>';
+        for (var p = 1; p <= totalPages; p++) {
+          html += '<button class="page-btn' + (p === currentPage ? ' page-btn--active' : '') + '" onclick="goPage(' + p + ')">' + p + '</button>';
+        }
+        html += '<button class="page-btn" onclick="goPage(' + (currentPage + 1) + ')"' +
+          (currentPage === totalPages ? ' disabled' : '') + '>' +
+          '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>';
+        container.innerHTML = html;
+      }
+
+      window.goPage = function (p) {
+        var totalPages = Math.ceil(filteredQuotes.length / PAGE_SIZE);
+        if (p < 1 || p > totalPages) return;
+        currentPage = p;
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      function applyFilters() {
+        var query  = (document.getElementById('quoteSearch').value || '').toLowerCase().trim();
+        var status = document.getElementById('statusFilter').value;
+        var sort   = document.getElementById('sortFilter').value;
+
+        filteredQuotes = ALL_QUOTES.filter(function (q) {
+          var matchQuery  = !query || q.num.toLowerCase().indexOf(query) !== -1;
+          var matchStatus = !status || q.status === status;
+          return matchQuery && matchStatus;
+        });
+
+        if (sort === 'oldest') { filteredQuotes.sort(function (a, b) { return a.submittedSort - b.submittedSort; }); }
+        else                   { filteredQuotes.sort(function (a, b) { return b.submittedSort - a.submittedSort; }); }
+
+        currentPage = 1;
+        render();
+      }
+
+      window.applyFilters = applyFilters;
+
+      render();
+
+    })();
+  </script>
+
+</body>
+</html>

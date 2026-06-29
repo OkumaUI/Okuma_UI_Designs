@@ -423,8 +423,8 @@
               <div class="it-part-pn">525-0100-11</div>
             </div>
             <div class="it-col-machine">
-              <div class="it-mach-name">LU300-M</div>
-              <div class="it-mach-serial">S/N: M5-2891-K</div>
+              <div class="it-mach-name js-item-machine-name">LU300-M</div>
+              <div class="it-mach-serial js-item-machine-serial">Serial No: M5-2891-K</div>
             </div>
             <div class="it-col-qty"><span class="it-qty">2</span></div>
             <div class="it-col-price">
@@ -440,8 +440,8 @@
               <div class="it-part-pn">E4809-045-017-A</div>
             </div>
             <div class="it-col-machine">
-              <div class="it-mach-name">LU300-M</div>
-              <div class="it-mach-serial">S/N: M5-2891-K</div>
+              <div class="it-mach-name js-item-machine-name">LU300-M</div>
+              <div class="it-mach-serial js-item-machine-serial">Serial No: M5-2891-K</div>
             </div>
             <div class="it-col-qty"><span class="it-qty">1</span></div>
             <div class="it-col-price">
@@ -456,8 +456,8 @@
               <div class="it-part-pn">E4809-045-017-A</div>
             </div>
             <div class="it-col-machine">
-              <div class="it-mach-name">LU300-M</div>
-              <div class="it-mach-serial">S/N: M5-2891-K</div>
+              <div class="it-mach-name js-item-machine-name">LU300-M</div>
+              <div class="it-mach-serial js-item-machine-serial">Serial No: M5-2891-K</div>
             </div>
             <div class="it-col-qty"><span class="it-qty">1</span></div>
             <div class="it-col-price">
@@ -522,6 +522,24 @@
 
 
   <script src="components.js"></script>
+  <script>
+    (function () {
+      function syncMachineColumn(machineName) {
+        var name = machineName || localStorage.getItem('okmDefaultMachine') || '';
+        var serial = '';
+        if (name && window.OKUMA_MACHINES) {
+          var m = window.OKUMA_MACHINES.filter(function (x) { return x.name === name; })[0];
+          if (m) serial = m.serial;
+        }
+        document.querySelectorAll('.js-item-machine-name').forEach(function (el) { el.textContent = name; });
+        document.querySelectorAll('.js-item-machine-serial').forEach(function (el) { el.textContent = serial ? 'Serial No: ' + serial : ''; });
+      }
+      syncMachineColumn();
+      window.addEventListener('okuma:machineChanged', function (e) {
+        syncMachineColumn(e.detail && e.detail.name);
+      });
+    })();
+  </script>
 
 </body>
 </html>

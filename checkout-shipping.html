@@ -405,7 +405,7 @@
                 </div>
                 <div class="acc-col-mach">
                   <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
+                  <div class="acc-mach-serial">Serial No: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">2</span></div>
                 <div class="acc-col-price">
@@ -422,7 +422,7 @@
                 </div>
                 <div class="acc-col-mach">
                   <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
+                  <div class="acc-mach-serial">Serial No: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">1</span></div>
                 <div class="acc-col-price">
@@ -438,7 +438,7 @@
                 </div>
                 <div class="acc-col-mach">
                   <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
+                  <div class="acc-mach-serial">Serial No: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">1</span></div>
                 <div class="acc-col-price">
@@ -664,14 +664,32 @@
     var selectedShipping = 1;
     var addrCount = 2;
 
+    var SHIP_PRICES = { '0': 'Free', '1': '$24.99', '2': '$49.99' };
+    var SHIP_TOTALS = { '0': '$801.90', '1': '$826.89', '2': '$851.88' };
+
+    function updateShippingDisplay() {
+      var checked = document.querySelector('input[name="shipping"]:checked');
+      var val = checked ? checked.value : '1';
+      var price = SHIP_PRICES[val] || '$24.99';
+      var total = SHIP_TOTALS[val] || '$826.89';
+      var sidebarVal = document.querySelector('#summary-shipping-row .val');
+      if (sidebarVal) sidebarVal.textContent = price;
+      var totalEl = document.querySelector('.total-amount');
+      if (totalEl) totalEl.textContent = total;
+      localStorage.setItem('okmShippingPrice', price);
+    }
+
     // Default state: "I will pay myself" selected - hide shipping charge
-    document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); });
+    document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); updateShippingDisplay(); });
 
     document.querySelectorAll('input[name="address"]').forEach(function (r) {
       r.addEventListener('change', function () { selectedAddress = parseInt(this.value, 10); });
     });
     document.querySelectorAll('input[name="shipping"]').forEach(function (r) {
-      r.addEventListener('change', function () { selectedShipping = parseInt(this.value, 10); });
+      r.addEventListener('change', function () {
+        selectedShipping = parseInt(this.value, 10);
+        updateShippingDisplay();
+      });
     });
 
     /* â”€â”€ Carrier & Billing â”€â”€ */
@@ -700,14 +718,7 @@
     }
 
     function setShippingChargeVisible(visible) {
-      var row = document.getElementById('summary-shipping-row');
-      if (!row) return;
-      row.style.display = visible ? '' : 'none';
-      // Update total display
-      var totalEl = document.querySelector('.total-amount');
-      if (totalEl) {
-        totalEl.textContent = visible ? '$826.89' : '$802.90+';
-      }
+      // Shipping row is always visible; updateShippingDisplay handles value + total
     }
   </script>
 

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── MAIN AREA ── */
+    .main-area {
+      flex: 1;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Welcome banner */
+    .welcome { display: flex; flex-direction: column; gap: 8px; }
+    .welcome__title { font-size: 28px; font-weight: 700; color: #1A1A1A; line-height: 1; }
+    .welcome__sub { font-size: 14px; font-weight: 400; color: #4B4B4B; }
+
+    /* KPI row */
+    .kpi-row { display: flex; gap: 20px; flex-wrap: wrap; }
+    .kpi-tile {
+      flex: 1 1 220px;
+      min-width: 0;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .kpi-tile__label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #717171;
+      text-transform: uppercase;
+    }
+    .kpi-tile__num { font-size: 32px; font-weight: 700; color: #0B308E; line-height: 1; }
+
+    /* Section header (title + view-all) */
+    .section { display: flex; flex-direction: column; }
+    .section__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section__title { font-size: 18px; font-weight: 700; color: #1A1A1A; }
+    .section__link {
+      font-size: 13px;
+      font-weight: 700;
+      color: #005EB8;
+      text-decoration: none;
+    }
+    .section__link:hover { text-decoration: underline; }
+
+    /* Machine grid */
+    .machine-grid { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+    .machine-card {
+      flex: 1 1 300px;
+      min-width: 0;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .machine-card__photo {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+      background: #E8EAED;
+    }
+    .machine-card__body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .machine-card__name { font-size: 16px; font-weight: 700; color: #1A1A1A; }
+    .machine-card__serial {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #717171;
+      margin-top: 8px;
+    }
+    .machine-card__divider { height: 1px; background: #DEDEDE; }
+    .machine-card__foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .machine-card__reg-label {
+      font-size: 10px;
+      font-weight: 400;
+      color: #717171;
+      text-transform: uppercase;
+    }
+    .machine-card__reg-date {
+      font-size: 12px;
+      font-weight: 400;
+      color: #000;
+      margin-top: 8px;
+    }
+    .btn-browse {
+      border: 1px solid #005EB8;
+      border-radius: 2px;
+      background: transparent;
+      color: #005EB8;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-browse:hover { background: #005EB8; color: #fff; }
+
+    /* Quick links */
+    .quick-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .link-card {
+      flex: 1 1 150px;
+      min-width: 0;
+      background: #fff;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .link-card:hover { border-color: #005EB8; box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
+    .link-card svg { width: 24px; height: 24px; color: #0B308E; }
+    .link-card__label { font-size: 12px; font-weight: 700; color: #1A1A1A; text-align: center; }
+
+    /* Recent orders table */
+    .orders-wrap {
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+    .orders-table { width: 100%; border-collapse: collapse; }
+    .orders-table thead tr { background: #F5F5F5; }
+    .orders-table th {
+      font-size: 11px;
+      font-weight: 700;
+      color: #717171;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 13px 16px;
+      border-bottom: 1px solid #DEDEDE;
+      white-space: nowrap;
+    }
+    .orders-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #DEDEDE;
+      vertical-align: middle;
+      font-size: 13px;
+      color: #000;
+    }
+    .orders-table tbody tr:last-child td { border-bottom: none; }
+    .col-order { width: 160px; font-weight: 700; }
+    .col-date  { width: 140px; font-weight: 400; }
+    .col-items { font-weight: 400; }
+    .col-total { width: 120px; font-weight: 700; }
+    .col-status { width: 140px; }
+    .col-view  { width: 80px; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 2px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .status-badge--processing { background: #FFF9EF; border: 0.5px solid #FFB549; color: #FFB549; }
+    .status-badge--processing .dot { background: #FFB549; }
+    .status-badge--shipped { background: #F0FCFD; border: 0.5px solid #68D2DF; color: #68D2DF; }
+    .status-badge--shipped .dot { background: #68D2DF; }
+    .status-badge--delivered { background: #F4F9F1; border: 0.5px solid #74AA50; color: #74AA50; }
+    .status-badge--delivered .dot { background: #74AA50; }
+
+    .order-view-link {
+      font-size: 12px;
+      font-weight: 700;
+      color: #005EB8;
+      text-decoration: none;
+    }
+    .order-view-link:hover { text-decoration: underline; }
+
+    /* ══════════════════════════════════════════
+       BROWSE PARTS BOOK MODAL
+    ══════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.is-open { display: flex; }
+
+    .modal {
+      width: 560px;
+      background: #fff;
+      border-radius: 2px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal__header {
+      height: 60px;
+      background: #005EB8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+    }
+    .modal__title { font-size: 18px; font-weight: 700; color: #fff; }
+    .modal__close {
+      width: 20px;
+      height: 20px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .modal__body {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .modal__instruction { font-size: 14px; font-weight: 400; color: #4B4B4B; }
+
+    .modal__book-list { display: flex; flex-direction: column; gap: 16px; }
+    .book-option {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border: 1px solid #E5E5E5;
+      border-radius: 4px;
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .book-option.is-selected { border: 2px solid #005EB8; padding: 19px; }
+
+    .book-option__radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid #9E9E9E;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .book-option.is-selected .book-option__radio { border: 1px solid #005EB8; }
+    .book-option.is-selected .book-option__radio::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #005EB8;
+    }
+
+    .book-option__info { display: flex; flex-direction: column; gap: 7px; }
+    .book-option__title { font-size: 15px; font-weight: 700; color: #2C2A29; }
+    .book-option__line { font-size: 14px; font-weight: 400; color: #6B7280; }
+
+    .modal__divider { height: 1px; background: #E0E0E0; }
+
+    .modal__actions { display: flex; gap: 12px; }
+    .modal-btn {
+      flex: 1;
+      height: 38px;
+      border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-btn--cancel { background: transparent; border: 1px solid #005EB8; color: #005EB8; }
+    .modal-btn--cancel:hover { background: #F0F6FC; }
+    .modal-btn--proceed { background: #005EB8; border: none; color: #fff; }
+    .modal-btn--proceed:hover { background: #0B308E; }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════ HEADER ══════════════ -->
+  <div id="okuma-header"></div>
+
+  <!-- ══════════════ PAGE ══════════════ -->
+  <div class="app-body-shell">
+
+    <!-- SIDEBAR -->
+    <div id="okuma-sidebar" data-active="dashboard"></div>
+
+    <!-- MAIN AREA -->
+    <main class="main-area">
+
+      <!-- Welcome banner -->
+      <div class="welcome">
+        <h1 class="welcome__title">Good morning, Jonathan</h1>
+        <p class="welcome__sub">2 shipments arriving today.</p>
+      </div>
+
+      <!-- KPI row -->
+      <div class="kpi-row">
+        <div class="kpi-tile">
+          <div class="kpi-tile__label">Open Orders</div>
+          <div class="kpi-tile__num">47</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kpi-tile__label">Open Quotes</div>
+          <div class="kpi-tile__num">3</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kpi-tile__label">Registered Machines</div>
+          <div class="kpi-tile__num">5</div>
+        </div>
+      </div>
+
+      <!-- My Registered Machines -->
+      <section class="section">
+        <div class="section__head">
+          <h2 class="section__title">My Registered Machines</h2>
+          <a href="#" class="section__link">View All →</a>
+        </div>
+
+        <div class="machine-grid">
+          <!-- Card 1 -->
+          <div class="machine-card">
+            <img class="machine-card__photo" src="dash-machine-lu300m.png" alt="LU300-M">
+            <div class="machine-card__body">
+              <div>
+                <div class="machine-card__name">LU300-M</div>
+                <div class="machine-card__serial">Serial: M5-2891-K</div>
+              </div>
+              <div class="machine-card__divider"></div>
+              <div class="machine-card__foot">
+                <div>
+                  <div class="machine-card__reg-label">Registered</div>
+                  <div class="machine-card__reg-date">12 Oct 2024</div>
+                </div>
+                <button class="btn-browse" onclick="openModal('LU300-M','M5-2891-K')">Browse Parts Book</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="machine-card">
+            <img class="machine-card__photo" src="dash-machine-multus.png" alt="MULTUS U3000">
+            <div class="machine-card__body">
+              <div>
+                <div class="machine-card__name">MULTUS U3000</div>
+                <div class="machine-card__serial">Serial: MU-9102-L</div>
+              </div>
+              <div class="machine-card__divider"></div>
+              <div class="machine-card__foot">
+                <div>
+                  <div class="machine-card__reg-label">Registered</div>
+                  <div class="machine-card__reg-date">05 Jan 2025</div>
+                </div>
+                <button class="btn-browse" onclick="openModal('MULTUS U3000','MU-9102-L')">Browse Parts Book</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="machine-card">
+            <img class="machine-card__photo" src="dash-machine-lb2000.png" alt="LB2000 EX III">
+            <div class="machine-card__body">
+              <div>
+                <div class="machine-card__name">LB2000 EX III</div>
+                <div class="machine-card__serial">Serial: LB-4431-M</div>
+              </div>
+              <div class="machine-card__divider"></div>
+              <div class="machine-card__foot">
+                <div>
+                  <div class="machine-card__reg-label">Registered</div>
+                  <div class="machine-card__reg-date">18 Feb 2025</div>
+                </div>
+                <button class="btn-browse" onclick="openModal('LB2000 EX III','LB-4431-M')">Browse Parts Book</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick links -->
+      <div class="quick-links">
+        <a href="parts-book.html" class="link-card">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          <span class="link-card__label">Browse Parts Book</span>
+        </a>
+
+        <a href="cart.html" class="link-card">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 2h2.5l2.5 12.5a1.8 1.8 0 001.8 1.5h9a1.8 1.8 0 001.77-1.5L21 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9.5" cy="20" r="1.5" fill="currentColor"/>
+            <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+          </svg>
+          <span class="link-card__label">View Cart</span>
+        </a>
+
+        <a href="#" class="link-card">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 2h9l5 5v15a0 0 0 010 0H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M14 2v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="link-card__label">Request a Quote</span>
+        </a>
+
+        <a href="#" class="link-card">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 2h9l5 5v15a0 0 0 010 0H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M14 2v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="link-card__label">Order History</span>
+        </a>
+
+        <a href="#" class="link-card">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 12h3l3-7 4 16 3-9h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="link-card__label">Track an Order</span>
+        </a>
+      </div>
+
+      <!-- Recent Orders -->
+      <section class="section">
+        <div class="section__head">
+          <h2 class="section__title">Recent Orders</h2>
+          <a href="#" class="section__link">View All Orders →</a>
+        </div>
+
+        <div class="orders-wrap">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th class="col-order">Order #</th>
+                <th class="col-date">Date</th>
+                <th class="col-items">Items</th>
+                <th class="col-total">Total</th>
+                <th class="col-status">Status</th>
+                <th class="col-view"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-order">OKU-2026-00418</td>
+                <td class="col-date">Feb 22, 2026</td>
+                <td class="col-items">Spindle Bearing (2), Coolant Pump</td>
+                <td class="col-total">$842.25</td>
+                <td class="col-status"><span class="status-badge status-badge--processing"><span class="dot"></span>Processing</span></td>
+                <td class="col-view"><a href="#" class="order-view-link">View</a></td>
+              </tr>
+              <tr>
+                <td class="col-order">OKU-2026-00392</td>
+                <td class="col-date">Feb 18, 2026</td>
+                <td class="col-items">Drive Belt (5), Tool Changer Cam</td>
+                <td class="col-total">$1,204.00</td>
+                <td class="col-status"><span class="status-badge status-badge--shipped"><span class="dot"></span>Shipped</span></td>
+                <td class="col-view"><a href="#" class="order-view-link">View</a></td>
+              </tr>
+              <tr>
+                <td class="col-order">OKU-2026-00355</td>
+                <td class="col-date">Feb 10, 2026</td>
+                <td class="col-items">Hydraulic Filter Kit</td>
+                <td class="col-total">$412.00</td>
+                <td class="col-status"><span class="status-badge status-badge--delivered"><span class="dot"></span>Delivered</span></td>
+                <td class="col-view"><a href="#" class="order-view-link">View</a></td>
+              </tr>
+              <tr>
+                <td class="col-order">OKU-2026-00310</td>
+                <td class="col-date">Feb 02, 2026</td>
+                <td class="col-items">Proximity Sensor, Limit Switch</td>
+                <td class="col-total">$124.50</td>
+                <td class="col-status"><span class="status-badge status-badge--delivered"><span class="dot"></span>Delivered</span></td>
+                <td class="col-view"><a href="#" class="order-view-link">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ══════════════ BROWSE PARTS BOOK MODAL ══════════════ -->
+  <div class="modal-overlay" id="partsModalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <!-- Header -->
+      <div class="modal__header">
+        <h2 class="modal__title" id="modalTitle">Browse Parts Book</h2>
+        <button class="modal__close" onclick="closeModal()" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 5L15 15M15 5L5 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal__body">
+        <p class="modal__instruction">Select Parts Book</p>
+
+        <div class="modal__book-list">
+          <div class="book-option is-selected" data-pub="LE15-221-R1 Jan. 2008" onclick="selectBook(this)">
+            <div class="book-option__radio"></div>
+            <div class="book-option__info">
+              <div class="book-option__title" id="bookTitle1">LU300-M- Parts Book 1</div>
+              <div class="book-option__line" id="bookSerial1">Serial: M5-2891-K</div>
+              <div class="book-option__line">Pub No. LE15-221-R1 Jan. 2008</div>
+            </div>
+          </div>
+
+          <div class="book-option" data-pub="LE15-173-R2 Aug. 2003" onclick="selectBook(this)">
+            <div class="book-option__radio"></div>
+            <div class="book-option__info">
+              <div class="book-option__title" id="bookTitle2">LU300-M- Parts Book 2</div>
+              <div class="book-option__line" id="bookSerial2">Serial: M5-2891-K</div>
+              <div class="book-option__line">Pub No. LE15-173-R2 Aug. 2003</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal__divider"></div>
+
+        <div class="modal__actions">
+          <button class="modal-btn modal-btn--cancel" onclick="closeModal()">Cancel</button>
+          <button class="modal-btn modal-btn--proceed" onclick="window.location='parts-catalogue.html'">Proceed</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SCRIPTS ══════════════ -->
+  <script src="components.js"></script>
+  <script>
+    function openModal(model, serial) {
+      // Populate modal context for the selected machine
+      document.getElementById('bookTitle1').textContent = model + '- Parts Book 1';
+      document.getElementById('bookTitle2').textContent = model + '- Parts Book 2';
+      document.getElementById('bookSerial1').textContent = 'Serial: ' + serial;
+      document.getElementById('bookSerial2').textContent = 'Serial: ' + serial;
+
+      var overlay = document.getElementById('partsModalOverlay');
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      var overlay = document.getElementById('partsModalOverlay');
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(event) {
+      if (event.target === document.getElementById('partsModalOverlay')) {
+        closeModal();
+      }
+    }
+
+    function selectBook(el) {
+      var options = document.querySelectorAll('.book-option');
+      for (var i = 0; i < options.length; i++) {
+        options[i].classList.remove('is-selected');
+      }
+      el.classList.add('is-selected');
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') { closeModal(); }
+    });
+  </script>
+
+</body>
+</html>
