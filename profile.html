@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -131,6 +131,11 @@
     .field__input-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #9E9E9E; pointer-events: none; display: flex; }
     .field__pw-wrap { position: relative; }
     .field__pw-wrap .field__input { padding-right: 48px; }
+
+    /* Hide the browser-native password reveal eye (Edge / Chrome on Windows) */
+    .field__pw-wrap input[type="password"]::-ms-reveal,
+    .field__pw-wrap input[type="password"]::-ms-clear,
+    .field__pw-wrap input[type="text"]::-ms-reveal { display: none; }
     .field__eye-btn {
       position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
       background: none; border: none; cursor: pointer; color: #717171;
