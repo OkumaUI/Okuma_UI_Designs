@@ -308,14 +308,18 @@
       .filters__drawer-head { display: flex; }
       .filter-sort-mobile   { display: block; }
       .filters__apply-wrap  { display: block; }
+      .filters__head        { display: none; }
     }
 
     @media (max-width: 768px) {
       .main-area { padding: 16px 16px 72px; }
+      .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 84px; row-gap: 28px; max-width: 724px; margin: 0 auto; width: 113%; }
       .part-card { grid-template-columns: 1fr; }
-      .part-card__identity { border-right: none; border-bottom: 1px solid #F0F0F0; }
-      .part-card__avail { border-right: none; border-bottom: 1px solid #F0F0F0; flex-direction: row; align-items: center; gap: 16px; }
-      .part-card__action { flex-direction: row; align-items: center; justify-content: space-between; }
+      .part-card__identity { border-right: none; border-bottom: 1px solid #F0F0F0; align-items: center; text-align: center; }
+      .part-card__attrs { justify-content: center; }
+      .part-card__avail { border-right: none; border-bottom: 1px solid #F0F0F0; flex-direction: row; align-items: center; justify-content: center; gap: 16px; }
+      .part-card__action { flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+      .part-card__price-wrap { align-items: center; text-align: center; }
     }
 
     @media (max-width: 640px) { .sr-title { font-size: 22px; } }
@@ -326,6 +330,16 @@
       .results-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
       .part-card__price { font-size: 17px; }
       .pagination { justify-content: center; gap: 2px; }
+    }
+
+    /* iPhone XR (414px): single column, card content centered */
+    @media (max-width: 414px) {
+      .cards-grid { display: flex; flex-direction: column; gap: 8px; }
+      .part-card__identity { align-items: center; text-align: center; }
+      .part-card__attrs { justify-content: center; }
+      .part-card__avail { justify-content: center; }
+      .part-card__action { justify-content: center; }
+      .part-card__price-wrap { align-items: center; text-align: center; }
     }
   </style>
 </head>
@@ -448,16 +462,11 @@
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M1.5 2.5h13L9.5 8.5V13l-3 1.5V8.5L1.5 2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
       </svg>
-      Filters
+      Filters & Sort
       <span class="ftb-badge" id="ftbBadge"></span>
     </button>
     <div class="ftb-sep"></div>
-    <button type="button" class="ftb-btn" id="ftbSort">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      Sort: <span id="ftbSortLabel">Relevance</span>
-    </button>
+    
   </div>
 
   <div id="okuma-auth-footer"></div>
