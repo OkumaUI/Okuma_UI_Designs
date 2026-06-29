@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout: Shipping – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+    }
+
+    /* ===== PAGE LAYOUT ===== */
+    .page-content { display: flex; justify-content: center; }
+    .page-inner { width: 1200px; max-width: 100%; padding: 0 120px; display: flex; flex-direction: column; align-items: center; }
+
+    /* ===== STEPPER ===== */
+    .stepper {
+      width: 960px; max-width: 100%;
+      padding: 40px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+    .step { display: flex; align-items: center; gap: 10px; }
+    .step-circle {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .step-circle.active { background: #005EB8; border: 1px solid #005EB8; color: #FFFFFF; }
+    .step-circle.complete { background: #10B981; border: 1px solid #005EB8; color: #FFFFFF; }
+    .step-circle.inactive { background: #FFFFFF; border: 1px solid #9E9E9E; color: #9E9E9E; }
+    .step-label { font-size: 14px; white-space: nowrap; }
+    .step-label.active { font-weight: 700; color: #005EB8; }
+    .step-label.inactive { font-weight: 500; color: #6B7280; }
+    .step-connector { width: 60px; height: 1px; flex-shrink: 0; }
+    .step-connector.done { background: #005EB8; }
+    .step-connector.pending { background: #E5E5E5; }
+
+    /* ===== CHECKOUT BODY ===== */
+    .checkout-body {
+      width: 960px; max-width: 100%;
+      padding-bottom: 40px;
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+    .checkout-left { width: 488px; flex-shrink: 0; display: flex; flex-direction: column; gap: 32px; }
+
+    .page-title { font-size: 32px; font-weight: 800; color: #2C2A29; line-height: 1; }
+
+    .section { display: flex; flex-direction: column; gap: 16px; }
+    .section-label {
+      font-size: 12px; font-weight: 700; color: #6B7280;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+
+    /* ===== RADIO CARDS ===== */
+    .radio-circle {
+      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+      background: #FFFFFF; display: flex; align-items: center; justify-content: center;
+    }
+    .radio-circle.selected { border: 6px solid #005EB8; }
+    .radio-circle.unselected { border: 1px solid #9E9E9E; }
+
+    .addr-card, .ship-card {
+      background: #FFFFFF; border-radius: 4px; padding: 20px;
+      display: flex; align-items: center; gap: 16px; cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .addr-card.selected, .ship-card.selected { border: 2px solid #005EB8; }
+    .addr-card.unselected, .ship-card.unselected { border: 1px solid #E5E5E5; }
+
+    .addr-text { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .addr-name { font-size: 15px; font-weight: 700; color: #2C2A29; line-height: 1; }
+    .addr-tag { font-size: 14px; font-weight: 400; color: #6B7280; line-height: 1; }
+    .addr-line { font-size: 13px; font-weight: 400; color: #6B7280; line-height: 1.4; }
+
+    .add-addr {
+      display: flex; align-items: center; gap: 8px; padding-top: 8px;
+      background: none; border: none; cursor: pointer; font-family: inherit;
+    }
+    .add-addr span { font-size: 14px; font-weight: 700; color: #005EB8; }
+    .add-addr:hover span { text-decoration: underline; }
+
+    .ship-icon { color: #2C2A29; flex-shrink: 0; }
+    .ship-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .ship-name { font-size: 15px; font-weight: 700; color: #2C2A29; line-height: 1; }
+    .ship-days { font-size: 14px; font-weight: 400; color: #6B7280; line-height: 1; }
+    .ship-price { font-size: 16px; font-weight: 700; color: #2C2A29; }
+
+    /* ===== SPECIAL INSTRUCTIONS ===== */
+    .special-block { display: flex; flex-direction: column; gap: 8px; }
+    .special-title { font-size: 13px; font-weight: 700; color: #2C2A29; }
+    .special-textarea {
+      width: 100%; height: 100px; border: 1px solid #9E9E9E; border-radius: 2px;
+      padding: 12px; font-size: 14px; font-family: inherit; color: #2C2A29;
+      resize: vertical; outline: none;
+    }
+    .special-textarea:focus { border-color: #005EB8; }
+    .special-textarea::placeholder { color: #9E9E9E; }
+
+    /* ===== CTA ===== */
+    .cta-block { display: flex; flex-direction: column; gap: 16px; }
+    .btn-primary {
+      background: #005EB8; height: 56px; width: 100%; border-radius: 4px;
+      font-size: 16px; font-weight: 700; color: #FFFFFF; border: none; cursor: pointer;
+      font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 12px;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #0052A3; }
+    .btn-secondary {
+      background: transparent; border: 1px solid #005EB8; color: #005EB8;
+      height: 38px; width: 100%; border-radius: 2px; font-size: 14px; font-weight: 700;
+      cursor: pointer; font-family: inherit; transition: background 0.15s;
+    }
+    .btn-secondary:hover { background: #EBF3FF; }
+
+    /* ===== ORDER SUMMARY SIDEBAR ===== */
+    .checkout-right { width: 440px; flex-shrink: 0; display: flex; flex-direction: column; gap: 24px; }
+    .summary-card {
+      background: #FFFFFF; border: 1px solid #E5E5E5; border-radius: 4px;
+      padding: 24px; display: flex; flex-direction: column; gap: 24px;
+    }
+    .summary-header { display: flex; justify-content: space-between; align-items: center; }
+    .summary-title { font-size: 18px; font-weight: 700; color: #2C2A29; }
+    .edit-cart-link { font-size: 13px; font-weight: 700; color: #005EB8; text-decoration: none; }
+    .edit-cart-link:hover { text-decoration: underline; }
+    .summary-rows { display: flex; flex-direction: column; gap: 16px; }
+    .summary-row { display: flex; justify-content: space-between; align-items: center; }
+    .summary-row .lbl { font-size: 14px; font-weight: 400; color: #6B7280; }
+    .summary-row .val { font-size: 14px; font-weight: 500; color: #2C2A29; }
+    .summary-row .val.discount { color: #208831; }
+    .summary-divider { height: 1px; background: #E5E5E5; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; }
+    .total-label { font-size: 16px; font-weight: 700; color: #2C2A29; }
+    .total-amount { font-size: 24px; font-weight: 800; color: #005EB8; }
+    .secured-note { display: flex; align-items: center; gap: 8px; padding-top: 8px; }
+    .secured-note span { font-size: 12px; font-weight: 400; color: #6B7280; }
+
+    .help-card {
+      background: #F7F8F9; border-radius: 4px; padding: 20px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .help-title { font-size: 13px; font-weight: 700; color: #2C2A29; }
+    .help-text { font-size: 12px; font-weight: 400; color: #6B7280; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <div id="okuma-header"></div>
+
+  <!-- ===== PAGE CONTENT ===== -->
+  <div class="page-content">
+    <div class="page-inner">
+
+      <!-- STEPPER -->
+      <div class="stepper">
+        <div class="step">
+          <div class="step-circle active">1</div>
+          <div class="step-label active">Shipping</div>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">2</div>
+          <div class="step-label inactive">Payment</div>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">3</div>
+          <div class="step-label inactive">Review Order</div>
+        </div>
+        <div class="step-connector pending"></div>
+        <div class="step">
+          <div class="step-circle inactive">4</div>
+          <div class="step-label inactive">Confirmation</div>
+        </div>
+      </div>
+
+      <!-- CHECKOUT BODY -->
+      <div class="checkout-body">
+
+        <!-- LEFT COLUMN -->
+        <div class="checkout-left">
+          <h1 class="page-title">Shipping Details</h1>
+
+          <!-- Saved Addresses -->
+          <div class="section">
+            <div class="section-label">Saved Addresses</div>
+
+            <div class="addr-card selected" id="addr-0" onclick="selectAddress(0)">
+              <div class="radio-circle selected" id="addr-radio-0"></div>
+              <div class="addr-text">
+                <div class="addr-name">Okuma HQ - Warehouse B</div>
+                <div class="addr-tag">Primary Address</div>
+                <div class="addr-line">11900 Cottonwood Street, Charlotte, NC 28214, USA</div>
+              </div>
+            </div>
+
+            <div class="addr-card unselected" id="addr-1" onclick="selectAddress(1)">
+              <div class="radio-circle unselected" id="addr-radio-1"></div>
+              <div class="addr-text">
+                <div class="addr-name">Service Depot North</div>
+                <div class="addr-line">455 Innovation Drive, Detroit, MI 48126, USA</div>
+              </div>
+            </div>
+
+            <button class="add-addr">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#005EB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="3.5" x2="8" y2="12.5"/><line x1="3.5" y1="8" x2="12.5" y2="8"/>
+              </svg>
+              <span>Add new shipping address</span>
+            </button>
+          </div>
+
+          <!-- Shipping Method -->
+          <div class="section">
+            <div class="section-label">Shipping Method</div>
+
+            <div class="ship-card unselected" id="ship-0" onclick="selectShipping(0)">
+              <div class="radio-circle unselected" id="ship-radio-0"></div>
+              <svg class="ship-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13" rx="1"/>
+                <path d="M16 8h4l3 3v5h-7V8z"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+              <div class="ship-info">
+                <div class="ship-name">Standard Ground</div>
+                <div class="ship-days">5–7 business days</div>
+              </div>
+              <div class="ship-price">Free</div>
+            </div>
+
+            <div class="ship-card selected" id="ship-1" onclick="selectShipping(1)">
+              <div class="radio-circle selected" id="ship-radio-1"></div>
+              <svg class="ship-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13" rx="1"/>
+                <path d="M16 8h4l3 3v5h-7V8z"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+              <div class="ship-info">
+                <div class="ship-name">Express Shipping</div>
+                <div class="ship-days">2–3 business days</div>
+              </div>
+              <div class="ship-price">$24.99</div>
+            </div>
+
+            <div class="ship-card unselected" id="ship-2" onclick="selectShipping(2)">
+              <div class="radio-circle unselected" id="ship-radio-2"></div>
+              <svg class="ship-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 2 11 13"/>
+                <path d="M22 2 15 22l-4-9-9-4 20-7z"/>
+              </svg>
+              <div class="ship-info">
+                <div class="ship-name">Overnight Delivery</div>
+                <div class="ship-days">1 business day</div>
+              </div>
+              <div class="ship-price">$49.99</div>
+            </div>
+          </div>
+
+          <!-- Special Instructions -->
+          <div class="special-block">
+            <div class="special-title">Special Instructions (Optional)</div>
+            <textarea class="special-textarea" placeholder="e.g., Gate code, specific loading dock, etc."></textarea>
+          </div>
+
+          <!-- CTA -->
+          <div class="cta-block">
+            <button class="btn-primary" onclick="window.location='checkout-payment.html'">
+              Continue to Payment Details
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="8" x2="13" y2="8"/><polyline points="8.5 3.5 13 8 8.5 12.5"/>
+              </svg>
+            </button>
+            <button class="btn-secondary" onclick="window.location='parts-catalogue.html'">Back to Parts Book</button>
+          </div>
+        </div><!-- /checkout-left -->
+
+        <!-- RIGHT COLUMN -->
+        <div class="checkout-right">
+          <div class="summary-card">
+            <div class="summary-header">
+              <span class="summary-title">Order Summary</span>
+              <a href="cart.html" class="edit-cart-link">Edit Cart</a>
+            </div>
+
+            <div class="summary-rows">
+              <div class="summary-row">
+                <span class="lbl">Items (3)</span>
+                <span class="val">$742.50</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl">Shipping &amp; Handling</span>
+                <span class="val">$24.99</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl">Tax (Estimated)</span>
+                <span class="val">$59.40</span>
+              </div>
+              <div class="summary-row">
+                <span class="lbl">Discount (NEW10)</span>
+                <span class="val discount">(-) $42.50</span>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="total-row">
+              <span class="total-label">Total</span>
+              <span class="total-amount">$826.89</span>
+            </div>
+
+            <div class="secured-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Secured by MyOkuma Enterprise Grade Encryption</span>
+            </div>
+          </div>
+
+          <div class="help-card">
+            <div class="help-title">Need Help?</div>
+            <div class="help-text">Contact OKUMA America Parts Support at 1-800-MY-OKUMA or email parts@okuma.com</div>
+          </div>
+        </div><!-- /checkout-right -->
+
+      </div><!-- /checkout-body -->
+    </div><!-- /page-inner -->
+  </div><!-- /page-content -->
+
+  <script>
+    var selectedAddress = 0;
+    var selectedShipping = 1;
+    var totalAddresses = 2;
+    var totalShipping = 3;
+
+    function selectAddress(idx) {
+      for (var i = 0; i < totalAddresses; i++) {
+        var card = document.getElementById('addr-' + i);
+        var radio = document.getElementById('addr-radio-' + i);
+        if (i === idx) {
+          card.className = 'addr-card selected';
+          radio.className = 'radio-circle selected';
+        } else {
+          card.className = 'addr-card unselected';
+          radio.className = 'radio-circle unselected';
+        }
+      }
+      selectedAddress = idx;
+    }
+
+    function selectShipping(idx) {
+      for (var i = 0; i < totalShipping; i++) {
+        var card = document.getElementById('ship-' + i);
+        var radio = document.getElementById('ship-radio-' + i);
+        if (i === idx) {
+          card.className = 'ship-card selected';
+          radio.className = 'radio-circle selected';
+        } else {
+          card.className = 'ship-card unselected';
+          radio.className = 'radio-circle unselected';
+        }
+      }
+      selectedShipping = idx;
+    }
+  </script>
+
+  <script src="components.js"></script>
+
+</body>
+</html>

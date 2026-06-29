@@ -3,8 +3,8 @@
    Include via <script src="auth.js"> on every page before components.js
    ════════════════════════════════════════════════════════════════ */
 var OKUMA_USERS = [
-  { email: 'customer@okuma.com', password: 'customer123', role: 'customer' },
-  { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer'   }
+  { email: 'customer@okuma.com', password: 'customer123', role: 'customer', firstName: 'Jonathan', lastName: 'Hayes' },
+  { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer',   firstName: 'Sarah',    lastName: 'Mitchell' }
 ];
 
 function okunmaLogin(email, password) {
@@ -13,9 +13,9 @@ function okunmaLogin(email, password) {
     if (OKUMA_USERS[i].email === e && OKUMA_USERS[i].password === password) {
       var u = OKUMA_USERS[i];
       sessionStorage.setItem('okuma_session', JSON.stringify({
-        email: u.email, password: u.password, role: u.role
+        email: u.email, password: u.password, role: u.role, firstName: u.firstName, lastName: u.lastName
       }));
-      return { email: u.email, role: u.role };
+      return { email: u.email, role: u.role, firstName: u.firstName, lastName: u.lastName };
     }
   }
   return null;
@@ -28,7 +28,7 @@ function okuma_checkAuth() {
     var s = JSON.parse(raw);
     for (var i = 0; i < OKUMA_USERS.length; i++) {
       if (OKUMA_USERS[i].email === s.email && OKUMA_USERS[i].password === s.password) {
-        return { email: OKUMA_USERS[i].email, role: OKUMA_USERS[i].role };
+        return { email: OKUMA_USERS[i].email, role: OKUMA_USERS[i].role, firstName: OKUMA_USERS[i].firstName, lastName: OKUMA_USERS[i].lastName };
       }
     }
     sessionStorage.removeItem('okuma_session');
@@ -48,7 +48,7 @@ function okuma_getUser() {
     var s = JSON.parse(raw);
     for (var i = 0; i < OKUMA_USERS.length; i++) {
       if (OKUMA_USERS[i].email === s.email && OKUMA_USERS[i].password === s.password) {
-        return { email: OKUMA_USERS[i].email, role: OKUMA_USERS[i].role };
+        return { email: OKUMA_USERS[i].email, role: OKUMA_USERS[i].role, firstName: OKUMA_USERS[i].firstName, lastName: OKUMA_USERS[i].lastName };
       }
     }
     return null;

@@ -430,7 +430,7 @@
                 </div>
                 <div class="acc-col-mach">
                   <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
+                  <div class="acc-mach-serial">Serial No: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">2</span></div>
                 <div class="acc-col-price">
@@ -445,7 +445,7 @@
                 </div>
                 <div class="acc-col-mach">
                   <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
+                  <div class="acc-mach-serial">Serial No: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">1</span></div>
                 <div class="acc-col-price">
@@ -459,7 +459,7 @@
                 </div>
                 <div class="acc-col-mach">
                   <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
+                  <div class="acc-mach-serial">Serial No: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">1</span></div>
                 <div class="acc-col-price">
@@ -536,7 +536,7 @@
                   <span class="pay-head-title">Credit or Debit Card</span>
                 </span>
                 <span class="pay-logos">
-                  <img class="logo-amex" src="pay-amex.png" alt="American Express">
+                  <img class="logo-amex" src="images/pay-amex.png" alt="American Express">
                   <span class="logo-mc" role="img" aria-label="Mastercard"></span>
                   <span class="logo-visa" role="img" aria-label="Visa">VISA</span>
                   <span class="logo-paypal" role="img" aria-label="PayPal">PayPal</span>
@@ -658,7 +658,7 @@
               </div>
               <div class="summary-row">
                 <span class="lbl">Shipping &amp; Handling</span>
-                <span class="val">$24.99</span>
+                <span class="val" id="pay-shipping-val">$24.99</span>
               </div>
               <div class="summary-row">
                 <span class="lbl">Tax (Estimated)</span>
@@ -856,6 +856,13 @@
 
 
   <script src="components.js"></script>
+  <script>
+    (function () {
+      var price = localStorage.getItem('okmShippingPrice') || '$24.99';
+      var el = document.getElementById('pay-shipping-val');
+      if (el) el.textContent = price;
+    })();
+  </script>
   <script>
     function toggleCartAcc() {
       var acc = document.getElementById('cartAcc');
