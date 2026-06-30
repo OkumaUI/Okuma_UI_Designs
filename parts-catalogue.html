@@ -1174,6 +1174,10 @@
       .modal-part-row { flex-direction: column; }
       .modal-cta-row { flex-direction: column; }
       .btn-continue, .btn-view-cart { width: 100%; flex: none; }
+      /* Stack alt-part rows so price never overlaps the part name */
+      .alt-modal__body { padding: 20px 16px 0; }
+      .alt-part-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .alt-part-row__right { width: 100%; justify-content: flex-start; }
     }
 
     /* ── Custom dropdown (≤1024px, injected by JS) ─────────── */
