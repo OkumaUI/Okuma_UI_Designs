@@ -295,9 +295,9 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .main-area { padding: 20px 20px 72px; }
-      .sr-layout { flex-direction: column; gap: 0; margin-top: 16px; }
+      .sr-layout { flex-direction: column; gap: 0; margin-top: 16px; align-items: stretch; }
       .filter-trigger-bar { display: flex; }
-      .sort-select { display: none; }
+      .filter-wrap { display: none; }
 
       /* Sidebar → bottom-sheet drawer */
       .filters {
@@ -320,7 +320,7 @@
 
     @media (max-width: 768px) {
       .main-area { padding: 16px 16px 72px; }
-      .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 84px; row-gap: 28px; max-width: 724px; margin: 0 auto; width: 113%; }
+      .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 12px; row-gap: 12px; width: 100%; }
       .part-card { grid-template-columns: 1fr; }
       .part-card__identity { border-right: none; border-bottom: 1px solid #F0F0F0; align-items: center; text-align: center; }
       .part-card__attrs { justify-content: center; }
@@ -335,7 +335,6 @@
       .main-area { padding: 12px 12px 72px; }
       .sr-title { font-size: 20px; }
       .results-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .filter-select { width: 100%; }
       .part-card__price { font-size: 17px; }
       .pagination { justify-content: center; gap: 2px; }
     }

@@ -286,7 +286,7 @@
   <header class="app-header">
     <nav class="nav" aria-label="Primary">
       <div class="nav__left">
-        <button class="nav__hamburger" id="navHamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="okumaSidebar" hidden>
+        <button class="nav__hamburger" id="navHamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="okuma-sidebar" hidden>
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
         <div class="nav__logo">
@@ -366,14 +366,8 @@
   <!-- ===== BODY ===== -->
   <div class="app-body-shell">
 
-    <!-- Sidebar -->
-    <nav class="sidebar" id="okumaSidebar" aria-label="Sections">
-      <a href="dashboard.html" class="sidebar-item"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="2" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/></svg><span>Dashboard</span></a>
-      <a href="parts-catalogue.html" class="sidebar-item"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 2h11a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2"/><path d="M7 2v16M10 6h3M10 9h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Browse Parts Book</span></a>
-      <a href="my-orders.html" class="sidebar-item"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 5.5V10l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>My Orders</span></a>
-      <a href="my-quotes.html" class="sidebar-item"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 2h6l4 4v12a1 1 0 01-1 1H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M11 2v4h4M7 11h6M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>My Quotes</span></a>
-      <a href="profile.html" class="sidebar-item"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="6.5" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M3 18c0-3.6 3.13-6.5 7-6.5s7 2.9 7 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>My Account</span></a>
-    </nav>
+    <!-- Sidebar (injected by components.js) -->
+    <div id="okuma-sidebar"></div>
 
     <!-- ===== MAIN ===== -->
     <main id="main" tabindex="-1">
