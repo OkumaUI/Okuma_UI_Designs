@@ -230,29 +230,124 @@
     img, svg { max-width: 100%; }
 
     /* â•â• RESPONSIVE â•â• */
+    /* ── FILTER DRAWER + TRIGGER BAR ─────────────────────────────── */
+
+    .filter-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 800;
+    }
+    .filter-overlay.visible { display: block; }
+
+    /* Mobile-only drawer elements — hidden on desktop */
+    .filters__drawer-head,
+    .filter-sort-mobile,
+    .filters__apply-wrap { display: none; }
+
+    .filters__drawer-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 16px; border-bottom: 1px solid #E5E5E5; margin-bottom: 4px;
+    }
+    .filters__drawer-title { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+    .filters__close-btn {
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer; color: #1A1A1A; border-radius: 50%;
+    }
+    .filters__close-btn:hover { background: #F0F0F0; }
+
+    .sort-radio-opts { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+    .sort-radio-opt {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; font-weight: 500; color: #1A1A1A; cursor: pointer;
+    }
+    .sort-radio-opt input { accent-color: #005EB8; width: 16px; height: 16px; margin: 0; flex-shrink: 0; }
+
+    .filters__apply-wrap { padding: 16px 0 4px; border-top: 1px solid #E5E5E5; margin-top: 16px; }
+    .filters__apply-btn {
+      width: 100%; height: 48px; background: #005EB8; color: #fff; border: none;
+      border-radius: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+    }
+    .filters__apply-btn:hover { background: #0052A3; }
+
+    /* Sticky trigger bar — hidden on desktop */
+    .filter-trigger-bar {
+      display: none; position: fixed;
+      bottom: 0; left: 0; right: 0; height: 56px;
+      background: #fff; border-top: 1px solid #E5E5E5;
+      z-index: 700; box-shadow: 0 -2px 8px rgba(0,0,0,0.07);
+    }
+    .ftb-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: none; border: none; cursor: pointer;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px; font-weight: 600; color: #1A1A1A;
+    }
+    .ftb-btn:active { background: #F5F5F5; }
+    .ftb-sep { width: 1px; background: #E5E5E5; margin: 12px 0; flex-shrink: 0; }
+    .ftb-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 18px; height: 18px; padding: 0 5px;
+      background: #005EB8; color: #fff; border-radius: 9px;
+      font-size: 10px; font-weight: 700;
+    }
+    .ftb-badge:empty { display: none; }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
-      .main-area { padding: 20px; }
-      .sr-layout { flex-direction: column; gap: 20px; }
-      .filters { width: 100%; }
+      .main-area { padding: 20px 20px 72px; }
+      .sr-layout { flex-direction: column; gap: 0; margin-top: 16px; }
+      .filter-trigger-bar { display: flex; }
+      .sort-select { display: none; }
+
+      /* Sidebar → bottom-sheet drawer */
+      .filters {
+        position: fixed; bottom: 56px; left: 0; right: 0;
+        width: auto; max-height: 78vh;
+        overflow-y: auto; -webkit-overflow-scrolling: touch;
+        border-radius: 16px 16px 0 0; border: none;
+        border-top: 1px solid #E0E0E0;
+        box-shadow: 0 -6px 32px rgba(0,0,0,0.14);
+        z-index: 810; padding: 20px 20px 0;
+        transform: translateY(calc(100% + 56px));
+        transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .filters.open { transform: translateY(0); }
+      .filters__drawer-head { display: flex; }
+      .filter-sort-mobile   { display: block; }
+      .filters__apply-wrap  { display: block; }
+      .filters__head        { display: none; }
     }
+
     @media (max-width: 768px) {
-      .main-area { padding: 16px; }
-      .sr-layout { margin-top: 20px; }
+      .main-area { padding: 16px 16px 72px; }
+      .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 84px; row-gap: 28px; max-width: 724px; margin: 0 auto; width: 113%; }
       .part-card { grid-template-columns: 1fr; }
-      .part-card__identity { border-right: none; border-bottom: 1px solid #F0F0F0; }
-      .part-card__avail { border-right: none; border-bottom: 1px solid #F0F0F0; flex-direction: row; align-items: center; gap: 16px; }
-      .part-card__action { flex-direction: row; align-items: center; justify-content: space-between; }
+      .part-card__identity { border-right: none; border-bottom: 1px solid #F0F0F0; align-items: center; text-align: center; }
+      .part-card__attrs { justify-content: center; }
+      .part-card__avail { border-right: none; border-bottom: 1px solid #F0F0F0; flex-direction: row; align-items: center; justify-content: center; gap: 16px; }
+      .part-card__action { flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+      .part-card__price-wrap { align-items: center; text-align: center; }
     }
-    @media (max-width: 640px) {
-      .sr-title { font-size: 22px; }
-    }
+
+    @media (max-width: 640px) { .sr-title { font-size: 22px; } }
+
     @media (max-width: 480px) {
-      .main-area { padding: 12px; }
+      .main-area { padding: 12px 12px 72px; }
       .sr-title { font-size: 20px; }
       .results-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
       .filter-select { width: 100%; }
       .part-card__price { font-size: 17px; }
       .pagination { justify-content: center; gap: 2px; }
+    }
+
+    /* iPhone XR (414px): single column, card content centered */
+    @media (max-width: 414px) {
+      .cards-grid { display: flex; flex-direction: column; gap: 8px; }
+      .part-card__identity { align-items: center; text-align: center; }
+      .part-card__attrs { justify-content: center; }
+      .part-card__avail { justify-content: center; }
+      .part-card__action { justify-content: center; }
+      .part-card__price-wrap { align-items: center; text-align: center; }
     }
   </style>
 </head>
@@ -262,6 +357,9 @@
   <div id="okuma-header"></div>
 
   <!-- â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ PAGE â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
+  <!-- Filter backdrop overlay -->
+  <div class="filter-overlay" id="filterOverlay"></div>
+
   <div class="app-body-shell">
 
     <!-- SIDEBAR (no active item) -->
@@ -275,8 +373,31 @@
 
       <div class="sr-layout">
 
-        <!-- FILTERS PANEL -->
-        <aside class="filters">
+        <!-- FILTERS PANEL (sidebar on desktop, bottom-sheet drawer on mobile) -->
+        <aside class="filters" id="filterDrawer">
+
+          <!-- Drawer header — mobile only -->
+          <div class="filters__drawer-head">
+            <span class="filters__drawer-title">Filters &amp; Sort</span>
+            <button type="button" class="filters__close-btn" id="filterClose" aria-label="Close filters">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Sort section — mobile drawer only -->
+          <div class="filter-sort-mobile">
+            <div class="filters__section-label">Sort By</div>
+            <div class="sort-radio-opts" id="sortRadioGroup">
+              <label class="sort-radio-opt"><input type="radio" name="mob-sort" value="relevance" checked> Relevance</label>
+              <label class="sort-radio-opt"><input type="radio" name="mob-sort" value="price-asc"> Price: Low to High</label>
+              <label class="sort-radio-opt"><input type="radio" name="mob-sort" value="price-desc"> Price: High to Low</label>
+              <label class="sort-radio-opt"><input type="radio" name="mob-sort" value="name-asc"> Name: A &ndash; Z</label>
+            </div>
+          </div>
+
+          <!-- Desktop filters header -->
           <div class="filters__head">
             <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1.5 2.5h13L9.5 8.5V13l-3 1.5V8.5L1.5 2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -316,6 +437,12 @@
               <span class="price-row__max" id="priceMax">$1000</span>
             </div>
           </div>
+
+          <!-- Apply button — mobile drawer only -->
+          <div class="filters__apply-wrap">
+            <button type="button" class="filters__apply-btn" id="filterApply">Show Results</button>
+          </div>
+
         </aside>
 
         <!-- RESULTS -->
@@ -340,6 +467,19 @@
     </main>
   </div>
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Sticky Filters & Sort bar — mobile/tablet only -->
+  <div class="filter-trigger-bar" id="filterTriggerBar">
+    <button type="button" class="ftb-btn" id="ftbFilters">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M1.5 2.5h13L9.5 8.5V13l-3 1.5V8.5L1.5 2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      Filters & Sort
+      <span class="ftb-badge" id="ftbBadge"></span>
+    </button>
+    <div class="ftb-sep"></div>
+    
+  </div>
+
   <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>
 
@@ -649,6 +789,87 @@
       if (elSort) elSort.addEventListener('change', function () { currentPage = 1; renderResults(); });
 
       renderResults();
+    })();
+
+    /* ── MOBILE FILTER DRAWER ──────────────────────────────────────── */
+    (function () {
+      var overlay   = document.getElementById('filterOverlay');
+      var drawer    = document.getElementById('filterDrawer');
+      var closeBtn  = document.getElementById('filterClose');
+      var applyBtn  = document.getElementById('filterApply');
+      var ftbFilters = document.getElementById('ftbFilters');
+      var ftbSort    = document.getElementById('ftbSort');
+      var badge      = document.getElementById('ftbBadge');
+      var sortSelect = document.getElementById('sortSelect');
+      var sortLbl    = document.getElementById('ftbSortLabel');
+
+      var SORT_LABELS = {
+        'relevance':  'Relevance',
+        'price-asc':  'Price ↑',
+        'price-desc': 'Price ↓',
+        'name-asc':   'Name A–Z'
+      };
+
+      function openDrawer() {
+        drawer.classList.add('open');
+        overlay.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDrawer() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('visible');
+        document.body.style.overflow = '';
+      }
+
+      function updateBadge() {
+        var count = document.querySelectorAll('input[data-filter]:checked').length;
+        if (parseInt(document.getElementById('priceRange').value, 10) < 1000) count++;
+        badge.textContent = count > 0 ? String(count) : '';
+      }
+
+      function syncSortLabel() {
+        sortLbl.textContent = SORT_LABELS[sortSelect.value] || 'Relevance';
+      }
+
+      /* Sort radio → desktop select sync */
+      var radios = document.querySelectorAll('input[name="mob-sort"]');
+      Array.prototype.forEach.call(radios, function (r) {
+        r.addEventListener('change', function () {
+          sortSelect.value = r.value;
+          sortSelect.dispatchEvent(new Event('change'));
+          syncSortLabel();
+        });
+      });
+
+      /* Desktop select → radio sync */
+      function syncRadioFromSelect() {
+        Array.prototype.forEach.call(radios, function (r) {
+          r.checked = r.value === sortSelect.value;
+        });
+      }
+      sortSelect.addEventListener('change', function () {
+        syncRadioFromSelect();
+        syncSortLabel();
+      });
+
+      /* Filter change → badge */
+      var checkboxes = document.querySelectorAll('input[data-filter]');
+      Array.prototype.forEach.call(checkboxes, function (cb) {
+        cb.addEventListener('change', updateBadge);
+      });
+      document.getElementById('priceRange').addEventListener('input', updateBadge);
+
+      ftbFilters.addEventListener('click', openDrawer);
+      ftbSort.addEventListener('click', openDrawer);
+      closeBtn.addEventListener('click', closeDrawer);
+      overlay.addEventListener('click', closeDrawer);
+      applyBtn.addEventListener('click', closeDrawer);
+
+      /* Init */
+      syncSortLabel();
+      syncRadioFromSelect();
+      updateBadge();
     })();
   </script>
 

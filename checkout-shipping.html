@@ -706,13 +706,31 @@
     var selectedShipping = 1;
     var addrCount = 2;
 
+    var SHIP_PRICES = { '0': 'Free', '1': '$24.99', '2': '$49.99' };
+    var SHIP_TOTALS = { '0': '$801.90', '1': '$826.89', '2': '$851.88' };
+
+    function updateShippingDisplay() {
+      var checked = document.querySelector('input[name="shipping"]:checked');
+      var val = checked ? checked.value : '1';
+      var price = SHIP_PRICES[val] || '$24.99';
+      var total = SHIP_TOTALS[val] || '$826.89';
+      var sidebarVal = document.querySelector('#summary-shipping-row .val');
+      if (sidebarVal) sidebarVal.textContent = price;
+      var totalEl = document.querySelector('.total-amount');
+      if (totalEl) totalEl.textContent = total;
+      localStorage.setItem('okmShippingPrice', price);
+    }
+
     document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); });
 
     document.querySelectorAll('input[name="address"]').forEach(function (r) {
       r.addEventListener('change', function () { selectedAddress = parseInt(this.value, 10); });
     });
     document.querySelectorAll('input[name="shipping"]').forEach(function (r) {
-      r.addEventListener('change', function () { selectedShipping = parseInt(this.value, 10); });
+      r.addEventListener('change', function () {
+        selectedShipping = parseInt(this.value, 10);
+        updateShippingDisplay();
+      });
     });
 
     function onCarrierChange() {

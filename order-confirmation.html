@@ -530,6 +530,24 @@
 
 
   <script src="components.js"></script>
+  <script>
+    (function () {
+      function syncMachineColumn(machineName) {
+        var name = machineName || localStorage.getItem('okmDefaultMachine') || '';
+        var serial = '';
+        if (name && window.OKUMA_MACHINES) {
+          var m = window.OKUMA_MACHINES.filter(function (x) { return x.name === name; })[0];
+          if (m) serial = m.serial;
+        }
+        document.querySelectorAll('.js-item-machine-name').forEach(function (el) { el.textContent = name; });
+        document.querySelectorAll('.js-item-machine-serial').forEach(function (el) { el.textContent = serial ? 'Serial No: ' + serial : ''; });
+      }
+      syncMachineColumn();
+      window.addEventListener('okuma:machineChanged', function (e) {
+        syncMachineColumn(e.detail && e.detail.name);
+      });
+    })();
+  </script>
 
 </body>
 </html>

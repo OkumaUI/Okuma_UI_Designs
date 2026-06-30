@@ -287,9 +287,10 @@
     }
     .addr-req-confirm-reject:hover { background: #8B0000; }
     .addr-req-cancel-reject {
-      height: 34px; padding: 0 10px; background: transparent;
-      border: none; font-size: 13px; color: #717171; cursor: pointer;
+      height: 34px; padding: 0 14px; background: transparent;
+      border: 1px solid #6E6E6E; border-radius: 4px; font-size: 13px; color: #4B4B4B; cursor: pointer;
     }
+    .addr-req-cancel-reject:hover { background: #F0F0F0; }
     .addr-req-empty { font-size: 14px; color: #9E9E9E; padding: 16px 0; }
 
     /* â”€â”€ Approve Confirmation Modal â”€â”€ */
@@ -315,15 +316,15 @@
     .approve-modal__card-label { font-size: 15px; font-weight: 700; color: #1A1A1A; }
     .approve-modal__card-meta { font-size: 12px; color: #717171; margin-top: 1px; }
     .approve-modal__card-address { font-size: 13px; color: #4B4B4B; margin-top: 4px; }
-    .approve-modal__actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 4px; }
+    .approve-modal__actions { display: flex; gap: 10px; padding-top: 4px; }
     .approve-modal__cancel {
-      height: 40px; padding: 0 20px; background: transparent;
+      flex: 1; height: 40px; padding: 0; background: transparent;
       border: 1px solid #6E6E6E; border-radius: 4px; font-family: inherit;
       font-size: 14px; font-weight: 500; color: #4B4B4B; cursor: pointer;
     }
     .approve-modal__cancel:hover { background: #F0F0F0; }
     .approve-modal__confirm {
-      height: 40px; padding: 0 24px; background: #005EB8; color: #fff;
+      flex: 1; height: 40px; padding: 0; background: #005EB8; color: #fff;
       border: none; border-radius: 4px; font-family: inherit; font-size: 14px;
       font-weight: 700; cursor: pointer; transition: background 0.15s;
     }

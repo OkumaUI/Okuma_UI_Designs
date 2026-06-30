@@ -292,7 +292,7 @@
     }
 
     @media (max-width: 768px) {
-      .page-content { padding-top: 60px; }
+      .page-content { padding-top: 20px; }
       .page-inner { padding: 0 16px; }
       .stepper {
         justify-content: space-between;
@@ -303,7 +303,9 @@
       .step { gap: 6px; }
       .step-connector { flex: 1; width: auto; }
       .summary-cards { gap: 16px; }
-      .order-item { padding: 16px; gap: 12px; }
+      .order-item { padding: 16px; gap: 10px; }
+      .order-item__info { width: auto; flex: 1; min-width: 0; }
+      .order-item__machine-col { width: auto; flex-shrink: 1; min-width: 0; }
       .order-item__price { width: auto; }
       .review-title { font-size: 28px; }
       /* hide the table header row on mobile - item rows wrap so it no longer aligns */
@@ -349,10 +351,40 @@
       .step-label { font-size: 12px; }
       .step-connector { flex: 1; width: auto; }
       .review-title { font-size: 22px; }
-      /* let the item row wrap so qty/price don't squeeze the name */
-      .order-item { flex-wrap: wrap; }
-      .order-item__qty { flex: 0 0 auto; text-align: left; }
-      .order-item__price { width: auto; margin-left: auto; }
+      /* 2-row grid: [name | price] on row 1, [machine+serial | qty] on row 2 */
+      .order-item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 6px 12px;
+        padding: 14px 16px;
+        align-items: start;
+      }
+      .order-item__info {
+        grid-column: 1; grid-row: 1;
+        flex: none; width: auto; min-width: 0;
+      }
+      .order-item__machine-col {
+        grid-column: 1; grid-row: 2;
+        width: auto; flex-direction: row; gap: 5px;
+        align-items: center; flex-shrink: 1;
+      }
+      .order-item__machine-name   { font-size: 11px; color: #6B7280; font-weight: 500; }
+      .order-item__machine-serial { font-size: 11px; color: #9E9E9E; }
+      .order-item__qty {
+        grid-column: 2; grid-row: 2;
+        width: auto; text-align: right;
+        font-size: 12px; color: #6B7280; white-space: nowrap;
+        align-self: center;
+      }
+      .order-item__price {
+        grid-column: 2; grid-row: 1;
+        width: auto; text-align: right;
+        font-size: 15px; font-weight: 700; white-space: nowrap;
+        margin-left: 0;
+      }
+      .order-item__name { font-size: 14px; }
+      .order-item__pn   { font-size: 12px; }
       /* reduce left-column gap further on smallest screens */
       .checkout-left { gap: 20px; }
     }
@@ -643,6 +675,30 @@
 
 
   <script src="components.js"></script>
+  <script>
+    (function () {
+      function syncMachineColumn(machineName) {
+        var name   = machineName || localStorage.getItem('okmDefaultMachine') || '';
+        var serial = '';
+        if (name && window.OKUMA_MACHINES) {
+          var m = window.OKUMA_MACHINES.filter(function (x) { return x.name === name; })[0];
+          if (m) serial = m.serial;
+        }
+        document.querySelectorAll('.js-item-machine-name').forEach(function (el) {
+          el.textContent = name;
+        });
+        document.querySelectorAll('.js-item-machine-serial').forEach(function (el) {
+          el.textContent = serial ? 'Serial No: ' + serial : '';
+        });
+      }
+
+      syncMachineColumn();
+
+      window.addEventListener('okuma:machineChanged', function (e) {
+        syncMachineColumn(e.detail && e.detail.name);
+      });
+    })();
+  </script>
 
 </body>
 </html>

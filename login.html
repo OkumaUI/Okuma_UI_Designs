@@ -59,7 +59,7 @@
       flex: 0 0 50%;
       max-width: 50%;
       background: #ffffff;
-      padding: 80px 80px;
+      padding: 80px 120px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -133,6 +133,11 @@
     /* Password wrapper */
     .field__password-wrap { position: relative; }
     .field__password-wrap .field__input { padding-right: 48px; }
+
+    /* Hide the browser-native password reveal eye (Edge / Chrome on Windows) */
+    .field__password-wrap input[type="password"]::-ms-reveal,
+    .field__password-wrap input[type="password"]::-ms-clear,
+    .field__password-wrap input[type="text"]::-ms-reveal { display: none; }
 
     .field__eye-btn {
       position: absolute;
@@ -251,7 +256,7 @@
     /* ─── RESPONSIVE ──────────────────────────────────────────── */
     /* Tablet: tighten the generous form padding */
     @media (max-width: 1024px) {
-      .form-panel { padding: 64px 48px; }
+      .form-panel { padding: 64px 64px; }
     }
 
     /* ≤900: stack to one column. Hero becomes a short banner above the form. */
@@ -272,26 +277,25 @@
       }
     }
 
-    /* ≤768: hide the hero photo entirely; full-width centered form */
+    /* Form-panel logo is always hidden; hero banner handles all breakpoints */
+    .form-panel__logo { display: none; }
+
+    /* ≤768: shrink hero to a slim blue logo banner */
     @media (max-width: 768px) {
-      .hero { display: none; }
-      .form-panel {
-        padding: 32px 24px;
-        flex: 0 0 100%;
+      .hero {
+        flex: 0 0 auto;
         max-width: 100%;
         width: 100%;
+        height: 90px;
+        background: #005EB8;
       }
-      .form-panel__title { font-size: 28px; }
+      .hero__logo { width: 160px; }
+      .form-panel { padding: 32px 24px; }
     }
 
     @media (max-width: 480px) {
-      .hero { height: 140px; }
       .form-panel { padding: 24px; }
       .form-panel__title { font-size: 26px; }
-    }
-
-    @media (max-width: 414px) {
-      .form-panel__subtitle { font-size: 14px; }
     }
   </style>
 </head>
@@ -305,6 +309,9 @@
   <!-- ─── RIGHT PANEL (FORM) ────────────────────────────────────── -->
   <div class="form-panel">
     <div class="form-panel__inner">
+
+      <!-- Logo (mobile only) -->
+      <img src="okuma-logo.png" alt="Okuma – Open Possibilities" class="form-panel__logo" />
 
       <!-- Title + subtitle -->
       <h1 class="form-panel__title">Welcome Back</h1>

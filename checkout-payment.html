@@ -432,7 +432,7 @@
               </svg>
               <span class="machine-strip__name">LU300-M</span>
               <span class="machine-strip__sep">|</span>
-              <span class="machine-strip__serial">Serial No: M5-2891-K</span>
+              <span class="machine-strip__serial">S/N: M5-2891-K</span>
             </div>
             <div class="acc-table">
               <div class="acc-table__head">
@@ -444,6 +444,10 @@
                 <div class="acc-col-part">
                   <div class="acc-part-name">Plate</div>
                   <div class="acc-part-pn">525-0100-11</div>
+                </div>
+                <div class="acc-col-mach">
+                  <div class="acc-mach-name">LU300-M</div>
+                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">2</span></div>
                 <div class="acc-col-price">
@@ -764,6 +768,13 @@
 
 
   <script src="components.js"></script>
+  <script>
+    (function () {
+      var price = localStorage.getItem('okmShippingPrice') || '$24.99';
+      var el = document.getElementById('pay-shipping-val');
+      if (el) el.textContent = price;
+    })();
+  </script>
   <script>
     function toggleCartAcc() {
       var acc = document.getElementById('cartAcc');
