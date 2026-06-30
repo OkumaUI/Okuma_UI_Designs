@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout: Shipping -“ Okuma Parts Portal</title>
+  <title>Checkout: Shipping -" Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -132,10 +132,26 @@
     .acct-number-input:focus { border-color: #005EB8; }
     .acct-number-input::placeholder { color: #9E9E9E; }
     .acct-note {
-      font-size: 12px; color: #208831; font-weight: 500;
-      display: none; align-items: center; gap: 6px;
+      display: none; align-items: flex-start; gap: 8px;
+      background: #F0F6FF; border: 1px solid #C7DCFA; border-radius: 4px;
+      padding: 10px 12px;
     }
     .acct-note.show { display: flex; }
+    .acct-note svg { color: #005EB8; flex-shrink: 0; margin-top: 1px; }
+    .acct-note span { font-size: 12px; font-weight: 500; color: #1A3A5C; line-height: 1.5; }
+
+    /* Prepaid warehouse note */
+    .prepaid-note {
+      display: none; align-items: flex-start; gap: 8px;
+      background: #F0F6FF; border: 1px solid #C7DCFA; border-radius: 4px;
+      padding: 10px 12px;
+    }
+    .prepaid-note.show { display: flex; }
+    .prepaid-note__icon { color: #005EB8; flex-shrink: 0; margin-top: 1px; }
+    .prepaid-note__text { font-size: 12px; font-weight: 500; color: #1A3A5C; line-height: 1.5; }
+
+    /* Hide method prices when Prepaid is active */
+    body.prepaid-active .ship-price { display: none; }
 
     /* ===== SPECIAL INSTRUCTIONS ===== */
     .special-block { display: flex; flex-direction: column; gap: 8px; }
@@ -180,9 +196,13 @@
     .summary-row .val { font-size: 14px; font-weight: 500; color: #2C2A29; }
     .summary-row .val.discount { color: #208831; }
     .summary-divider { height: 1px; background: #E5E5E5; }
-    .total-row { display: flex; justify-content: space-between; align-items: center; }
-    .total-label { font-size: 16px; font-weight: 700; color: #2C2A29; }
-    .total-amount { font-size: 24px; font-weight: 800; color: #005EB8; }
+    .val.ship-muted { font-size: 13px; font-weight: 400; color: #9E9E9E; font-style: italic; }
+    .shipping-note { font-size: 11px; font-weight: 400; color: #9E9E9E; line-height: 1.4; padding-top: 2px; }
+    .total-row { display: flex; justify-content: space-between; align-items: flex-start; }
+    .total-label { font-size: 16px; font-weight: 700; color: #2C2A29; padding-top: 4px; }
+    .total-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .total-amount { font-size: 24px; font-weight: 800; color: #005EB8; line-height: 1.2; }
+    .total-excl { font-size: 11px; font-weight: 400; color: #9E9E9E; }
     .secured-note { display: flex; align-items: center; gap: 8px; padding-top: 8px; }
     .secured-note span { font-size: 12px; font-weight: 400; color: #6B7280; }
 
@@ -250,13 +270,10 @@
     .acc-table__row:last-child { border-bottom: none; }
     .acc-hcol { font-size: 11px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.3px; }
     .acc-col-part  { flex: 1; min-width: 0; }
-    .acc-col-mach  { width: 150px; flex-shrink: 0; }
     .acc-col-qty   { width: 36px;  flex-shrink: 0; text-align: center; }
     .acc-col-price { width: 90px;  flex-shrink: 0; text-align: right; }
     .acc-part-name   { font-size: 13px; font-weight: 700; color: #2C2A29; line-height: 1.3; }
     .acc-part-pn     { font-size: 11px; color: #6B7280; margin-top: 2px; }
-    .acc-mach-name   { font-size: 12px; font-weight: 600; color: #2C2A29; line-height: 1.3; }
-    .acc-mach-serial { font-size: 11px; color: #6B7280; margin-top: 2px; }
     .acc-qty         { font-size: 13px; font-weight: 500; color: #2C2A29; display: block; padding-top: 2px; }
     .acc-price       { font-size: 13px; font-weight: 700; color: #2C2A29; display: block; padding-top: 2px; }
     .acc-price--sale { color: #AD0000; }
@@ -289,7 +306,7 @@
       .step-connector { flex: 1; width: auto; }
       .page-title { font-size: 26px; }
 
-      /* Tablet typography - bump small text up 1-“2px */
+      /* Tablet typography - bump small text up 1-"2px */
       .section-label  { font-size: 13px; }
       .addr-name      { font-size: 16px; }
       .addr-tag       { font-size: 15px; }
@@ -351,8 +368,20 @@
       .stepper { gap: 2px; }
     }
 
-    @media (max-width: 480px) {
-      .acc-col-mach { display: none; }
+    /* ===== MACHINE CONTEXT STRIP (accordion) ===== */
+    .machine-strip {
+      display: flex; align-items: center; gap: 10px;
+      background: #F0F6FF; border: 1px solid #C7DCFA;
+      border-radius: 4px; padding: 8px 12px;
+      margin-bottom: 14px;
+    }
+    .machine-strip__icon { color: #005EB8; flex-shrink: 0; }
+    .machine-strip__name {
+      font-size: 13px; font-weight: 700; color: #005EB8; line-height: 1;
+    }
+    .machine-strip__sep { color: #C7DCFA; font-size: 13px; }
+    .machine-strip__serial {
+      font-size: 12px; font-weight: 400; color: #4A6FA5; line-height: 1;
     }
   </style>
 </head>
@@ -387,12 +416,23 @@
 
         <div class="cart-acc__body" id="cartAccBody" role="region" aria-label="Cart items">
           <div class="cart-acc__inner">
+
+            <!-- Machine context strip -->
+            <div class="machine-strip">
+              <svg class="machine-strip__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+              <span class="machine-strip__name">LU300-M</span>
+              <span class="machine-strip__sep">|</span>
+              <span class="machine-strip__serial">Serial No: M5-2891-K</span>
+            </div>
+
             <div class="acc-table">
 
               <!-- Header row -->
               <div class="acc-table__head">
                 <div class="acc-col-part"><span class="acc-hcol">Part</span></div>
-                <div class="acc-col-mach"><span class="acc-hcol">Machine</span></div>
                 <div class="acc-col-qty"><span class="acc-hcol">Qty</span></div>
                 <div class="acc-col-price"><span class="acc-hcol">Price</span></div>
               </div>
@@ -402,10 +442,6 @@
                 <div class="acc-col-part">
                   <div class="acc-part-name">Plate</div>
                   <div class="acc-part-pn">525-0100-11</div>
-                </div>
-                <div class="acc-col-mach">
-                  <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">Serial No: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">2</span></div>
                 <div class="acc-col-price">
@@ -420,10 +456,6 @@
                   <div class="acc-part-name">Coolant Pump Assembly</div>
                   <div class="acc-part-pn">E4809-045-017-A</div>
                 </div>
-                <div class="acc-col-mach">
-                  <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">Serial No: M5-2891-K</div>
-                </div>
                 <div class="acc-col-qty"><span class="acc-qty">1</span></div>
                 <div class="acc-col-price">
                   <span class="acc-price">$185.00</span>
@@ -435,10 +467,6 @@
                 <div class="acc-col-part">
                   <div class="acc-part-name">Servo Drive Belt</div>
                   <div class="acc-part-pn">E4809-045-017-A</div>
-                </div>
-                <div class="acc-col-mach">
-                  <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">Serial No: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">1</span></div>
                 <div class="acc-col-price">
@@ -523,6 +551,14 @@
                   </select>
                 </div>
               </div>
+              <!-- Shown only when Prepaid is selected -->
+              <div class="prepaid-note" id="prepaidNote">
+                <svg class="prepaid-note__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#005EB8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="7" cy="7" r="6"/><line x1="7" y1="5" x2="7" y2="7.5"/><line x1="7" y1="9.5" x2="7" y2="9.6"/>
+                </svg>
+                <span class="prepaid-note__text">Shipping cost will be calculated by the warehouse when your order is prepared for shipment.</span>
+              </div>
+
               <div class="acct-number-wrap" id="acctNumberWrap">
                 <label for="acct-number">Account Number</label>
                 <input type="text" class="acct-number-input" id="acct-number"
@@ -530,8 +566,10 @@
                        oninput="onAcctNumberChange()">
               </div>
               <div class="acct-note" id="acctNote">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#208831" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 7 5.5 10.5 12 4"/></svg>
-                Shipping will be charged to your carrier account and added to this order.
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#005EB8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="7" cy="7" r="6"/><line x1="7" y1="5" x2="7" y2="7.5"/><line x1="7" y1="9.5" x2="7" y2="9.6"/>
+                </svg>
+                <span>Shipping will be charged to your carrier account and added to this order.</span>
               </div>
             </div>
           </div>
@@ -552,7 +590,7 @@
                 </svg>
                 <span class="ship-info">
                   <span class="ship-name">Standard Ground</span>
-                  <span class="ship-days">5-“7 business days</span>
+                  <span class="ship-days">5-7 business days</span>
                 </span>
                 <span class="ship-price">Free</span>
               </label>
@@ -568,7 +606,7 @@
                 </svg>
                 <span class="ship-info">
                   <span class="ship-name">Express Shipping</span>
-                  <span class="ship-days">2-“3 business days</span>
+                  <span class="ship-days">2-3 business days</span>
                 </span>
                 <span class="ship-price">$24.99</span>
               </label>
@@ -622,8 +660,9 @@
               </div>
               <div class="summary-row" id="summary-shipping-row">
                 <span class="lbl">Shipping &amp; Handling</span>
-                <span class="val">$24.99</span>
+                <span class="val ship-muted">Added at shipment</span>
               </div>
+              <div class="shipping-note">Shipping cost confirmed when your order is prepared for dispatch</div>
               <div class="summary-row">
                 <span class="lbl">Tax (Estimated)</span>
                 <span class="val">$59.40</span>
@@ -638,7 +677,10 @@
 
             <div class="total-row">
               <span class="total-label">Total</span>
-              <span class="total-amount">$826.89</span>
+              <div class="total-right">
+                <span class="total-amount">$801.90</span>
+                <span class="total-excl">excl. shipping</span>
+              </div>
             </div>
 
             <div class="secured-note">
@@ -679,8 +721,7 @@
       localStorage.setItem('okmShippingPrice', price);
     }
 
-    // Default state: "I will pay myself" selected - hide shipping charge
-    document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); updateShippingDisplay(); });
+    document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); });
 
     document.querySelectorAll('input[name="address"]').forEach(function (r) {
       r.addEventListener('change', function () { selectedAddress = parseInt(this.value, 10); });
@@ -692,33 +733,21 @@
       });
     });
 
-    /* â”€â”€ Carrier & Billing â”€â”€ */
     function onCarrierChange() {
-      var carrier = document.getElementById('acct-carrier').value;
-      var wrap    = document.getElementById('acctNumberWrap');
-      var note    = document.getElementById('acctNote');
-      var input   = document.getElementById('acct-number');
+      var carrier     = document.getElementById('acct-carrier').value;
+      var wrap        = document.getElementById('acctNumberWrap');
+      var acctNote    = document.getElementById('acctNote');
+      var prepaidNote = document.getElementById('prepaidNote');
+      var input       = document.getElementById('acct-number');
+      var isPrepaid   = (carrier === 'okuma');
 
-      if (carrier === 'okuma') {
-        // "I will pay myself" - no account number needed, no shipping charge
-        wrap.classList.remove('show');
-        note.classList.remove('show');
-        input.value = '';
-        setShippingChargeVisible(false);
-      } else {
-        // Using a carrier account - show account number field, add shipping to cart
-        wrap.classList.add('show');
-        note.classList.add('show');
-        setShippingChargeVisible(true);
-      }
-    }
+      /* Prepaid: warehouse note visible, account fields hidden, prices hidden */
+      prepaidNote.classList.toggle('show', isPrepaid);
+      wrap.classList.toggle('show', !isPrepaid);
+      acctNote.classList.toggle('show', !isPrepaid);
+      document.body.classList.toggle('prepaid-active', isPrepaid);
 
-    function onAcctNumberChange() {
-      // Account number input is informational only; visibility is driven by carrier selection
-    }
-
-    function setShippingChargeVisible(visible) {
-      // Shipping row is always visible; updateShippingDisplay handles value + total
+      if (isPrepaid) input.value = '';
     }
   </script>
 
