@@ -175,7 +175,7 @@
     .btn-primary:hover { background: #0052A3; }
     .btn-secondary {
       background: transparent; border: 1px solid #005EB8; color: #005EB8;
-      height: 38px; width: 100%; border-radius: 2px; font-size: 14px; font-weight: 700;
+      height: 56px; width: 100%; border-radius: 2px; font-size: 14px; font-weight: 700;
       cursor: pointer; font-family: inherit; transition: background 0.15s;
     }
     .btn-secondary:hover { background: #EBF3FF; }
@@ -556,7 +556,7 @@
                 <svg class="prepaid-note__icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#005EB8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="7" cy="7" r="6"/><line x1="7" y1="5" x2="7" y2="7.5"/><line x1="7" y1="9.5" x2="7" y2="9.6"/>
                 </svg>
-                <span class="prepaid-note__text">Shipping cost will be calculated by the warehouse when your order is prepared for shipment.</span>
+                <span class="prepaid-note__text">Shipping cost will be calculated by the warehouse at time of shipment and reflected on your invoice</span>
               </div>
 
               <div class="acct-number-wrap" id="acctNumberWrap">
@@ -569,7 +569,7 @@
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#005EB8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="7" cy="7" r="6"/><line x1="7" y1="5" x2="7" y2="7.5"/><line x1="7" y1="9.5" x2="7" y2="9.6"/>
                 </svg>
-                <span>Shipping will be charged to your carrier account and added to this order.</span>
+                <span>Shipping will be billed directly to your carrier account. Okuma will not add shipping charges to this order.</span>
               </div>
             </div>
           </div>
@@ -705,21 +705,6 @@
     var selectedAddress  = 0;
     var selectedShipping = 1;
     var addrCount = 2;
-
-    var SHIP_PRICES = { '0': 'Free', '1': '$24.99', '2': '$49.99' };
-    var SHIP_TOTALS = { '0': '$801.90', '1': '$826.89', '2': '$851.88' };
-
-    function updateShippingDisplay() {
-      var checked = document.querySelector('input[name="shipping"]:checked');
-      var val = checked ? checked.value : '1';
-      var price = SHIP_PRICES[val] || '$24.99';
-      var total = SHIP_TOTALS[val] || '$826.89';
-      var sidebarVal = document.querySelector('#summary-shipping-row .val');
-      if (sidebarVal) sidebarVal.textContent = price;
-      var totalEl = document.querySelector('.total-amount');
-      if (totalEl) totalEl.textContent = total;
-      localStorage.setItem('okmShippingPrice', price);
-    }
 
     document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); });
 

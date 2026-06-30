@@ -4,7 +4,7 @@
    ════════════════════════════════════════════════════════════════ */
 var OKUMA_USERS = [
   { email: 'customer@okuma.com', password: 'customer123', role: 'customer', firstName: 'Jonathan', lastName: 'Hayes' },
-  { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer',   firstName: 'Sarah',    lastName: 'Mitchell' }
+  { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer',   firstName: 'Jonathan', lastName: 'Hayes'    }
 ];
 
 function okunmaLogin(email, password) {
