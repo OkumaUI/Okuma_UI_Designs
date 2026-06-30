@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quote Detail — Okuma Parts Portal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      padding: 32px 32px 64px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #717171; margin-bottom: 20px; }
+    .breadcrumb a { color: #717171; text-decoration: none; }
+    .breadcrumb a:hover { color: #005EB8; text-decoration: underline; }
+    .breadcrumb__sep { color: #C4C4C4; }
+    .breadcrumb__current { color: #1A1A1A; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
+
+    /* PAGE HEADER */
+    .page-head { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
+    .page-head__back {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 4px; border: 1px solid #DEDEDE;
+      background: #fff; color: #1A1A1A; text-decoration: none; flex-shrink: 0;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .page-head__back:hover { border-color: #005EB8; background: #F0F6FF; color: #005EB8; }
+    .page-head__back svg { width: 16px; height: 16px; }
+    .page-head__info { flex: 1; min-width: 0; }
+    .page-head__title { font-size: 24px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.3px; }
+    .page-head__meta { font-size: 13px; color: #717171; margin-top: 3px; display: block; }
+
+    /* STATUS BADGES */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 2px; padding: 5px 12px;
+      font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0;
+    }
+    .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .status-badge--submitted    { background: #EEF4FF; border: 0.5px solid #4A90D9; color: #4A90D9; }
+    .status-badge--submitted .dot { background: #4A90D9; }
+    .status-badge--under-review { background: #FFF9EF; border: 0.5px solid #FFB549; color: #E08A00; }
+    .status-badge--under-review .dot { background: #FFB549; }
+    .status-badge--quoted       { background: #EDF9FA; border: 0.5px solid #2DB8C5; color: #2099A5; }
+    .status-badge--quoted .dot  { background: #2DB8C5; }
+    .status-badge--approved     { background: #F4F9F1; border: 0.5px solid #74AA50; color: #74AA50; }
+    .status-badge--approved .dot { background: #74AA50; }
+    .status-badge--ordered      { background: #EDFAF0; border: 0.5px solid #3D9A5A; color: #3D9A5A; }
+    .status-badge--ordered .dot { background: #3D9A5A; }
+    .status-badge--expired      { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #9E9E9E; }
+    .status-badge--expired .dot { background: #9E9E9E; }
+    .status-badge--declined     { background: #FFF5F5; border: 0.5px solid #D04B4B; color: #D04B4B; }
+    .status-badge--declined .dot { background: #D04B4B; }
+
+    /* BANNERS */
+    .alert-banner {
+      display: flex; align-items: flex-start; gap: 10px;
+      border-radius: 4px; padding: 12px 16px; margin-bottom: 20px;
+      font-size: 13px; font-weight: 500; line-height: 1.5;
+    }
+    .alert-banner svg { flex-shrink: 0; margin-top: 1px; }
+    .alert-banner--warn   { background: #FFF9EF; border: 1px solid #FFD580; color: #7A4F00; }
+    .alert-banner--urgent { background: #FFF0F0; border: 1px solid #FFC0C0; color: #C0392B; }
+    .alert-banner--grey   { background: #F5F5F5; border: 1px solid #DEDEDE; color: #555; }
+
+    /* TIMELINE */
+    .timeline-card { border: 1px solid #DEDEDE; border-radius: 4px; padding: 28px 40px; margin-bottom: 20px; }
+    .timeline { display: flex; align-items: flex-start; position: relative; }
+    .timeline-track { position: absolute; top: 13px; left: 14px; right: 14px; height: 2px; background: #EBEBEB; z-index: 0; }
+    .timeline-track__fill { height: 100%; background: #005EB8; }
+    .timeline-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 9px; position: relative; z-index: 1; }
+    .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #fff; border: 2px solid #DEDEDE; }
+    .step-dot--done    { background: #005EB8; border-color: #005EB8; color: #fff; }
+    .step-dot--active  { background: #005EB8; border-color: #005EB8; color: #fff; box-shadow: 0 0 0 4px rgba(0,94,184,0.14); }
+    .step-dot--pending { background: #fff; border-color: #DEDEDE; color: #BDBDBD; }
+    .step-label { font-size: 12px; font-weight: 600; color: #9E9E9E; text-align: center; line-height: 1.3; }
+    .step-label--done, .step-label--active { color: #1A1A1A; }
+    .step-date { font-size: 11px; color: #B0B0B0; text-align: center; line-height: 1.3; margin-top: -4px; }
+    .step-date--done, .step-date--active { color: #717171; }
+
+    /* TWO COLUMN LAYOUT */
+    .detail-layout { display: flex; gap: 20px; align-items: flex-start; }
+    .detail-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+    .detail-aside { width: 308px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+
+    /* CARDS */
+    .det-card { border: 1px solid #DEDEDE; border-radius: 4px; overflow: hidden; }
+    .det-card__head {
+      padding: 12px 20px; background: #F5F5F5; border-bottom: 1px solid #DEDEDE;
+      font-size: 11px; font-weight: 700; color: #717171; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .det-card__body { padding: 20px; }
+
+    /* ITEMS TABLE */
+    .items-tbl { width: 100%; border-collapse: collapse; min-width: 520px; }
+    .items-tbl th {
+      padding: 10px 16px; font-size: 11px; font-weight: 700; color: #9E9E9E;
+      text-transform: uppercase; letter-spacing: 0.3px; text-align: left;
+      border-bottom: 1px solid #DEDEDE; white-space: nowrap; background: #FAFAFA;
+    }
+    .items-tbl th.r { text-align: right; }
+    .items-tbl td { padding: 14px 16px; border-bottom: 1px solid #F0F0F0; vertical-align: middle; font-size: 13px; }
+    .items-tbl tbody tr:last-child td { border-bottom: none; }
+    .items-tbl tbody tr:hover { background: #FAFAFA; }
+    .it-name    { font-size: 13px; font-weight: 700; color: #1A1A1A; }
+    .it-pn      { font-size: 11px; color: #9E9E9E; margin-top: 2px; }
+    .ordered-for-label { font-size: 11px; font-weight: 700; color: #717171; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    .ordered-for-strip { display: flex; align-items: center; gap: 10px; padding: 11px 16px; background: #EAF2FF; border-left: 3px solid #005EB8; border-radius: 2px; }
+    .ordered-for-strip__mach { font-size: 14px; font-weight: 700; color: #005EB8; }
+    .ordered-for-strip__sep  { color: #C4C4C4; margin: 0 2px; }
+    .ordered-for-strip__ser  { font-size: 13px; color: #4B4B4B; }
+    .it-pending { font-size: 12px; color: #9E9E9E; font-style: italic; }
+    .r          { text-align: right; }
+    .it-linetotal { font-size: 13px; font-weight: 700; color: #1A1A1A; }
+    .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* SUMMARY */
+    .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 13px; }
+    .sum-row__lbl { color: #717171; }
+    .sum-row__val { font-weight: 500; color: #1A1A1A; }
+    .sum-row__val--muted { color: #9E9E9E; font-style: italic; font-weight: 400; }
+    .sum-divider { height: 1px; background: #DEDEDE; margin: 10px 0; }
+    .sum-total { display: flex; justify-content: space-between; align-items: flex-start; padding: 4px 0; }
+    .sum-total__lbl { font-size: 14px; font-weight: 700; color: #1A1A1A; padding-top: 4px; }
+    .sum-total__val { font-size: 20px; font-weight: 800; color: #005EB8; }
+    .sum-total__excl { font-size: 10px; color: #9E9E9E; margin-top: 3px; text-align: right; }
+    .sum-pending { text-align: center; padding: 16px 0 8px; }
+    .sum-pending__msg { font-size: 13px; color: #717171; line-height: 1.5; margin-top: 10px; }
+
+    /* INFO ROWS */
+    .info-row { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-bottom: 1px solid #F0F0F0; }
+    .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-row:first-child { padding-top: 0; }
+    .info-lbl { font-size: 11px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.4px; }
+    .info-val { font-size: 13px; color: #1A1A1A; line-height: 1.5; }
+    .info-val--link { color: #005EB8; font-weight: 700; text-decoration: none; }
+    .info-val--link:hover { text-decoration: underline; }
+
+    /* NOTE FROM OKUMA */
+    .okuma-note { border: 1px solid #C7DCFA; border-radius: 4px; overflow: hidden; }
+    .okuma-note__head {
+      padding: 10px 16px; background: #F0F6FF; border-bottom: 1px solid #C7DCFA;
+      font-size: 11px; font-weight: 700; color: #003D82;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .okuma-note__body { padding: 14px 16px; font-size: 13px; color: #1A1A1A; line-height: 1.6; }
+
+    /* ACTIONS */
+    .action-stack { display: flex; flex-direction: column; gap: 10px; }
+    .btn-det {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; height: 40px; border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      text-decoration: none; border: 1.5px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .btn-det--primary { background: #005EB8; color: #fff; border-color: #005EB8; }
+    .btn-det--primary:hover { background: #0B308E; border-color: #0B308E; }
+    .btn-det--outline { background: #fff; color: #005EB8; border-color: #005EB8; }
+    .btn-det--outline:hover { background: #F0F6FF; }
+    .btn-det--danger  { background: #fff; color: #C0392B; border-color: #C0392B; }
+    .btn-det--danger:hover { background: #FFF5F5; }
+    .btn-det svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .support-link {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 13px; color: #717171; text-decoration: none; padding: 6px 0;
+    }
+    .support-link:hover { color: #005EB8; }
+
+    img, svg { max-width: 100%; }
+
+    @media (min-width: 769px) and (max-width: 1199px) {
+      .main-area { padding: 24px 24px 48px; }
+      .detail-aside { width: 268px; }
+    }
+    @media (max-width: 900px) {
+      .detail-layout { flex-direction: column; }
+      .detail-aside { width: 100%; }
+    }
+    @media (max-width: 768px) {
+      .main-area { padding: 16px 16px 48px; }
+      .timeline-card { padding: 20px 16px; }
+      .page-head__title { font-size: 20px; }
+    }
+    @media (max-width: 480px) {
+      .page-head__title { font-size: 18px; }
+      .step-date { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <div class="app-body-shell">
+    <div id="okuma-sidebar" data-active="quotes"></div>
+
+    <main class="main-area">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="dashboard.html">Home</a>
+        <span class="breadcrumb__sep">/</span>
+        <a href="my-quotes.html">My Quotes</a>
+        <span class="breadcrumb__sep">/</span>
+        <span class="breadcrumb__current" id="bcId">Quote Detail</span>
+      </nav>
+
+      <div class="page-head">
+        <a href="my-quotes.html" class="page-head__back" aria-label="Back to My Quotes">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <div class="page-head__info">
+          <h1 class="page-head__title" id="pgTitle">Quote</h1>
+          <span class="page-head__meta" id="pgMeta"></span>
+        </div>
+        <span id="pgBadge"></span>
+      </div>
+
+      <div id="quoteContent"></div>
+
+    </main>
+  </div>
+
+  <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
+  <script src="components.js"></script>
+
+  <script>
+  (function () {
+
+    var TODAY = 20260626;
+
+    function daysDiff(expirySort) {
+      var ey = Math.floor(expirySort / 10000);
+      var em = Math.floor((expirySort % 10000) / 100);
+      var ed = expirySort % 100;
+      var ty = Math.floor(TODAY / 10000);
+      var tm = Math.floor((TODAY % 10000) / 100);
+      var td = TODAY % 100;
+      return (ey - ty) * 365 + (em - tm) * 30 + (ed - td);
+    }
+
+    /* ── DATA ─────────────────────────────────────────────── */
+    var DATA = {
+      'QUO-2026-00089': {
+        num: 'QUO-2026-00089', submitted: 'Jun 18, 2026', status: 'quoted',
+        expiry: 'Jul 25, 2026', expirySort: 20260725,
+        requestedBy: 'James Hartwell', poRef: null, linkedOrderId: null,
+        note: 'Your quote request has been reviewed and priced by our team. Review the quoted unit prices below and approve to proceed with your order.',
+        steps: [
+          { label: 'Submitted',    date: 'Jun 18, 2026', s: 'done'    },
+          { label: 'Under Review', date: 'Jun 19, 2026', s: 'done'    },
+          { label: 'Quoted',       date: 'Jun 22, 2026', s: 'active'  },
+          { label: 'Approved',     date: '—',            s: 'pending' },
+          { label: 'Ordered',      date: '—',            s: 'pending' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 2, unit: 520.00 },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 2, unit: 380.00 },
+          { name: 'Chuck Jaw Set (3-pc)',  pn: 'A1B-0092-330',    mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 1, unit: 660.00 },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-0045-SLK',     mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 5, unit: 76.00  }
+        ],
+        sum: { subtotal: 2840.00, total: 2840.00 }
+      },
+      'QUO-2026-00085': {
+        num: 'QUO-2026-00085', submitted: 'Jun 15, 2026', status: 'approved',
+        expiry: 'Jun 29, 2026', expirySort: 20260629,
+        requestedBy: 'James Hartwell', poRef: null, linkedOrderId: null,
+        note: 'Your quote has been approved and is ready to convert to an order. Proceed to checkout to complete your purchase.',
+        steps: [
+          { label: 'Submitted',    date: 'Jun 15, 2026', s: 'done'    },
+          { label: 'Under Review', date: 'Jun 16, 2026', s: 'done'    },
+          { label: 'Quoted',       date: 'Jun 18, 2026', s: 'done'    },
+          { label: 'Approved',     date: 'Jun 20, 2026', s: 'active'  },
+          { label: 'Ordered',      date: '—',            s: 'pending' }
+        ],
+        items: [
+          { name: 'Spindle Bearing Unit', pn: 'SK-2291-001', mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, unit: 352.50 },
+          { name: 'Turret Index Pin',     pn: 'TIP-4421-K',  mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, unit: 260.00 }
+        ],
+        sum: { subtotal: 612.50, total: 612.50 }
+      },
+      'QUO-2026-00081': {
+        num: 'QUO-2026-00081', submitted: 'Jun 10, 2026', status: 'quoted',
+        expiry: 'Jul 03, 2026', expirySort: 20260703,
+        requestedBy: 'James Hartwell', poRef: 'ABC-PO-9912', linkedOrderId: null,
+        note: 'Your quote request has been reviewed and priced by our team. Review the quoted unit prices below and approve to proceed with your order.',
+        steps: [
+          { label: 'Submitted',    date: 'Jun 10, 2026', s: 'done'    },
+          { label: 'Under Review', date: 'Jun 11, 2026', s: 'done'    },
+          { label: 'Quoted',       date: 'Jun 14, 2026', s: 'active'  },
+          { label: 'Approved',     date: '—',            s: 'pending' },
+          { label: 'Ordered',      date: '—',            s: 'pending' }
+        ],
+        items: [
+          { name: 'Spindle Bearing Unit',  pn: 'SK-2291-001',     mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 2,  unit: 720.00 },
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 2,  unit: 520.00 },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 2,  unit: 380.00 },
+          { name: 'Chuck Jaw Set (3-pc)',  pn: 'A1B-0092-330',    mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 2,  unit: 310.00 },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 4,  unit: 86.50  },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-0045-SLK',     mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 10, unit: 89.40  }
+        ],
+        sum: { subtotal: 5100.00, total: 5100.00 }
+      },
+      'QUO-2026-00077': {
+        num: 'QUO-2026-00077', submitted: 'Jun 05, 2026', status: 'under-review',
+        expiry: null, expirySort: 0,
+        requestedBy: 'James Hartwell', poRef: null, linkedOrderId: null,
+        note: null,
+        steps: [
+          { label: 'Submitted',    date: 'Jun 05, 2026', s: 'done'    },
+          { label: 'Under Review', date: 'Jun 06, 2026', s: 'active'  },
+          { label: 'Quoted',       date: '—',            s: 'pending' },
+          { label: 'Approved',     date: '—',            s: 'pending' },
+          { label: 'Ordered',      date: '—',            s: 'pending' }
+        ],
+        items: [
+          { name: 'Plate Bearing', pn: '525-0100-11', mach: 'MULTUS U3000', ser: 'MU-9102-L', qty: 1, unit: null }
+        ],
+        sum: null
+      },
+      'QUO-2026-00072': {
+        num: 'QUO-2026-00072', submitted: 'May 28, 2026', status: 'quoted',
+        expiry: 'Jun 27, 2026', expirySort: 20260627,
+        requestedBy: 'James Hartwell', poRef: null, linkedOrderId: null,
+        note: 'Your quote request has been reviewed and priced by our team. Review the quoted unit prices below and approve to proceed with your order.',
+        steps: [
+          { label: 'Submitted',    date: 'May 28, 2026', s: 'done'    },
+          { label: 'Under Review', date: 'May 29, 2026', s: 'done'    },
+          { label: 'Quoted',       date: 'Jun 01, 2026', s: 'active'  },
+          { label: 'Approved',     date: '—',            s: 'pending' },
+          { label: 'Ordered',      date: '—',            s: 'pending' }
+        ],
+        items: [
+          { name: 'Servo Drive Belt',     pn: 'B0612-045-H8',  mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 5, unit: 86.50  },
+          { name: 'O-Ring Seal Kit',      pn: 'OR-0045-SLK',   mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 8, unit: 47.80  },
+          { name: 'Chuck Jaw Set (3-pc)', pn: 'A1B-0092-330',  mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 1, unit: 635.10 }
+        ],
+        sum: { subtotal: 1450.00, total: 1450.00 }
+      },
+      'QUO-2026-00068': {
+        num: 'QUO-2026-00068', submitted: 'May 20, 2026', status: 'submitted',
+        expiry: null, expirySort: 0,
+        requestedBy: 'James Hartwell', poRef: null, linkedOrderId: null,
+        note: null,
+        steps: [
+          { label: 'Submitted',    date: 'May 20, 2026', s: 'active'  },
+          { label: 'Under Review', date: '—',            s: 'pending' },
+          { label: 'Quoted',       date: '—',            s: 'pending' },
+          { label: 'Approved',     date: '—',            s: 'pending' },
+          { label: 'Ordered',      date: '—',            s: 'pending' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 1, unit: null },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LU300-M',       ser: 'M5-2891-K', qty: 4, unit: null },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'LU300-M',       ser: 'M5-2891-K', qty: 1, unit: null },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-0045-SLK',     mach: 'MULTUS U3000',  ser: 'MU-9102-L', qty: 6, unit: null },
+          { name: 'Spindle Bearing Unit',  pn: 'SK-2291-001',     mach: 'LU300-M',       ser: 'M5-2891-K', qty: 1, unit: null }
+        ],
+        sum: null
+      },
+      'QUO-2026-00061': {
+        num: 'QUO-2026-00061', submitted: 'May 10, 2026', status: 'expired',
+        expiry: 'Jun 09, 2026', expirySort: 20260609,
+        requestedBy: 'James Hartwell', poRef: null, linkedOrderId: null,
+        note: null,
+        steps: [
+          { label: 'Submitted',    date: 'May 10, 2026', s: 'done'    },
+          { label: 'Under Review', date: 'May 11, 2026', s: 'done'    },
+          { label: 'Quoted',       date: 'May 15, 2026', s: 'done'    },
+          { label: 'Approved',     date: '—',            s: 'pending' },
+          { label: 'Ordered',      date: '—',            s: 'pending' }
+        ],
+        items: [
+          { name: 'Turret Index Pin', pn: 'TIP-4421-K',  mach: 'LU300-M',      ser: 'M5-2891-K',  qty: 2, unit: 124.00 },
+          { name: 'O-Ring Seal Kit',  pn: 'OR-0045-SLK', mach: 'MULTUS U3000', ser: 'MU-9102-L',  qty: 2, unit: 38.00  }
+        ],
+        sum: { subtotal: 324.00, total: 324.00 }
+      },
+      'QUO-2026-00054': {
+        num: 'QUO-2026-00054', submitted: 'Apr 25, 2026', status: 'ordered',
+        expiry: 'May 25, 2026', expirySort: 20260525,
+        requestedBy: 'James Hartwell', poRef: 'PO-4421-B', linkedOrderId: 'OKU-2026-00398',
+        note: 'This quote was converted to an order on May 06, 2026. View your order for shipping and delivery details.',
+        steps: [
+          { label: 'Submitted',    date: 'Apr 25, 2026', s: 'done' },
+          { label: 'Under Review', date: 'Apr 26, 2026', s: 'done' },
+          { label: 'Quoted',       date: 'Apr 29, 2026', s: 'done' },
+          { label: 'Approved',     date: 'May 02, 2026', s: 'done' },
+          { label: 'Ordered',      date: 'May 06, 2026', s: 'done' }
+        ],
+        items: [
+          { name: 'Spindle Bearing Unit',  pn: 'SK-2291-001',     mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 1, unit: 820.00 },
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 2, unit: 520.00 },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 2, unit: 390.00 },
+          { name: 'Chuck Jaw Set (3-pc)',  pn: 'A1B-0092-330',    mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 1, unit: 410.00 },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 2, unit: 97.00  },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-0045-SLK',     mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 6, unit: 59.00  },
+          { name: 'Turret Index Pin',      pn: 'TIP-4421-K',      mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 1, unit: 302.00 }
+        ],
+        sum: { subtotal: 3900.00, total: 3900.00 }
+      },
+      'QUO-2026-00047': {
+        num: 'QUO-2026-00047', submitted: 'Apr 12, 2026', status: 'declined',
+        expiry: 'May 12, 2026', expirySort: 20260512,
+        requestedBy: 'James Hartwell', poRef: null, linkedOrderId: null,
+        note: null,
+        steps: [
+          { label: 'Submitted',    date: 'Apr 12, 2026', s: 'done'    },
+          { label: 'Under Review', date: 'Apr 13, 2026', s: 'done'    },
+          { label: 'Quoted',       date: 'Apr 16, 2026', s: 'done'    },
+          { label: 'Approved',     date: '—',            s: 'pending' },
+          { label: 'Ordered',      date: '—',            s: 'pending' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, unit: 480.00 },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, unit: 200.00 },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, unit: 100.00 }
+        ],
+        sum: { subtotal: 780.00, total: 780.00 }
+      }
+    };
+
+    /* ── HELPERS ──────────────────────────────────────────── */
+    var STATUS_LABEL = {
+      'submitted':    'Submitted',
+      'under-review': 'Under Review',
+      'quoted':       'Quoted',
+      'approved':     'Approved',
+      'ordered':      'Ordered',
+      'expired':      'Expired',
+      'declined':     'Declined'
+    };
+    var BADGE_CLASS = {
+      'submitted':    'status-badge--submitted',
+      'under-review': 'status-badge--under-review',
+      'quoted':       'status-badge--quoted',
+      'approved':     'status-badge--approved',
+      'ordered':      'status-badge--ordered',
+      'expired':      'status-badge--expired',
+      'declined':     'status-badge--declined'
+    };
+
+    function fmt(n) {
+      return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    function badge(s) {
+      return '<span class="status-badge ' + (BADGE_CLASS[s] || '') + '"><span class="dot"></span>' + (STATUS_LABEL[s] || s) + '</span>';
+    }
+    function checkIcon() {
+      return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+    function dotIcon(col) {
+      return '<svg width="8" height="8" viewBox="0 0 8 8" fill="' + col + '" aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>';
+    }
+    function warnSvg(col) {
+      return '<svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6.5" stroke="' + col + '" stroke-width="1.4"/><path d="M7.5 4.5v3.5" stroke="' + col + '" stroke-width="1.5" stroke-linecap="round"/><circle cx="7.5" cy="10.5" r="0.75" fill="' + col + '"/></svg>';
+    }
+
+    /* ── RENDER ───────────────────────────────────────────── */
+    function render(q) {
+      document.title = q.num + ' — Okuma Parts Portal';
+      document.getElementById('bcId').textContent = q.num;
+      document.getElementById('pgTitle').textContent = q.num;
+      document.getElementById('pgMeta').textContent = 'Submitted ' + q.submitted;
+      document.getElementById('pgBadge').innerHTML = badge(q.status);
+
+      var html = renderBanner(q) + renderTimeline(q);
+      html += '<div class="detail-layout">';
+      html += '<div class="detail-main">' + renderItems(q) + '</div>';
+      html += '<div class="detail-aside">' + renderSummary(q) + renderInfo(q) + renderNote(q) + renderActions(q) + '</div>';
+      html += '</div>';
+
+      document.getElementById('quoteContent').innerHTML = html;
+    }
+
+    function renderBanner(q) {
+      var s = q.status;
+      if (s === 'expired') {
+        return '<div class="alert-banner alert-banner--grey">' + warnSvg('#9E9E9E') +
+          '<span>This quote expired on <strong>' + q.expiry + '</strong> without being approved. Request a new quote to proceed.</span>' +
+          '</div>';
+      }
+      if (s === 'declined') {
+        return '<div class="alert-banner alert-banner--urgent">' + warnSvg('#C0392B') +
+          '<span>This quote request was declined. Contact your Okuma representative if you believe this is in error or to discuss alternatives.</span>' +
+          '</div>';
+      }
+      if ((s === 'quoted' || s === 'approved') && q.expirySort > 0) {
+        var days = daysDiff(q.expirySort);
+        if (days <= 6) {
+          var dStr = days <= 0 ? 'today' : (days === 1 ? 'tomorrow' : 'in ' + days + ' days');
+          return '<div class="alert-banner alert-banner--urgent">' + warnSvg('#C0392B') +
+            '<span>This quote expires <strong>' + dStr + '</strong> (' + q.expiry + '). Approve it now to secure your pricing.</span>' +
+            '</div>';
+        }
+        if (days <= 14) {
+          return '<div class="alert-banner alert-banner--warn">' + warnSvg('#E08A00') +
+            '<span>This quote expires in <strong>' + days + ' days</strong> (' + q.expiry + '). Approve before the deadline to secure pricing.</span>' +
+            '</div>';
+        }
+      }
+      return '';
+    }
+
+    function renderTimeline(q) {
+      var steps = q.steps;
+      var activeIdx = 0;
+      for (var i = 0; i < steps.length; i++) {
+        if (steps[i].s === 'done' || steps[i].s === 'active') activeIdx = i;
+      }
+      var pct = (activeIdx / (steps.length - 1)) * 100;
+
+      var stepsHTML = steps.map(function(st) {
+        var dc = 'step-dot', lc = 'step-label', dtc = 'step-date', inner = '';
+        if (st.s === 'done') {
+          dc += ' step-dot--done'; lc += ' step-label--done'; dtc += ' step-date--done';
+          inner = checkIcon();
+        } else if (st.s === 'active') {
+          dc += ' step-dot--active'; lc += ' step-label--active'; dtc += ' step-date--active';
+          inner = dotIcon('#fff');
+        } else {
+          dc += ' step-dot--pending';
+          inner = dotIcon('#DEDEDE');
+        }
+        return '<div class="timeline-step">' +
+          '<div class="' + dc + '">' + inner + '</div>' +
+          '<span class="' + lc + '">' + st.label + '</span>' +
+          '<span class="' + dtc + '">' + st.date + '</span>' +
+          '</div>';
+      }).join('');
+
+      return '<div class="timeline-card">' +
+        '<div class="timeline">' +
+        '<div class="timeline-track"><div class="timeline-track__fill" style="width:' + pct + '%"></div></div>' +
+        stepsHTML +
+        '</div></div>';
+    }
+
+    function renderItems(q) {
+      var first = q.items[0];
+      var strip = first
+        ? '<div style="margin-bottom:12px;">' +
+            '<p class="ordered-for-label">Ordered For</p>' +
+            '<div class="ordered-for-strip">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#005EB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>' +
+              '<span class="ordered-for-strip__mach">' + first.mach + '</span>' +
+              '<span class="ordered-for-strip__sep">|</span>' +
+              '<span class="ordered-for-strip__ser">Serial No: ' + first.ser + '</span>' +
+            '</div>' +
+          '</div>'
+        : '';
+
+      var rows = q.items.map(function(it) {
+        var unitCell = it.unit !== null
+          ? '<span style="color:#4B4B4B">' + fmt(it.unit) + '</span>'
+          : '<span class="it-pending">TBD</span>';
+        var lineCell = it.unit !== null
+          ? '<span class="it-linetotal">' + fmt(it.qty * it.unit) + '</span>'
+          : '<span class="it-pending">—</span>';
+        return '<tr>' +
+          '<td><div class="it-name">' + it.name + '</div><div class="it-pn">P/N: ' + it.pn + '</div></td>' +
+          '<td class="r" style="width:50px">' + it.qty + '</td>' +
+          '<td class="r" style="width:105px">' + unitCell + '</td>' +
+          '<td class="r" style="width:105px">' + lineCell + '</td>' +
+          '</tr>';
+      }).join('');
+
+      return strip +
+        '<div class="det-card">' +
+        '<div class="det-card__head">Items in Quote (' + q.items.length + ')</div>' +
+        '<div class="tbl-scroll">' +
+        '<table class="items-tbl">' +
+        '<thead><tr>' +
+        '<th>Part</th>' +
+        '<th class="r" style="width:50px">Qty</th>' +
+        '<th class="r" style="width:105px">Unit Price</th>' +
+        '<th class="r" style="width:105px">Line Total</th>' +
+        '</tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+        '</table>' +
+        '</div></div>';
+    }
+
+    function renderSummary(q) {
+      var html = '<div class="det-card"><div class="det-card__head">Quote Summary</div><div class="det-card__body">';
+      if (q.sum === null) {
+        html += '<div class="sum-pending">' +
+          '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="11" stroke="#DEDEDE" stroke-width="1.5"/><path d="M14 9v5.5l3.5 2" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '<p class="sum-pending__msg">Pricing will appear here once your quote has been reviewed by our team.</p>' +
+          '</div>';
+      } else {
+        var s = q.sum;
+        var n = q.items.length;
+        html += '<div class="sum-row"><span class="sum-row__lbl">Subtotal (' + n + ' item' + (n !== 1 ? 's' : '') + ')</span><span class="sum-row__val">' + fmt(s.subtotal) + '</span></div>';
+        html += '<div class="sum-row"><span class="sum-row__lbl">Shipping &amp; Handling</span><span class="sum-row__val sum-row__val--muted">Added at shipment</span></div>';
+        html += '<div class="sum-row"><span class="sum-row__lbl">Tax</span><span class="sum-row__val sum-row__val--muted">Calculated at checkout</span></div>';
+        html += '<div class="sum-divider"></div>';
+        html += '<div class="sum-total">' +
+          '<span class="sum-total__lbl">Total</span>' +
+          '<div style="text-align:right">' +
+          '<div class="sum-total__val">' + fmt(s.total) + '</div>' +
+          '<div class="sum-total__excl">excl. shipping &amp; tax</div>' +
+          '</div>' +
+          '</div>';
+      }
+      html += '</div></div>';
+      return html;
+    }
+
+    function renderInfo(q) {
+      var html = '<div class="det-card"><div class="det-card__head">Quote Info</div><div class="det-card__body">';
+      html += '<div class="info-row"><span class="info-lbl">Quote Number</span><span class="info-val">' + q.num + '</span></div>';
+      html += '<div class="info-row"><span class="info-lbl">Date Submitted</span><span class="info-val">' + q.submitted + '</span></div>';
+      if (q.expiry) {
+        html += '<div class="info-row"><span class="info-lbl">Expiry Date</span><span class="info-val">' + q.expiry + '</span></div>';
+      }
+      if (q.poRef) {
+        html += '<div class="info-row"><span class="info-lbl">PO Reference</span><span class="info-val">' + q.poRef + '</span></div>';
+      }
+      html += '<div class="info-row"><span class="info-lbl">Requested By</span><span class="info-val">' + q.requestedBy + '</span></div>';
+      if (q.linkedOrderId) {
+        html += '<div class="info-row"><span class="info-lbl">Order Created</span>' +
+          '<a class="info-val info-val--link" href="order-detail.html?id=' + q.linkedOrderId + '">' + q.linkedOrderId + '</a>' +
+          '</div>';
+      }
+      html += '</div></div>';
+      return html;
+    }
+
+    function renderNote(q) {
+      if (!q.note) return '';
+      var isOrder = q.status === 'ordered';
+      var infoSvg = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="#003D82" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5.5"/><path d="M6.5 6v2.5M6.5 4a.5.5 0 1 1 0 1.01"/></svg>';
+      return '<div class="okuma-note">' +
+        '<div class="okuma-note__head">' + infoSvg + (isOrder ? 'Order Confirmation' : 'Note from Okuma') + '</div>' +
+        '<div class="okuma-note__body">' + q.note + '</div>' +
+        '</div>';
+    }
+
+    function renderActions(q) {
+      var s = q.status;
+      var html = '<div class="action-stack">';
+
+      var icoApprove = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7.5l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var icoWithdraw = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+      var icoNew = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+      var icoArrow = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h9M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var icoDl = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v8M4 7l3 3.5L10 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 11v1A1.5 1.5 0 0 0 2.5 13.5h9A1.5 1.5 0 0 0 13 12v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+
+      if (s === 'quoted') {
+        html += '<a href="checkout-shipping.html" class="btn-det btn-det--primary">' + icoApprove + 'Approve &amp; Place Order</a>';
+        html += '<button class="btn-det btn-det--danger" onclick="return false;">' + icoWithdraw + 'Withdraw Quote Request</button>';
+      } else if (s === 'approved') {
+        html += '<a href="checkout-shipping.html" class="btn-det btn-det--primary">' + icoApprove + 'Place Order</a>';
+        html += '<button class="btn-det btn-det--danger" onclick="return false;">' + icoWithdraw + 'Withdraw Quote Request</button>';
+      } else if (s === 'submitted' || s === 'under-review') {
+        html += '<button class="btn-det btn-det--danger" onclick="return false;">' + icoWithdraw + 'Withdraw Quote Request</button>';
+      } else if (s === 'ordered') {
+        html += '<a href="order-detail.html?id=' + q.linkedOrderId + '" class="btn-det btn-det--primary">' + icoArrow + 'View Order</a>';
+        html += '<a href="#" class="btn-det btn-det--outline" onclick="return false;">' + icoDl + 'Download Quote (PDF)</a>';
+      } else if (s === 'expired' || s === 'declined') {
+        html += '<a href="my-quotes.html" class="btn-det btn-det--primary">' + icoNew + 'Request New Quote</a>';
+        if (q.sum) {
+          html += '<a href="#" class="btn-det btn-det--outline" onclick="return false;">' + icoDl + 'Download Quote (PDF)</a>';
+        }
+      }
+
+      html += '<a href="#" class="support-link" onclick="return false;">' +
+        '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5.5"/><path d="M6.5 6v2M6.5 4a1 1 0 1 1 0 2.01"/></svg>' +
+        'Contact Support' +
+        '</a>';
+
+      html += '</div>';
+      return html;
+    }
+
+    /* ── INIT ──────────────────────────────────────────────── */
+    var id = new URLSearchParams(window.location.search).get('id');
+    var quote = id && DATA[id];
+    render(quote || DATA['QUO-2026-00089']);
+
+  })();
+  </script>
+
+</body>
+</html>
