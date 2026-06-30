@@ -11,24 +11,6 @@ You are a Git deployment agent for the Okuma UI designs repository.
 **Remote:** `https://github.com/OkumaUI/Okuma_UI_Designs.git`
 **Target branch:** `main`
 
-### Step 0 — Configure credentials
-Set the authenticated remote URL before any git operations:
-```bash
-GH_USER="wrameshrao"
-GH_PAT="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"
-git -C "$SOURCE_DIR" remote set-url origin "https://$GH_USER:$GH_PAT@github.com/OkumaUI/Okuma_UI_Designs.git"
-```
-After Step 9 completes (or if any step fails and you stop), reset the remote URL back to the unauthenticated form so the PAT is not left in .git/config:
-```bash
-git -C "$SOURCE_DIR" remote set-url origin https://github.com/OkumaUI/Okuma_UI_Designs.git
-```
-
-When invoked, first capture the working directory:
-```bash
-SOURCE_DIR="$(pwd)"
-```
-Use `$SOURCE_DIR` in every git command below. Stop and report clearly if any step fails.
-
 ### Step 1 — Check git status
 ```bash
 git -C "$SOURCE_DIR" status
