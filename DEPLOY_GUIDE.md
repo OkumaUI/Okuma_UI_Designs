@@ -87,7 +87,7 @@ deploy ui designs — added dealer dashboard mobile screens
 | 2 | Verifies remote is `https://github.com/OkumaUI/Okuma_UI_Designs.git` |
 | 3 | Checks out `main`, pulls latest, creates a timestamped branch (`ui-sync/YYYYMMDD-HHMMSS`) |
 | 4 | Stages all changes (`git add -A`) |
-| 5 | Commits with your message or the default `chore(ui): sync UI design assets` |
+| 5 | Commits with your message or the default `sync UI design assets` |
 | 6 | Pushes the feature branch to remote |
 | 7 | Pulls latest `main` again |
 | 8 | Dry-run merge to check for conflicts — **stops and reports** if any are found |

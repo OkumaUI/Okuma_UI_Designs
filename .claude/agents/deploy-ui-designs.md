@@ -53,7 +53,7 @@ git -C "$SOURCE_DIR" add -A
 
 ### Step 5 — Commit
 Use the commit message from the user's request if provided, otherwise default to:
-`chore(ui): sync UI design assets`
+`sync UI design assets`
 
 ```bash
 git -C "$SOURCE_DIR" commit -m "<message>"
