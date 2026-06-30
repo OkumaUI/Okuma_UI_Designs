@@ -295,12 +295,44 @@
     @media (max-width: 480px) {
       .page-head__title { font-size: 22px; }
       .search-wrap { flex: 0 0 100%; }
-      .filter-select { min-width: 0; width: 100%; }
-      .filter-wrap { flex: 1 1 calc(50% - 6px); }
+      .filter-wrap { flex: 0 0 100%; }
+      .filter-select { width: 100%; min-width: 0; }
       .quotes-table th,
       .quotes-table td { padding: 10px 12px; font-size: 12px; }
       .quotes-foot { flex-direction: column; align-items: flex-start; gap: 12px; }
     }
+
+    /* ── Custom dropdown (matches parts-catalogue style) ── */
+    .csd-btn {
+      width: 100%; height: 42px;
+      border: 1px solid #DEDEDE; border-radius: 4px;
+      padding: 0 36px 0 14px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; font-weight: 500;
+      text-align: left; color: #1A1A1A; background: #fff;
+      cursor: pointer; appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%23717171' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+    .csd-btn:focus { outline: none; border-color: #005EB8; }
+    .csd-panel {
+      display: none; position: absolute;
+      top: 100%; left: 0; right: 0;
+      margin-top: 2px; background: #fff;
+      border: 1px solid #DEDEDE; border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+      max-height: 220px; overflow-y: auto;
+      -webkit-overflow-scrolling: touch; z-index: 300;
+    }
+    .csd-panel.open { display: block; }
+    .csd-item {
+      padding: 11px 14px; font-size: 13px; color: #1A1A1A;
+      cursor: pointer; border-top: 1px solid #F0F0F0;
+    }
+    .csd-item:first-child { border-top: none; }
+    .csd-item.csd-placeholder { color: #757575; cursor: default; }
+    .csd-item:not(.csd-placeholder):hover { background: #EEF4FF; }
+    .csd-item.csd-selected { color: #005EB8; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -560,6 +592,69 @@
 
       render();
 
+    })();
+  </script>
+
+  <script>
+    /* ── Custom dropdowns for Filter/Sort (mirrors parts-catalogue pattern) ── */
+    (function () {
+      document.querySelectorAll('.filter-wrap').forEach(function (wrap) {
+        var sel = wrap.querySelector('.filter-select');
+        var chevron = wrap.querySelector('.filter-wrap__chevron');
+        if (!sel) return;
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'csd-btn';
+
+        var panel = document.createElement('div');
+        panel.className = 'csd-panel';
+
+        function syncBtn() {
+          var opt = sel.options[sel.selectedIndex];
+          btn.textContent = opt ? opt.text.trim() : '';
+          btn.style.color = (!opt || opt.value === '') ? '#757575' : '#1A1A1A';
+        }
+
+        function buildPanel() {
+          panel.innerHTML = '';
+          Array.from(sel.options).forEach(function (opt) {
+            var item = document.createElement('div');
+            item.className = 'csd-item' +
+              (opt.value === '' ? ' csd-placeholder' : '') +
+              (opt.selected ? ' csd-selected' : '');
+            item.textContent = opt.text.trim();
+            item.addEventListener('click', function () {
+              if (opt.value === '') return;
+              sel.value = opt.value;
+              sel.dispatchEvent(new Event('change'));
+              syncBtn();
+              buildPanel();
+              panel.classList.remove('open');
+            });
+            panel.appendChild(item);
+          });
+        }
+
+        btn.addEventListener('click', function () {
+          buildPanel();
+          panel.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function (e) {
+          if (!wrap.contains(e.target)) panel.classList.remove('open');
+        });
+
+        window.addEventListener('scroll', function () {
+          panel.classList.remove('open');
+        }, { passive: true });
+
+        sel.style.display = 'none';
+        if (chevron) chevron.style.display = 'none';
+        wrap.appendChild(btn);
+        wrap.appendChild(panel);
+        syncBtn();
+      });
     })();
   </script>
 

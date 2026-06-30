@@ -233,15 +233,11 @@
         margin-top: 12px;
       }
       .cart-row .col-total {
-        order: 2; flex: 0 0 auto;
-        margin-left: auto; margin-top: 12px;
+        position: absolute; top: 14px; right: 44px;
         text-align: right;
       }
       .cart-row .col-total .total-stack { align-items: flex-end; }
-      .cart-row .col-price { flex-basis: 100%; }
-      .cart-row .col-price::before { content: 'Price: '; color: #6E6E6E; font-weight: 400; }
-      .cart-row .col-qty   { margin-top: 4px; }
-      .cart-row .col-total { margin-top: 4px; }
+      .cart-row .col-qty { margin-top: 4px; }
     }
     @media (max-width: 480px) {
       main { padding: 16px 12px; }
