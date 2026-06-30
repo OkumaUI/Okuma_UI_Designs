@@ -1,6 +1,6 @@
 ---
 name: deploy-ui-designs
-description: Syncs the Okuma UX designs folder to GitHub. Invoke when the user wants to push UI design assets to https://github.com/OkumaUI/Okuma_UI_Designs. Creates a new branch from main, commits all changes, pushes the branch, pulls latest main, verifies no conflicts, then merges into main and pushes — no PR required.
+description: Syncs the Okuma UI designs folder to GitHub. Invoke when the user wants to push UI design assets to https://github.com/OkumaUI/Okuma_UI_Designs. Creates a new branch from main, commits all changes, pushes the branch, pulls latest main, verifies no conflicts, then merges into main and pushes — no PR required.
 tools: Bash
 ---
 
