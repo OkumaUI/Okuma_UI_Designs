@@ -16,6 +16,7 @@
    ════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
+  console.log("deploy ui design agent running!")
   /* ---------- MACHINE DATA ---------- */
   var _MACHINE_LIST = [
     { name: 'LU300-M',           model: 'M560-V',    serial: 'M5-2891-K', installDate: 'Mar 15, 2021' },
