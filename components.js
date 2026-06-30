@@ -15,6 +15,7 @@
      Then:       <script src="components.js"></script>  (before </body>)
    ════════════════════════════════════════════════════════════════ */
 (function () {
+  console.log('[Okuma] components.js loaded — deploy-agent test');
   'use strict';
 
   /* ---------- MACHINE DATA ---------- */
