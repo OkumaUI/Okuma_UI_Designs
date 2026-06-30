@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order Detail -“ Okuma Parts Portal</title>
+  <title>Order Detail — Okuma Parts Portal</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,37 +24,37 @@
       padding: 32px 32px 64px;
       display: flex;
       flex-direction: column;
-      gap: 0;
     }
 
-    /* â”€â”€ BREADCRUMB â”€â”€ */
+    /* BREADCRUMB */
     .breadcrumb {
       display: flex;
       align-items: center;
       gap: 6px;
       font-size: 13px;
-      margin-bottom: 24px;
+      color: #717171;
+      margin-bottom: 20px;
     }
     .breadcrumb a { color: #717171; text-decoration: none; }
-    .breadcrumb a:hover { color: #1A1A1A; }
-    .breadcrumb__sep { color: #717171; }
-    .breadcrumb__current { color: #1A1A1A; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
+    .breadcrumb a:hover { color: #005EB8; text-decoration: underline; }
+    .breadcrumb__sep { color: #C4C4C4; }
+    .breadcrumb__current { color: #1A1A1A; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
 
-    /* â”€â”€ PAGE HEADER â”€â”€ */
+    /* PAGE HEADER */
     .page-head {
       display: flex;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 32px;
+      gap: 14px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
     }
-
     .page-head__back {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 36px;
       height: 36px;
-      border-radius: 6px;
+      border-radius: 4px;
       border: 1px solid #DEDEDE;
       background: #fff;
       color: #1A1A1A;
@@ -64,113 +64,240 @@
     }
     .page-head__back:hover { border-color: #005EB8; background: #F0F6FF; color: #005EB8; }
     .page-head__back svg { width: 16px; height: 16px; }
+    .page-head__info { flex: 1; min-width: 0; }
+    .page-head__title { font-size: 24px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.3px; }
+    .page-head__meta { font-size: 13px; color: #717171; margin-top: 3px; display: block; }
 
-    .page-head__titles { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-    .page-head__title {
-      font-size: 22px;
-      font-weight: 800;
-      color: #1A1A1A;
-      letter-spacing: -0.3px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .page-head__subtitle {
-      font-size: 13px;
-      color: #717171;
-    }
-
-    /* â”€â”€ PLACEHOLDER CARD â”€â”€ */
-    .placeholder-card {
-      background: #FAFAFA;
-      border: 1.5px dashed #DEDEDE;
-      border-radius: 10px;
-      padding: 72px 48px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    .placeholder-card__icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: #EEF3FF;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #005EB8;
-      flex-shrink: 0;
-    }
-    .placeholder-card__icon svg { width: 26px; height: 26px; }
-
-    .placeholder-card__label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #005EB8;
-      background: #EEF3FF;
-      padding: 4px 10px;
-      border-radius: 4px;
-    }
-
-    .placeholder-card__title {
-      font-size: 20px;
-      font-weight: 700;
-      color: #1A1A1A;
-    }
-
-    .placeholder-card__body {
-      font-size: 14px;
-      color: #717171;
-      line-height: 1.6;
-      max-width: 420px;
-    }
-
-    .placeholder-card__order-num {
-      font-size: 13px;
-      font-weight: 600;
-      color: #1A1A1A;
-      background: #fff;
-      border: 1px solid #DEDEDE;
-      border-radius: 6px;
-      padding: 8px 20px;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 0.5px;
-    }
-
-    .placeholder-card__back-link {
+    /* STATUS BADGES */
+    .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      margin-top: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #005EB8;
-      text-decoration: none;
+      border-radius: 2px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .placeholder-card__back-link:hover { text-decoration: underline; }
-    .placeholder-card__back-link svg { width: 13px; height: 13px; }
+    .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .status-badge--processing { background: #FFF9EF; border: 0.5px solid #FFB549; color: #FFB549; }
+    .status-badge--processing .dot { background: #FFB549; }
+    .status-badge--shipped    { background: #F0FCFD; border: 0.5px solid #68D2DF; color: #68D2DF; }
+    .status-badge--shipped .dot { background: #68D2DF; }
+    .status-badge--delivered  { background: #F4F9F1; border: 0.5px solid #74AA50; color: #74AA50; }
+    .status-badge--delivered .dot { background: #74AA50; }
+    .status-badge--cancelled  { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #9E9E9E; }
+    .status-badge--cancelled .dot { background: #9E9E9E; }
 
+    /* CANCELLED BANNER */
+    .cancelled-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #FFF5F5;
+      border: 1px solid #FFC9C9;
+      border-radius: 4px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #C0392B;
+      margin-bottom: 20px;
+    }
+
+    /* TIMELINE */
+    .timeline-card {
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      padding: 28px 40px;
+      margin-bottom: 20px;
+    }
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      position: relative;
+    }
+    .timeline-track {
+      position: absolute;
+      top: 13px;
+      left: 14px;
+      right: 14px;
+      height: 2px;
+      background: #EBEBEB;
+      z-index: 0;
+    }
+    .timeline-track__fill { height: 100%; background: #005EB8; }
+    .timeline-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      position: relative;
+      z-index: 1;
+    }
+    .step-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: #fff;
+      border: 2px solid #DEDEDE;
+    }
+    .step-dot--done    { background: #005EB8; border-color: #005EB8; color: #fff; }
+    .step-dot--active  { background: #005EB8; border-color: #005EB8; color: #fff; box-shadow: 0 0 0 4px rgba(0,94,184,0.14); }
+    .step-dot--pending { background: #fff; border-color: #DEDEDE; color: #BDBDBD; }
+    .step-label { font-size: 12px; font-weight: 600; color: #9E9E9E; text-align: center; line-height: 1.3; }
+    .step-label--done, .step-label--active { color: #1A1A1A; }
+    .step-date { font-size: 11px; color: #B0B0B0; text-align: center; line-height: 1.3; margin-top: -4px; }
+    .step-date--done, .step-date--active { color: #717171; }
+
+    /* TWO COLUMN */
+    .detail-layout {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .detail-main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .detail-aside {
+      width: 308px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* CARDS */
+    .det-card { border: 1px solid #DEDEDE; border-radius: 4px; overflow: hidden; }
+    .det-card__head {
+      padding: 12px 20px;
+      background: #F5F5F5;
+      border-bottom: 1px solid #DEDEDE;
+      font-size: 11px;
+      font-weight: 700;
+      color: #717171;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .det-card__body { padding: 20px; }
+
+    /* ITEMS TABLE */
+    .items-tbl { width: 100%; border-collapse: collapse; min-width: 520px; }
+    .items-tbl th {
+      padding: 10px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #9E9E9E;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      text-align: left;
+      border-bottom: 1px solid #DEDEDE;
+      white-space: nowrap;
+      background: #FAFAFA;
+    }
+    .items-tbl th.r { text-align: right; }
+    .items-tbl td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #F0F0F0;
+      vertical-align: middle;
+      font-size: 13px;
+    }
+    .items-tbl tbody tr:last-child td { border-bottom: none; }
+    .items-tbl tbody tr:hover { background: #FAFAFA; }
+
+    .it-name  { font-size: 13px; font-weight: 700; color: #1A1A1A; }
+    .it-pn    { font-size: 11px; color: #9E9E9E; margin-top: 2px; }
+    .it-mach  { font-size: 12px; color: #4B4B4B; font-weight: 500; }
+    .it-ser   { font-size: 11px; color: #9E9E9E; margin-top: 1px; }
+    .r        { text-align: right; }
+    .it-linetotal { font-size: 13px; font-weight: 700; color: #1A1A1A; }
+
+    .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* ORDER SUMMARY CARD */
+    .sum-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 0; font-size: 13px;
+    }
+    .sum-row__lbl { color: #717171; }
+    .sum-row__val { font-weight: 500; color: #1A1A1A; }
+    .sum-row__val--green { color: #74AA50; font-weight: 600; }
+    .sum-divider  { height: 1px; background: #DEDEDE; margin: 10px 0; }
+    .sum-total {
+      display: flex; justify-content: space-between; align-items: center; padding: 4px 0;
+    }
+    .sum-total__lbl { font-size: 14px; font-weight: 700; color: #1A1A1A; }
+    .sum-total__val { font-size: 20px; font-weight: 800; color: #005EB8; }
+
+    /* INFO ROWS */
+    .info-row {
+      display: flex; flex-direction: column; gap: 2px;
+      padding: 10px 0; border-bottom: 1px solid #F0F0F0;
+    }
+    .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-row:first-child { padding-top: 0; }
+    .info-lbl { font-size: 11px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.4px; }
+    .info-val { font-size: 13px; color: #1A1A1A; line-height: 1.5; }
+    .info-val--muted { color: #717171; }
+
+    .tracking-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 13px; font-weight: 700; color: #005EB8; text-decoration: none;
+    }
+    .tracking-link:hover { text-decoration: underline; }
+
+    /* ACTIONS */
+    .action-stack { display: flex; flex-direction: column; gap: 10px; }
+    .btn-det {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; height: 40px; border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      text-decoration: none; border: 1.5px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .btn-det--primary { background: #005EB8; color: #fff; border-color: #005EB8; }
+    .btn-det--primary:hover { background: #0B308E; border-color: #0B308E; }
+    .btn-det--outline { background: #fff; color: #005EB8; border-color: #005EB8; }
+    .btn-det--outline:hover { background: #F0F6FF; }
+    .btn-det svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .support-link {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 13px; color: #717171; text-decoration: none; padding: 6px 0;
+    }
+    .support-link:hover { color: #005EB8; }
+
+    img, svg { max-width: 100%; }
+
+    /* RESPONSIVE */
+    @media (min-width: 769px) and (max-width: 1199px) {
+      .main-area { padding: 24px 24px 48px; }
+      .detail-aside { width: 268px; }
+    }
+    @media (max-width: 900px) {
+      .detail-layout { flex-direction: column; }
+      .detail-aside { width: 100%; }
+    }
     @media (max-width: 768px) {
       .main-area { padding: 16px 16px 48px; }
-      .placeholder-card { padding: 48px 24px; }
+      .timeline-card { padding: 20px 16px; }
+      .page-head__title { font-size: 20px; }
     }
-
+    @media (max-width: 600px) {
+      .page-head { flex-wrap: wrap; gap: 10px; }
+    }
     @media (max-width: 480px) {
-      .main-area { padding: 12px 12px 40px; }
-      .placeholder-card { padding: 32px 16px; }
-      .placeholder-card__title { font-size: 17px; }
-      .placeholder-card__body { font-size: 13px; }
-      .page-head__title { font-size: 17px; }
-    }
-
-    @media (max-width: 414px) {
-      .main-area { padding: 12px 12px 32px; }
+      .page-head__title { font-size: 18px; }
+      .step-date { display: none; }
     }
   </style>
 </head>
@@ -183,74 +310,354 @@
 
     <main class="main-area">
 
-      <!-- Breadcrumb -->
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="dashboard.html">Home</a>
         <span class="breadcrumb__sep">/</span>
         <a href="my-orders.html">My Orders</a>
         <span class="breadcrumb__sep">/</span>
-        <span class="breadcrumb__current" id="breadcrumbOrderId">Order Detail</span>
+        <span class="breadcrumb__current" id="bcId">Order Detail</span>
       </nav>
 
-      <!-- Page header -->
       <div class="page-head">
         <a href="my-orders.html" class="page-head__back" aria-label="Back to My Orders">
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <div class="page-head__titles">
-          <h1 class="page-head__title" id="pageTitle">Order Detail</h1>
-          <span class="page-head__subtitle" id="pageSubtitle">Loading-¦</span>
+        <div class="page-head__info">
+          <h1 class="page-head__title" id="pgTitle">Order</h1>
+          <span class="page-head__meta" id="pgMeta"></span>
         </div>
+        <span id="pgBadge"></span>
       </div>
 
-      <!-- Placeholder -->
-      <div class="placeholder-card">
-        <div class="placeholder-card__icon">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/>
-            <path d="M8 12h8M8 8h5M8 16h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <span class="placeholder-card__label">Coming Soon</span>
-        <p class="placeholder-card__title">This screen is yet to be built</p>
-        <p class="placeholder-card__body">
-          The Order Detail view will show a full breakdown of the order - line items, shipping info, status timeline, and invoice download. Check back once this screen is designed and implemented.
-        </p>
-        <div class="placeholder-card__order-num" id="orderNumDisplay">-</div>
-        <a href="my-orders.html" class="placeholder-card__back-link">
-          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Back to My Orders
-        </a>
-      </div>
+      <div id="orderContent"></div>
 
     </main>
   </div>
 
   <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>
-
   <script src="components.js"></script>
-  <script>
-    (function () {
-      var params = new URLSearchParams(window.location.search);
-      var id = params.get('id');
 
-      if (id) {
-        document.getElementById('breadcrumbOrderId').textContent = id;
-        document.getElementById('pageTitle').textContent = id;
-        document.getElementById('pageSubtitle').textContent = 'Order Detail';
-        document.getElementById('orderNumDisplay').textContent = id;
-      } else {
-        document.getElementById('pageSubtitle').textContent = 'Order Detail';
-        document.getElementById('orderNumDisplay').textContent = 'No order ID provided';
+  <script>
+  (function () {
+
+    /* ─── ORDER DATA ─────────────────────────────────────── */
+    var DATA = {
+      'OKU-2026-00421': {
+        num: 'OKU-2026-00421', date: 'Jun 10, 2026', status: 'shipped',
+        orderedFor: 'ABC Industries', poRef: 'ABC-PO-7741', placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999AA10123456784',
+          shippedDate: 'Jun 13, 2026', estDelivery: 'Jun 17, 2026',
+          addr: { name: 'ABC Industries — Receiving Dock', street: '4521 Commerce Drive', city: 'Charlotte, NC 28208, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Jun 10, 2026', s: 'done'    },
+          { label: 'Confirmed',    date: 'Jun 11, 2026', s: 'done'    },
+          { label: 'Shipped',      date: 'Jun 13, 2026', s: 'active'  },
+          { label: 'Delivered',    date: 'Est. Jun 17',  s: 'pending' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 1, price: 520.00, img: 'images/product-coolant-pump.png'   },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 3, price: 86.50,  img: 'images/product-servo-belt.png'     },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 1, price: 380.00, img: 'images/product-plate-bearing.png'  }
+        ],
+        sum: { subtotal: 1159.50, shipping: 45.00, tax: 80.00, total: 1284.50 }
+      },
+      'OKU-2026-00398': {
+        num: 'OKU-2026-00398', date: 'May 28, 2026', status: 'delivered',
+        orderedFor: 'Delta Components', poRef: 'DLT-PO-3392', placedBy: 'James Hartwell',
+        ship: {
+          method: 'FedEx Express', tracking: '748923489563',
+          shippedDate: 'May 30, 2026', estDelivery: 'Jun 2, 2026', deliveredDate: 'Jun 2, 2026',
+          addr: { name: 'Delta Components — Main Plant', street: '810 Industrial Pkwy', city: 'Atlanta, GA 30301, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'May 28, 2026', s: 'done' },
+          { label: 'Confirmed',    date: 'May 29, 2026', s: 'done' },
+          { label: 'Shipped',      date: 'May 30, 2026', s: 'done' },
+          { label: 'Delivered',    date: 'Jun 2, 2026',  s: 'done' }
+        ],
+        items: [
+          { name: 'Spindle Bearing Unit',   pn: 'SK-2291-001',     mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 2, price: 720.00, img: null },
+          { name: 'Coolant Pump Assembly',  pn: 'E4809-045-017-A', mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 2, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Plate Bearing',          pn: '525-0100-11',     mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 1, price: 380.00, img: 'images/product-plate-bearing.png' },
+          { name: 'Servo Drive Belt',       pn: 'B0612-045-H8',    mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 2, price: 86.50,  img: 'images/product-servo-belt.png' },
+          { name: 'O-Ring Seal Kit',        pn: 'OR-0045-SLK',     mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 5, price: 18.00,  img: null },
+          { name: 'Chuck Jaw Set (3-pc)',   pn: 'A1B-0092-330',    mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 1, price: 246.00, img: null },
+          { name: 'Turret Index Pin',       pn: 'TIP-4421-K',      mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 1, price: 51.00,  img: null }
+        ],
+        sum: { subtotal: 3420.00, shipping: 125.00, tax: 125.00, total: 3670.00 }
+      },
+      'OKU-2026-00375': {
+        num: 'OKU-2026-00375', date: 'May 15, 2026', status: 'delivered',
+        orderedFor: null, poRef: null, placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999BB10987654321',
+          shippedDate: 'May 17, 2026', estDelivery: 'May 22, 2026', deliveredDate: 'May 21, 2026',
+          addr: { name: 'Okuma HQ — Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte, NC 28214, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'May 15, 2026', s: 'done' },
+          { label: 'Confirmed',    date: 'May 16, 2026', s: 'done' },
+          { label: 'Shipped',      date: 'May 17, 2026', s: 'done' },
+          { label: 'Delivered',    date: 'May 21, 2026', s: 'done' }
+        ],
+        items: [
+          { name: 'O-Ring Seal Kit', pn: 'OR-0045-SLK', mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 47.80, img: null }
+        ],
+        sum: { subtotal: 47.80, shipping: 0, tax: 0, total: 47.80 }
+      },
+      'OKU-2026-00342': {
+        num: 'OKU-2026-00342', date: 'Apr 30, 2026', status: 'cancelled',
+        orderedFor: 'Franklin Engineering', poRef: 'FE-PO-0092', placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: null,
+          estDelivery: null,
+          addr: { name: 'Franklin Engineering', street: '230 N. Industrial Road', city: 'Raleigh, NC 27601, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Apr 30, 2026', s: 'done'    },
+          { label: 'Confirmed',    date: '—',            s: 'pending' },
+          { label: 'Shipped',      date: '—',            s: 'pending' },
+          { label: 'Delivered',    date: '—',            s: 'pending' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 86.50,  img: 'images/product-servo-belt.png'  }
+        ],
+        sum: { subtotal: 606.50, shipping: 0, tax: 5.50, total: 612.00 }
+      },
+      'OKU-2026-00301': {
+        num: 'OKU-2026-00301', date: 'Apr 12, 2026', status: 'processing',
+        orderedFor: null, poRef: null, placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: null,
+          estDelivery: 'Apr 22, 2026',
+          addr: { name: 'Okuma HQ — Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte, NC 28214, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Apr 12, 2026', s: 'done'    },
+          { label: 'Confirmed',    date: 'Apr 13, 2026', s: 'active'  },
+          { label: 'Shipped',      date: 'Est. Apr 16',  s: 'pending' },
+          { label: 'Delivered',    date: 'Est. Apr 22',  s: 'pending' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 2, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-0045-SLK',     mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 8, price: 18.00,  img: null },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'LU300-M',       ser: 'M5-2891-K',  qty: 1, price: 405.00, img: 'images/product-plate-bearing.png' },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'MULTUS U3000',  ser: 'MU-9102-L',  qty: 2, price: 86.50,  img: 'images/product-servo-belt.png' },
+          { name: 'Chuck Jaw Set (3-pc)', pn: 'A1B-0092-330',    mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 1, price: 121.00, img: null }
+        ],
+        sum: { subtotal: 2005.50, shipping: 55.50, tax: 84.00, total: 2145.00 }
+      }
+    };
+
+    /* ─── HELPERS ──────────────────────────────────────── */
+    function fmt(n) {
+      return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    var BADGE = {
+      processing: 'status-badge--processing',
+      shipped:    'status-badge--shipped',
+      delivered:  'status-badge--delivered',
+      cancelled:  'status-badge--cancelled'
+    };
+    function badge(s) {
+      var lbl = s.charAt(0).toUpperCase() + s.slice(1);
+      return '<span class="status-badge ' + (BADGE[s] || '') + '"><span class="dot"></span>' + lbl + '</span>';
+    }
+    function checkIcon() {
+      return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+    function dotIcon(col) {
+      return '<svg width="8" height="8" viewBox="0 0 8 8" fill="' + col + '" aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>';
+    }
+    function extIcon() {
+      return '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H4M9 1v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+    function dlIcon() {
+      return '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v8M4 7l3 3.5L10 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 11v1A1.5 1.5 0 0 0 2.5 13.5h9A1.5 1.5 0 0 0 13 12v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    }
+    function reorderIcon() {
+      return '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    }
+
+    /* ─── RENDER ───────────────────────────────────────── */
+    function render(o) {
+      document.title = o.num + ' — Okuma Parts Portal';
+      document.getElementById('bcId').textContent = o.num;
+      document.getElementById('pgTitle').textContent = o.num;
+      document.getElementById('pgMeta').textContent =
+        'Placed ' + o.date + (o.orderedFor ? ' · For ' + o.orderedFor : '');
+      document.getElementById('pgBadge').innerHTML = badge(o.status);
+
+      var html = '';
+
+      if (o.status === 'cancelled') {
+        html += '<div class="cancelled-banner">' +
+          '<svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6.5" stroke="#C0392B" stroke-width="1.4"/><path d="M7.5 4.5v3.5" stroke="#C0392B" stroke-width="1.5" stroke-linecap="round"/><circle cx="7.5" cy="10.5" r="0.75" fill="#C0392B"/></svg>' +
+          'This order was cancelled. Items were not shipped. Contact support if you need assistance.' +
+          '</div>';
       }
 
-      document.title = (id ? id + ' -“ ' : '') + 'Order Detail -“ Okuma Parts Portal';
-    })();
+      html += renderTimeline(o);
+
+      html += '<div class="detail-layout">';
+      html += '<div class="detail-main">' + renderItems(o) + renderShipping(o) + '</div>';
+      html += '<div class="detail-aside">' + renderSummary(o) + renderInfo(o) + renderActions(o) + '</div>';
+      html += '</div>';
+
+      document.getElementById('orderContent').innerHTML = html;
+    }
+
+    function renderTimeline(o) {
+      var steps = o.steps;
+      var activeIdx = 0;
+      for (var i = 0; i < steps.length; i++) {
+        if (steps[i].s === 'done' || steps[i].s === 'active') activeIdx = i;
+      }
+      var pct = o.status === 'cancelled' ? 0 : (activeIdx / (steps.length - 1)) * 100;
+
+      var stepsHTML = steps.map(function(st) {
+        var dc = 'step-dot', lc = 'step-label', dtc = 'step-date', inner = '';
+        if (st.s === 'done') {
+          dc += ' step-dot--done'; lc += ' step-label--done'; dtc += ' step-date--done';
+          inner = checkIcon();
+        } else if (st.s === 'active') {
+          dc += ' step-dot--active'; lc += ' step-label--active'; dtc += ' step-date--active';
+          inner = dotIcon('#fff');
+        } else {
+          dc += ' step-dot--pending';
+          inner = dotIcon('#DEDEDE');
+        }
+        return '<div class="timeline-step">' +
+          '<div class="' + dc + '">' + inner + '</div>' +
+          '<span class="' + lc + '">' + st.label + '</span>' +
+          '<span class="' + dtc + '">' + st.date + '</span>' +
+          '</div>';
+      }).join('');
+
+      return '<div class="timeline-card">' +
+        '<div class="timeline">' +
+        '<div class="timeline-track"><div class="timeline-track__fill" style="width:' + pct + '%"></div></div>' +
+        stepsHTML +
+        '</div></div>';
+    }
+
+    function renderItems(o) {
+      var rows = o.items.map(function(it) {
+        var lineTotal = it.qty * it.price;
+        return '<tr>' +
+          '<td><div class="it-name">' + it.name + '</div><div class="it-pn">P/N: ' + it.pn + '</div></td>' +
+          '<td><div class="it-mach">' + it.mach + '</div><div class="it-ser">' + it.ser + '</div></td>' +
+          '<td class="r" style="width:50px"><span>' + it.qty + '</span></td>' +
+          '<td class="r" style="width:95px"><span style="color:#4B4B4B">' + fmt(it.price) + '</span></td>' +
+          '<td class="r" style="width:95px"><span class="it-linetotal">' + fmt(lineTotal) + '</span></td>' +
+          '</tr>';
+      }).join('');
+
+      return '<div class="det-card">' +
+        '<div class="det-card__head">Items Ordered (' + o.items.length + ')</div>' +
+        '<div class="tbl-scroll">' +
+        '<table class="items-tbl">' +
+        '<thead><tr>' +
+        '<th>Part</th>' +
+        '<th style="width:160px">Machine</th>' +
+        '<th class="r" style="width:50px">Qty</th>' +
+        '<th class="r" style="width:95px">Unit Price</th>' +
+        '<th class="r" style="width:95px">Total</th>' +
+        '</tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+        '</table>' +
+        '</div></div>';
+    }
+
+    function renderShipping(o) {
+      var s = o.ship;
+      if (!s) return '';
+      var html = '<div class="det-card"><div class="det-card__head">Shipping Details</div><div class="det-card__body">';
+
+      html += '<div class="info-row">' +
+        '<span class="info-lbl">Ship To</span>' +
+        '<span class="info-val">' + s.addr.name + '</span>' +
+        '<span class="info-val info-val--muted">' + s.addr.street + '</span>' +
+        '<span class="info-val info-val--muted">' + s.addr.city + '</span>' +
+        '</div>';
+
+      html += '<div class="info-row"><span class="info-lbl">Shipping Method</span><span class="info-val">' + s.method + '</span></div>';
+
+      if (s.tracking) {
+        html += '<div class="info-row"><span class="info-lbl">Tracking Number</span>' +
+          '<a class="tracking-link" href="#" onclick="return false;">' + s.tracking + ' ' + extIcon() + '</a>' +
+          '</div>';
+      }
+
+      if (s.shippedDate) {
+        html += '<div class="info-row"><span class="info-lbl">Shipped On</span><span class="info-val">' + s.shippedDate + '</span></div>';
+      }
+
+      if (s.estDelivery || s.deliveredDate) {
+        var isDelivered = o.status === 'delivered';
+        html += '<div class="info-row"><span class="info-lbl">' + (isDelivered ? 'Delivered On' : 'Est. Delivery') + '</span>' +
+          '<span class="info-val">' + (isDelivered && s.deliveredDate ? s.deliveredDate : (s.estDelivery || '—')) + '</span></div>';
+      }
+
+      html += '</div></div>';
+      return html;
+    }
+
+    function renderSummary(o) {
+      var s = o.sum;
+      var html = '<div class="det-card"><div class="det-card__head">Order Summary</div><div class="det-card__body">';
+      html += '<div class="sum-row"><span class="sum-row__lbl">Subtotal (' + o.items.length + ' item' + (o.items.length !== 1 ? 's' : '') + ')</span><span class="sum-row__val">' + fmt(s.subtotal) + '</span></div>';
+      html += '<div class="sum-row"><span class="sum-row__lbl">Shipping</span><span class="' + (s.shipping > 0 ? 'sum-row__val' : 'sum-row__val sum-row__val--green') + '">' + (s.shipping > 0 ? fmt(s.shipping) : 'Free') + '</span></div>';
+      if (s.tax > 0) {
+        html += '<div class="sum-row"><span class="sum-row__lbl">Tax</span><span class="sum-row__val">' + fmt(s.tax) + '</span></div>';
+      }
+      html += '<div class="sum-divider"></div>';
+      html += '<div class="sum-total"><span class="sum-total__lbl">Total</span><span class="sum-total__val">' + fmt(s.total) + '</span></div>';
+      html += '</div></div>';
+      return html;
+    }
+
+    function renderInfo(o) {
+      var html = '<div class="det-card"><div class="det-card__head">Order Info</div><div class="det-card__body">';
+      html += '<div class="info-row"><span class="info-lbl">Order Date</span><span class="info-val">' + o.date + '</span></div>';
+      html += '<div class="info-row"><span class="info-lbl">Order Number</span><span class="info-val">' + o.num + '</span></div>';
+      if (o.orderedFor) {
+        html += '<div class="info-row"><span class="info-lbl">Ordered For</span><span class="info-val">' + o.orderedFor + '</span></div>';
+      }
+      if (o.poRef) {
+        html += '<div class="info-row"><span class="info-lbl">PO Reference</span><span class="info-val">' + o.poRef + '</span></div>';
+      }
+      html += '<div class="info-row"><span class="info-lbl">Placed By</span><span class="info-val">' + o.placedBy + '</span></div>';
+      html += '</div></div>';
+      return html;
+    }
+
+    function renderActions(o) {
+      var html = '<div class="action-stack">';
+      html += '<a href="#" class="btn-det btn-det--outline" onclick="return false;">' + dlIcon() + 'Download Invoice</a>';
+      if (o.status === 'delivered') {
+        html += '<button class="btn-det btn-det--primary" onclick="window.location=\'create-order.html\'">' + reorderIcon() + 'Reorder Items</button>';
+      }
+      html += '<a href="#" class="support-link" onclick="return false;">' +
+        '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5.5"/><path d="M6.5 6v2M6.5 4a1 1 0 1 1 0 2.01"/></svg>' +
+        'Contact Support' +
+        '</a>';
+      html += '</div>';
+      return html;
+    }
+
+    /* ─── INIT ─────────────────────────────────────────── */
+    var id = new URLSearchParams(window.location.search).get('id');
+    var order = id && DATA[id];
+    render(order || DATA['OKU-2026-00421']);
+
+  })();
   </script>
 
 </body>

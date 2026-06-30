@@ -1283,7 +1283,7 @@
         <div id="diagram-wrapper">
           <div id="diagram-inner">
             <!-- Parts sheet diagram (shown when book+group+sheet selected) -->
-            <img class="diagram-img" id="parts-diagram-img" src="diagram-sheet53.png" alt="LU300-M exploded view"
+            <img class="diagram-img" id="parts-diagram-img" src="images/diagram-sheet53.png" alt="LU300-M exploded view"
                  draggable="false"
                  onerror="this.style.display='none'">
 
@@ -1383,7 +1383,7 @@
       <div class="modal-body">
         <div class="modal-part-row">
           <div class="modal-thumbnail">
-            <img src="product-plate-bearing.png" alt="Part"
+            <img src="images/product-plate-bearing.png" alt="Part"
                  onerror="this.style.display='none'">
           </div>
           <div class="modal-part-info">
@@ -1863,8 +1863,8 @@
       gImg.style.display = '';
 
       // Trigger image load only when src changes (avoid flicker on same-group re-entry)
-      if (gImg.src.indexOf('Bed Group image.png') === -1) {
-        gImg.src = 'Bed Group image.png';
+      if (gImg.src.indexOf('images/Bed Group image.png') === -1) {
+        gImg.src = 'images/Bed Group image.png';
       }
 
       document.querySelectorAll('.pin:not(.sheet-pin)').forEach(function (p) { p.style.display = 'none'; });

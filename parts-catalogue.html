@@ -522,6 +522,16 @@
     }
     #popup-alt-btn:hover { background: #EEF4FF; }
 
+    #part-popup-close {
+      position: absolute; top: 7px; right: 7px;
+      width: 18px; height: 18px;
+      background: rgba(255,255,255,0.12); border: none; border-radius: 2px;
+      cursor: pointer; color: rgba(255,255,255,0.75); padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s, color 0.1s;
+    }
+    #part-popup-close:hover { background: rgba(255,255,255,0.28); color: #fff; }
+
     /* â”€â”€ ALTERNATIVES MODAL â”€â”€ */
     #alt-modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -1175,7 +1185,7 @@
         <div class="machine-title-row">
           <div class="machine-title-left">
             <h1 class="machine-title">LU300-M</h1>
-            <span class="verified-badge">Verified Machine</span>
+            <span class="verified-badge">INSTALLED</span>
           </div>
           <a href="#" class="btn-download-pdf" onclick="return false;" title="Download parts book PDF">
             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
@@ -1184,7 +1194,7 @@
             Download PDF
           </a>
         </div>
-        <p class="machine-details">Serial: M5-2891-K&nbsp;&nbsp;|&nbsp;&nbsp;Stock Condition: Active</p>
+        <p class="machine-details">Serial No: M5-2891-K | Stock Condition: Active</p>
       </div>
 
       <!-- FILTER BAR -->
@@ -1287,7 +1297,7 @@
         <div id="diagram-wrapper">
           <div id="diagram-inner">
             <!-- Parts sheet diagram (shown when book+group+sheet selected) -->
-            <img class="diagram-img" id="parts-diagram-img" src="diagram-sheet53.png" alt="LU300-M exploded view"
+            <img class="diagram-img" id="parts-diagram-img" src="images/diagram-sheet53.png" alt="LU300-M exploded view"
                  draggable="false"
                  onerror="this.style.display='none'">
 
@@ -1295,13 +1305,6 @@
             <img class="diagram-img" id="group-diagram-img" src="" alt="Group overview"
                  draggable="false" style="display:none;"
                  onerror="this.style.display='none'">
-
-            <!-- Sheet Selection Popup -->
-            <div id="sheet-popup">
-              <div id="sheet-popup-label">Sheet</div>
-              <div id="sheet-popup-desc">Description</div>
-              <button id="sheet-popup-select" type="button">Select Sheet</button>
-            </div>
 
             <!-- Numbered Pins - positions are set by positionPartPins() using image-relative ix/iy fractions -->
             <button type="button" class="pin in-stock"     data-pin="1" data-ix="0.33" data-iy="0.30" title="Part 1" aria-label="Part 1">1</button>
@@ -1312,19 +1315,7 @@
             <button type="button" class="pin in-stock"     data-pin="6" data-ix="0.42" data-iy="0.40" title="Part 6" aria-label="Part 6">6</button>
             <button type="button" class="pin in-stock"     data-pin="7" data-ix="0.53" data-iy="0.44" title="Part 7" aria-label="Part 7">7</button>
 
-            <!-- Part Popup -->
-            <div id="part-popup">
-              <div id="popup-part-num"></div>
-              <div id="popup-desc"></div>
-              <div id="popup-price" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:6px;"></div>
-              <div class="popup-stepper">
-                <button id="popup-minus" type="button">&minus;</button>
-                <span id="popup-qty">1</span>
-                <button id="popup-plus" type="button">+</button>
-              </div>
-              <button id="popup-add-btn" type="button">Add to Cart</button>
-              <button id="popup-alt-btn" type="button">Suggested Alternatives -º</button>
-            </div>
+            <!-- Part Popup moved to body level -->
           </div>
         </div>
 
@@ -1387,7 +1378,7 @@
       <div class="modal-body">
         <div class="modal-part-row">
           <div class="modal-thumbnail">
-            <img src="product-plate-bearing.png" alt="Part"
+            <img src="images/product-plate-bearing.png" alt="Part"
                  onerror="this.style.display='none'">
           </div>
           <div class="modal-part-info">
@@ -1506,6 +1497,32 @@
        JAVASCRIPT
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- Sheet Popup (body-level: never inside a transformed ancestor) -->
+  <div id="sheet-popup">
+    <div id="sheet-popup-label">Sheet</div>
+    <div id="sheet-popup-desc">Description</div>
+    <button id="sheet-popup-select" type="button">Select Sheet</button>
+  </div>
+
+  <!-- Part Popup (body-level: never inside a transformed ancestor) -->
+  <div id="part-popup">
+    <button id="part-popup-close" type="button" aria-label="Close popup">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M1 1l8 8M9 1L1 9"/>
+      </svg>
+    </button>
+    <div id="popup-part-num"></div>
+    <div id="popup-desc"></div>
+    <div id="popup-price" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:6px;"></div>
+    <div class="popup-stepper">
+      <button id="popup-minus" type="button">&minus;</button>
+      <span id="popup-qty">1</span>
+      <button id="popup-plus" type="button">+</button>
+    </div>
+    <button id="popup-add-btn" type="button">Add to Cart</button>
+    <button id="popup-alt-btn" type="button">Suggested Alternatives &#x2192;</button>
+  </div>
+
   <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>
 
@@ -1531,6 +1548,7 @@
     let popupQty = 1;
     let modalQty = 1;
     let modalPartId = null;
+    let activePinEl = null;
 
     // â”€â”€ Zoom / Pan state â”€â”€
     let scale = 1;
@@ -1867,8 +1885,8 @@
       gImg.style.display = '';
 
       // Trigger image load only when src changes (avoid flicker on same-group re-entry)
-      if (gImg.src.indexOf('Bed Group image.png') === -1) {
-        gImg.src = 'Bed Group image.png';
+      if (gImg.src.indexOf('images/Bed Group image.png') === -1) {
+        gImg.src = 'images/Bed Group image.png';
       }
 
       document.querySelectorAll('.pin:not(.sheet-pin)').forEach(function (p) { p.style.display = 'none'; });
@@ -1962,10 +1980,16 @@
       var popupH = popup.offsetHeight || 110;
       var px = vpLeft - 24;
       var py = vpTop  - popupH - 14;
-      var maxLeft = window.innerWidth - popupW - 10;
-      if (px < 8) px = 8;
+      // Clamp horizontally within the viewer
+      var minLeft = wRect.left + 4;
+      var maxLeft = wRect.right - popupW - 4;
+      if (px < minLeft) px = minLeft;
       if (px > maxLeft) px = maxLeft;
-      if (py < wRect.top + 8) py = vpTop + 18;
+      // Prefer above pin; drop below if it clips the viewer top
+      if (py < wRect.top + 4) py = vpTop + 18;
+      // Clamp bottom within the viewer
+      var maxTop = wRect.bottom - popupH - 4;
+      if (py > maxTop) py = maxTop;
       popup.style.left = px + 'px';
       popup.style.top  = py + 'px';
     }
@@ -2053,7 +2077,7 @@
         var crumbEl   = document.querySelector('.machine-name-crumb');
         if (titleEl)   titleEl.textContent = m.name;
         if (detailsEl) detailsEl.textContent =
-          'Serial: ' + m.serial + 'Â Â |Â Â Stock Condition: ' + m.condition;
+          'Serial No: ' + m.serial + ' | Stock Condition: ' + m.condition;
         if (crumbEl)   crumbEl.textContent = m.name;
         document.title = m.name + ' -“ Parts Catalogue -“ Okuma Parts Portal';
       }
@@ -2072,7 +2096,7 @@
       var detailsEl = document.querySelector('.machine-details');
       var crumbEl   = document.querySelector('.machine-name-crumb');
       if (titleEl)   titleEl.textContent = cardMachine;
-      if (detailsEl) detailsEl.textContent = 'Serial: ' + cardSerial + '  |  Stock Condition: Active';
+      if (detailsEl) detailsEl.textContent = 'Serial No: ' + cardSerial + ' | Stock Condition: Active';
       if (crumbEl)   crumbEl.textContent = cardMachine;
       document.title = cardMachine + ' -“ Parts Catalogue -“ Okuma Parts Portal';
     })();
@@ -2087,7 +2111,7 @@
         const crumbEl   = document.querySelector('.machine-name-crumb');
         if (titleEl)   titleEl.textContent = orderMachineName;
         if (detailsEl) detailsEl.textContent =
-          'Serial: ' + (orderMachineSerial || '-') + '  |  Stock Condition: Active';
+          'Serial No: ' + (orderMachineSerial || '-') + ' | Stock Condition: Active';
         if (crumbEl)   crumbEl.textContent = orderMachineName;
         document.title = orderMachineName + ' -“ Parts Catalogue -“ Okuma Parts Portal';
       }
@@ -2168,6 +2192,38 @@
       });
     });
 
+    function positionPopupNearPin(pinEl) {
+      const innerW = diagramInner.offsetWidth;
+      const innerH = diagramInner.offsetHeight;
+      const pinLeft = (parseFloat(pinEl.style.left) / 100) * innerW;
+      const pinTop  = (parseFloat(pinEl.style.top)  / 100) * innerH;
+      const scaledLeft = pinLeft * scale + translateX;
+      const scaledTop  = pinTop  * scale + translateY;
+      const wRect  = diagramWrapper.getBoundingClientRect();
+      const vpLeft = wRect.left + scaledLeft;
+      const vpTop  = wRect.top  + scaledTop;
+      const popupW = popup.offsetWidth || 192;
+      const popupH = popup.offsetHeight || 160;
+      let px = vpLeft - 24;
+      let py = vpTop - popupH - 14;
+      // Clamp horizontally within the viewer
+      const minLeft = wRect.left + 4;
+      const maxLeft = wRect.right - popupW - 4;
+      if (px < minLeft) px = minLeft;
+      if (px > maxLeft) px = maxLeft;
+      // Prefer above pin; drop below if it clips the viewer top
+      const belowPin = py < wRect.top + 4;
+      if (belowPin) py = vpTop + 18;
+      // Clamp bottom within the viewer
+      const maxTop = wRect.bottom - popupH - 4;
+      if (py > maxTop) py = maxTop;
+      const arrowLeft = Math.max(10, Math.min(popupW - 22, vpLeft - px));
+      popup.style.setProperty('--arrow-left', arrowLeft + 'px');
+      popup.classList.toggle('arrow-top', belowPin);
+      popup.style.left = px + 'px';
+      popup.style.top  = py + 'px';
+    }
+
     function showPopupNearPin(pinEl, part) {
       popupPartNum.textContent = part.partNum;
       popupDesc.textContent = part.name;
@@ -2177,40 +2233,36 @@
         : 'Add to Quote';
       const hasAlts = !part.inStock && (ALTERNATIVES_MAP[part.partNum] || []).length > 0;
       popupAltBtn.style.display = hasAlts ? 'block' : 'none';
+      activePinEl = pinEl;
       popup.style.display = 'block';
-      // pins are positioned in % - resolve to px relative to inner, then to viewport
-      const innerW = diagramInner.offsetWidth;
-      const innerH = diagramInner.offsetHeight;
-      const pinLeft = (parseFloat(pinEl.style.left) / 100) * innerW;
-      const pinTop  = (parseFloat(pinEl.style.top)  / 100) * innerH;
-      const scaledLeft = pinLeft * scale + translateX;
-      const scaledTop  = pinTop  * scale + translateY;
-      // Convert diagram-wrapper coords → viewport coords (popup is position:fixed)
-      const wRect = diagramWrapper.getBoundingClientRect();
-      const vpLeft = wRect.left + scaledLeft;
-      const vpTop  = wRect.top  + scaledTop;
-      const popupW = popup.offsetWidth || 192;
-      const popupH = popup.offsetHeight || 160;
-      let px = vpLeft - 24;
-      let py = vpTop - popupH - 14;
-      const maxLeft = window.innerWidth - popupW - 10;
-      if (px < 8) px = 8;
-      if (px > maxLeft) px = maxLeft;
-      const belowPin = py < wRect.top + 8;
-      if (belowPin) py = vpTop + 18;
-      const maxTop = window.innerHeight - popupH - 8;
-      if (py > maxTop) py = maxTop;
-      // arrow tracks the pin horizontally within the popup
-      const arrowLeft = Math.max(10, Math.min(popupW - 22, vpLeft - px));
-      popup.style.setProperty('--arrow-left', arrowLeft + 'px');
-      popup.classList.toggle('arrow-top', belowPin);
-      popup.style.left = px + 'px';
-      popup.style.top  = py + 'px';
+      positionPopupNearPin(pinEl);
+      startPopupTracking();
     }
 
     function hidePopup() {
+      activePinEl = null;
       popup.style.display = 'none';
       document.querySelectorAll('.pin').forEach(p => p.classList.remove('selected'));
+      stopPopupTracking();
+    }
+
+    // rAF loop — re-anchors popup every frame while visible so it tracks the pin
+    // through any movement: page scroll, content-area scroll, pan, zoom
+    var _trackingRaf = null;
+    function startPopupTracking() {
+      if (_trackingRaf) return;
+      function tick() {
+        if (activePinEl && popup.style.display !== 'none') {
+          positionPopupNearPin(activePinEl);
+          _trackingRaf = requestAnimationFrame(tick);
+        } else {
+          _trackingRaf = null;
+        }
+      }
+      _trackingRaf = requestAnimationFrame(tick);
+    }
+    function stopPopupTracking() {
+      if (_trackingRaf) { cancelAnimationFrame(_trackingRaf); _trackingRaf = null; }
     }
 
     // Show popup centred at the top of the viewer when no pin match
@@ -2521,6 +2573,11 @@
     });
 
     popup.addEventListener('click', (e) => e.stopPropagation());
+
+    document.getElementById('part-popup-close').addEventListener('click', function(e) {
+      e.stopPropagation();
+      hidePopup();
+    });
 
     // â”€â”€ Close sheet popup when clicking outside â”€â”€
     document.addEventListener('click', function (e) {

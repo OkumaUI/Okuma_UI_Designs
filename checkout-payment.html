@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout: Payment -“ Okuma Parts Portal</title>
+  <title>Checkout: Payment — Okuma Parts Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -238,7 +238,7 @@
     .security-notice span { font-size: 13px; font-weight: 400; color: #0369A1; line-height: 1.3; }
 
     /* ===== CTA ===== */
-    .cta-block { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .cta-block { display: flex; flex-direction: column; gap: 12px; }
     .btn-primary {
       background: #005EB8; height: 56px; width: 100%; border-radius: 4px;
       font-size: 16px; font-weight: 700; color: #FFFFFF; border: none; cursor: pointer;
@@ -263,9 +263,13 @@
     .summary-row .val { font-size: 14px; font-weight: 500; color: #2C2A29; }
     .summary-row .val.discount { color: #208831; }
     .summary-divider { height: 1px; background: #E5E5E5; }
-    .total-row { display: flex; justify-content: space-between; align-items: center; }
-    .total-label { font-size: 16px; font-weight: 700; color: #2C2A29; }
-    .total-amount { font-size: 24px; font-weight: 800; color: #005EB8; }
+    .val.ship-muted { font-size: 13px; font-weight: 400; color: #9E9E9E; font-style: italic; }
+    .shipping-note { font-size: 11px; font-weight: 400; color: #9E9E9E; line-height: 1.4; padding-top: 2px; }
+    .total-row { display: flex; justify-content: space-between; align-items: flex-start; }
+    .total-label { font-size: 16px; font-weight: 700; color: #2C2A29; padding-top: 4px; }
+    .total-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .total-amount { font-size: 24px; font-weight: 800; color: #005EB8; line-height: 1.2; }
+    .total-excl { font-size: 11px; font-weight: 400; color: #9E9E9E; }
     .secured-note { display: flex; align-items: center; gap: 8px; padding-top: 8px; }
     .secured-note span { font-size: 12px; font-weight: 400; color: #6B7280; }
 
@@ -323,14 +327,21 @@
     .acc-table__row:last-child { border-bottom: none; }
     .acc-hcol { font-size: 11px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.3px; }
     .acc-col-part  { flex: 1; min-width: 0; }
-    .acc-col-mach  { width: 150px; flex-shrink: 0; }
     .acc-col-qty   { width: 36px;  flex-shrink: 0; text-align: center; }
     .acc-col-price { width: 90px;  flex-shrink: 0; text-align: right; }
     .acc-part-name   { font-size: 13px; font-weight: 700; color: #2C2A29; line-height: 1.3; }
     .acc-part-pn     { font-size: 11px; color: #6B7280; margin-top: 2px; }
-    .acc-mach-name   { font-size: 12px; font-weight: 600; color: #2C2A29; line-height: 1.3; }
-    .acc-mach-serial { font-size: 11px; color: #6B7280; margin-top: 2px; }
     .acc-qty         { font-size: 13px; font-weight: 500; color: #2C2A29; display: block; padding-top: 2px; }
+    .machine-strip {
+      display: flex; align-items: center; gap: 10px;
+      background: #F0F6FF; border: 1px solid #C7DCFA;
+      border-radius: 4px; padding: 8px 12px;
+      margin-bottom: 14px;
+    }
+    .machine-strip__icon   { color: #005EB8; flex-shrink: 0; }
+    .machine-strip__name   { font-size: 13px; font-weight: 700; color: #005EB8; line-height: 1; }
+    .machine-strip__sep    { color: #C7DCFA; font-size: 13px; }
+    .machine-strip__serial { font-size: 12px; font-weight: 400; color: #4A6FA5; line-height: 1; }
     .acc-price       { font-size: 13px; font-weight: 700; color: #2C2A29; display: block; padding-top: 2px; }
     .acc-price--sale { color: #AD0000; }
     .acc-price-orig  { font-size: 11px; color: #9E9E9E; text-decoration: line-through; display: block; margin-top: 1px; }
@@ -381,7 +392,6 @@
       .pay-head { flex-wrap: wrap; gap: 8px; }
       .bill-addr-modal { padding: 20px 16px 16px; }
       .cta-block { grid-template-columns: 1fr; }
-      .acc-col-mach { display: none; }
     }
   </style>
 </head>
@@ -416,10 +426,17 @@
 
         <div class="cart-acc__body" id="cartAccBody" role="region" aria-label="Cart items">
           <div class="cart-acc__inner">
+            <div class="machine-strip">
+              <svg class="machine-strip__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              <span class="machine-strip__name">LU300-M</span>
+              <span class="machine-strip__sep">|</span>
+              <span class="machine-strip__serial">Serial No: M5-2891-K</span>
+            </div>
             <div class="acc-table">
               <div class="acc-table__head">
                 <div class="acc-col-part"><span class="acc-hcol">Part</span></div>
-                <div class="acc-col-mach"><span class="acc-hcol">Machine</span></div>
                 <div class="acc-col-qty"><span class="acc-hcol">Qty</span></div>
                 <div class="acc-col-price"><span class="acc-hcol">Price</span></div>
               </div>
@@ -427,10 +444,6 @@
                 <div class="acc-col-part">
                   <div class="acc-part-name">Plate</div>
                   <div class="acc-part-pn">525-0100-11</div>
-                </div>
-                <div class="acc-col-mach">
-                  <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">2</span></div>
                 <div class="acc-col-price">
@@ -443,10 +456,6 @@
                   <div class="acc-part-name">Coolant Pump Assembly</div>
                   <div class="acc-part-pn">E4809-045-017-A</div>
                 </div>
-                <div class="acc-col-mach">
-                  <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
-                </div>
                 <div class="acc-col-qty"><span class="acc-qty">1</span></div>
                 <div class="acc-col-price">
                   <span class="acc-price">$185.00</span>
@@ -456,10 +465,6 @@
                 <div class="acc-col-part">
                   <div class="acc-part-name">Servo Drive Belt</div>
                   <div class="acc-part-pn">E4809-045-017-A</div>
-                </div>
-                <div class="acc-col-mach">
-                  <div class="acc-mach-name">LU300-M</div>
-                  <div class="acc-mach-serial">S/N: M5-2891-K</div>
                 </div>
                 <div class="acc-col-qty"><span class="acc-qty">1</span></div>
                 <div class="acc-col-price">
@@ -536,7 +541,7 @@
                   <span class="pay-head-title">Credit or Debit Card</span>
                 </span>
                 <span class="pay-logos">
-                  <img class="logo-amex" src="pay-amex.png" alt="American Express">
+                  <img class="logo-amex" src="images/pay-amex.png" alt="American Express">
                   <span class="logo-mc" role="img" aria-label="Mastercard"></span>
                   <span class="logo-visa" role="img" aria-label="Visa">VISA</span>
                   <span class="logo-paypal" role="img" aria-label="PayPal">PayPal</span>
@@ -571,7 +576,7 @@
           </fieldset>
 
           <!-- ===== BILLING ADDRESS (standalone, outside payment type) ===== -->
-          <div id="billingWrapper">
+          <div id="billingWrapper" style="display:none;">
           <div style="padding-top: 8px;">
             <div class="billing-row">
               <input type="checkbox" class="billing-checkbox-native" id="billing-same" name="billing-same" checked>
@@ -607,13 +612,6 @@
               </span>
             </label>
 
-            <button type="button" class="add-addr" id="addBillAddrBtn">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <circle cx="8" cy="8" r="7" stroke="#005EB8" stroke-width="1.5"/>
-                <path d="M8 5v6M5 8h6" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              <span>Add new billing address</span>
-            </button>
           </div>
           </div><!-- /billingWrapper -->
 
@@ -658,8 +656,9 @@
               </div>
               <div class="summary-row">
                 <span class="lbl">Shipping &amp; Handling</span>
-                <span class="val">$24.99</span>
+                <span class="val ship-muted">Added at shipment</span>
               </div>
+              <div class="shipping-note">Shipping cost confirmed when your order is prepared for dispatch</div>
               <div class="summary-row">
                 <span class="lbl">Tax (Estimated)</span>
                 <span class="val">$59.40</span>
@@ -674,7 +673,10 @@
 
             <div class="total-row">
               <span class="total-label">Total</span>
-              <span class="total-amount">$826.89</span>
+              <div class="total-right">
+                <span class="total-amount">$801.90</span>
+                <span class="total-excl">excl. shipping</span>
+              </div>
             </div>
 
             <div class="secured-note">
@@ -695,51 +697,8 @@
     </div><!-- /page-inner -->
   </div><!-- /page-content -->
 
-  <!-- Add billing address modal -->
-  <div class="bill-addr-modal-overlay" id="billAddrModalOverlay">
-    <div class="bill-addr-modal" role="dialog" aria-modal="true" aria-labelledby="billModalTitle">
-      <div class="bill-modal__head">
-        <span class="bill-modal__title" id="billModalTitle">Add Billing Address</span>
-        <button type="button" class="bill-modal__close" id="billAddrModalClose" aria-label="Close">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
-        </button>
-      </div>
-      <div class="bill-form-row">
-        <div class="bill-form-field">
-          <label for="bill-label">Address Label</label>
-          <input type="text" id="bill-label" placeholder="e.g. Accounts Office">
-        </div>
-      </div>
-      <div class="bill-form-row">
-        <div class="bill-form-field">
-          <label for="bill-street">Street Address</label>
-          <input type="text" id="bill-street" placeholder="123 Main Street">
-        </div>
-      </div>
-      <div class="bill-form-row">
-        <div class="bill-form-field">
-          <label for="bill-city">City</label>
-          <input type="text" id="bill-city" placeholder="City">
-        </div>
-        <div class="bill-form-field">
-          <label for="bill-state">State</label>
-          <input type="text" id="bill-state" placeholder="State">
-        </div>
-        <div class="bill-form-field">
-          <label for="bill-zip">ZIP Code</label>
-          <input type="text" id="bill-zip" placeholder="00000">
-        </div>
-      </div>
-      <div class="bill-form-actions">
-        <button type="button" class="btn-cancel-bill" id="billAddrCancelBtn">Cancel</button>
-        <button type="button" class="btn-save-bill" id="billAddrSaveBtn">Save Address</button>
-      </div>
-    </div>
-  </div>
-
   <script>
     var selectedPayment = 'po';
-    var billAddrCount = 2;
 
     // Dealer role: PO only, hide card option and billing section
     document.addEventListener('DOMContentLoaded', function () {
@@ -764,6 +723,7 @@
       var cardForm = document.getElementById('card-form');
       var poForm = document.getElementById('po-form');
 
+      var billing = document.getElementById('billingWrapper');
       if (tab === 'card') {
         // Credit card selected (expanded), PO collapsed (grey)
         cardCard.className = 'pay-card selected';
@@ -772,6 +732,7 @@
         poCard.className = 'pay-card collapsed-grey';
         poCircle.className = 'radio-circle unselected';
         poForm.style.display = 'none';
+        if (billing) billing.style.display = '';
       } else {
         // PO selected (expanded header + field card), credit card collapsed (white)
         cardCard.className = 'pay-card collapsed';
@@ -780,6 +741,7 @@
         poCard.className = 'pay-card selected';
         poCircle.className = 'radio-circle selected';
         poForm.style.display = 'block';
+        if (billing) billing.style.display = 'none';
       }
       selectedPayment = tab;
     }
@@ -790,65 +752,11 @@
     });
     // Billing checkbox visual (tick + border) is handled purely in CSS via :checked.
 
-    // â”€â”€ Billing same-as-shipping toggle â”€â”€
+    // â"€â"€ Billing same-as-shipping toggle â"€â"€
     document.getElementById('billing-same').addEventListener('change', function () {
       document.getElementById('billAddressSection').style.display = this.checked ? 'none' : 'flex';
     });
 
-    // â”€â”€ Add billing address modal â”€â”€
-    var billOverlay  = document.getElementById('billAddrModalOverlay');
-    var billCloseBtn = document.getElementById('billAddrModalClose');
-    var billCancelBtn = document.getElementById('billAddrCancelBtn');
-    var billSaveBtn  = document.getElementById('billAddrSaveBtn');
-
-    document.getElementById('addBillAddrBtn').addEventListener('click', function () {
-      billOverlay.classList.add('open');
-      document.getElementById('bill-label').focus();
-    });
-
-    function closeBillModal() {
-      billOverlay.classList.remove('open');
-      ['bill-label','bill-street','bill-city','bill-state','bill-zip'].forEach(function (id) {
-        document.getElementById(id).value = '';
-      });
-    }
-
-    billCloseBtn.addEventListener('click', closeBillModal);
-    billCancelBtn.addEventListener('click', closeBillModal);
-    billOverlay.addEventListener('click', function (e) {
-      if (e.target === billOverlay) closeBillModal();
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && billOverlay.classList.contains('open')) closeBillModal();
-    });
-
-    billSaveBtn.addEventListener('click', function () {
-      var label  = document.getElementById('bill-label').value.trim();
-      var street = document.getElementById('bill-street').value.trim();
-      var city   = document.getElementById('bill-city').value.trim();
-      var state  = document.getElementById('bill-state').value.trim();
-      var zip    = document.getElementById('bill-zip').value.trim();
-      if (!street || !city || !state || !zip) return;
-
-      var fullAddr = street + ', ' + city + ', ' + state + ' ' + zip + ', USA';
-      var idx = billAddrCount++;
-      var card = document.createElement('label');
-      card.className = 'addr-card';
-      card.setAttribute('for', 'bill-addr-' + idx);
-      card.innerHTML =
-        '<input type="radio" class="radio-native" name="bill-address" id="bill-addr-' + idx + '" value="' + idx + '" checked>' +
-        '<span class="radio-circle" aria-hidden="true"></span>' +
-        '<span class="addr-text">' +
-          (label ? '<span class="addr-name">' + label + '</span>' : '') +
-          '<span class="addr-line">' + fullAddr + '</span>' +
-        '</span>';
-
-      document.querySelectorAll('input[name="bill-address"]').forEach(function (r) { r.checked = false; });
-
-      var addBtn = document.getElementById('addBillAddrBtn');
-      addBtn.parentNode.insertBefore(card, addBtn);
-      closeBillModal();
-    });
   </script>
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
