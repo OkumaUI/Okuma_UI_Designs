@@ -730,6 +730,15 @@
     }
 
     function openPicker() {
+      var cm = document.getElementById('machinePickerMenu'); // same as pickerMenu — harmless
+      var cpMenu = document.getElementById('custPickerMenu');
+      var cpBtn  = document.getElementById('customerPickerBtn');
+      var uMenu  = document.getElementById('userMenu');
+      var uBtn   = document.getElementById('userMenuBtn');
+      if (cpMenu) cpMenu.classList.remove('open');
+      if (cpBtn)  cpBtn.setAttribute('aria-expanded', 'false');
+      if (uMenu)  uMenu.classList.remove('open');
+      if (uBtn)   uBtn.setAttribute('aria-expanded', 'false');
       if (machSearchInput) machSearchInput.value = '';
       renderMachList('');
       pickerMenu.classList.add('open');
@@ -771,6 +780,7 @@
     }
 
     document.addEventListener('click', function () { closePicker(); });
+    window.addEventListener('scroll', function () { closePicker(); }, { passive: true });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         if (machSwitchEl.classList.contains('open')) { hideMachSwitchModal(); return; }
@@ -921,6 +931,14 @@
 
     /* ── picker open / close ── */
     function openCustPicker() {
+      var mpMenu = document.getElementById('machinePickerMenu');
+      var mpBtn  = document.getElementById('machinePickerBtn');
+      var uMenu  = document.getElementById('userMenu');
+      var uBtn   = document.getElementById('userMenuBtn');
+      if (mpMenu) mpMenu.classList.remove('open');
+      if (mpBtn)  mpBtn.setAttribute('aria-expanded', 'false');
+      if (uMenu)  uMenu.classList.remove('open');
+      if (uBtn)   uBtn.setAttribute('aria-expanded', 'false');
       custPickerMenu.classList.add('open');
       custPickerBtn.setAttribute('aria-expanded', 'true');
       custSearchInput.value = '';
@@ -975,6 +993,7 @@
     });
 
     document.addEventListener('click', function () { closeCustPicker(); });
+    window.addEventListener('scroll', function () { closeCustPicker(); }, { passive: true });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         if (cswEl.classList.contains('open')) { hideSwitchModal(); return; }
