@@ -662,6 +662,17 @@
 
   <script>
     (function () {
+      var _cartUser = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
+      if (_cartUser && _cartUser.role === 'dealer') {
+        document.querySelectorAll('a[href="profile.html"]').forEach(function (el) {
+          el.setAttribute('href', 'dealer-profile.html');
+        });
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
       function lsGet(key, fallback) { try { return localStorage.getItem(key) || fallback; } catch(e) { return fallback; } }
       function lsSet(key, val)      { try { localStorage.setItem(key, val); } catch(e) {} }
 
