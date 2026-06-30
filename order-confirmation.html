@@ -12,10 +12,14 @@
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       background-color: #F7F8F9;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     /* â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .page-content {
+      flex: 1;
+      min-width: 0;
       display: flex;
       justify-content: center;
       padding: 40px 24px 80px;
@@ -321,7 +325,7 @@
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      .page-content { padding: calc(60px + 20px) 16px 56px; }
+      .page-content { padding: 24px 16px 56px; }
       .card { padding: 40px 24px; gap: 24px; }
       .card__title { font-size: 26px; }
     }
@@ -331,7 +335,7 @@
     }
 
     @media (max-width: 480px) {
-      .page-content { padding: calc(56px + 16px) 16px 48px; }
+      .page-content { padding: 16px 16px 48px; }
       .card { padding: 28px 16px; }
       .card__title { font-size: 22px; }
       .card__ref-number { font-size: 20px; }
@@ -357,7 +361,9 @@
   <div id="okuma-header"></div>
 
   <!-- â”€â”€â”€ PAGE CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
-  <main class="page-content">
+  <div class="app-body-shell">
+    <div id="okuma-sidebar" data-active="orders"></div>
+    <main class="page-content">
     <div class="card">
 
       <!-- 1. Hero: icon + title + subtitle -->
@@ -524,6 +530,7 @@
 
     </div>
   </main>
+  </div>
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>

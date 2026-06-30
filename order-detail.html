@@ -284,7 +284,7 @@
       .detail-aside { width: 268px; }
     }
     @media (max-width: 900px) {
-      .detail-layout { flex-direction: column; }
+      .detail-layout { flex-direction: column; align-items: stretch; }
       .detail-aside { width: 100%; }
     }
     @media (max-width: 768px) {
@@ -298,6 +298,10 @@
     @media (max-width: 480px) {
       .page-head__title { font-size: 18px; }
       .step-date { display: none; }
+      /* Collapse Machine column so the items table fits without scrolling */
+      .items-tbl th:nth-child(2),
+      .items-tbl td:nth-child(2) { display: none; }
+      .items-tbl { min-width: 0; width: 100%; }
     }
   </style>
 </head>

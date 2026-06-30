@@ -132,16 +132,16 @@
     .card__total-value { font-size: 20px; font-weight: 800; color: #005EB8; }
 
     /* â”€â”€â”€ ACTION BUTTONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-    .card__actions { display: flex; gap: 16px; }
+    .card__actions { display: flex; flex-direction: column; gap: 12px; }
     .btn {
-      flex: 1; height: 48px; border-radius: 4px;
-      font-family: inherit; font-size: 15px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: opacity 0.15s;
+      width: 100%; padding: 12px 24px; border-radius: 2px;
+      font-family: inherit; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: background 0.15s;
     }
-    .btn:hover { opacity: 0.88; }
     .btn--primary { background: #005EB8; color: #fff; border: none; }
-    .btn--outline  { background: #fff; color: #005EB8; border: 1.5px solid #005EB8; }
+    .btn--primary:hover { background: #00509C; }
+    .btn--outline  { background: #fff; color: #005EB8; border: 1px solid #005EB8; }
+    .btn--outline:hover { background: #F0F6FF; }
 
     /* â”€â”€â”€ DOWNLOAD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .card__download {
@@ -171,19 +171,20 @@
       .card__ref-number { font-size: 20px; }
       .card__total-label { font-size: 15px; }
       .card__total-value { font-size: 17px; }
-      .card__actions { flex-direction: column; }
-      .card__actions .btn { width: 100%; }
       .conf-part { flex-wrap: wrap; gap: 6px; }
       .conf-part__pn  { flex: 0 0 auto; }
       .conf-part__desc { flex: 1 1 100%; order: 2; }
       .conf-part__qty  { flex: 0 0 auto; order: 3; }
       .conf-part__total { flex: 0 0 auto; order: 4; margin-left: auto; }
     }
+  
+    @media (min-width: 1025px) { .sidebar { display: none; } }
   </style>
 </head>
 <body>
 
   <div id="okuma-header"></div>
+  <div id="okuma-sidebar"></div>
 
   <!-- STEPPER STRIP -->
   <div class="stepper-strip">
