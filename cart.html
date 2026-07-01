@@ -640,7 +640,12 @@
       { email: 'customer@okuma.com', password: 'customer123', role: 'customer', firstName: 'Jonathan', lastName: 'Hayes' },
       { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer',   firstName: 'Sarah',    lastName: 'Mitchell' }
     ];
-    function okuma_checkAuth() {}
+    function okuma_checkAuth() {
+      try {
+        var s = JSON.parse(sessionStorage.getItem('okuma_session'));
+        if (s && s.role === 'dealer') { window.location.replace('dealer-cart.html'); }
+      } catch(e) {}
+    }
     function okuma_getUser() {
       try { var s = JSON.parse(sessionStorage.getItem('okuma_session')); if (s && s.firstName) return s; } catch(e) {}
       return OKUMA_USERS[0];

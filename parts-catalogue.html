@@ -310,6 +310,16 @@
     .pin.out-of-stock { background: #9E9E9E; }
     .pin.selected { box-shadow: 0 0 0 3px white, 0 0 0 5px #005EB8; }
 
+    /* Sheet bubble pins — pill shape override */
+    .sheet-pin {
+      width: auto;
+      height: auto;
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
     /* Pins are only shown once all filters are chosen (diagram unlocked) */
     .diagram-viewer.is-locked .pin { display: none; }
 
@@ -842,208 +852,92 @@
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        CART MODAL
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-    #cart-modal-overlay {
+    /* -- CART TOAST -- */
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateX(60px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes toast-out {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(60px); }
+    }
+
+    #cart-toast {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
+      top: 28px;
+      right: 28px;
+      min-width: 300px;
+      max-width: 360px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
       display: none;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 16px; overflow-y: auto; overflow-x: hidden;
+      flex-direction: row;
+      overflow: hidden;
+      z-index: 2000;
+      animation: toast-in 0.28s cubic-bezier(0.22,1,0.36,1);
     }
 
-    #cart-modal {
-      width: 100%;
-      max-width: 560px;
-      max-height: 85vh;
-      background: white;
-      border-radius: 2px;
-      box-shadow: 0px 12px 24px rgba(0,0,0,0.25);
-      overflow: auto;
-      margin: auto 0;
+    #cart-toast.hiding {
+      animation: toast-out 0.22s ease forwards;
     }
 
-    .modal-header {
-      background: #005EB8;
-      height: 64px;
-      padding: 20px;
+    .toast-accent {
+      width: 5px;
+      flex-shrink: 0;
+      background: #2E7D32;
+    }
+
+    .toast-body {
+      flex: 1;
+      padding: 14px 12px 14px 14px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .modal-header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .modal-title {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 18px;
+    .toast-header {
+      color: #2E7D32;
+      font-size: 12px;
       font-weight: 700;
-      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 8px;
     }
 
-    #cart-modal-close {
+    #toast-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111111;
+    }
+
+    #toast-partnum {
+      font-size: 14px;
+      font-weight: 400;
+      color: #6E6E6E;
+    }
+
+    #toast-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111111;
+      margin-top: 4px;
+    }
+
+    #toast-close {
+      align-self: flex-start;
+      margin: 10px 10px 0 0;
       background: none;
       border: none;
       cursor: pointer;
-      line-height: 0;
-      padding: 0;
-      display: flex;
-    }
-
-    .modal-body {
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .modal-part-row {
-      display: flex;
-      gap: 24px;
-    }
-
-    .modal-thumbnail {
-      display: none;
-    }
-
-    .modal-thumbnail img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .modal-part-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    #modal-part-name {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      color: #000000;
-    }
-
-    #modal-part-num {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 13px;
-      font-weight: 400;
+      font-size: 18px;
       color: #6E6E6E;
+      line-height: 1;
+      padding: 2px 4px;
+      flex-shrink: 0;
     }
 
-    .modal-qty-line {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    #modal-qty-text {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 400;
-      color: #000000;
-    }
-
-    #modal-each {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      color: #000000;
-    }
-
-    .modal-price-block {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    #modal-price-original {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 16px;
-      font-weight: 400;
-      color: #6E6E6E;
-      text-decoration: line-through;
-    }
-
-    #modal-price-discounted {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      color: #AD0000;
-    }
-
-    .modal-divider {
-      border: none;
-      border-top: 1px solid #E0E0E0;
-      margin: 0;
-    }
-
-    .modal-cart-summary {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-cart-count {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      color: #6E6E6E;
-    }
-
-    .modal-subtotal {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      color: #000000;
-    }
-
-    .modal-cta-row {
-      display: flex;
-      gap: 12px;
-    }
-
-    .btn-continue {
-      flex: 1;
-      min-height: 38px;
-      padding: 8px 12px;
-      border: 1px solid #005EB8;
-      background: transparent;
-      color: #005EB8;
-      border-radius: 2px;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .btn-continue:hover { background: #EEF4FF; }
-
-    .btn-view-cart {
-      flex: 1;
-      min-height: 38px;
-      padding: 8px 12px;
-      background: #005EB8;
-      color: white;
-      border: none;
-      border-radius: 2px;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .btn-view-cart:hover { background: #0B308E; }
+    #toast-close:hover { color: #111111; }
 
     /* â”€â”€ QUOTE MODAL â”€â”€ */
     #quote-modal-overlay {
@@ -1455,56 +1349,16 @@
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        CART MODAL
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-  <div id="cart-modal-overlay">
-    <div id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-modal-title">
-      <div class="modal-header">
-        <div class="modal-header-left">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
-          <span class="modal-title" id="cart-modal-title">Added to Cart</span>
-        </div>
-        <button id="cart-modal-close" type="button" aria-label="Close">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
-            <path d="M5 5L15 15M15 5L5 15"/>
-          </svg>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <div class="modal-part-row">
-          <div class="modal-thumbnail">
-            <img src="images/product-plate-bearing.png" alt="Part"
-                 onerror="this.style.display='none'">
-          </div>
-          <div class="modal-part-info">
-            <div id="modal-part-name">Plate</div>
-            <div id="modal-part-num">Part # 525-0100-11</div>
-            <div class="modal-qty-line">
-              <span id="modal-qty-text">Qty: <span id="modal-qty">2</span></span>
-              <span id="modal-each">$247.50 each</span>
-            </div>
-            <div class="modal-price-block">
-              <span id="modal-price-original">$495.00</span>
-              <span id="modal-price-discounted">$405.00 total</span>
-            </div>
-          </div>
-        </div>
-
-        <hr class="modal-divider">
-
-        <div class="modal-cart-summary">
-          <span class="modal-cart-count" id="modal-cart-count">3 items in cart</span>
-          <span class="modal-subtotal" id="modal-subtotal">Subtotal: $495.00</span>
-        </div>
-
-        <div class="modal-cta-row">
-          <button class="btn-continue" id="btn-continue" type="button">Continue Shopping</button>
-          <button class="btn-view-cart" type="button" onclick="window.location='cart.html'">View Cart</button>
-        </div>
-      </div>
+  <!-- Cart Toast -->
+  <div id="cart-toast" role="status" aria-live="polite">
+    <div class="toast-accent"></div>
+    <div class="toast-body">
+      <div class="toast-header">&#10003; Added to Cart</div>
+      <div id="toast-name"></div>
+      <div id="toast-partnum"></div>
+      <div id="toast-price"></div>
     </div>
+    <button id="toast-close" type="button" aria-label="Dismiss">&times;</button>
   </div>
 
   <!-- Alternatives Modal -->
@@ -1643,8 +1497,6 @@
     // â”€â”€ State â”€â”€
     let selectedPartId = null;
     let popupQty = 1;
-    let modalQty = 1;
-    let modalPartId = null;
     let activePinEl = null;
 
     // â”€â”€ Zoom / Pan state â”€â”€
@@ -1752,16 +1604,7 @@
     const popupMinus     = document.getElementById('popup-minus');
     const popupPlus      = document.getElementById('popup-plus');
     const popupAddBtn    = document.getElementById('popup-add-btn');
-    const cartOverlay    = document.getElementById('cart-modal-overlay');
-    const cartClose      = document.getElementById('cart-modal-close');
-    const btnContinue    = document.getElementById('btn-continue');
-    const modalPartName  = document.getElementById('modal-part-name');
-    const modalPartNum   = document.getElementById('modal-part-num');
-    const modalQtyEl     = document.getElementById('modal-qty');
-    const modalEach      = document.getElementById('modal-each');
-    const modalPriceOrig = document.getElementById('modal-price-original');
-    const modalPriceDisc = document.getElementById('modal-price-discounted');
-    const modalSubtotal  = document.getElementById('modal-subtotal');
+    const cartToast = document.getElementById('cart-toast');
     const zoomIn         = document.getElementById('zoom-in');
     const zoomOut        = document.getElementById('zoom-out');
 
@@ -1775,13 +1618,6 @@
       });
       // Change popup button label
       popupAddBtn.textContent = 'Add to Order';
-      // Change modal title and View Cart → View Order
-      document.getElementById('cart-modal-title').textContent = 'Added to Order';
-      const btnVC = document.querySelector('.btn-view-cart');
-      if (btnVC) {
-        btnVC.textContent = 'View Order';
-        btnVC.onclick = () => { window.location = 'create-order.html'; };
-      }
     }
 
     // â”€â”€ Alternatives map (partNum → array of alternative part IDs) â”€â”€
@@ -1888,14 +1724,14 @@
     var GROUP_SHEET_PINS = {
       '1': [ // Bed Group - positions match SHEET No.X text labels in the drawing
         { num: '1', value: 's1-1', ix: 0.23,  iy: 0.68  },
-        { num: '2', value: 's1-2', ix: 0.529, iy: 0.261 },
-        { num: '3', value: 's1-3', ix: 0.29,  iy: 0.34  },
+        { num: '2', value: 's1-2', ix: 0.529, iy: 0.291 },
+        { num: '3', value: 's1-3', ix: 0.36,  iy: 0.34  },
       ],
     };
 
     // Default ring for groups without a dedicated image (placeholder positions)
     var DEFAULT_PIN_RING = [
-      {ix:0.193,iy:0.647},{ix:0.529,iy:0.261},{ix:0.311,iy:0.317},
+      {ix:0.193,iy:0.647},{ix:0.529,iy:0.291},{ix:0.381,iy:0.317},
       {ix:0.74, iy:0.40 },{ix:0.70, iy:0.57 },{ix:0.24, iy:0.48 },
       {ix:0.50, iy:0.74 },{ix:0.65, iy:0.30 },{ix:0.78, iy:0.52 },
       {ix:0.42, iy:0.80 },
@@ -1955,7 +1791,7 @@
         btn.className   = 'pin in-stock sheet-pin';
         btn.style.left  = pos.left;
         btn.style.top   = pos.top;
-        btn.textContent = pin.num;
+        btn.textContent = 'Sheet ' + pin.num;
         btn.title       = 'Sheet ' + pin.num + ': ' + desc;
         btn.setAttribute('aria-label', 'Sheet ' + pin.num + ': ' + desc);
         btn.setAttribute('data-sheet-value', pin.value);
@@ -2406,7 +2242,7 @@
           selectedPartId = id;
           openQuoteModal(part);
         } else {
-          openCartModal(part, rowQtys[id]);
+          showCartToast(part, rowQtys[id]);
         }
         return;
       }
@@ -2469,7 +2305,7 @@
       if (!part.inStock) {
         openQuoteModal(part);
       } else {
-        openCartModal(part, popupQty);
+        showCartToast(part, popupQty);
       }
     });
 
@@ -2533,7 +2369,7 @@
           const qty  = altQtys[id] || 1;
           if (!alt) return;
           closeAltModal();
-          openCartModal(alt, qty);
+          showCartToast(alt, qty);
         });
       });
 
@@ -2585,22 +2421,8 @@
       if (e.target === quoteModalOverlay) closeQuoteModal();
     });
 
-    // â”€â”€ Modal logic â”€â”€
-    function refreshModalPrices() {
-      const part = partsData.find(p => p.id === modalPartId);
-      if (!part) return;
-      const each = part.price;                 // unit price
-      const totalOrig = each * modalQty;        // pre-discount total
-      const totalDisc = totalOrig * 0.9;        // 10% discount
-      modalQtyEl.textContent = modalQty;
-      modalEach.textContent = '$' + each.toFixed(2) + ' each';
-      modalPriceOrig.textContent = '$' + totalOrig.toFixed(2);
-      modalPriceDisc.textContent = '$' + totalDisc.toFixed(2) + ' total';
-      modalSubtotal.textContent = 'Subtotal: $' + totalOrig.toFixed(2);
-    }
-
-    // Element that opened the modal - focus returns here on close (WCAG 2.4.3)
-    let cartModalTrigger = null;
+    // -- Toast logic --
+    var _toastTimer = null;
 
     function savePendingPart(part, qty) {
       const pending = JSON.parse(localStorage.getItem('okmOrderPendingParts') || '[]');
@@ -2613,43 +2435,30 @@
       localStorage.setItem('okmOrderPendingParts', JSON.stringify(pending));
     }
 
-    function openCartModal(part, qty) {
-      modalPartId = part.id;
-      modalQty = qty || 1;
-      modalPartName.textContent = part.name;
-      modalPartNum.textContent = 'Part # ' + part.partNum;
-      refreshModalPrices();
-      if (isOrderMode) {
-        savePendingPart(part, modalQty);
-        document.getElementById('cart-modal-title').textContent = part.name + ' added to order';
-      }
-      cartModalTrigger = document.activeElement;
-      cartOverlay.style.display = 'flex';
-      // Move focus into the dialog
-      cartClose.focus();
+    function showCartToast(part, qty) {
+      if (isOrderMode) savePendingPart(part, qty);
+      const q = qty || 1;
+      const each = part.price;
+      const total = (each * q).toFixed(2);
+      document.getElementById('toast-name').textContent = part.name;
+      document.getElementById('toast-partnum').textContent = 'Part # ' + part.partNum;
+      document.getElementById('toast-price').textContent = 'Qty ' + q + '  ×  $' + each.toFixed(2) + '  =  $' + total;
+      cartToast.classList.remove('hiding');
+      cartToast.style.display = 'flex';
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(dismissToast, 8000);
     }
 
-    function closeCartModal() {
-      cartOverlay.style.display = 'none';
-      if (cartModalTrigger && typeof cartModalTrigger.focus === 'function') {
-        cartModalTrigger.focus();
-      }
-      cartModalTrigger = null;
+    function dismissToast() {
+      cartToast.classList.add('hiding');
+      cartToast.addEventListener('animationend', function handler() {
+        cartToast.style.display = 'none';
+        cartToast.classList.remove('hiding');
+        cartToast.removeEventListener('animationend', handler);
+      });
     }
 
-    cartClose.addEventListener('click', closeCartModal);
-    btnContinue.addEventListener('click', closeCartModal);
-
-    cartOverlay.addEventListener('click', (e) => {
-      if (e.target === cartOverlay) closeCartModal();
-    });
-
-    // Escape closes the dialog
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && cartOverlay.style.display === 'flex') {
-        closeCartModal();
-      }
-    });
+    document.getElementById('toast-close').addEventListener('click', dismissToast);
 
     // â”€â”€ Select Sheet button â”€â”€
     document.getElementById('sheet-popup-select').addEventListener('click', function (e) {
@@ -2689,7 +2498,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         hideSheetPopup();
-        if (cartOverlay.style.display !== 'flex') hidePopup();
+        hidePopup();
       }
     });
 

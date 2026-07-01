@@ -706,7 +706,8 @@
 
     // Dealer role: PO only, hide card option and billing section
     document.addEventListener('DOMContentLoaded', function () {
-      var role = localStorage.getItem('okmUserRole');
+      var role = '';
+      try { var s = JSON.parse(sessionStorage.getItem('okuma_session')); role = (s && s.role) || ''; } catch(e) {}
       if (role === 'dealer') {
         document.getElementById('card-card').style.display = 'none';
         document.getElementById('billingWrapper').style.display = 'none';
@@ -784,7 +785,9 @@
     }
 
     (function () {
-      if (localStorage.getItem('okmUserRole') !== 'dealer') return;
+      var role = '';
+      try { var s = JSON.parse(sessionStorage.getItem('okuma_session')); role = (s && s.role) || ''; } catch(e) {}
+      if (role !== 'dealer') return;
       var cust = localStorage.getItem('okmSelectedCustomer');
       if (!cust) return;
       var label = document.querySelector('.cart-acc__label');

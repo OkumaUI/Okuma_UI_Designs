@@ -367,7 +367,6 @@
     <!-- MAIN AREA -->
     <main class="main-area">
 
-      <div class="sr-count" id="srCount">0 results found</div>
       <h1 class="sr-title" id="srTitle">All Parts</h1>
 
       <div class="sr-layout">
@@ -536,7 +535,7 @@
       var currentPage = 1;
 
       /* DOM refs */
-      var elCount = document.getElementById('srCount');
+      var elCount = document.getElementById('resultsBarCount');
       var elTitle = document.getElementById('srTitle');
       var elGrid  = document.getElementById('cardsGrid');
       var elPag   = document.getElementById('pagination');
@@ -731,7 +730,6 @@
         /* count */
         var countText = filtered.length + ' result' + (filtered.length === 1 ? '' : 's') + ' found';
         elCount.textContent = countText;
-        if (elBarCount) elBarCount.textContent = countText;
 
         var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
         if (currentPage > totalPages) currentPage = totalPages;

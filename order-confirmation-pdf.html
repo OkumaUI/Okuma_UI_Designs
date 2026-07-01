@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmation – Okuma</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      background: #f0f2f5;
+      color: #1A1A1A;
+      padding: 32px 24px 48px;
+    }
+
+    .pdf-page {
+      width: 794px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+    }
+
+    /* ── HEADER ── */
+    .pdf-header {
+      background: #005EB8;
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pdf-header__logo {
+      height: 36px;
+      filter: brightness(0) invert(1);
+      object-fit: contain;
+    }
+
+    .pdf-header__title {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* ── BANNER ── */
+    .pdf-banner {
+      background: #F0FAF4;
+      border-bottom: 1px solid #C3E6CB;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .pdf-banner__icon {
+      width: 36px; height: 36px;
+      background: #2E7D32;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .pdf-banner__text h2 { font-size: 15px; font-weight: 700; color: #1B5E20; }
+    .pdf-banner__text p  { font-size: 12px; color: #388E3C; margin-top: 2px; }
+
+    /* ── BODY ── */
+    .pdf-body {
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* ── META ROW ── */
+    .pdf-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #005EB8;
+    }
+
+    .pdf-meta__ref   { font-size: 22px; font-weight: 800; color: #005EB8; }
+    .pdf-meta__sub   { font-size: 12px; color: #6E6E6E; margin-top: 4px; }
+
+    .pdf-meta__right { text-align: right; }
+    .pdf-meta__date  { font-size: 13px; font-weight: 600; color: #1A1A1A; }
+
+    .pdf-meta__ordered-for {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #444;
+    }
+
+    .pdf-meta__ordered-for strong {
+      font-weight: 700;
+      color: #005EB8;
+    }
+
+    /* ── INFO GRID ── */
+    .pdf-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+    }
+
+    .pdf-info-cell {
+      background: #F7F9FC;
+      border: 1px solid #E0E6EF;
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+
+    .pdf-info-cell__label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      color: #6E6E6E; margin-bottom: 6px;
+    }
+
+    .pdf-info-cell__value {
+      font-size: 13px; font-weight: 600;
+      color: #1A1A1A; line-height: 1.5;
+    }
+
+    .pdf-info-cell__sub { font-size: 11px; color: #6E6E6E; margin-top: 2px; line-height: 1.4; }
+
+    /* ── ORDERED FOR STRIP ── */
+    .pdf-ordered-for-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #EEF4FF;
+      border: 1px solid #C5D8F8;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #1A1A1A;
+    }
+
+    .pdf-ordered-for-strip__label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: #005EB8;
+      flex-shrink: 0;
+      margin-right: 4px;
+    }
+
+    .pdf-ordered-for-strip__sep { color: #C5D8F8; margin: 0 4px; }
+
+    /* ── SECTION HEADING ── */
+    .pdf-section-heading {
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      color: #005EB8;
+      border-bottom: 1px solid #E0E6EF;
+      padding-bottom: 8px; margin-bottom: 12px;
+    }
+
+    /* ── ITEMS TABLE ── */
+    .pdf-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+    .pdf-table thead tr { background: #005EB8; color: #fff; }
+
+    .pdf-table thead th {
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .pdf-table thead th.th-right,
+    .pdf-table tbody td.td-right { text-align: right; }
+
+    .pdf-table thead th.th-center,
+    .pdf-table tbody td.td-center { text-align: center; }
+
+    .pdf-table tbody tr { border-bottom: 1px solid #E8ECF0; }
+    .pdf-table tbody tr:last-child { border-bottom: none; }
+    .pdf-table tbody tr:nth-child(even) { background: #F7F9FC; }
+
+    .pdf-table tbody td {
+      padding: 11px 12px;
+      color: #1A1A1A;
+      vertical-align: middle;
+    }
+
+    .td-sale  { color: #AD0000; font-weight: 700; }
+    .td-orig  { font-size: 11px; color: #9E9E9E; text-decoration: line-through; margin-left: 4px; }
+
+    /* ── BOTTOM SECTION ── */
+    .pdf-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .pdf-bottom__left {
+      flex: 1;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ── DELIVERY NOTE ── */
+    .pdf-delivery {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #F0FAF4;
+      border: 1px solid #C3E6CB;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #1B5E20;
+      line-height: 1.5;
+    }
+
+    /* ── FEDEX NOTE ── */
+    .pdf-fedex-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #FFF8E1;
+      border: 1px solid #FFD54F;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #5D4037;
+      line-height: 1.5;
+    }
+
+    /* ── SUMMARY ── */
+    .pdf-summary { width: 300px; flex-shrink: 0; }
+
+    .pdf-summary-row {
+      display: flex; justify-content: space-between;
+      font-size: 13px; padding: 6px 0; color: #444;
+    }
+
+    .pdf-summary-row--green { color: #2E7D32; }
+    .pdf-summary-divider { border-top: 2px solid #1A1A1A; margin: 6px 0; }
+
+    .pdf-summary-row--total {
+      font-size: 16px; font-weight: 800;
+      color: #005EB8; padding-top: 10px;
+    }
+
+    .pdf-summary-excl { font-size: 10px; color: #9E9E9E; text-align: right; margin-top: 2px; }
+
+    /* ── FOOTER ── */
+    .pdf-footer {
+      background: #1A1A1A;
+      color: rgba(255,255,255,0.7);
+      padding: 20px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 11px; gap: 16px;
+    }
+
+    .pdf-footer__brand { color: #fff; font-weight: 700; font-size: 12px; }
+    .pdf-footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+
+    /* ── ACTION BAR (screen only) ── */
+    .pdf-action-bar {
+      width: 794px; margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+    }
+
+    .pdf-action-bar p { font-size: 13px; color: #555; }
+
+    .pdf-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      height: 40px; padding: 0 20px;
+      background: #005EB8; color: #fff;
+      border: none; border-radius: 4px;
+      font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+
+    .pdf-btn:hover { background: #0B308E; }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .pdf-action-bar { display: none; }
+      .pdf-page { width: 100%; box-shadow: none; margin: 0; }
+      @page { margin: 0; size: A4; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Action bar -->
+  <div class="pdf-action-bar">
+    <p>In the print dialog, select <strong>Save as PDF</strong> and choose your folder.</p>
+    <button class="pdf-btn" onclick="window.print()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 1v9M4.5 7L8 11l3.5-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M1 12v1.5A1.5 1.5 0 002.5 15h11A1.5 1.5 0 0015 13.5V12" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Save as PDF
+    </button>
+  </div>
+
+  <div class="pdf-page">
+
+    <!-- HEADER -->
+    <div class="pdf-header">
+      <img src="images/okuma-logo.png" alt="Okuma" class="pdf-header__logo" onerror="this.style.display='none'">
+      <div class="pdf-header__title">Order Confirmation</div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="pdf-banner">
+      <div class="pdf-banner__icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="pdf-banner__text">
+        <h2 id="pdf-banner-title">Order Placed Successfully</h2>
+        <p id="pdf-banner-sub">Thank you. Your order has been received and is being processed.</p>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="pdf-body">
+
+      <!-- Reference + Date -->
+      <div class="pdf-meta">
+        <div>
+          <div class="pdf-meta__ref" id="pdf-ref">—</div>
+          <div class="pdf-meta__sub">Order Reference Number</div>
+        </div>
+        <div class="pdf-meta__right">
+          <div class="pdf-meta__date" id="pdf-date">—</div>
+          <div class="pdf-meta__ordered-for" id="pdf-ordered-for-meta" style="display:none;">
+            Ordered for: <strong id="pdf-ordered-for-name">—</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info grid: Bill To | Ship To | Payment (+ Customer for dealer) -->
+      <div class="pdf-info-grid" id="pdf-info-grid">
+        <!-- filled by JS -->
+      </div>
+
+      <!-- Ordered For strip (machine context) -->
+      <div class="pdf-ordered-for-strip" id="pdf-ordered-for-strip" style="display:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#005EB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+        <span class="pdf-ordered-for-strip__label">Ordered For</span>
+        <span id="pdf-strip-machine">—</span>
+        <span class="pdf-ordered-for-strip__sep">|</span>
+        <span id="pdf-strip-serial">—</span>
+      </div>
+
+      <!-- Items Ordered -->
+      <div>
+        <div class="pdf-section-heading">Items Ordered</div>
+        <table class="pdf-table">
+          <thead>
+            <tr>
+              <th style="width:34%">Part Name</th>
+              <th style="width:20%">Part Number</th>
+              <th class="th-center" style="width:10%">Qty</th>
+              <th class="th-right" style="width:18%">Unit Price</th>
+              <th class="th-right" style="width:18%">Line Total</th>
+            </tr>
+          </thead>
+          <tbody id="pdf-items-body">
+            <!-- filled by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bottom: delivery + FedEx note (left) | summary (right) -->
+      <div class="pdf-bottom">
+
+        <div class="pdf-bottom__left">
+          <!-- Delivery note -->
+          <div class="pdf-delivery">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;margin-top:1px;" aria-hidden="true">
+              <rect x="2" y="4" width="16" height="14" rx="2" stroke="#166534" stroke-width="1.5"/>
+              <path d="M2 8h16" stroke="#166534" stroke-width="1.5"/>
+              <path d="M6 2v4M14 2v4" stroke="#166534" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span id="pdf-delivery-text">Delivery details will be confirmed once the order is processed.</span>
+          </div>
+
+          <!-- FedEx shipping note (shown when carrier = FedEx) -->
+          <div class="pdf-fedex-note" id="pdf-fedex-note" style="display:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px;" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="#F57C00" stroke-width="1.5"/>
+              <path d="M12 8v4M12 16h.01" stroke="#F57C00" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span>Shipping cost will be calculated by the warehouse at time of shipment and reflected on your invoice.</span>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="pdf-summary">
+          <div class="pdf-section-heading">Order Summary</div>
+          <div id="pdf-summary-rows"></div>
+        </div>
+
+      </div>
+
+    </div><!-- /pdf-body -->
+
+    <!-- FOOTER -->
+    <div class="pdf-footer">
+      <div>
+        <div class="pdf-footer__brand">OKUMA AMERICA CORPORATION</div>
+        <div style="margin-top:3px;">11900 Westhall Drive, Charlotte, NC 28278 &nbsp;|&nbsp; P 704.588.7000</div>
+      </div>
+      <div style="text-align:right;">
+        <div>okuma.com</div>
+        <div style="margin-top:3px;" id="pdf-footer-ref"></div>
+      </div>
+    </div>
+
+  </div><!-- /pdf-page -->
+
+  <script>
+  (function () {
+    var order = JSON.parse(localStorage.getItem('okmPdfOrder') || 'null');
+
+    /* ── Demo fallback (customer flow) ── */
+    if (!order) {
+      order = {
+        flow: 'customer',
+        ref: '#ORD-2026-00421',
+        date: 'July 1, 2026',
+        orderedFor: 'James Rutherford',
+        customer: 'Rutherford Manufacturing Co.',
+        billTo: 'James Rutherford',
+        billToAddr: '45 Industrial Way, Suite 300\nCharlotte, NC 28202, USA',
+        shipTo: 'Okuma HQ – Warehouse B',
+        shipToAddr: '11900 Cottonwood Street\nCharlotte, NC 28214, USA',
+        payment: 'Credit Card (ending 4242)',
+        shippingCarrier: 'FedEx',
+        machine: 'LU300-M',
+        machineSerial: 'Serial No: M5-2891-K',
+        items: [
+          { name:'Plate',                 partNum:'525-0100-11',     qty:2, unitPrice:247.50, salePrice:202.50 },
+          { name:'Coolant Pump Assembly', partNum:'E4809-045-017-A', qty:1, unitPrice:185.00 },
+          { name:'Servo Drive Belt',      partNum:'E4809-045-018-B', qty:1, unitPrice:62.50  }
+        ],
+        subtotal: 742.50,
+        tax: 59.40,
+        discount: { code:'NEW10', amount:42.50 },
+        total: 801.90,
+        shippingNote: 'excl. shipping'
+      };
+    }
+
+    function el(id)      { return document.getElementById(id); }
+    function set(id, v)  { var e = el(id); if (e) e.textContent = v; }
+    function show(id)    { var e = el(id); if (e) e.style.display = ''; }
+    function showFlex(id){ var e = el(id); if (e) e.style.display = 'flex'; }
+    function money(v)    { return '$' + parseFloat(v).toFixed(2); }
+
+    /* ── Banner ── */
+    if (order.flow === 'dealer') {
+      set('pdf-banner-title', 'Dealer Order Placed Successfully');
+      set('pdf-banner-sub',   'Order for ' + (order.customer || 'customer') + ' has been submitted and is being processed.');
+    } else {
+      set('pdf-banner-sub', 'Thank you' + (order.orderedFor ? ', ' + order.orderedFor : '') + '. Your order has been received and is being processed.');
+    }
+
+    /* ── Meta ── */
+    set('pdf-ref',        order.ref  || '—');
+    set('pdf-date',       order.date || '—');
+    set('pdf-footer-ref', order.ref  || '');
+
+    if (order.orderedFor) {
+      showFlex('pdf-ordered-for-meta');
+      set('pdf-ordered-for-name', order.orderedFor);
+    }
+
+    /* ── Info grid ── */
+    var infoCells = [];
+
+    if (order.flow === 'dealer' && order.customer) {
+      infoCells.push({ label:'Customer', value: order.customer, sub: order.acct ? 'Account #' + order.acct : '' });
+    }
+
+    infoCells.push({
+      label: 'Bill To',
+      value: order.billTo || '—',
+      sub:   (order.billToAddr || '').replace(/\n/g, ' · ')
+    });
+
+    infoCells.push({
+      label: 'Ship To',
+      value: order.shipTo || '—',
+      sub:   (order.shipToAddr || '').replace(/\n/g, ' · ')
+    });
+
+    infoCells.push({ label:'Payment', value: order.payment || '—' });
+
+    el('pdf-info-grid').innerHTML = infoCells.map(function(c) {
+      return '<div class="pdf-info-cell">' +
+        '<div class="pdf-info-cell__label">' + c.label + '</div>' +
+        '<div class="pdf-info-cell__value">' + (c.value || '—') + '</div>' +
+        (c.sub ? '<div class="pdf-info-cell__sub">' + c.sub + '</div>' : '') +
+        '</div>';
+    }).join('');
+
+    /* ── Ordered For strip (machine) ── */
+    if (order.machine) {
+      showFlex('pdf-ordered-for-strip');
+      set('pdf-strip-machine', order.machine);
+      set('pdf-strip-serial',  order.machineSerial || '');
+    }
+
+    /* ── Items table ── */
+    var items = order.items || [];
+    el('pdf-items-body').innerHTML = items.length ? items.map(function(item) {
+      var lineTotal = item.salePrice != null ? (item.salePrice * item.qty) : (item.unitPrice * item.qty);
+      var priceCell = item.salePrice != null
+        ? '<span class="td-sale">' + money(item.salePrice) + '</span><span class="td-orig">' + money(item.unitPrice) + '</span>'
+        : money(item.unitPrice);
+      return '<tr>' +
+        '<td>' + item.name + '</td>' +
+        '<td style="color:#555;font-size:12px;">' + (item.partNum || '—') + '</td>' +
+        '<td class="td-center" style="font-weight:600;">' + item.qty + '</td>' +
+        '<td class="td-right">' + priceCell + '</td>' +
+        '<td class="td-right" style="font-weight:700;">' + money(lineTotal) + '</td>' +
+        '</tr>';
+    }).join('') : '<tr><td colspan="5" style="text-align:center;color:#9E9E9E;padding:20px;font-size:13px;">No items found.</td></tr>';
+
+    /* ── Delivery text ── */
+    if (order.deliveryText) set('pdf-delivery-text', order.deliveryText);
+
+    /* ── Shipping note ── */
+    if (order.flow === 'dealer' || (order.shippingCarrier && order.shippingCarrier.toLowerCase().indexOf('fedex') !== -1)) {
+      showFlex('pdf-fedex-note');
+    }
+
+    /* ── Summary ── */
+    var subtotal = order.subtotal || items.reduce(function(s, i) {
+      return s + (i.salePrice != null ? i.salePrice : i.unitPrice) * i.qty;
+    }, 0);
+
+    var rows = '';
+    rows += '<div class="pdf-summary-row"><span>Parts subtotal</span><span>' + money(subtotal) + '</span></div>';
+
+    if (order.flow === 'dealer') {
+      rows += '<div class="pdf-summary-row"><span>Shipping &amp; Handling</span><span>' + money(order.shipping || 0) + '</span></div>';
+      rows += '<div class="pdf-summary-row"><span>Tax (8%)</span><span>' + money(order.tax || 0) + '</span></div>';
+    } else {
+      rows += '<div class="pdf-summary-row"><span>Shipping &amp; Handling</span><span style="color:#9E9E9E;font-style:italic;">Added at shipment</span></div>';
+      rows += '<div class="pdf-summary-row"><span>Tax (Estimated)</span><span>' + money(order.tax || 0) + '</span></div>';
+      if (order.discount) {
+        rows += '<div class="pdf-summary-row pdf-summary-row--green"><span>Discount (' + order.discount.code + ')</span><span>(-) ' + money(order.discount.amount) + '</span></div>';
+      }
+    }
+
+    rows += '<div class="pdf-summary-divider"></div>';
+    var totalLabel = order.flow === 'dealer' ? 'Total Charged' : 'Total';
+    rows += '<div class="pdf-summary-row pdf-summary-row--total"><span>' + totalLabel + '</span><span>' + money(order.total || subtotal) + '</span></div>';
+    if (order.shippingNote) rows += '<div class="pdf-summary-excl">' + order.shippingNote + '</div>';
+
+    el('pdf-summary-rows').innerHTML = rows;
+
+    /* ── Auto-print ── */
+    window.addEventListener('load', function () {
+      setTimeout(function () { window.print(); }, 600);
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
