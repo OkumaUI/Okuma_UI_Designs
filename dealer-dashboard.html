@@ -396,13 +396,13 @@
             <div class="kpi-tile__label">Customer's Open Orders</div>
             <div class="kpi-tile__num" id="custKpi1Num">47</div>
           </a>
-          <a class="kpi-tile" id="custKpi2Link" href="my-quotes.html" style="text-decoration:none;">
-            <div class="kpi-tile__label">Customer's Open Quotes</div>
+          <a class="kpi-tile" id="custKpi2Link" href="my-orders.html?type=po" style="text-decoration:none;">
+            <div class="kpi-tile__label">Customer's Open POs</div>
             <div class="kpi-tile__num" id="custKpi2Num">3</div>
           </a>
-          <a class="kpi-tile" id="custKpi3Link" href="dealer-profile.html?tab=customers" style="text-decoration:none;">
-            <div class="kpi-tile__label">Customer's Registered Machines</div>
-            <div class="kpi-tile__num" id="custKpi3Num">5</div>
+          <a class="kpi-tile" id="custKpi3Link" href="dealer-profile.html?tab=addr-requests" style="text-decoration:none;">
+            <div class="kpi-tile__label">Customer's Pending Address Approvals</div>
+            <div class="kpi-tile__num" id="custKpi3Num">1</div>
           </a>
         </div>
 
@@ -488,7 +488,7 @@
         'ABC Industries': {
           account: 'AC-4421',
           address: '418 Innovation Drive, Detroit, MI 48126, USA',
-          kpi: { orders: 47, quotes: 3, machines: 5, lastReg: '10 Feb 2025' },
+          kpi: { orders: 47, pos: 3, pendingAddr: 2 },
           machines: [
             { name: 'LU300-M',       serial: 'L3-4421-R',  img: 'images/dash-machine-lu300m.png',  reg: '12 Oct 2024' },
             { name: 'MULTUS U3000',  serial: 'MU-9102-L',  img: 'images/dash-machine-multus.png',  reg: '05 Jan 2025' },
@@ -504,7 +504,7 @@
         'Smith Manufacturing': {
           account: 'SM-2891',
           address: '782 Industrial Blvd, Cincinnati, OH 45201, USA',
-          kpi: { orders: 12, quotes: 1, machines: 2, lastReg: '18 Nov 2024' },
+          kpi: { orders: 12, pos: 1, pendingAddr: 1 },
           machines: [
             { name: 'GENOS L200E',       serial: 'GL-2891-A', img: 'images/dash-machine-lu300m.png', reg: '22 Aug 2024' },
             { name: 'SPACE TURN LB3000', serial: 'ST-7743-B', img: 'images/dash-machine-multus.png', reg: '18 Nov 2024' }
@@ -519,7 +519,7 @@
         'Pacific Precision': {
           account: 'PP-5517',
           address: '2140 Tech Park Drive, San Jose, CA 95110, USA',
-          kpi: { orders: 63, quotes: 5, machines: 6, lastReg: '03 Mar 2025' },
+          kpi: { orders: 63, pos: 5, pendingAddr: 2 },
           machines: [
             { name: 'MB-56V AII',   serial: 'MB-5517-C', img: 'images/dash-machine-lu300m.png', reg: '10 Jun 2024' },
             { name: 'LU300-M',      serial: 'L3-5517-D', img: 'images/dash-machine-multus.png', reg: '14 Sep 2024' },
@@ -535,7 +535,7 @@
         'Delta Components': {
           account: 'DC-3302',
           address: '900 Commerce Street, Dallas, TX 75201, USA',
-          kpi: { orders: 21, quotes: 2, machines: 3, lastReg: '27 Jan 2025' },
+          kpi: { orders: 21, pos: 2, pendingAddr: 1 },
           machines: [
             { name: 'LB2000 EX III', serial: 'LB-3302-F', img: 'images/dash-machine-lb2000.png', reg: '09 May 2024' },
             { name: 'GENOS L200E',   serial: 'GL-3302-G', img: 'images/dash-machine-lu300m.png', reg: '27 Jan 2025' }
@@ -550,7 +550,7 @@
         'Apex Machining': {
           account: 'AM-7789',
           address: '3315 West Fullerton Ave, Chicago, IL 60647, USA',
-          kpi: { orders: 34, quotes: 4, machines: 5, lastReg: '14 Apr 2025' },
+          kpi: { orders: 34, pos: 4, pendingAddr: 2 },
           machines: [
             { name: 'MB-56V AII',        serial: 'MB-7789-H', img: 'images/dash-machine-multus.png', reg: '18 Feb 2024' },
             { name: 'MULTUS U3000',      serial: 'MU-7789-I', img: 'images/dash-machine-lb2000.png', reg: '14 Apr 2025' },
@@ -561,6 +561,199 @@
             { num: 'OKU-2026-00484', date: 'Feb 26, 2026', count: 1, total: '$43.00',    status: 'delivered' },
             { num: 'OKU-2026-00452', date: 'Feb 17, 2026', count: 1, total: '$385.00',   status: 'delivered' },
             { num: 'OKU-2026-00418', date: 'Feb 06, 2026', count: 6, total: '$94.50',    status: 'delivered' }
+          ]
+        },
+        'Borland Systems': {
+          account: 'BS-1101',
+          address: '200 State Street, Boston, MA 02109, USA',
+          kpi: { orders: 8, pos: 2, pendingAddr: 1 },
+          machines: [
+            { name: 'LU300-M',    serial: 'L3-1101-A', img: 'images/dash-machine-lu300m.png', reg: '14 Aug 2024' },
+            { name: 'GENOS L200E',serial: 'GL-1101-B', img: 'images/dash-machine-multus.png', reg: '05 Dec 2024' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00533', date: 'Mar 15, 2026', count: 2, total: '$468.00', status: 'processing' },
+            { num: 'OKU-2026-00487', date: 'Feb 27, 2026', count: 1, total: '$122.50', status: 'delivered' }
+          ]
+        },
+        'Century Fabrication': {
+          account: 'CF-2201',
+          address: '450 Music Row, Nashville, TN 37203, USA',
+          kpi: { orders: 5, pos: 1, pendingAddr: 0 },
+          machines: [
+            { name: 'MULTUS U3000', serial: 'MU-2201-C', img: 'images/dash-machine-multus.png', reg: '22 Jan 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00520', date: 'Mar 11, 2026', count: 1, total: '$315.00', status: 'shipped' },
+            { num: 'OKU-2026-00462', date: 'Feb 20, 2026', count: 2, total: '$94.00',  status: 'delivered' }
+          ]
+        },
+        'East Coast Tooling': {
+          account: 'EC-3301',
+          address: '1616 Market Street, Philadelphia, PA 19103, USA',
+          kpi: { orders: 19, pos: 3, pendingAddr: 1 },
+          machines: [
+            { name: 'LB2000 EX III', serial: 'LB-3301-D', img: 'images/dash-machine-lb2000.png', reg: '11 Jun 2024' },
+            { name: 'MB-56V AII',    serial: 'MB-3301-E', img: 'images/dash-machine-multus.png', reg: '08 Mar 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00527', date: 'Mar 13, 2026', count: 3, total: '$720.00', status: 'processing' },
+            { num: 'OKU-2026-00494', date: 'Mar 01, 2026', count: 1, total: '$187.50', status: 'shipped' },
+            { num: 'OKU-2026-00458', date: 'Feb 18, 2026', count: 2, total: '$340.00', status: 'delivered' }
+          ]
+        },
+        'Franklin Engineering': {
+          account: 'FE-4401',
+          address: '250 South High Street, Columbus, OH 43215, USA',
+          kpi: { orders: 11, pos: 2, pendingAddr: 0 },
+          machines: [
+            { name: 'LU300-M', serial: 'L3-4401-F', img: 'images/dash-machine-lu300m.png', reg: '17 Oct 2024' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00516', date: 'Mar 09, 2026', count: 2, total: '$512.00', status: 'processing' },
+            { num: 'OKU-2026-00468', date: 'Feb 21, 2026', count: 1, total: '$78.00',  status: 'delivered' }
+          ]
+        },
+        'Global Parts Supply': {
+          account: 'GP-5501',
+          address: '100 Peachtree Street NE, Atlanta, GA 30303, USA',
+          kpi: { orders: 26, pos: 4, pendingAddr: 1 },
+          machines: [
+            { name: 'SPACE TURN LB3000', serial: 'ST-5501-G', img: 'images/dash-machine-lb2000.png', reg: '09 Sep 2024' },
+            { name: 'MULTUS U3000',      serial: 'MU-5501-H', img: 'images/dash-machine-multus.png', reg: '28 Feb 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00531', date: 'Mar 14, 2026', count: 4, total: '$1,045.00', status: 'shipped' },
+            { num: 'OKU-2026-00503', date: 'Mar 04, 2026', count: 2, total: '$294.00',   status: 'delivered' },
+            { num: 'OKU-2026-00471', date: 'Feb 22, 2026', count: 1, total: '$66.50',    status: 'delivered' }
+          ]
+        },
+        'Harmon Industries': {
+          account: 'HI-6601',
+          address: '2800 N Central Ave, Phoenix, AZ 85004, USA',
+          kpi: { orders: 7, pos: 1, pendingAddr: 0 },
+          machines: [
+            { name: 'LB2000 EX III', serial: 'LB-6601-I', img: 'images/dash-machine-lb2000.png', reg: '14 Nov 2024' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00507', date: 'Mar 06, 2026', count: 1, total: '$243.00', status: 'shipped' },
+            { num: 'OKU-2026-00464', date: 'Feb 19, 2026', count: 1, total: '$89.00',  status: 'delivered' }
+          ]
+        },
+        'Industrial Solutions': {
+          account: 'IS-7701',
+          address: '1600 Glenarm Place, Denver, CO 80202, USA',
+          kpi: { orders: 15, pos: 3, pendingAddr: 1 },
+          machines: [
+            { name: 'GENOS L200E', serial: 'GL-7701-J', img: 'images/dash-machine-lu300m.png', reg: '08 Jul 2024' },
+            { name: 'LU300-M',     serial: 'L3-7701-K', img: 'images/dash-machine-multus.png', reg: '20 Jan 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00522', date: 'Mar 11, 2026', count: 3, total: '$678.00', status: 'processing' },
+            { num: 'OKU-2026-00475', date: 'Feb 23, 2026', count: 1, total: '$152.00', status: 'delivered' }
+          ]
+        },
+        'Johnson Metal Works': {
+          account: 'JM-8801',
+          address: '500 Union Street, Seattle, WA 98101, USA',
+          kpi: { orders: 9, pos: 2, pendingAddr: 0 },
+          machines: [
+            { name: 'MB-56V AII', serial: 'MB-8801-L', img: 'images/dash-machine-multus.png', reg: '30 Dec 2024' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00509', date: 'Mar 07, 2026', count: 2, total: '$398.00', status: 'shipped' },
+            { num: 'OKU-2026-00466', date: 'Feb 20, 2026', count: 1, total: '$112.50', status: 'delivered' }
+          ]
+        },
+        'Keystone Precision': {
+          account: 'KP-9901',
+          address: '625 Liberty Ave, Pittsburgh, PA 15222, USA',
+          kpi: { orders: 22, pos: 3, pendingAddr: 1 },
+          machines: [
+            { name: 'MULTUS U3000',      serial: 'MU-9901-M', img: 'images/dash-machine-multus.png', reg: '03 Oct 2024' },
+            { name: 'SPACE TURN LB3000', serial: 'ST-9901-N', img: 'images/dash-machine-lb2000.png', reg: '16 Feb 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00528', date: 'Mar 13, 2026', count: 3, total: '$836.00', status: 'processing' },
+            { num: 'OKU-2026-00496', date: 'Mar 02, 2026', count: 2, total: '$320.00', status: 'shipped' },
+            { num: 'OKU-2026-00460', date: 'Feb 19, 2026', count: 1, total: '$145.00', status: 'delivered' }
+          ]
+        },
+        'Lakeland Manufacturing': {
+          account: 'LM-1011',
+          address: '80 South 8th Street, Minneapolis, MN 55402, USA',
+          kpi: { orders: 13, pos: 2, pendingAddr: 0 },
+          machines: [
+            { name: 'LU300-M', serial: 'L3-1011-O', img: 'images/dash-machine-lu300m.png', reg: '25 Sep 2024' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00518', date: 'Mar 10, 2026', count: 2, total: '$556.00', status: 'shipped' },
+            { num: 'OKU-2026-00470', date: 'Feb 22, 2026', count: 1, total: '$74.00',  status: 'delivered' }
+          ]
+        },
+        'Meridian Toolworks': {
+          account: 'MT-2011',
+          address: '700 Smith Street, Houston, TX 77002, USA',
+          kpi: { orders: 18, pos: 3, pendingAddr: 1 },
+          machines: [
+            { name: 'LB2000 EX III', serial: 'LB-2011-P', img: 'images/dash-machine-lb2000.png', reg: '17 Jul 2024' },
+            { name: 'GENOS L200E',   serial: 'GL-2011-Q', img: 'images/dash-machine-lu300m.png', reg: '11 Mar 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00525', date: 'Mar 12, 2026', count: 2, total: '$612.00', status: 'processing' },
+            { num: 'OKU-2026-00491', date: 'Feb 28, 2026', count: 3, total: '$438.50', status: 'shipped' },
+            { num: 'OKU-2026-00453', date: 'Feb 16, 2026', count: 1, total: '$98.00',  status: 'delivered' }
+          ]
+        },
+        'Summit Precision': {
+          account: 'SP-3011',
+          address: '1120 NW Couch Street, Portland, OR 97209, USA',
+          kpi: { orders: 6, pos: 1, pendingAddr: 0 },
+          machines: [
+            { name: 'SPACE TURN LB3000', serial: 'ST-3011-R', img: 'images/dash-machine-lb2000.png', reg: '07 Jan 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00513', date: 'Mar 08, 2026', count: 1, total: '$276.00', status: 'shipped' },
+            { num: 'OKU-2026-00455', date: 'Feb 17, 2026', count: 1, total: '$88.50',  status: 'delivered' }
+          ]
+        },
+        'Tri-State Machining': {
+          account: 'TS-4011',
+          address: '127 Public Square, Cleveland, OH 44114, USA',
+          kpi: { orders: 16, pos: 2, pendingAddr: 1 },
+          machines: [
+            { name: 'LU300-M',    serial: 'L3-4011-S', img: 'images/dash-machine-lu300m.png', reg: '02 Aug 2024' },
+            { name: 'MB-56V AII', serial: 'MB-4011-T', img: 'images/dash-machine-multus.png', reg: '19 Feb 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00529', date: 'Mar 13, 2026', count: 3, total: '$924.00', status: 'processing' },
+            { num: 'OKU-2026-00486', date: 'Feb 26, 2026', count: 2, total: '$267.00', status: 'shipped' },
+            { num: 'OKU-2026-00449', date: 'Feb 15, 2026', count: 1, total: '$54.50',  status: 'delivered' }
+          ]
+        },
+        'United Fabricators': {
+          account: 'UF-5011',
+          address: '200 S Biscayne Blvd, Miami, FL 33131, USA',
+          kpi: { orders: 10, pos: 2, pendingAddr: 0 },
+          machines: [
+            { name: 'MULTUS U3000', serial: 'MU-5011-U', img: 'images/dash-machine-multus.png', reg: '04 Oct 2024' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00510', date: 'Mar 07, 2026', count: 2, total: '$445.00', status: 'shipped' },
+            { num: 'OKU-2026-00469', date: 'Feb 22, 2026', count: 1, total: '$133.00', status: 'delivered' }
+          ]
+        },
+        'Westfield Components': {
+          account: 'WC-6011',
+          address: '2345 Grand Blvd, Kansas City, MO 64108, USA',
+          kpi: { orders: 14, pos: 2, pendingAddr: 1 },
+          machines: [
+            { name: 'LB2000 EX III',     serial: 'LB-6011-V', img: 'images/dash-machine-lb2000.png', reg: '21 Nov 2024' },
+            { name: 'SPACE TURN LB3000', serial: 'ST-6011-W', img: 'images/dash-machine-multus.png', reg: '06 Apr 2025' }
+          ],
+          orders: [
+            { num: 'OKU-2026-00523', date: 'Mar 11, 2026', count: 2, total: '$588.00', status: 'processing' },
+            { num: 'OKU-2026-00483', date: 'Feb 25, 2026', count: 1, total: '$214.00', status: 'delivered' }
           ]
         }
       };
@@ -593,8 +786,8 @@
         custCtxAddr.textContent = d.address;
 
         kpi1Num.textContent = d.kpi.orders;
-        kpi2Num.textContent = d.kpi.quotes;
-        kpi3Num.textContent = d.kpi.machines;
+        kpi2Num.textContent = d.kpi.pos;
+        kpi3Num.textContent = d.kpi.pendingAddr;
 
         machGrid.innerHTML = d.machines.map(function (m) {
           return '<div class="machine-card">' +
@@ -636,8 +829,10 @@
 
         var k1 = document.getElementById('custKpi1Link');
         var k2 = document.getElementById('custKpi2Link');
+        var k3 = document.getElementById('custKpi3Link');
         if (k1) k1.href = 'my-orders.html?filter=open&customer=' + custParam;
-        if (k2) k2.href = 'my-quotes.html?filter=open&customer=' + custParam;
+        if (k2) k2.href = 'my-orders.html?type=po&customer=' + custParam;
+        if (k3) k3.href = 'dealer-profile.html?tab=addr-requests&customer=' + custParam;
 
         stateAll.style.display  = 'none';
         stateCust.style.display = '';

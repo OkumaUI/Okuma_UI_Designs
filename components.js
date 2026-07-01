@@ -112,7 +112,7 @@
                 <div class="user-menu__name">${_okuma_user ? (_okuma_user.firstName + ' ' + _okuma_user.lastName) : 'Guest'}</div>
                 <div class="user-menu__org">${_okuma_user ? (_okuma_user.role === 'dealer' ? 'Dealer Account' : 'Customer Account') : ''}</div>
               </div>
-              <a href="profile.html" class="user-menu__item" role="menuitem">
+              <a href="${_okuma_user && _okuma_user.role === 'dealer' ? 'dealer-profile.html' : 'profile.html'}" class="user-menu__item" role="menuitem">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="4.5" r="2.5" stroke="#005EB8" stroke-width="1.3"/><path d="M2.5 12c0-2.2 2-3.8 4.5-3.8s4.5 1.6 4.5 3.8" stroke="#005EB8" stroke-width="1.3" stroke-linecap="round"/></svg>
                 My Account
               </a>
@@ -143,7 +143,7 @@
       icon: '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 5.5V10l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
     { key: 'quotes', label: 'My Quotes', href: 'my-quotes.html',
       icon: '<path d="M5 2h6l4 4v12a1 1 0 01-1 1H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M11 2v4h4M7 11h6M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
-    { key: 'account', label: 'My Account', href: 'profile.html',
+    { key: 'account', label: 'My Account', href: (_okuma_user && _okuma_user.role === 'dealer') ? 'dealer-profile.html' : 'profile.html',
       icon: '<circle cx="10" cy="6.5" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M3 18c0-3.6 3.13-6.5 7-6.5s7 2.9 7 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
   ];
 
@@ -198,7 +198,6 @@
             '<a href="#">Events</a>' +
             '<a href="#">FAQs</a>' +
             '<a href="#">E-Store</a>' +
-            '<a href="#">Contact Okuma</a>' +
           '</div>' +
 
           /* Resources + Media */
@@ -210,12 +209,6 @@
             '<div class="footer-col__heading footer-col__gap">Media</div>' +
             '<a href="#">Press Releases</a>' +
             '<a href="#">Media Resources</a>' +
-          '</div>' +
-
-          /* Standalone links */
-          '<div class="footer-col">' +
-            '<a href="#" style="font-weight:700;color:#fff;">Okuma Careers</a>' +
-            '<a href="#" style="font-weight:700;color:#fff;">Distributor Login</a>' +
           '</div>' +
 
         '</nav>' +
@@ -335,122 +328,19 @@
     if (q) window.location = 'search-results.html?q=' + encodeURIComponent(q);
   }
 
-  /* Build and inject the suggestion dropdown once */
-  var navSuggest = document.createElement('div');
-  navSuggest.id = 'navSuggest';
-  navSuggest.style.cssText = [
-    'display:none',
-    'position:absolute',
-    'top:calc(100% + 6px)',
-    'left:0',
-    'right:0',
-    'background:#fff',
-    'border:1px solid #D1D5DB',
-    'border-radius:6px',
-    'box-shadow:0 6px 20px rgba(0,0,0,0.12)',
-    'z-index:9999',
-    'overflow:hidden',
-    'max-height:320px',
-    'overflow-y:auto',
-  ].join(';');
-
-  /* navSearch needs position:relative so the dropdown anchors to it */
-  if (navSearch) {
-    navSearch.style.position = 'relative';
-    navSearch.appendChild(navSuggest);
-  }
-
-  var activeIdx = -1;
-
-  function closeSuggest() {
-    navSuggest.style.display = 'none';
-    navSuggest.innerHTML = '';
-    activeIdx = -1;
-  }
-
-  function highlightItem(idx) {
-    var items = navSuggest.querySelectorAll('.nav-suggest-item');
-    items.forEach(function (el, i) {
-      el.style.background = i === idx ? '#F0F5FB' : '';
-    });
-    activeIdx = idx;
-  }
-
-  function renderSuggest(term) {
-    if (!term || term.length < 3) { closeSuggest(); return; }
-    var lo = term.toLowerCase();
-    var hits = NAV_CATALOGUE.filter(function (p) {
-      return p.id.toLowerCase().indexOf(lo) !== -1 || p.desc.toLowerCase().indexOf(lo) !== -1;
-    }).slice(0, 8);
-
-    if (!hits.length) {
-      navSuggest.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:#9E9E9E;">No results for "' + term + '"</div>';
-      navSuggest.style.display = 'block';
-      activeIdx = -1;
-      return;
-    }
-
-    navSuggest.innerHTML = hits.map(function (p, i) {
-      function hl(str) {
-        var idx2 = str.toLowerCase().indexOf(lo);
-        if (idx2 === -1) return str;
-        return str.slice(0, idx2) + '<strong>' + str.slice(idx2, idx2 + lo.length) + '</strong>' + str.slice(idx2 + lo.length);
-      }
-      return '<div class="nav-suggest-item" data-q="' + p.id + '" style="' +
-        'padding:10px 14px;cursor:pointer;display:flex;flex-direction:column;gap:3px;' +
-        (i < hits.length - 1 ? 'border-bottom:1px solid #F5F5F5;' : '') + '">' +
-        '<span style="font-size:13px;font-weight:600;color:#2C2A29;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + hl(p.desc) + '</span>' +
-        '<span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#757575;">' +
-          '<span style="font-family:\'Courier New\',monospace;font-weight:700;color:#005EB8;">' + hl(p.id) + '</span>' +
-        '</span>' +
-      '</div>';
-    }).join('');
-
-    navSuggest.querySelectorAll('.nav-suggest-item').forEach(function (el) {
-      el.addEventListener('mousedown', function (e) {
-        e.preventDefault(); /* prevent blur firing before click */
-        goSearch(el.getAttribute('data-q'));
-      });
-      el.addEventListener('mouseover', function () {
-        var items = navSuggest.querySelectorAll('.nav-suggest-item');
-        highlightItem(Array.prototype.indexOf.call(items, el));
-      });
-    });
-
-    navSuggest.style.display = 'block';
-    activeIdx = -1;
-  }
-
   if (navSearchInput) {
-    navSearchInput.addEventListener('input', function () {
-      renderSuggest(navSearchInput.value.trim());
-    });
-
     navSearchInput.addEventListener('keydown', function (e) {
-      var items = navSuggest.querySelectorAll('.nav-suggest-item');
-      if (e.key === 'ArrowDown') {
+      if (e.key === 'Enter') {
         e.preventDefault();
-        highlightItem(Math.min(activeIdx + 1, items.length - 1));
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        highlightItem(Math.max(activeIdx - 1, 0));
-      } else if (e.key === 'Enter') {
-        if (activeIdx >= 0 && items[activeIdx]) {
-          goSearch(items[activeIdx].getAttribute('data-q'));
-        } else {
-          goSearch(navSearchInput.value);
-        }
+        goSearch(navSearchInput.value);
       } else if (e.key === 'Escape') {
         closeSearchPanel();
         if (navSearchBtn) navSearchBtn.focus();
       }
     });
-
-    navSearchInput.addEventListener('blur', function () {
-      /* Delay so mousedown on a suggestion fires first */
-      setTimeout(closeSuggest, 150);
-    });
   }
+
+  function closeSuggest() { /* no-op — autocomplete removed */ }
 
   /* ---------- behaviors: mobile search panel toggle ---------- */
   var navSearchBtn = document.getElementById('navSearchBtn');
@@ -466,10 +356,8 @@
 
   function closeSearchPanel() {
     navSearch.classList.remove('open');
-    /* Restore position:relative so the autocomplete suggestion dropdown anchors correctly */
-    navSearch.style.position = 'relative';
     if (navSearchBtn) navSearchBtn.setAttribute('aria-expanded', 'false');
-    closeSuggest();
+    if (navSearchInput) navSearchInput.value = '';
   }
 
   if (navSearchBtn && navSearch) {
@@ -562,11 +450,26 @@
     var MAX_RECENT_MACH  = 3;
 
     var CUSTOMER_MACHINES = {
-      'ABC Industries':      ['LU300-M', 'MULTUS U3000', 'LB2000 EX III'],
-      'Smith Manufacturing': ['GENOS L200E', 'SPACE TURN LB3000'],
-      'Pacific Precision':   ['MB-56V AII', 'LU300-M', 'MULTUS U3000'],
-      'Delta Components':    ['LB2000 EX III', 'GENOS L200E'],
-      'Apex Machining':      ['MB-56V AII', 'MULTUS U3000', 'SPACE TURN LB3000'],
+      'ABC Industries':        ['LU300-M', 'MULTUS U3000', 'LB2000 EX III'],
+      'Smith Manufacturing':   ['GENOS L200E', 'SPACE TURN LB3000'],
+      'Pacific Precision':     ['MB-56V AII', 'LU300-M', 'MULTUS U3000'],
+      'Delta Components':      ['LB2000 EX III', 'GENOS L200E'],
+      'Apex Machining':        ['MB-56V AII', 'MULTUS U3000', 'SPACE TURN LB3000'],
+      'Borland Systems':       ['LU300-M', 'GENOS L200E'],
+      'Century Fabrication':   ['MULTUS U3000'],
+      'East Coast Tooling':    ['LB2000 EX III', 'MB-56V AII'],
+      'Franklin Engineering':  ['LU300-M'],
+      'Global Parts Supply':   ['SPACE TURN LB3000', 'MULTUS U3000'],
+      'Harmon Industries':     ['LB2000 EX III'],
+      'Industrial Solutions':  ['GENOS L200E', 'LU300-M'],
+      'Johnson Metal Works':   ['MB-56V AII'],
+      'Keystone Precision':    ['MULTUS U3000', 'SPACE TURN LB3000'],
+      'Lakeland Manufacturing':['LU300-M'],
+      'Meridian Toolworks':    ['LB2000 EX III', 'GENOS L200E'],
+      'Summit Precision':      ['SPACE TURN LB3000'],
+      'Tri-State Machining':   ['LU300-M', 'MB-56V AII'],
+      'United Fabricators':    ['MULTUS U3000'],
+      'Westfield Components':  ['LB2000 EX III', 'SPACE TURN LB3000'],
     };
 
     /* ── recent machines helpers ── */

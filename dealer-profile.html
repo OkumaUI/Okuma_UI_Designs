@@ -273,9 +273,75 @@
       vertical-align: middle; font-size: 13px; color: #1A1A1A;
     }
     .cust-table tbody tr:last-child td { border-bottom: none; }
-    .cust-table tbody tr:hover { background: #F9FBFF; }
+    .cust-table .cust-row:hover { background: #F9FBFF; }
     .cust-name { font-size: 14px; font-weight: 700; color: #1A1A1A; }
     .cust-acct { font-size: 12px; color: #9E9E9E; margin-top: 2px; }
+
+    /* ── Accordion toggle ── */
+    .cust-toggle-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: none; border: none; padding: 0;
+      cursor: pointer; font-size: 14px; font-weight: 700; color: #1A1A1A;
+      text-align: left; width: 100%;
+    }
+    .cust-toggle-btn:hover .cust-name-text { color: #005EB8; }
+
+    .cust-chevron {
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: #717171;
+      transition: transform 0.2s;
+    }
+    .cust-row.open .cust-chevron { transform: rotate(180deg); }
+
+    /* ── Accordion panel ── */
+    .cust-accordion-row { display: none; }
+    .cust-accordion-row.open { display: table-row; }
+
+    .cust-accordion-row > td {
+      padding: 0 !important;
+      border-bottom: 1px solid #DEDEDE !important;
+      background: #fff;
+    }
+
+    .cust-machines-panel {
+      padding: 24px 24px 24px 24px;
+    }
+
+    .cust-machines-heading {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: #717171; margin-bottom: 12px;
+    }
+
+    /* Machine sub-table — matches portal table pattern exactly */
+    .cust-machines-table { width: 100%; border-collapse: collapse; }
+    .cust-machines-table thead tr { background: #F5F5F5; }
+    .cust-machines-table th {
+      font-size: 11px; font-weight: 700; color: #717171;
+      text-transform: uppercase; text-align: left;
+      padding: 11px 16px; border-bottom: 1px solid #DEDEDE; white-space: nowrap;
+    }
+    .cust-machines-table td {
+      padding: 12px 16px; border-bottom: 1px solid #DEDEDE;
+      vertical-align: middle; font-size: 13px; color: #1A1A1A;
+    }
+    .cust-machines-table tbody tr:last-child td { border-bottom: none; }
+    .cust-machines-table tbody tr:hover { background: #F9FBFF; }
+
+    .machine-model-badge { font-weight: 700; color: #1A1A1A; }
+
+    /* Status badges — matches portal status-badge pattern */
+    .machine-status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 20px; padding: 3px 10px 3px 8px;
+      font-size: 12px; font-weight: 500;
+    }
+    .machine-status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .machine-status-badge--active   { background: #F4F9F1; border: 0.5px solid #74AA50; color: #74AA50; }
+    .machine-status-badge--active .dot { background: #74AA50; }
+    .machine-status-badge--warranty { background: #FFF9EF; border: 0.5px solid #FFB549; color: #B07800; }
+    .machine-status-badge--warranty .dot { background: #FFB549; }
+    .machine-status-badge--expired  { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #9E9E9E; }
+    .machine-status-badge--expired .dot { background: #9E9E9E; }
 
     /* ── PARTS BOOK MODAL ── */
     .modal-overlay {
@@ -413,6 +479,40 @@
     .addr-hist-badge--rejected { background: #FFF5F5; border: 0.5px solid #D04B4B; color: #D04B4B; }
     .addr-hist-badge--rejected .dot { background: #D04B4B; }
     .addr-hist-reason { font-size: 11px; color: #9E9E9E; margin-top: 3px; }
+
+    /* ── ADDRESS REQUEST TOOLBAR ── */
+    .addr-req-toolbar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .addr-req-search-wrap {
+      position: relative; flex: 1; min-width: 160px;
+    }
+    .addr-req-search-wrap > svg {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: #9E9E9E; pointer-events: none;
+    }
+    .addr-req-search {
+      width: 100%; height: 38px; border: 1px solid #D1D5DB; border-radius: 4px;
+      padding: 0 12px 0 34px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; color: #1A1A1A; background: #fff; outline: none;
+    }
+    .addr-req-search:focus { border-color: #005EB8; box-shadow: 0 0 0 2px rgba(0,94,184,0.12); }
+    .addr-req-search::placeholder { color: #9E9E9E; }
+    .addr-req-sort-wrap { position: relative; flex-shrink: 0; }
+    .addr-req-sort {
+      height: 38px; padding: 0 34px 0 12px; border: 1px solid #D1D5DB;
+      border-radius: 4px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; color: #1A1A1A; background: #fff; outline: none;
+      appearance: none; -webkit-appearance: none; cursor: pointer; min-width: 180px;
+    }
+    .addr-req-sort:focus { border-color: #005EB8; box-shadow: 0 0 0 2px rgba(0,94,184,0.12); }
+    .addr-req-sort-wrap > svg {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      pointer-events: none; color: #717171;
+    }
 
     /* ── APPROVE CONFIRMATION MODAL ── */
     .approve-modal-overlay {
@@ -722,52 +822,18 @@
 
           <div class="orders-wrap">
             <div class="orders-scroll">
-              <table class="cust-table">
+              <table class="cust-table" id="cust-accordion-table">
                 <thead>
                   <tr>
-                    <th>Customer</th>
+                    <th style="width:30%">Customer</th>
                     <th>Account #</th>
                     <th>Location</th>
                     <th>Open Orders</th>
                     <th>Machines</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td><span class="cust-name">ABC Industries</span></td>
-                    <td>AC-4421</td>
-                    <td>Detroit, MI</td>
-                    <td>47</td>
-                    <td>5</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cust-name">Smith Manufacturing</span></td>
-                    <td>SM-2891</td>
-                    <td>Cincinnati, OH</td>
-                    <td>12</td>
-                    <td>2</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cust-name">Pacific Precision</span></td>
-                    <td>PP-5517</td>
-                    <td>San Jose, CA</td>
-                    <td>63</td>
-                    <td>6</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cust-name">Delta Components</span></td>
-                    <td>DC-3302</td>
-                    <td>Dallas, TX</td>
-                    <td>21</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cust-name">Apex Machining</span></td>
-                    <td>AM-7789</td>
-                    <td>Chicago, IL</td>
-                    <td>34</td>
-                    <td>5</td>
-                  </tr>
+                <tbody id="cust-accordion-body">
+                  <!-- rows injected by JS -->
                 </tbody>
               </table>
             </div>
@@ -784,6 +850,33 @@
             <div class="addr-req-section__head">
               <span class="addr-req-section__title">Pending Requests</span>
               <span class="addr-req-section__count" id="pendingCount" style="display:none;">0</span>
+            </div>
+            <div class="addr-req-toolbar">
+              <div class="addr-req-search-wrap">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
+                  <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <input type="text" class="addr-req-search" id="pendingSearchInput"
+                       placeholder="Search by customer" aria-label="Search pending requests by customer">
+              </div>
+              <div class="addr-req-sort-wrap">
+                <select class="addr-req-sort" id="pendingCustFilter" aria-label="Filter by customer">
+                  <option value="">All Customers</option>
+                </select>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="addr-req-sort-wrap">
+                <select class="addr-req-sort" id="pendingSortSelect" aria-label="Sort pending requests">
+                  <option value="date-desc">Newest to Oldest</option>
+                  <option value="date-asc">Oldest to Newest</option>
+                </select>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
             </div>
             <div class="orders-wrap">
               <div class="orders-scroll">
@@ -808,6 +901,43 @@
           <div class="addr-req-section" id="addrHistSection">
             <div class="addr-req-section__head">
               <span class="addr-req-section__title">History</span>
+            </div>
+            <div class="addr-req-toolbar">
+              <div class="addr-req-search-wrap">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
+                  <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <input type="text" class="addr-req-search" id="histSearchInput"
+                       placeholder="Search by customer" aria-label="Search history by customer">
+              </div>
+              <div class="addr-req-sort-wrap">
+                <select class="addr-req-sort" id="histCustFilter" aria-label="Filter by customer">
+                  <option value="">All Customers</option>
+                </select>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="addr-req-sort-wrap">
+                <select class="addr-req-sort" id="histStatusFilter" aria-label="Filter by status">
+                  <option value="">All Statuses</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="addr-req-sort-wrap">
+                <select class="addr-req-sort" id="histSortSelect" aria-label="Sort history">
+                  <option value="date-desc">Newest to Oldest</option>
+                  <option value="date-asc">Oldest to Newest</option>
+                </select>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
             </div>
             <div class="orders-wrap">
               <div class="orders-scroll">
@@ -1149,6 +1279,36 @@
     var approveCancel  = document.getElementById('approveModalCancel');
     var pendingApproveIdx = -1;
 
+    var pendingSearch     = '';
+    var pendingCustFilter = '';
+    var pendingSort       = 'date-desc';
+    var histSearch        = '';
+    var histCustFilter    = '';
+    var histStatusFilter  = '';
+    var histSort          = 'date-desc';
+
+    var pendingCustFilterEl = document.getElementById('pendingCustFilter');
+    var histCustFilterEl    = document.getElementById('histCustFilter');
+    var histStatusFilterEl  = document.getElementById('histStatusFilter');
+
+    function populateCustomerDropdown(sel, rows, currentVal) {
+      if (!sel) return;
+      var unique = [];
+      rows.forEach(function(r) { if (unique.indexOf(r.customer) === -1) unique.push(r.customer); });
+      unique.sort();
+      var opts = '<option value="">All Customers</option>';
+      unique.forEach(function(name) {
+        opts += '<option value="' + name + '"' + (name === currentVal ? ' selected' : '') + '>' + name + '</option>';
+      });
+      sel.innerHTML = opts;
+    }
+
+    function applySort(rows, sortKey) {
+      var out = rows.slice();
+      if (sortKey === 'date-asc') out.reverse();
+      return out;
+    }
+
     function updateTabBadge() {
       var pending = ADDR_REQUESTS.filter(function(r) { return r.status === 'pending'; }).length;
       if (tabBadge) {
@@ -1162,12 +1322,36 @@
     }
 
     function renderTable() {
-      var pending = ADDR_REQUESTS.filter(function(r) { return r.status === 'pending'; });
-      var history = ADDR_REQUESTS.filter(function(r) { return r.status === 'approved' || r.status === 'rejected'; });
+      var pendingBase = ADDR_REQUESTS.filter(function(r) { return r.status === 'pending'; });
+      var histBase    = ADDR_REQUESTS.filter(function(r) { return r.status === 'approved' || r.status === 'rejected'; });
+
+      /* keep custFilter valid if customer moved sections */
+      var pendingCusts = pendingBase.map(function(r) { return r.customer; });
+      if (pendingCustFilter && pendingCusts.indexOf(pendingCustFilter) === -1) pendingCustFilter = '';
+      var histCusts = histBase.map(function(r) { return r.customer; });
+      if (histCustFilter && histCusts.indexOf(histCustFilter) === -1) histCustFilter = '';
+
+      populateCustomerDropdown(pendingCustFilterEl, pendingBase, pendingCustFilter);
+      populateCustomerDropdown(histCustFilterEl,    histBase,    histCustFilter);
+
+      var q = pendingSearch.toLowerCase();
+      var pending = pendingBase.slice();
+      if (q) pending = pending.filter(function(r) { return r.customer.toLowerCase().indexOf(q) !== -1; });
+      if (pendingCustFilter) pending = pending.filter(function(r) { return r.customer === pendingCustFilter; });
+      pending = applySort(pending, pendingSort);
+
+      var hq = histSearch.toLowerCase();
+      var history = histBase.slice();
+      if (hq) history = history.filter(function(r) { return r.customer.toLowerCase().indexOf(hq) !== -1; });
+      if (histCustFilter)   history = history.filter(function(r) { return r.customer === histCustFilter; });
+      if (histStatusFilter) history = history.filter(function(r) { return r.status   === histStatusFilter; });
+      history = applySort(history, histSort);
 
       /* --- Pending section --- */
+      var hasAnyFilter = q || pendingCustFilter;
       if (pending.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4"><div class="addr-req-empty">No pending requests at this time.</div></td></tr>';
+        var emptyMsg = hasAnyFilter ? 'No customers match your filter.' : 'No pending requests at this time.';
+        tbody.innerHTML = '<tr><td colspan="4"><div class="addr-req-empty">' + emptyMsg + '</div></td></tr>';
       } else {
         tbody.innerHTML = pending.map(function(r) {
           var i    = ADDR_REQUESTS.indexOf(r);
@@ -1197,27 +1381,31 @@
       }
 
       /* --- History section --- */
-      if (history.length === 0) {
+      if (ADDR_REQUESTS.filter(function(r) { return r.status === 'approved' || r.status === 'rejected'; }).length === 0) {
         histSection.style.display = 'none';
       } else {
         histSection.style.display = '';
-        histTbody.innerHTML = history.map(function(r) {
-          var full  = r.street + ', ' + r.city + ', ' + r.state + ' ' + r.zip + ', USA';
-          var isApp = r.status === 'approved';
-          var badge = '<span class="addr-hist-badge addr-hist-badge--' + r.status + '">' +
-            '<span class="dot"></span>' + (isApp ? 'Approved' : 'Rejected') +
-          '</span>' +
-          ((!isApp && r.rejectReason) ? '<div class="addr-hist-reason">' + r.rejectReason + '</div>' : '');
-          return '<tr>' +
-            '<td style="font-weight:600;">' + r.customer + '</td>' +
-            '<td>' + r.date + '</td>' +
-            '<td>' +
-              '<span style="font-size:14px;font-weight:700;color:#1A1A1A;">' + r.label + '</span><br>' +
-              '<span style="font-size:12px;color:#717171;">' + full + '</span>' +
-            '</td>' +
-            '<td>' + badge + '</td>' +
-          '</tr>';
-        }).join('');
+        if (history.length === 0) {
+          histTbody.innerHTML = '<tr><td colspan="4"><div class="addr-req-empty">No customers match your filter.</div></td></tr>';
+        } else {
+          histTbody.innerHTML = history.map(function(r) {
+            var full  = r.street + ', ' + r.city + ', ' + r.state + ' ' + r.zip + ', USA';
+            var isApp = r.status === 'approved';
+            var badge = '<span class="addr-hist-badge addr-hist-badge--' + r.status + '">' +
+              '<span class="dot"></span>' + (isApp ? 'Approved' : 'Rejected') +
+            '</span>' +
+            ((!isApp && r.rejectReason) ? '<div class="addr-hist-reason">' + r.rejectReason + '</div>' : '');
+            return '<tr>' +
+              '<td style="font-weight:600;">' + r.customer + '</td>' +
+              '<td>' + r.date + '</td>' +
+              '<td>' +
+                '<span style="font-size:14px;font-weight:700;color:#1A1A1A;">' + r.label + '</span><br>' +
+                '<span style="font-size:12px;color:#717171;">' + full + '</span>' +
+              '</td>' +
+              '<td>' + badge + '</td>' +
+            '</tr>';
+          }).join('');
+        }
       }
 
       updateTabBadge();
@@ -1275,6 +1463,167 @@
     };
 
     renderTable();
+
+    var pendingSearchInput = document.getElementById('pendingSearchInput');
+    var pendingSortSelect  = document.getElementById('pendingSortSelect');
+    var histSearchInput    = document.getElementById('histSearchInput');
+    var histSortSelect     = document.getElementById('histSortSelect');
+
+    if (pendingSearchInput)  pendingSearchInput.addEventListener('input',  function() { pendingSearch     = this.value; renderTable(); });
+    if (pendingCustFilterEl) pendingCustFilterEl.addEventListener('change', function() { pendingCustFilter = this.value; renderTable(); });
+    if (pendingSortSelect)   pendingSortSelect.addEventListener('change',   function() { pendingSort       = this.value; renderTable(); });
+    if (histSearchInput)     histSearchInput.addEventListener('input',      function() { histSearch        = this.value; renderTable(); });
+    if (histCustFilterEl)    histCustFilterEl.addEventListener('change',    function() { histCustFilter    = this.value; renderTable(); });
+    if (histStatusFilterEl)  histStatusFilterEl.addEventListener('change',  function() { histStatusFilter  = this.value; renderTable(); });
+    if (histSortSelect)      histSortSelect.addEventListener('change',      function() { histSort          = this.value; renderTable(); });
+
+  })();
+  </script>
+
+  <!-- ── Customer Accordion ── -->
+  <script>
+  (function () {
+    var CUSTOMERS = [
+      {
+        name: 'ABC Industries', acct: 'AC-4421', location: 'Detroit, MI',
+        openOrders: 47,
+        machines: [
+          { model:'LU300-M',   serial:'M5-2891-K', installed:'Jan 2021', warranty:'Active',   lastService:'Mar 2026' },
+          { model:'MB-5000H',  serial:'H9-4412-A', installed:'Jun 2019', warranty:'Expired',  lastService:'Nov 2025' },
+          { model:'GENOS L200',serial:'GL-7731-C', installed:'Sep 2022', warranty:'Active',   lastService:'Apr 2026' },
+          { model:'LU300-M',   serial:'M5-3312-F', installed:'Feb 2023', warranty:'Warranty', lastService:'Jan 2026' },
+          { model:'MB-4000H',  serial:'H9-0021-B', installed:'Dec 2020', warranty:'Active',   lastService:'Feb 2026' }
+        ]
+      },
+      {
+        name: 'Smith Manufacturing', acct: 'SM-2891', location: 'Cincinnati, OH',
+        openOrders: 12,
+        machines: [
+          { model:'MULTUS B300', serial:'MB-1120-X', installed:'Mar 2022', warranty:'Warranty', lastService:'Dec 2025' },
+          { model:'LB3000 EX II',serial:'LB-8821-D', installed:'Jul 2020', warranty:'Expired',  lastService:'Oct 2025' }
+        ]
+      },
+      {
+        name: 'Pacific Precision', acct: 'PP-5517', location: 'San Jose, CA',
+        openOrders: 63,
+        machines: [
+          { model:'MU-6300V',   serial:'MV-4401-G', installed:'Apr 2021', warranty:'Active',   lastService:'May 2026' },
+          { model:'LU300-M',    serial:'M5-9981-K', installed:'Nov 2019', warranty:'Expired',  lastService:'Sep 2025' },
+          { model:'MB-5000H',   serial:'H9-6612-E', installed:'Aug 2022', warranty:'Active',   lastService:'Mar 2026' },
+          { model:'GENOS M460V',serial:'GM-3302-P', installed:'Jan 2023', warranty:'Warranty', lastService:'Feb 2026' },
+          { model:'LB4000 EX',  serial:'LB-5540-Q', installed:'Mar 2020', warranty:'Expired',  lastService:'Aug 2025' },
+          { model:'MU-8000V',   serial:'MV-7721-R', installed:'Oct 2023', warranty:'Active',   lastService:'Apr 2026' }
+        ]
+      },
+      {
+        name: 'Delta Components', acct: 'DC-3302', location: 'Dallas, TX',
+        openOrders: 21,
+        machines: [
+          { model:'GENOS L300',  serial:'GL-2211-T', installed:'May 2021', warranty:'Active',   lastService:'Jan 2026' },
+          { model:'LU300-M',     serial:'M5-6643-U', installed:'Feb 2022', warranty:'Warranty', lastService:'Nov 2025' },
+          { model:'MB-4000H',    serial:'H9-8834-V', installed:'Dec 2019', warranty:'Expired',  lastService:'Jul 2025' }
+        ]
+      },
+      {
+        name: 'Apex Machining', acct: 'AM-7789', location: 'Chicago, IL',
+        openOrders: 34,
+        machines: [
+          { model:'MU-6300V',    serial:'MV-5501-W', installed:'Jun 2022', warranty:'Active',   lastService:'Apr 2026' },
+          { model:'LB3000 EX II',serial:'LB-9912-X', installed:'Sep 2021', warranty:'Active',   lastService:'Mar 2026' },
+          { model:'MB-5000H',    serial:'H9-3321-Y', installed:'Jan 2020', warranty:'Expired',  lastService:'Dec 2025' },
+          { model:'GENOS M460V', serial:'GM-7743-Z', installed:'Oct 2023', warranty:'Warranty', lastService:'Feb 2026' },
+          { model:'LU300-M',     serial:'M5-1127-A', installed:'Apr 2021', warranty:'Active',   lastService:'May 2026' }
+        ]
+      }
+    ];
+
+    function warrantyBadge(w) {
+      var cls = w === 'Active' ? 'machine-status-badge--active' :
+                w === 'Warranty' ? 'machine-status-badge--warranty' :
+                'machine-status-badge--expired';
+      return '<span class="machine-status-badge ' + cls + '"><span class="dot"></span>' + w + '</span>';
+    }
+
+    function buildMachinePanel(machines) {
+      var rows = machines.map(function(m) {
+        return '<tr>' +
+          '<td><span class="machine-model-badge">' + m.model + '</span></td>' +
+          '<td style="color:#6E6E6E;">' + m.serial + '</td>' +
+          '<td>' + m.installed + '</td>' +
+          '<td>' + warrantyBadge(m.warranty) + '</td>' +
+          '<td style="color:#6E6E6E;">' + m.lastService + '</td>' +
+          '</tr>';
+      }).join('');
+
+      return '<div class="cust-machines-panel">' +
+        '<div class="cust-machines-heading">Registered Machines (' + machines.length + ')</div>' +
+        '<table class="cust-machines-table">' +
+          '<thead><tr>' +
+            '<th>Model</th><th>Serial Number</th><th>Installed</th><th>Warranty Status</th><th>Last Service</th>' +
+          '</tr></thead>' +
+          '<tbody>' + rows + '</tbody>' +
+        '</table>' +
+      '</div>';
+    }
+
+    var tbody = document.getElementById('cust-accordion-body');
+    if (!tbody) return;
+
+    CUSTOMERS.forEach(function(c, i) {
+      var rowId    = 'cust-row-' + i;
+      var panelId  = 'cust-panel-' + i;
+
+      /* Main row */
+      var tr = document.createElement('tr');
+      tr.className = 'cust-row';
+      tr.id = rowId;
+      tr.innerHTML =
+        '<td>' +
+          '<button class="cust-toggle-btn" aria-expanded="false" aria-controls="' + panelId + '">' +
+            '<span class="cust-chevron">' +
+              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">' +
+                '<path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+              '</svg>' +
+            '</span>' +
+            '<span class="cust-name-text">' + c.name + '</span>' +
+          '</button>' +
+        '</td>' +
+        '<td>' + c.acct + '</td>' +
+        '<td>' + c.location + '</td>' +
+        '<td>' + c.openOrders + '</td>' +
+        '<td>' + c.machines.length + '</td>';
+
+      /* Accordion panel row */
+      var panelTr = document.createElement('tr');
+      panelTr.className = 'cust-accordion-row';
+      panelTr.id = panelId;
+      var panelTd = document.createElement('td');
+      panelTd.setAttribute('colspan', '5');
+      panelTd.innerHTML = buildMachinePanel(c.machines);
+      panelTr.appendChild(panelTd);
+
+      /* Toggle handler */
+      tr.querySelector('.cust-toggle-btn').addEventListener('click', function () {
+        var isOpen = tr.classList.contains('open');
+        /* Close all others */
+        tbody.querySelectorAll('.cust-row.open').forEach(function(r) {
+          r.classList.remove('open');
+          r.querySelector('.cust-toggle-btn').setAttribute('aria-expanded', 'false');
+        });
+        tbody.querySelectorAll('.cust-accordion-row.open').forEach(function(r) {
+          r.classList.remove('open');
+        });
+        /* Open this one unless it was already open */
+        if (!isOpen) {
+          tr.classList.add('open');
+          panelTr.classList.add('open');
+          this.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      tbody.appendChild(tr);
+      tbody.appendChild(panelTr);
+    });
 
   })();
   </script>

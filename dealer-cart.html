@@ -7,6 +7,7 @@
   <script>
     (function () {
       var c = new URLSearchParams(window.location.search).get('customer');
+      if (!c) { try { c = localStorage.getItem('okmSelectedCustomer') || ''; } catch(e) {} }
       if (c) document.title = c + ' Cart - Okuma Parts Portal';
     })();
   </script>
@@ -295,8 +296,9 @@
           <script>
             (function () {
               var c = new URLSearchParams(window.location.search).get('customer');
+              if (!c) { try { c = localStorage.getItem('okmSelectedCustomer') || ''; } catch(e) {} }
               var el = document.getElementById('dealerCartTitle');
-              if (c && el) el.textContent = c + ' Cart';
+              if (c && el) el.textContent = c + "’s Cart";
             })();
           </script>
 
@@ -455,7 +457,7 @@
               <span class="total-amount" id="summary-total">$742.50+</span>
             </div>
 
-            <button class="checkout-btn" onclick="window.location='checkout-shipping.html'">Proceed To Checkout</button>
+            <button class="checkout-btn" onclick="window.location='dealer-order-shipping.html'">Proceed To Checkout</button>
 
             <!-- ⚠ GAP: accepted payment methods to be confirmed with functional team -->
             <div class="payments">

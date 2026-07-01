@@ -377,7 +377,7 @@
         </div>
         <div>
           <h1 class="card__title">Order Confirmed!</h1>
-          <p class="card__subtitle" style="margin-top:8px;">Thank you, James. Your order has been placed successfully.</p>
+          <p class="card__subtitle" id="conf-subtitle" style="margin-top:8px;">Thank you. Your order has been placed successfully.</p>
         </div>
       </div>
 
@@ -520,7 +520,7 @@
       </div>
 
       <!-- 7. Download link -->
-      <a href="#" class="card__download">
+      <a href="#" class="card__download" id="btn-download-pdf" onclick="downloadPdf(event)">
         <svg class="card__download-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M8 1v9M4.5 7L8 11l3.5-4" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M1 12v1.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5V12" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round"/>
@@ -528,13 +528,58 @@
         Download Order Confirmation PDF
       </a>
 
+      <script>
+      function downloadPdf(e) {
+        e.preventDefault();
+        var user = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
+        var fullName = user ? (user.firstName + ' ' + user.lastName).trim() : 'Customer';
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var now = new Date();
+        localStorage.setItem('okmPdfOrder', JSON.stringify({
+          flow: 'customer',
+          ref: '#ORD-2026-00421',
+          date: months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear(),
+          orderedFor: fullName,
+          customer: fullName,
+          billTo: fullName,
+          billToAddr: '45 Industrial Way, Suite 300\nCharlotte, NC 28202, USA',
+          shipTo: 'Okuma HQ – Warehouse B',
+          shipToAddr: '11900 Cottonwood Street\nCharlotte, NC 28214, USA',
+          payment: 'Credit Card (ending 4242)',
+          shippingCarrier: 'FedEx',
+          machine: 'LU300-M',
+          machineSerial: 'Serial No: M5-2891-K',
+          items: [
+            { name:'Plate',                 partNum:'525-0100-11',      qty:2, unitPrice:247.50, salePrice:202.50 },
+            { name:'Coolant Pump Assembly', partNum:'E4809-045-017-A',  qty:1, unitPrice:185.00 },
+            { name:'Servo Drive Belt',      partNum:'E4809-045-018-B',  qty:1, unitPrice:62.50  }
+          ],
+          subtotal: 742.50,
+          tax: 59.40,
+          discount: { code:'NEW10', amount:42.50 },
+          total: 801.90,
+          shippingNote: 'excl. shipping',
+          deliveryText: 'Delivery details will be confirmed with the customer once the order is processed.'
+        }));
+        window.open('order-confirmation-pdf.html', '_blank');
+      }
+      </script>
+
     </div>
   </main>
   </div>
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>
-
+  <script>
+    (function () {
+      var user = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
+      if (user && user.firstName) {
+        var el = document.getElementById('conf-subtitle');
+        if (el) el.textContent = 'Thank you, ' + user.firstName + '. Your order has been placed successfully.';
+      }
+    })();
+  </script>
 
   <script src="components.js"></script>
   <script>

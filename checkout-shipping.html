@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout: Shipping -" Okuma Parts Portal</title>
+  <title>Checkout: Shipping - Okuma Parts Portal</title>
+  <script>
+    (function () {
+      try {
+        var s = JSON.parse(sessionStorage.getItem('okuma_session'));
+        if (s && s.role === 'dealer') { window.location.replace('dealer-order-review.html'); }
+      } catch(e) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -670,7 +678,7 @@
 
           <!-- CTA -->
           <div class="cta-block">
-            <button class="btn-primary" onclick="window.location='checkout-payment.html'">
+            <button class="btn-primary" onclick="(function(){var s;try{s=JSON.parse(sessionStorage.getItem('okuma_session'));}catch(e){}window.location=(s&&s.role==='dealer')?'dealer-order-payment.html':'checkout-payment.html';})()">
               Continue to Payment Details
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="3" y1="8" x2="13" y2="8"/><polyline points="8.5 3.5 13 8 8.5 12.5"/>
@@ -685,7 +693,7 @@
           <div class="summary-card">
             <div class="summary-header">
               <span class="summary-title">Order Summary</span>
-              <a href="cart.html" class="edit-cart-link">Edit Cart</a>
+              <a href="cart.html" class="edit-cart-link" id="editCartLink">Edit Cart</a>
             </div>
 
             <div class="summary-rows">
@@ -786,11 +794,15 @@
     }
 
     (function () {
-      if (localStorage.getItem('okmUserRole') !== 'dealer') return;
-      var cust = localStorage.getItem('okmSelectedCustomer');
-      if (!cust) return;
-      var label = document.querySelector('.cart-acc__label');
-      if (label) label.textContent = cust +  "'s Cart";
+      var s; try { s = JSON.parse(sessionStorage.getItem('okuma_session')); } catch(e) {}
+      var isDealer = s && s.role === 'dealer';
+      var cust = localStorage.getItem('okmSelectedCustomer') || '';
+      if (isDealer && cust) {
+        var label = document.querySelector('.cart-acc__label');
+        if (label) label.textContent = cust + "'s Cart";
+      }
+      var editLink = document.getElementById('editCartLink');
+      if (editLink && isDealer) editLink.href = 'dealer-cart.html';
     })();
   </script>
 
