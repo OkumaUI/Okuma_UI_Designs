@@ -216,8 +216,11 @@
 
     .it-name  { font-size: 13px; font-weight: 700; color: #1A1A1A; }
     .it-pn    { font-size: 11px; color: #9E9E9E; margin-top: 2px; }
-    .it-mach  { font-size: 12px; color: #4B4B4B; font-weight: 500; }
-    .it-ser   { font-size: 11px; color: #9E9E9E; margin-top: 1px; }
+    .ordered-for-label { font-size: 11px; font-weight: 700; color: #717171; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    .ordered-for-strip { display: flex; align-items: center; gap: 10px; padding: 11px 16px; background: #EAF2FF; border-left: 3px solid #005EB8; border-radius: 2px; }
+    .ordered-for-strip__mach { font-size: 14px; font-weight: 700; color: #005EB8; }
+    .ordered-for-strip__sep  { color: #C4C4C4; margin: 0 2px; }
+    .ordered-for-strip__ser  { font-size: 13px; color: #4B4B4B; }
     .r        { text-align: right; }
     .it-linetotal { font-size: 13px; font-weight: 700; color: #1A1A1A; }
 
@@ -552,11 +555,23 @@
     }
 
     function renderItems(o) {
+      var first = o.items[0];
+      var strip = first
+        ? '<div style="padding:16px 16px 0;">' +
+            '<p class="ordered-for-label">Ordered For</p>' +
+            '<div class="ordered-for-strip">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#005EB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>' +
+              '<span class="ordered-for-strip__mach">' + first.mach + '</span>' +
+              '<span class="ordered-for-strip__sep">|</span>' +
+              '<span class="ordered-for-strip__ser">Serial No: ' + first.ser + '</span>' +
+            '</div>' +
+          '</div>'
+        : '';
+
       var rows = o.items.map(function(it) {
         var lineTotal = it.qty * it.price;
         return '<tr>' +
           '<td><div class="it-name">' + it.name + '</div><div class="it-pn">P/N: ' + it.pn + '</div></td>' +
-          '<td><div class="it-mach">' + it.mach + '</div><div class="it-ser">' + it.ser + '</div></td>' +
           '<td class="r" style="width:50px"><span>' + it.qty + '</span></td>' +
           '<td class="r" style="width:95px"><span style="color:#4B4B4B">' + fmt(it.price) + '</span></td>' +
           '<td class="r" style="width:95px"><span class="it-linetotal">' + fmt(lineTotal) + '</span></td>' +
@@ -565,11 +580,11 @@
 
       return '<div class="det-card">' +
         '<div class="det-card__head">Items Ordered (' + o.items.length + ')</div>' +
-        '<div class="tbl-scroll">' +
+        strip +
+        '<div class="tbl-scroll" style="margin-top:16px;">' +
         '<table class="items-tbl">' +
         '<thead><tr>' +
         '<th>Part</th>' +
-        '<th style="width:160px">Machine</th>' +
         '<th class="r" style="width:50px">Qty</th>' +
         '<th class="r" style="width:95px">Unit Price</th>' +
         '<th class="r" style="width:95px">Total</th>' +

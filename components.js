@@ -97,7 +97,7 @@
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/><path d="M14 14l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
           <div class="nav__cart">
-            <a class="nav__icon-btn" href="cart.html" aria-label="Cart, 3 items">
+            <a class="nav__icon-btn" id="navCartLink" href="${isDealer ? ('dealer-cart.html' + (localStorage.getItem('okmSelectedCustomer') ? '?customer=' + encodeURIComponent(localStorage.getItem('okmSelectedCustomer')) : '')) : 'cart.html'}" aria-label="Cart, 3 items">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M1 1h2.2l2.1 10.4a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.47-1.2L19 4.5H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="1.3" fill="currentColor"/><circle cx="16" cy="17" r="1.3" fill="currentColor"/></svg>
             </a>
             <span class="nav__cart-badge" aria-hidden="true">3</span>
@@ -112,7 +112,7 @@
                 <div class="user-menu__name">${_okuma_user ? (_okuma_user.firstName + ' ' + _okuma_user.lastName) : 'Guest'}</div>
                 <div class="user-menu__org">${_okuma_user ? (_okuma_user.role === 'dealer' ? 'Dealer Account' : 'Customer Account') : ''}</div>
               </div>
-              <a href="profile.html" class="user-menu__item" role="menuitem">
+              <a href="${isDealer ? 'dealer-profile.html' : 'profile.html'}" class="user-menu__item" role="menuitem">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="4.5" r="2.5" stroke="#005EB8" stroke-width="1.3"/><path d="M2.5 12c0-2.2 2-3.8 4.5-3.8s4.5 1.6 4.5 3.8" stroke="#005EB8" stroke-width="1.3" stroke-linecap="round"/></svg>
                 My Account
               </a>
@@ -143,7 +143,7 @@
       icon: '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 5.5V10l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
     { key: 'quotes', label: 'My Quotes', href: 'my-quotes.html',
       icon: '<path d="M5 2h6l4 4v12a1 1 0 01-1 1H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M11 2v4h4M7 11h6M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
-    { key: 'account', label: 'My Account', href: 'profile.html',
+    { key: 'account', label: 'My Account', href: (_okuma_user && _okuma_user.role === 'dealer') ? 'dealer-profile.html' : 'profile.html',
       icon: '<circle cx="10" cy="6.5" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M3 18c0-3.6 3.13-6.5 7-6.5s7 2.9 7 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
   ];
 
@@ -198,7 +198,6 @@
             '<a href="#">Events</a>' +
             '<a href="#">FAQs</a>' +
             '<a href="#">E-Store</a>' +
-            '<a href="#">Contact Okuma</a>' +
           '</div>' +
 
           /* Resources + Media */
@@ -210,12 +209,6 @@
             '<div class="footer-col__heading footer-col__gap">Media</div>' +
             '<a href="#">Press Releases</a>' +
             '<a href="#">Media Resources</a>' +
-          '</div>' +
-
-          /* Standalone links */
-          '<div class="footer-col">' +
-            '<a href="#" style="font-weight:700;color:#fff;">Okuma Careers</a>' +
-            '<a href="#" style="font-weight:700;color:#fff;">Distributor Login</a>' +
           '</div>' +
 
         '</nav>' +
@@ -747,6 +740,10 @@
       var cust = e.detail && e.detail.name ? e.detail.name : '';
       filterMachineItems(cust);
       syncMachinePickerLabel();
+      var navCartLinkEl = document.getElementById('navCartLink');
+      if (navCartLinkEl && isDealer) {
+        navCartLinkEl.href = cust ? 'dealer-cart.html?customer=' + encodeURIComponent(cust) : 'dealer-cart.html';
+      }
     });
 
     pickerBtn.addEventListener('click', function (e) {

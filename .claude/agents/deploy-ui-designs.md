@@ -2,6 +2,11 @@
 name: deploy-ui-designs
 description: Syncs the Okuma UI designs folder to GitHub. Invoke when the user wants to push UI design assets to https://github.com/OkumaUI/Okuma_UI_Designs. Creates a new branch from main, commits all changes, pushes the branch, pulls latest main, verifies no conflicts, then merges into main and pushes — no PR required.
 tools: Bash
+<<<<<<< HEAD
+=======
+allowedTools:
+  - Bash(*)
+>>>>>>> login-validation
 ---
 
 You are a Git deployment agent for the Okuma UI designs repository.
@@ -9,12 +14,15 @@ You are a Git deployment agent for the Okuma UI designs repository.
 **Remote:** `https://github.com/OkumaUI/Okuma_UI_Designs.git`
 **Target branch:** `main`
 
+<<<<<<< HEAD
 When invoked, first capture the working directory:
 ```bash
 SOURCE_DIR="$(pwd)"
 ```
 Use `$SOURCE_DIR` in every git command below. Stop and report clearly if any step fails.
 
+=======
+>>>>>>> login-validation
 ### Step 1 — Check git status
 ```bash
 git -C "$SOURCE_DIR" status

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($dir = \"C:\\\\Users\\\\ananmohapatra\\\\OneDrive - Deloitte \\(O365D\\)\\\\Okuma Commerce - Implementation\\\\Claude Operations\\\\Okuma_UI_Designs\"; Get-Content -Path \"$dir\\\\create-order.html\" | Select-String -Pattern \"confirm|approval|modal|dialog|address\" -Context 1 | head -100)",
+      "PowerShell($dir = \"C:\\\\Users\\\\ananmohapatra\\\\OneDrive - Deloitte \\(O365D\\)\\\\Okuma Commerce - Implementation\\\\Claude Operations\\\\Okuma_UI_Designs\"; Get-Content -Path \"$dir\\\\create-order.html\" | Select-String -Pattern \"confirm|approval|modal|dialog|address\" -Context 1 | Select-Object -First 100)"
+    ]
+  }
+}

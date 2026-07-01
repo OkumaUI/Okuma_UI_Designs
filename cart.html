@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Cart - Okuma Parts Portal</title>
-  <title>Your Cart - Okuma Parts Portal</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -180,39 +180,32 @@
       .cart-head { gap: 16px; }
     }
 
-    /* Mobile: cart rows become stacked cards */
     @media (max-width: 640px) {
       main { padding: 16px; }
       .page-title { font-size: 24px; }
       .cart-head { display: none; }
-
-      /* Larger touch targets (WCAG 2.5.5) */
       .qty-btn { width: 40px; height: 40px; }
       .qty-stepper { height: 40px; }
       .qty-value { height: 40px; font-size: 15px; }
 
-      /* Card-style row */
       .cart-row {
         position: relative;
         flex-wrap: wrap;
         align-items: flex-start;
         gap: 4px 0;
-        padding: 16px 44px 16px 0; /* right gap keeps content clear of trash btn */
+        padding: 16px 44px 16px 0;
       }
       .cart-row .item-thumb { display: none; }
 
-      /* Row 1: part name + number — full width */
       .cart-row .col-desc { flex: 0 0 100%; order: 0; }
       .item-name { font-size: 15px; }
 
-      /* Row 2: machine info — full width, slightly smaller */
       .cart-row .col-machine {
         flex: 0 0 100%; order: 1; width: 100%; margin-top: 2px;
       }
       .item-machine-name   { font-size: 11px; color: #6B7280; font-weight: 500; }
       .item-machine-serial { font-size: 11px; color: #9E9E9E; }
 
-      /* Trash button: absolute top-right of each card */
       .cart-row .col-action {
         position: absolute; top: 14px; right: 0;
         width: auto; order: 0;
@@ -223,10 +216,8 @@
       }
       .cart-row .trash-btn:hover { background: #FFF0F0; color: #AD0000; }
 
-      /* Hide unit price on mobile — qty + total make it clear */
       .cart-row .col-price { display: none; }
 
-      /* Row 3: qty stepper (left) + total (right) */
       .cart-row .col-qty {
         order: 2; flex: 0 0 auto;
         justify-content: flex-start;
@@ -661,6 +652,17 @@
 
   <script>
     (function () {
+      var _cartUser = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
+      if (_cartUser && _cartUser.role === 'dealer') {
+        document.querySelectorAll('a[href="profile.html"]').forEach(function (el) {
+          el.setAttribute('href', 'dealer-profile.html');
+        });
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
       function lsGet(key, fallback) { try { return localStorage.getItem(key) || fallback; } catch(e) { return fallback; } }
       function lsSet(key, val)      { try { localStorage.setItem(key, val); } catch(e) {} }
 
@@ -751,6 +753,16 @@
         updateBanner(currentMachine);
         closeModal();
       });
+    })();
+  </script>
+  <script>
+    (function () {
+      var customer = new URLSearchParams(window.location.search).get('customer');
+      if (customer) {
+        var h1 = document.querySelector('.page-title');
+        if (h1) h1.textContent = customer + ' Cart';
+        document.title = customer + ' Cart - Okuma Parts Portal';
+      }
     })();
   </script>
 </body>
