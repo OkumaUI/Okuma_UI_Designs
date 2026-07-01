@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -40,17 +40,15 @@
       flex-wrap: wrap;
     }
 
-    /* Avatar */
     .avatar-wrap { position: relative; flex-shrink: 0; }
     .avatar-initials {
       display: flex; align-items: center; justify-content: center;
       width: 80px; height: 80px; border-radius: 50%;
-      background: #005EB8; color: #fff;
+      background: #0B308E; color: #fff;
       font-size: 26px; font-weight: 700; letter-spacing: 1px;
       flex-shrink: 0; user-select: none;
     }
 
-    /* Identity */
     .profile-identity {
       flex: 1; min-width: 0;
       display: flex; align-items: center; justify-content: space-between;
@@ -59,12 +57,10 @@
     .profile-identity__info { display: flex; flex-direction: column; gap: 6px; }
     .profile-identity__name { font-size: 22px; font-weight: 700; color: #2C2A29; line-height: 1.2; }
     .profile-identity__meta { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
-    .profile-identity__title { font-size: 14px; font-weight: 400; color: #717171; }
     .profile-identity__company { font-size: 14px; font-weight: 400; color: #4B4B4B; }
-    .profile-identity__since { font-size: 13px; font-weight: 400; color: #9E9E9E; }
     .role-tag {
       display: inline-flex; align-items: center;
-      font-size: 11px; font-weight: 700; color: #005EB8;
+      font-size: 11px; font-weight: 700; color: #0B308E;
       background: #EAF2FF; border: 1px solid #B3D1F5;
       border-radius: 10px; padding: 2px 10px; letter-spacing: 0.3px;
       text-transform: uppercase;
@@ -98,6 +94,16 @@
     .tab-btn:focus-visible { outline: 2px solid #005EB8; outline-offset: -2px; border-radius: 2px; }
     .tab-panel { padding: 32px; }
 
+    /* Tab count badge */
+    .tab-count-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 18px; height: 18px; border-radius: 9px;
+      background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E;
+      font-size: 10px; font-weight: 700;
+      padding: 0 5px; margin-left: 6px; vertical-align: middle;
+      line-height: 1;
+    }
+
     /* ── FORM FIELDS ── */
     .field { display: flex; flex-direction: column; gap: 6px; }
     .field__label {
@@ -112,7 +118,6 @@
     .field__input:focus { border-color: #005EB8; box-shadow: 0 0 0 2px rgba(0,94,184,0.15); }
     .field__input::placeholder { color: #9E9E9E; }
 
-    /* ── BTN PRIMARY ── */
     .btn--primary {
       display: inline-flex; align-items: center; justify-content: center;
       height: 44px; padding: 0 24px; background: #005EB8; color: #fff;
@@ -123,12 +128,8 @@
     .btn--primary:hover { background: #0B308E; }
     .btn--primary:disabled { opacity: 0.55; cursor: not-allowed; }
 
-    /* ── FORM HELPERS ── */
     .form-col { display: flex; flex-direction: column; gap: 20px; }
     .field--locked .field__input { background: #F7F8F9; color: #717171; cursor: not-allowed; border-color: #E0E0E0; }
-    .field__input-wrap { position: relative; }
-    .field__input-wrap .field__input { padding-right: 44px; }
-    .field__input-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #9E9E9E; pointer-events: none; display: flex; }
     .field__pw-wrap { position: relative; }
     .field__pw-wrap .field__input { padding-right: 48px; }
     .field__eye-btn {
@@ -137,32 +138,25 @@
       display: flex; align-items: center; padding: 4px; border-radius: 3px;
     }
     .field__eye-btn:hover { color: #1A1A1A; }
-    .field__eye-btn:focus-visible { outline: 2px solid #005EB8; outline-offset: 2px; border-radius: 3px; }
     [hidden] { display: none !important; }
 
-    /* ── PASSWORD STRENGTH ── */
     .pw-strength { margin-top: 8px; }
     .pw-strength__bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 5px; }
     .pw-strength__seg { height: 4px; border-radius: 2px; background: #E0E0E0; transition: background 0.2s; }
     .pw-strength__text { font-size: 12px; color: #9E9E9E; }
 
-    /* ── PASSWORD RULES ── */
     .pw-rules {
       display: flex; flex-direction: column; gap: 7px;
       padding: 14px 16px; background: #F7F8F9;
       border: 1px solid #E0E0E0; border-radius: 4px; margin-top: 10px;
     }
-    .pw-rule {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 12px; color: #9E9E9E; transition: color 0.15s;
-    }
+    .pw-rule { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #9E9E9E; transition: color 0.15s; }
     .pw-rule.is-met { color: #74AA50; }
     .pw-rule svg { flex-shrink: 0; }
     .pw-rule__icon--check { display: none; }
     .pw-rule.is-met .pw-rule__icon--empty { display: none; }
     .pw-rule.is-met .pw-rule__icon--check { display: block; }
 
-    /* ── PROFILE DATA ROWS (read-only) ── */
     .profile-data-list { margin-bottom: 4px; }
     .profile-data-row {
       display: flex; align-items: baseline; padding: 13px 0;
@@ -175,14 +169,12 @@
     }
     .profile-data-value { font-size: 14px; font-weight: 400; color: #1A1A1A; }
 
-    /* ── SECTION HELPERS ── */
     .section-divider { height: 1px; background: #E0E0E0; margin: 36px 0; }
     .section-subhead {
       font-size: 13px; font-weight: 700; color: #005EB8;
       text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 24px;
     }
 
-    /* ── FORM ACTIONS ── */
     .form-actions { display: flex; align-items: center; gap: 16px; margin-top: 28px; }
     .btn--save { height: 48px; width: auto; min-width: 160px; padding: 0 32px; }
     .save-confirm {
@@ -191,7 +183,6 @@
     }
     .save-confirm.is-visible { opacity: 1; }
 
-    /* ── TOAST ── */
     .toast {
       position: fixed; bottom: 32px; left: 50%;
       transform: translateX(-50%) translateY(20px);
@@ -229,7 +220,6 @@
     }
     .addr-add-btn:hover { text-decoration: underline; }
 
-    /* Address modal */
     .addr-modal-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,.45); z-index: 9999;
@@ -270,53 +260,24 @@
     }
     .addr-modal__cancel:hover { background: #F0F0F0; }
 
-    /* ── MY MACHINES ── */
-    .mach-search-field {
-      display: flex; align-items: center; gap: 10px;
-      padding: 0 12px; height: 40px;
-      border: 1px solid #DEDEDE; border-radius: 4px; background: #fff;
-      margin-bottom: 16px;
+    /* ── MY CUSTOMERS ── */
+    .cust-table { width: 100%; border-collapse: collapse; }
+    .cust-table thead tr { background: #F5F5F5; }
+    .cust-table th {
+      font-size: 11px; font-weight: 700; color: #717171;
+      text-transform: uppercase; text-align: left;
+      padding: 13px 16px; border-bottom: 1px solid #DEDEDE; white-space: nowrap;
     }
-    .mach-search-field:focus-within { border-color: #005EB8; }
-    .mach-search-field svg { color: #9E9E9E; flex-shrink: 0; }
-    .mach-search-field input {
-      flex: 1; border: none; outline: none; font-size: 13px;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      color: #1A1A1A; background: transparent;
+    .cust-table td {
+      padding: 14px 16px; border-bottom: 1px solid #DEDEDE;
+      vertical-align: middle; font-size: 13px; color: #1A1A1A;
     }
-    .mach-search-field input::placeholder { color: #9E9E9E; }
-    .mach-empty { font-size: 13px; color: #9E9E9E; padding: 16px 0; }
+    .cust-table tbody tr:last-child td { border-bottom: none; }
+    .cust-table tbody tr:hover { background: #F9FBFF; }
+    .cust-name { font-size: 14px; font-weight: 700; color: #1A1A1A; }
+    .cust-acct { font-size: 12px; color: #9E9E9E; margin-top: 2px; }
 
-    .machines-list { display: flex; flex-direction: column; }
-    .machine-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 0; border-bottom: 1px solid #E0E0E0;
-      gap: 16px; flex-wrap: wrap;
-    }
-    .machine-row:last-child { border-bottom: none; }
-    .machine-row__info { display: flex; flex-direction: column; gap: 4px; }
-    .machine-row__name { font-size: 15px; font-weight: 700; color: #2C2A29; }
-    .machine-row__serial { font-size: 12px; font-weight: 400; color: #9E9E9E; }
-    .machine-row__right { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
-    .verified-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 11px; font-weight: 700; color: #74AA50;
-      background: #EBF7F2; border: 1px solid #74AA50; border-radius: 12px; padding: 2px 9px;
-      text-transform: uppercase; letter-spacing: 0.3px;
-    }
-    .pending-install-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 11px; font-weight: 700; color: #92400E;
-      background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 12px; padding: 2px 9px;
-      text-transform: uppercase; letter-spacing: 0.3px;
-    }
-    .text-link {
-      font-size: 13px; font-weight: 700; color: #005EB8;
-      background: none; border: none; cursor: pointer; text-decoration: none; padding: 4px 0;
-    }
-    .text-link:hover { text-decoration: underline; }
-
-    /* ── BROWSE PARTS BOOK MODAL ── */
+    /* ── PARTS BOOK MODAL ── */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.5); z-index: 1000;
@@ -372,10 +333,128 @@
     .modal-btn--proceed { background: #005EB8; border: none; color: #fff; }
     .modal-btn--proceed:hover { background: #0B308E; }
 
+    /* ── ADDRESS APPROVAL REQUESTS PANEL ── */
+    .orders-wrap { border: 1px solid #DEDEDE; border-radius: 4px; overflow: visible; }
+    .orders-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .addr-req-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+    .addr-req-table thead tr { background: #F5F5F5; }
+    .addr-req-table th {
+      font-size: 11px; font-weight: 700; color: #717171;
+      text-transform: uppercase; text-align: left;
+      padding: 13px 16px; border-bottom: 1px solid #DEDEDE; white-space: nowrap;
+    }
+    .addr-req-table td {
+      padding: 14px 16px; border-bottom: 1px solid #DEDEDE;
+      vertical-align: middle; font-size: 13px; color: #1A1A1A;
+    }
+    .addr-req-table tbody tr:last-child td { border-bottom: none; }
+
+    .addr-req-empty {
+      padding: 48px 20px; text-align: center; font-size: 14px; color: #9E9E9E;
+    }
+
+    /* action buttons (inline in table) */
+    .addr-req-approve {
+      height: 34px; padding: 0 16px; background: #005EB8; color: #fff;
+      border: none; border-radius: 4px; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .addr-req-approve:hover { background: #0052A3; }
+    .addr-req-reject {
+      height: 34px; padding: 0 14px; background: transparent;
+      border: 1px solid #9E9E9E; border-radius: 4px; font-size: 13px;
+      font-weight: 500; color: #4B4B4B; cursor: pointer;
+    }
+    .addr-req-reject:hover { border-color: #AD0000; color: #AD0000; }
+    .addr-req-reason-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 0; }
+    .addr-req-reason-input {
+      flex: 1; height: 34px; border: 1px solid #D1D5DB; border-radius: 4px;
+      padding: 0 10px; font-family: inherit; font-size: 13px; color: #2C2A29; outline: none;
+      min-width: 140px;
+    }
+    .addr-req-reason-input:focus { border-color: #AD0000; }
+    .addr-req-confirm-reject {
+      height: 34px; padding: 0 14px; background: #AD0000; color: #fff;
+      border: none; border-radius: 4px; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .addr-req-confirm-reject:hover { background: #8B0000; }
+    .addr-req-cancel-reject {
+      height: 34px; padding: 0 14px; background: transparent;
+      border: 1px solid #6E6E6E; border-radius: 4px; font-size: 13px; color: #4B4B4B; cursor: pointer;
+    }
+    .addr-req-cancel-reject:hover { background: #F0F0F0; }
+
+    /* section dividers inside addr-requests panel */
+    .addr-req-section { margin-bottom: 28px; }
+    .addr-req-section:last-child { margin-bottom: 0; }
+    .addr-req-section__head {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .addr-req-section__title {
+      font-size: 14px; font-weight: 700; color: #1A1A1A;
+    }
+    .addr-req-section__count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 20px; height: 20px; padding: 0 6px;
+      background: #FFB549; color: #fff; border-radius: 10px;
+      font-size: 11px; font-weight: 700; line-height: 1;
+    }
+
+    /* history status badges */
+    .addr-hist-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 2px;
+      font-size: 11px; font-weight: 700; white-space: nowrap;
+    }
+    .addr-hist-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .addr-hist-badge--approved { background: #F4F9F1; border: 0.5px solid #74AA50; color: #74AA50; }
+    .addr-hist-badge--approved .dot { background: #74AA50; }
+    .addr-hist-badge--rejected { background: #FFF5F5; border: 0.5px solid #D04B4B; color: #D04B4B; }
+    .addr-hist-badge--rejected .dot { background: #D04B4B; }
+    .addr-hist-reason { font-size: 11px; color: #9E9E9E; margin-top: 3px; }
+
+    /* ── APPROVE CONFIRMATION MODAL ── */
+    .approve-modal-overlay {
+      display: none; position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,.45); z-index: 9999;
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .approve-modal-overlay.open { display: flex; }
+    .approve-modal {
+      background: #fff; border-radius: 8px;
+      padding: 32px 28px 24px; width: 480px; max-width: 100%;
+      box-shadow: 0 8px 40px rgba(0,0,0,.18);
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .approve-modal__title { font-size: 18px; font-weight: 700; color: #1A1A1A; }
+    .approve-modal__body { font-size: 14px; color: #4B4B4B; line-height: 1.5; }
+    .approve-modal__card {
+      background: #F5F7FA; border: 1px solid #E0E0E0; border-radius: 6px;
+      padding: 14px 16px; display: flex; flex-direction: column; gap: 4px;
+    }
+    .approve-modal__card-label { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+    .approve-modal__card-meta { font-size: 12px; color: #717171; margin-top: 1px; }
+    .approve-modal__card-address { font-size: 13px; color: #4B4B4B; margin-top: 4px; }
+    .approve-modal__actions { display: flex; gap: 10px; padding-top: 4px; }
+    .approve-modal__cancel {
+      flex: 1; height: 40px; background: transparent;
+      border: 1px solid #6E6E6E; border-radius: 4px; font-family: inherit;
+      font-size: 14px; font-weight: 500; color: #4B4B4B; cursor: pointer;
+    }
+    .approve-modal__cancel:hover { background: #F0F0F0; }
+    .approve-modal__confirm {
+      flex: 1; height: 40px; background: #005EB8; color: #fff;
+      border: none; border-radius: 4px; font-family: inherit; font-size: 14px;
+      font-weight: 700; cursor: pointer; transition: background 0.15s;
+    }
+    .approve-modal__confirm:hover { background: #0052A3; }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .main-area { padding: 24px; }
-      .profile-hero__body { padding: 0 24px 24px; }
+      .profile-hero__body { padding: 24px; }
       .tab-list { padding: 0 24px; }
       .tab-panel { padding: 24px; }
     }
@@ -383,7 +462,6 @@
     @media (max-width: 768px) {
       .main-area { padding: 16px; gap: 16px; }
       .profile-hero__body { padding: 20px; gap: 16px; }
-      .avatar-wrap__img { width: 64px; height: 64px; }
       .profile-identity { width: 100%; }
       .profile-identity__name { font-size: 20px; }
       .tab-list { padding: 0 16px; }
@@ -391,13 +469,11 @@
       .tab-panel { padding: 20px 16px; }
       .section-divider { margin: 20px 0; }
       .profile-data-label { width: 120px; }
-      .addr-modal-overlay { padding: 64px 16px 16px; }
       .machine-row__right { width: 100%; justify-content: flex-start; }
       #panel-profile .form-col { max-width: 100%; }
     }
     @media (max-width: 480px) {
       .profile-identity__name { font-size: 18px; }
-      .addr-modal { padding: 20px 16px 16px; }
       .addr-form-row { flex-direction: column; }
       .addr-modal__actions { flex-direction: column-reverse; }
       .addr-modal__save, .addr-modal__cancel { width: 100%; }
@@ -418,15 +494,15 @@
       <section class="profile-hero" aria-label="Profile overview">
         <div class="profile-hero__body">
           <div class="avatar-wrap">
-            <div class="avatar-initials" id="profileAvatar" aria-label="Profile initials">JH</div>
+            <div class="avatar-initials" aria-label="Profile initials">JH</div>
           </div>
           <div class="profile-identity">
             <div class="profile-identity__info">
               <h1 class="profile-identity__name">Jonathan Hayes</h1>
               <div class="profile-identity__meta">
-                <span class="role-tag" id="roleTag">Customer</span>
+                <span class="role-tag">Distributor</span>
               </div>
-              <p class="profile-identity__company">ACME Precision Manufacturing</p>
+              <p class="profile-identity__company">Okuma America Corporation</p>
             </div>
           </div>
         </div>
@@ -436,22 +512,29 @@
       <div class="profile-tabs">
 
         <div role="tablist" class="tab-list" aria-label="Account settings">
-          <button role="tab" class="tab-btn" id="tab-profile" aria-selected="true" aria-controls="panel-profile">
+          <button role="tab" class="tab-btn" id="tab-profile"
+                  aria-selected="true" aria-controls="panel-profile">
             Profile
           </button>
-          <button role="tab" class="tab-btn" id="tab-addresses" aria-selected="false" aria-controls="panel-addresses" tabindex="-1">
+          <button role="tab" class="tab-btn" id="tab-addresses"
+                  aria-selected="false" aria-controls="panel-addresses" tabindex="-1">
             Address Book
           </button>
-          <button role="tab" class="tab-btn" id="tab-machines" aria-selected="false" aria-controls="panel-machines" tabindex="-1">
-            My Machines
+          <button role="tab" class="tab-btn" id="tab-customers"
+                  aria-selected="false" aria-controls="panel-customers" tabindex="-1">
+            My Customers
+          </button>
+          <button role="tab" class="tab-btn" id="tab-addr-requests"
+                  aria-selected="false" aria-controls="panel-addr-requests" tabindex="-1">
+            Address Approval Requests
+            <span class="tab-count-badge" id="tabAddrBadge">2</span>
           </button>
         </div>
 
-        <!-- ═══ PANEL 1 — Profile (Personal Info + Change Password) ═══ -->
+        <!-- ═══ PANEL 1 — Profile ═══ -->
         <div role="tabpanel" id="panel-profile" class="tab-panel"
              aria-labelledby="tab-profile" tabindex="0">
 
-          <!-- Personal Info (read-only) -->
           <p class="section-subhead">Personal Information</p>
           <div class="profile-data-list">
             <div class="profile-data-row">
@@ -460,29 +543,27 @@
             </div>
             <div class="profile-data-row">
               <span class="profile-data-label">Job Title</span>
-              <span class="profile-data-value">Purchasing Manager</span>
+              <span class="profile-data-value">Regional Sales Manager</span>
             </div>
             <div class="profile-data-row">
               <span class="profile-data-label">Phone</span>
-              <span class="profile-data-value">+1 (704) 555-0182</span>
+              <span class="profile-data-value">+1 (704) 555-0241</span>
             </div>
             <div class="profile-data-row">
               <span class="profile-data-label">Email</span>
-              <span class="profile-data-value">customer@okuma.com</span>
+              <span class="profile-data-value">j.hayes@okuma-america.com</span>
             </div>
             <div class="profile-data-row">
               <span class="profile-data-label">Company</span>
-              <span class="profile-data-value">ACME Precision Manufacturing</span>
+              <span class="profile-data-value">Okuma America Corporation</span>
             </div>
           </div>
 
           <div class="section-divider" role="separator"></div>
 
-          <!-- Change Password -->
           <p class="section-subhead">Change Password</p>
           <form novalidate aria-label="Change password form" id="formSecurity">
             <div class="form-col">
-
               <div class="field">
                 <label class="field__label" for="currentPw">Current Password</label>
                 <div class="field__pw-wrap">
@@ -513,7 +594,6 @@
                     </svg>
                   </button>
                 </div>
-                <!-- Live password rules -->
                 <div class="pw-rules" aria-live="polite">
                   <div class="pw-rule" id="rule-length">
                     <svg class="pw-rule__icon pw-rule__icon--empty" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="#BDBDBD" stroke-width="1.5"/></svg>
@@ -536,7 +616,6 @@
                     At least one special character (!@#$%^&*)
                   </div>
                 </div>
-                <!-- Strength bar -->
                 <div class="pw-strength" aria-live="polite" style="margin-top:12px;">
                   <div class="pw-strength__bar" role="presentation" aria-hidden="true">
                     <div class="pw-strength__seg" id="str1"></div>
@@ -563,7 +642,6 @@
                   </button>
                 </div>
               </div>
-
             </div>
 
             <div class="form-actions">
@@ -591,7 +669,7 @@
               <circle cx="8" cy="8" r="7" stroke="#005EB8" stroke-width="1.5"/>
               <path d="M8 5v6M5 8h6" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
-            Request New Address
+            Add Address
           </button>
 
         </div><!-- /panel-addresses -->
@@ -600,7 +678,7 @@
         <div class="addr-modal-overlay" id="addrModalOverlay">
           <div class="addr-modal" role="dialog" aria-modal="true" aria-labelledby="addrModalTitle">
             <div class="addr-modal__head">
-              <span class="addr-modal__title" id="addrModalTitle">Request New Address</span>
+              <span class="addr-modal__title" id="addrModalTitle">Add Address</span>
               <button type="button" class="addr-modal__close" id="addrModalClose" aria-label="Close">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
               </button>
@@ -633,96 +711,145 @@
             </div>
             <div class="addr-modal__actions">
               <button type="button" class="addr-modal__cancel" id="addrModalCancel">Cancel</button>
-              <button type="button" class="addr-modal__save" id="addrModalSave">Submit Request</button>
+              <button type="button" class="addr-modal__save" id="addrModalSave">Save Address</button>
             </div>
           </div>
         </div>
 
-        <!-- ═══ PANEL 3 — My Machines ═══ -->
-        <div role="tabpanel" id="panel-machines" class="tab-panel"
-             aria-labelledby="tab-machines" tabindex="0" hidden>
+        <!-- ═══ PANEL 3 — My Customers ═══ -->
+        <div role="tabpanel" id="panel-customers" class="tab-panel"
+             aria-labelledby="tab-customers" tabindex="0" hidden>
 
-          <!-- Search -->
-          <div class="mach-search-field">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
-              <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            <input type="search" id="machSearch" placeholder="Search by machine name or serial..."
-                   autocomplete="off" oninput="filterMachines(this.value)">
+          <div class="orders-wrap">
+            <div class="orders-scroll">
+              <table class="cust-table">
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Account #</th>
+                    <th>Location</th>
+                    <th>Open Orders</th>
+                    <th>Machines</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="cust-name">ABC Industries</span></td>
+                    <td>AC-4421</td>
+                    <td>Detroit, MI</td>
+                    <td>47</td>
+                    <td>5</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cust-name">Smith Manufacturing</span></td>
+                    <td>SM-2891</td>
+                    <td>Cincinnati, OH</td>
+                    <td>12</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cust-name">Pacific Precision</span></td>
+                    <td>PP-5517</td>
+                    <td>San Jose, CA</td>
+                    <td>63</td>
+                    <td>6</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cust-name">Delta Components</span></td>
+                    <td>DC-3302</td>
+                    <td>Dallas, TX</td>
+                    <td>21</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cust-name">Apex Machining</span></td>
+                    <td>AM-7789</td>
+                    <td>Chicago, IL</td>
+                    <td>34</td>
+                    <td>5</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <div class="machines-list" id="machinesList" aria-label="Your registered machines">
+        </div><!-- /panel-customers -->
 
-            <div class="machine-row" data-name="LB2000 EX III" data-serial="LB-4431-M">
-              <div class="machine-row__info">
-                <span class="machine-row__name">LB2000 EX III</span>
-                <span class="machine-row__serial">Serial: LB-4431-M &nbsp;·&nbsp; Install Date: Nov 22, 2023</span>
-              </div>
-              <div class="machine-row__right">
-                <span class="verified-badge">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
-                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  INSTALLED
-                </span>
-                <button class="text-link" onclick="openPartsModal('LB2000 EX III', 'LB-4431-M')" aria-label="Browse parts for LB2000 EX III">
-                  Browse Parts →
-                </button>
+        <!-- ═══ PANEL 4 — Address Approval Requests ═══ -->
+        <div role="tabpanel" id="panel-addr-requests" class="tab-panel"
+             aria-labelledby="tab-addr-requests" tabindex="0" hidden>
+
+          <!-- Pending section -->
+          <div class="addr-req-section">
+            <div class="addr-req-section__head">
+              <span class="addr-req-section__title">Pending Requests</span>
+              <span class="addr-req-section__count" id="pendingCount" style="display:none;">0</span>
+            </div>
+            <div class="orders-wrap">
+              <div class="orders-scroll">
+                <table class="addr-req-table">
+                  <thead>
+                    <tr>
+                      <th style="width:160px">Customer</th>
+                      <th style="width:130px">Date Submitted</th>
+                      <th>Address</th>
+                      <th style="width:220px"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="addrReqTbody">
+                    <!-- populated by JS -->
+                  </tbody>
+                </table>
               </div>
             </div>
-
-            <div class="machine-row" data-name="LU300-M" data-serial="M5-2891-K">
-              <div class="machine-row__info">
-                <span class="machine-row__name">LU300-M</span>
-                <span class="machine-row__serial">Serial: M5-2891-K &nbsp;·&nbsp; Install Date: Mar 15, 2022</span>
-              </div>
-              <div class="machine-row__right">
-                <span class="verified-badge">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
-                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  INSTALLED
-                </span>
-                <button class="text-link" onclick="openPartsModal('LU300-M', 'M5-2891-K')" aria-label="Browse parts for LU300-M">
-                  Browse Parts →
-                </button>
-              </div>
-            </div>
-
-            <div class="machine-row" data-name="MULTUS U3000" data-serial="MU-9102-L">
-              <div class="machine-row__info">
-                <span class="machine-row__name">MULTUS U3000</span>
-                <span class="machine-row__serial">Serial: MU-9102-L &nbsp;·&nbsp; Install Date: Jul 08, 2021</span>
-              </div>
-              <div class="machine-row__right">
-                <span class="verified-badge">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                    <circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/>
-                    <path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  INSTALLED
-                </span>
-                <button class="text-link" onclick="openPartsModal('MULTUS U3000', 'MU-9102-L')" aria-label="Browse parts for MULTUS U3000">
-                  Browse Parts →
-                </button>
-              </div>
-            </div>
-
           </div>
-          <p class="mach-empty" id="machEmpty" hidden>No machines match your search.</p>
 
-        </div><!-- /panel-machines -->
+          <!-- History section -->
+          <div class="addr-req-section" id="addrHistSection">
+            <div class="addr-req-section__head">
+              <span class="addr-req-section__title">History</span>
+            </div>
+            <div class="orders-wrap">
+              <div class="orders-scroll">
+                <table class="addr-req-table">
+                  <thead>
+                    <tr>
+                      <th style="width:160px">Customer</th>
+                      <th style="width:130px">Date Submitted</th>
+                      <th>Address</th>
+                      <th style="width:160px">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="addrHistTbody">
+                    <!-- populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /panel-addr-requests -->
 
       </div><!-- /profile-tabs -->
 
     </main>
   </div>
 
+  <!-- Approve Confirmation Modal -->
+  <div class="approve-modal-overlay" id="approveModalOverlay">
+    <div class="approve-modal" role="dialog" aria-modal="true" aria-labelledby="approveModalTitle">
+      <span class="approve-modal__title" id="approveModalTitle">Confirm Address Approval</span>
+      <p class="approve-modal__body">You are about to approve the following address request. Once confirmed, the customer will be able to use this address for orders.</p>
+      <div class="approve-modal__card" id="approveModalCard"></div>
+      <div class="approve-modal__actions">
+        <button type="button" class="approve-modal__cancel" id="approveModalCancel">Cancel</button>
+        <button type="button" class="approve-modal__confirm" id="approveModalConfirm">Confirm Approval</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Password confirmation modal -->
-  <div class="modal-overlay" id="pwConfirmOverlay">
+  <div class="modal-overlay" id="pwConfirmOverlay" style="max-width:none;">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwConfirmTitle" style="max-width:440px;">
       <div class="modal__header">
         <h2 class="modal__title" id="pwConfirmTitle">Confirm Password Update</h2>
@@ -745,7 +872,7 @@
     </div>
   </div>
 
-  <!-- Parts Book modal (My Machines) -->
+  <!-- Parts Book modal -->
   <div class="modal-overlay" id="partsModalOverlay" onclick="handleOverlayClick(event)">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modal__header">
@@ -793,9 +920,6 @@
     Changes saved successfully
   </div>
 
-  <div id="liveRegion" aria-live="polite" aria-atomic="true"
-       style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;"></div>
-
   <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>
   <script src="components.js"></script>
@@ -809,26 +933,24 @@
     var panels = Array.prototype.slice.call(document.querySelectorAll('[role="tabpanel"]'));
 
     function activateTab(tab) {
-      tabs.forEach(function (t) { t.setAttribute('aria-selected', 'false'); t.setAttribute('tabindex', '-1'); });
-      panels.forEach(function (p) { p.hidden = true; });
+      tabs.forEach(function(t) { t.setAttribute('aria-selected', 'false'); t.setAttribute('tabindex', '-1'); });
+      panels.forEach(function(p) { p.hidden = true; });
       tab.setAttribute('aria-selected', 'true');
       tab.removeAttribute('tabindex');
       var panel = document.getElementById(tab.getAttribute('aria-controls'));
       if (panel) panel.hidden = false;
     }
 
-    // Open a specific tab from URL param (e.g. ?tab=machines from dashboard KPI)
     var _tabParam = new URLSearchParams(window.location.search).get('tab');
     if (_tabParam) {
       var _targetTab = document.getElementById('tab-' + _tabParam);
       if (_targetTab) activateTab(_targetTab);
     }
 
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () { activateTab(tab); });
-      tab.addEventListener('keydown', function (e) {
-        var idx = tabs.indexOf(tab);
-        var next = null;
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() { activateTab(tab); });
+      tab.addEventListener('keydown', function(e) {
+        var idx = tabs.indexOf(tab), next = null;
         if (e.key === 'ArrowRight') next = tabs[(idx + 1) % tabs.length];
         if (e.key === 'ArrowLeft')  next = tabs[(idx - 1 + tabs.length) % tabs.length];
         if (e.key === 'Home')       next = tabs[0];
@@ -837,21 +959,11 @@
       });
     });
 
-    /* ── ROLE TAG ── */
-    (function() {
-      var role = (localStorage.getItem('okmUserRole') || 'customer').toLowerCase();
-      var tag = document.getElementById('roleTag');
-      if (tag) {
-        var labels = { customer: 'Customer', distributor: 'Distributor', admin: 'Distributor' };
-        tag.textContent = labels[role] || 'Customer';
-      }
-    })();
-
     /* ── PASSWORD EYE TOGGLE ── */
     var EYE_OPEN = '<ellipse cx="9" cy="9" rx="8" ry="5.5" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>';
     var EYE_SHUT = '<path d="M2 2l14 14M7.3 7.4A2.5 2.5 0 0010.6 10.7M5.1 5.2C2.9 6.5 1 9 1 9s3 6 8 6c1.8 0 3.4-.6 4.8-1.6M8.3 3.1A8 8 0 0117 9s-.8 1.5-2.1 2.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
-    document.querySelectorAll('.field__eye-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
+    document.querySelectorAll('.field__eye-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
         var input = document.getElementById(btn.getAttribute('data-target'));
         if (!input) return;
         var show = input.type === 'password';
@@ -867,15 +979,12 @@
       { id: 'rule-number',  test: function(v) { return /[0-9]/.test(v); } },
       { id: 'rule-special', test: function(v) { return /[!@#$%^&*]/.test(v); } }
     ];
-
     function applyPwRules(val) {
       val = val || '';
       var score = 0;
       PW_RULES.forEach(function(r) {
-        var el = document.getElementById(r.id);
-        if (!el) return;
-        var met = r.test(val);
-        if (met) score++;
+        var el = document.getElementById(r.id); if (!el) return;
+        var met = r.test(val); if (met) score++;
         el.classList.toggle('is-met', met);
       });
       var COLORS = ['', '#AD0000', '#F59E0B', '#005EB8', '#2AAB3F'];
@@ -886,16 +995,10 @@
         if (seg) seg.style.background = i <= score ? col : '#E0E0E0';
       });
       var txt = document.getElementById('pwStrengthText');
-      if (txt) {
-        txt.textContent = val ? (LABELS[score] || 'Weak') : 'Enter a password';
-        txt.style.color = val ? col : '#9E9E9E';
-      }
+      if (txt) { txt.textContent = val ? (LABELS[score] || 'Weak') : 'Enter a password'; txt.style.color = val ? col : '#9E9E9E'; }
     }
-
     var newPwInput = document.getElementById('newPw');
-    if (newPwInput) {
-      newPwInput.addEventListener('input', function() { applyPwRules(this.value); });
-    }
+    if (newPwInput) newPwInput.addEventListener('input', function() { applyPwRules(this.value); });
 
     /* ── PASSWORD FORM SUBMIT ── */
     var formSecurity     = document.getElementById('formSecurity');
@@ -903,54 +1006,37 @@
     var pwConfirmClose   = document.getElementById('pwConfirmClose');
     var pwConfirmCancel  = document.getElementById('pwConfirmCancel');
     var pwConfirmOk      = document.getElementById('pwConfirmOk');
-
     function openPwConfirm()  { pwConfirmOverlay.classList.add('is-open');    document.body.style.overflow = 'hidden'; }
     function closePwConfirm() { pwConfirmOverlay.classList.remove('is-open'); document.body.style.overflow = ''; }
-
     function commitPasswordUpdate() {
       closePwConfirm();
-      var btn     = document.getElementById('saveSecurityBtn');
+      var btn = document.getElementById('saveSecurityBtn');
       var confirm = document.getElementById('confirmSecurity');
       btn.textContent = 'Saving…'; btn.disabled = true;
       setTimeout(function() {
         btn.textContent = 'Update Password'; btn.disabled = false;
         document.getElementById('currentPw').value = '';
-        document.getElementById('newPw').value     = '';
+        document.getElementById('newPw').value = '';
         document.getElementById('confirmPw').value = '';
         applyPwRules('');
         confirm.classList.add('is-visible');
         setTimeout(function() { confirm.classList.remove('is-visible'); }, 3000);
       }, 600);
     }
-
     if (formSecurity)    formSecurity.addEventListener('submit', function(e) { e.preventDefault(); openPwConfirm(); });
     if (pwConfirmClose)  pwConfirmClose.addEventListener('click', closePwConfirm);
     if (pwConfirmCancel) pwConfirmCancel.addEventListener('click', closePwConfirm);
     if (pwConfirmOk)     pwConfirmOk.addEventListener('click', commitPasswordUpdate);
     if (pwConfirmOverlay) pwConfirmOverlay.addEventListener('click', function(e) { if (e.target === pwConfirmOverlay) closePwConfirm(); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && pwConfirmOverlay && pwConfirmOverlay.classList.contains('is-open')) closePwConfirm(); });
-
-    /* ── MACHINE SEARCH ── */
-    window.filterMachines = function(query) {
-      var q = (query || '').toLowerCase().trim();
-      var rows = document.querySelectorAll('#machinesList .machine-row');
-      var visible = 0;
-      rows.forEach(function(row) {
-        var name   = (row.getAttribute('data-name')   || '').toLowerCase();
-        var serial = (row.getAttribute('data-serial')  || '').toLowerCase();
-        var match  = !q || name.indexOf(q) !== -1 || serial.indexOf(q) !== -1;
-        row.style.display = match ? '' : 'none';
-        if (match) visible++;
-      });
-      var empty = document.getElementById('machEmpty');
-      if (empty) empty.hidden = visible > 0;
-    };
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && pwConfirmOverlay && pwConfirmOverlay.classList.contains('is-open')) closePwConfirm();
+    });
 
     /* ── PARTS BOOK MODAL ── */
     window.openPartsModal = function(machineName, serial) {
       document.getElementById('modalTitle').textContent = machineName + ' — Browse Parts Book';
-      document.getElementById('bookTitle1').textContent = machineName + '- Parts Book 1';
-      document.getElementById('bookTitle2').textContent = machineName + '- Parts Book 2';
+      document.getElementById('bookTitle1').textContent = machineName + ' - Parts Book 1';
+      document.getElementById('bookTitle2').textContent = machineName + ' - Parts Book 2';
       document.getElementById('bookSerial1').textContent = 'Serial: ' + serial;
       document.getElementById('bookSerial2').textContent = 'Serial: ' + serial;
       var opts = document.querySelectorAll('.book-option');
@@ -979,16 +1065,15 @@
   </script>
 
   <script>
-  /* ── ADDRESS BOOK ── */
+  /* ── ADDRESS BOOK (own addresses) ── */
   (function () {
     var ADDRS = [
-      { label: 'Warehouse B',       street: '11900 Cottonwood Street', city: 'Charlotte', state: 'NC', zip: '28214', status: 'verified' },
-      { label: 'Service Depot North', street: '455 Innovation Drive',  city: 'Detroit',   state: 'MI', zip: '48126', status: 'verified' },
-      { label: 'New Assembly Plant', street: '800 Industrial Pkwy',    city: 'Columbus',  state: 'OH', zip: '43215', status: 'pending'  },
+      { label: 'Charlotte HQ',      street: '11900 Cottonwood Street', city: 'Charlotte',  state: 'NC', zip: '28214', status: 'verified' },
+      { label: 'Detroit Office',    street: '455 Innovation Drive',    city: 'Detroit',    state: 'MI', zip: '48126', status: 'verified' },
+      { label: 'Columbus Branch',   street: '800 Industrial Pkwy',     city: 'Columbus',   state: 'OH', zip: '43215', status: 'verified' }
     ];
 
     var overlay    = document.getElementById('addrModalOverlay');
-    var modalTitle = document.getElementById('addrModalTitle');
     var closeBtn   = document.getElementById('addrModalClose');
     var cancelBtn  = document.getElementById('addrModalCancel');
     var saveBtn    = document.getElementById('addrModalSave');
@@ -996,42 +1081,25 @@
     var list       = document.getElementById('addrBookList');
 
     function renderList() {
-      list.innerHTML = ADDRS.map(function (a, i) {
+      list.innerHTML = ADDRS.map(function(a) {
         var full = a.street + ', ' + a.city + ', ' + a.state + ' ' + a.zip;
-
-        if (a.status === 'pending') {
-          return '<div class="addr-book-card is-pending">' +
-            '<div class="addr-book-card__body">' +
-              '<span class="addr-book-card__label">' + a.label + '</span>' +
-              '<span class="addr-book-card__tag addr-book-card__tag--pending">Pending Approval</span>' +
-              '<span class="addr-book-card__line">' + full + '</span>' +
-              '<span class="addr-pending-note">Awaiting distributor approval — cannot be used for orders until approved.</span>' +
-            '</div>' +
-          '</div>';
-        }
-
-        /* verified — no status badge, no remove button */
         return '<div class="addr-book-card">' +
           '<div class="addr-book-card__body">' +
             '<span class="addr-book-card__label">' + a.label + '</span>' +
             '<span class="addr-book-card__line">' + full + '</span>' +
-          '</div>' +
-        '</div>';
+          '</div></div>';
       }).join('');
     }
 
     function openModal() {
-      modalTitle.textContent = 'Request New Address';
-      saveBtn.textContent    = 'Submit Request';
-      document.getElementById('am-label').value  = '';
+      document.getElementById('am-label').value = '';
       document.getElementById('am-street').value = '';
-      document.getElementById('am-city').value   = '';
-      document.getElementById('am-state').value  = '';
-      document.getElementById('am-zip').value    = '';
+      document.getElementById('am-city').value = '';
+      document.getElementById('am-state').value = '';
+      document.getElementById('am-zip').value = '';
       overlay.classList.add('open');
       document.getElementById('am-label').focus();
     }
-
     function closeModal() { overlay.classList.remove('open'); }
 
     addBtn.addEventListener('click', openModal);
@@ -1041,20 +1109,173 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
     });
-
-    saveBtn.addEventListener('click', function () {
+    saveBtn.addEventListener('click', function() {
       var label  = document.getElementById('am-label').value.trim();
       var street = document.getElementById('am-street').value.trim();
       var city   = document.getElementById('am-city').value.trim();
       var state  = document.getElementById('am-state').value.trim();
       var zip    = document.getElementById('am-zip').value.trim();
       if (!label || !street || !city || !state || !zip) return;
-      ADDRS.push({ label: label, street: street, city: city, state: state, zip: zip, status: 'pending' });
+      ADDRS.push({ label: label, street: street, city: city, state: state, zip: zip, status: 'verified' });
       renderList();
       closeModal();
     });
 
     renderList();
+  })();
+  </script>
+
+  <script>
+  /* ── ADDRESS APPROVAL REQUESTS ── */
+  (function () {
+
+    var ADDR_REQUESTS = [
+      { customer: 'ABC Industries',      label: 'New Assembly Plant',   street: '800 Industrial Pkwy', city: 'Columbus',     state: 'OH', zip: '43215', date: '24 Jun 2026', status: 'pending'  },
+      { customer: 'Delta Components',    label: 'West Coast Warehouse', street: '1420 Harbor Blvd',    city: 'Long Beach',   state: 'CA', zip: '90802', date: '22 Jun 2026', status: 'pending'  },
+      { customer: 'Smith Manufacturing', label: 'Downtown Office',      street: '200 Commerce St',     city: 'Cincinnati',   state: 'OH', zip: '45202', date: '10 Jun 2026', status: 'approved', rejectReason: '' },
+      { customer: 'Pacific Precision',   label: 'South Bay Facility',   street: '3310 El Camino Real',  city: 'Santa Clara',  state: 'CA', zip: '95051', date: '02 Jun 2026', status: 'approved', rejectReason: '' },
+      { customer: 'Apex Machining',      label: 'Secondary Warehouse',  street: '4501 W Diversey Ave',  city: 'Chicago',      state: 'IL', zip: '60639', date: '18 May 2026', status: 'rejected', rejectReason: 'Address could not be verified' },
+      { customer: 'Delta Components',    label: 'Texas Distribution',   street: '9900 Lyndon B Johnson', city: 'Dallas',      state: 'TX', zip: '75243', date: '05 May 2026', status: 'rejected', rejectReason: 'Duplicate of existing address' }
+    ];
+
+    var tbody        = document.getElementById('addrReqTbody');
+    var histTbody    = document.getElementById('addrHistTbody');
+    var histSection  = document.getElementById('addrHistSection');
+    var pendingCountEl = document.getElementById('pendingCount');
+    var tabBadge     = document.getElementById('tabAddrBadge');
+    var approveOverlay = document.getElementById('approveModalOverlay');
+    var approveCard    = document.getElementById('approveModalCard');
+    var approveConfirm = document.getElementById('approveModalConfirm');
+    var approveCancel  = document.getElementById('approveModalCancel');
+    var pendingApproveIdx = -1;
+
+    function updateTabBadge() {
+      var pending = ADDR_REQUESTS.filter(function(r) { return r.status === 'pending'; }).length;
+      if (tabBadge) {
+        tabBadge.textContent = pending;
+        tabBadge.style.display = pending > 0 ? '' : 'none';
+      }
+      if (pendingCountEl) {
+        pendingCountEl.textContent = pending;
+        pendingCountEl.style.display = pending > 0 ? '' : 'none';
+      }
+    }
+
+    function renderTable() {
+      var pending = ADDR_REQUESTS.filter(function(r) { return r.status === 'pending'; });
+      var history = ADDR_REQUESTS.filter(function(r) { return r.status === 'approved' || r.status === 'rejected'; });
+
+      /* --- Pending section --- */
+      if (pending.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4"><div class="addr-req-empty">No pending requests at this time.</div></td></tr>';
+      } else {
+        tbody.innerHTML = pending.map(function(r) {
+          var i    = ADDR_REQUESTS.indexOf(r);
+          var full = r.street + ', ' + r.city + ', ' + r.state + ' ' + r.zip + ', USA';
+          var actionCell =
+            '<div id="req-actions-' + i + '" style="display:flex;align-items:center;gap:8px;">' +
+              '<button class="addr-req-approve" onclick="window._approveReq(' + i + ')">Approve</button>' +
+              '<button class="addr-req-reject"  onclick="window._openRejectRow(' + i + ')">Reject</button>' +
+            '</div>' +
+            '<div id="req-reject-row-' + i + '" style="display:none;">' +
+              '<div class="addr-req-reason-row">' +
+                '<input type="text" class="addr-req-reason-input" id="req-reject-input-' + i + '" placeholder="Reason for rejection (optional)">' +
+                '<button class="addr-req-confirm-reject" onclick="window._confirmReject(' + i + ')">Confirm</button>' +
+                '<button class="addr-req-cancel-reject"  onclick="window._cancelRejectRow(' + i + ')">Cancel</button>' +
+              '</div>' +
+            '</div>';
+          return '<tr id="req-row-' + i + '">' +
+            '<td style="font-weight:600;">' + r.customer + '</td>' +
+            '<td>' + r.date + '</td>' +
+            '<td>' +
+              '<span style="font-size:14px;font-weight:700;color:#1A1A1A;">' + r.label + '</span><br>' +
+              '<span style="font-size:12px;color:#717171;">' + full + '</span>' +
+            '</td>' +
+            '<td style="white-space:nowrap;">' + actionCell + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      /* --- History section --- */
+      if (history.length === 0) {
+        histSection.style.display = 'none';
+      } else {
+        histSection.style.display = '';
+        histTbody.innerHTML = history.map(function(r) {
+          var full  = r.street + ', ' + r.city + ', ' + r.state + ' ' + r.zip + ', USA';
+          var isApp = r.status === 'approved';
+          var badge = '<span class="addr-hist-badge addr-hist-badge--' + r.status + '">' +
+            '<span class="dot"></span>' + (isApp ? 'Approved' : 'Rejected') +
+          '</span>' +
+          ((!isApp && r.rejectReason) ? '<div class="addr-hist-reason">' + r.rejectReason + '</div>' : '');
+          return '<tr>' +
+            '<td style="font-weight:600;">' + r.customer + '</td>' +
+            '<td>' + r.date + '</td>' +
+            '<td>' +
+              '<span style="font-size:14px;font-weight:700;color:#1A1A1A;">' + r.label + '</span><br>' +
+              '<span style="font-size:12px;color:#717171;">' + full + '</span>' +
+            '</td>' +
+            '<td>' + badge + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      updateTabBadge();
+    }
+
+    /* approve flow */
+    function openApproveModal(idx) {
+      pendingApproveIdx = idx;
+      var r    = ADDR_REQUESTS[idx];
+      var full = r.street + ', ' + r.city + ', ' + r.state + ' ' + r.zip + ', USA';
+      approveCard.innerHTML =
+        '<span class="approve-modal__card-label">' + r.label + '</span>' +
+        '<span class="approve-modal__card-meta">' + r.customer + ' &middot; Submitted ' + r.date + '</span>' +
+        '<span class="approve-modal__card-address">' + full + '</span>';
+      approveOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeApproveModal() {
+      approveOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      pendingApproveIdx = -1;
+    }
+
+    approveConfirm.addEventListener('click', function() {
+      if (pendingApproveIdx < 0) return;
+      ADDR_REQUESTS[pendingApproveIdx].status = 'approved';
+      renderTable();
+      closeApproveModal();
+    });
+    approveCancel.addEventListener('click', closeApproveModal);
+    approveOverlay.addEventListener('click', function(e) { if (e.target === approveOverlay) closeApproveModal(); });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && approveOverlay.classList.contains('open')) closeApproveModal();
+    });
+
+    window._approveReq = function(idx) { openApproveModal(idx); };
+
+    window._openRejectRow = function(idx) {
+      var actions = document.getElementById('req-actions-' + idx);
+      var row     = document.getElementById('req-reject-row-' + idx);
+      if (actions) actions.style.display = 'none';
+      if (row)     row.style.display = '';
+    };
+    window._cancelRejectRow = function(idx) {
+      var actions = document.getElementById('req-actions-' + idx);
+      var row     = document.getElementById('req-reject-row-' + idx);
+      if (actions) actions.style.display = 'flex';
+      if (row)     row.style.display = 'none';
+    };
+    window._confirmReject = function(idx) {
+      var input = document.getElementById('req-reject-input-' + idx);
+      ADDR_REQUESTS[idx].status = 'rejected';
+      ADDR_REQUESTS[idx].rejectReason = input ? input.value.trim() : '';
+      renderTable();
+    };
+
+    renderTable();
+
   })();
   </script>
 

@@ -352,7 +352,7 @@
 
       <!-- Breadcrumb -->
       <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="dashboard.html">Home</a>
+        <a href="dashboard.html" id="breadcrumbHome">Home</a>
         <span class="breadcrumb__sep">/</span>
         <span class="breadcrumb__current">My Orders</span>
       </nav>
@@ -392,6 +392,14 @@
             <option value="shipped">Shipped</option>
             <option value="delivered">Delivered</option>
             <option value="cancelled">Cancelled</option>
+          </select>
+          <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="filter-wrap">
+          <select class="filter-select" id="customerFilter" onchange="applyFilters()">
+            <option value="">Ordered For</option>
           </select>
           <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -564,15 +572,33 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
+      // Populate Ordered For dropdown with unique customer names from order data
+      (function () {
+        var sel = document.getElementById('customerFilter');
+        if (!sel) return;
+        var names = ALL_ORDERS
+          .map(function (o) { return o.orderedFor; })
+          .filter(function (v, i, a) { return v && a.indexOf(v) === i; })
+          .sort();
+        names.forEach(function (n) {
+          var opt = document.createElement('option');
+          opt.value = n;
+          opt.textContent = n;
+          sel.appendChild(opt);
+        });
+      })();
+
       function applyFilters() {
-        var query  = (document.getElementById('orderSearch').value || '').toLowerCase().trim();
-        var status = document.getElementById('statusFilter').value;
-        var sort   = document.getElementById('sortFilter').value;
+        var query    = (document.getElementById('orderSearch').value || '').toLowerCase().trim();
+        var status   = document.getElementById('statusFilter').value;
+        var customer = document.getElementById('customerFilter').value;
+        var sort     = document.getElementById('sortFilter').value;
 
         filteredOrders = ALL_ORDERS.filter(function (o) {
-          var matchQuery  = !query  || o.num.toLowerCase().includes(query) || o.date.toLowerCase().includes(query) || (o.orderedFor && o.orderedFor.toLowerCase().includes(query));
-          var matchStatus = !status || (status === 'open' ? (o.status === 'processing' || o.status === 'shipped') : o.status === status);
-          return matchQuery && matchStatus;
+          var matchQuery    = !query    || o.num.toLowerCase().includes(query) || o.date.toLowerCase().includes(query) || (o.orderedFor && o.orderedFor.toLowerCase().includes(query));
+          var matchStatus   = !status   || (status === 'open' ? (o.status === 'processing' || o.status === 'shipped') : o.status === status);
+          var matchCustomer = !customer || o.orderedFor === customer;
+          return matchQuery && matchStatus && matchCustomer;
         });
 
         if (sort === 'oldest') { filteredOrders.sort(function (a, b) { return a.dateSort - b.dateSort; }); }
@@ -582,7 +608,7 @@
         render();
 
         var clearBar = document.getElementById('clearFilterBar');
-        if (clearBar) clearBar.classList.toggle('visible', !!status);
+        if (clearBar) clearBar.classList.toggle('visible', !!(status || customer));
       }
 
       window.applyFilters = applyFilters;
@@ -590,7 +616,8 @@
       var clearFilterBtn = document.getElementById('clearFilterBtn');
       if (clearFilterBtn) {
         clearFilterBtn.addEventListener('click', function () {
-          document.getElementById('statusFilter').value = '';
+          document.getElementById('statusFilter').value   = '';
+          document.getElementById('customerFilter').value = '';
           applyFilters();
         });
       }
@@ -601,11 +628,24 @@
         if (stockBtn) stockBtn.style.display = 'none';
       }
 
-      // Apply filter from URL param (e.g. ?filter=open from dashboard KPI)
-      var _urlParam = new URLSearchParams(window.location.search).get('filter');
-      if (_urlParam) {
+      // Set Home breadcrumb to the correct dashboard based on role
+      (function () {
+        var _u = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
+        var el = document.getElementById('breadcrumbHome');
+        if (el && _u && _u.role === 'dealer') el.href = 'dealer-dashboard.html';
+      })();
+
+      // Apply filter from URL params
+      var _params = new URLSearchParams(window.location.search);
+      var _filterParam   = _params.get('filter');
+      var _customerParam = _params.get('customer');
+      if (_filterParam) {
         var sf = document.getElementById('statusFilter');
-        if (sf) { sf.value = _urlParam; }
+        if (sf) sf.value = _filterParam;
+      }
+      if (_customerParam) {
+        var cf = document.getElementById('customerFilter');
+        if (cf) cf.value = _customerParam;
       }
 
       // Initial render

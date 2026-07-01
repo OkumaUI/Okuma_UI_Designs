@@ -117,6 +117,32 @@
       color: #717171;
     }
 
+    .clear-filter-bar {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-top: -12px;
+      margin-bottom: 16px;
+    }
+    .clear-filter-bar.visible { display: flex; }
+    .clear-filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1px solid #DEDEDE;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #4B4B4B;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    .clear-filter-btn:hover { border-color: #005EB8; color: #005EB8; background: #F0F6FF; }
+    .clear-filter-btn svg { flex-shrink: 0; }
+
     /* ── TABLE WRAPPER ── */
     .quotes-card {
       border: 1px solid #DEDEDE;
@@ -346,7 +372,7 @@
 
       <!-- Breadcrumb -->
       <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="dashboard.html">Home</a>
+        <a href="dashboard.html" id="breadcrumbHome">Home</a>
         <span class="breadcrumb__sep">/</span>
         <span class="breadcrumb__current">My Quotes</span>
       </nav>
@@ -375,6 +401,7 @@
         <div class="filter-wrap">
           <select class="filter-select" id="statusFilter" onchange="applyFilters()">
             <option value="">Filter by Status</option>
+            <option value="open">Open</option>
             <option value="submitted">Submitted</option>
             <option value="under-review">Under Review</option>
             <option value="quoted">Quoted</option>
@@ -382,6 +409,14 @@
             <option value="ordered">Ordered</option>
             <option value="expired">Expired</option>
             <option value="declined">Declined</option>
+          </select>
+          <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="filter-wrap">
+          <select class="filter-select" id="customerFilter" onchange="applyFilters()">
+            <option value="">Ordered For</option>
           </select>
           <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -397,6 +432,16 @@
             <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
+      </div>
+
+      <!-- Clear filter bar -->
+      <div class="clear-filter-bar" id="clearFilterBar">
+        <button class="clear-filter-btn" id="clearFilterBtn" type="button">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <path d="M1 1l8 8M9 1L1 9"/>
+          </svg>
+          Clear Filter
+        </button>
       </div>
 
       <!-- Quotes table -->
@@ -448,18 +493,18 @@
       }
 
       var ALL_QUOTES = [
-        { num: 'QUO-2026-00089', submitted: 'Jun 18, 2026', submittedSort: 20260618, expiry: 'Jul 25, 2026', expirySort: 20260725, items: 4,  total: 2840.00, status: 'quoted'       },
-        { num: 'QUO-2026-00085', submitted: 'Jun 15, 2026', submittedSort: 20260615, expiry: 'Jun 29, 2026', expirySort: 20260629, items: 2,  total: 612.50,  status: 'approved'     },
-        { num: 'QUO-2026-00081', submitted: 'Jun 10, 2026', submittedSort: 20260610, expiry: 'Jul 03, 2026', expirySort: 20260703, items: 6,  total: 5100.00, status: 'quoted'       },
-        { num: 'QUO-2026-00077', submitted: 'Jun 05, 2026', submittedSort: 20260605, expiry: 'Jul 10, 2026', expirySort: 20260710, items: 1,  total: null,    status: 'under-review' },
-        { num: 'QUO-2026-00072', submitted: 'May 28, 2026', submittedSort: 20260528, expiry: 'Jun 27, 2026', expirySort: 20260627, items: 3,  total: 1450.00, status: 'quoted'       },
-        { num: 'QUO-2026-00068', submitted: 'May 20, 2026', submittedSort: 20260520, expiry: null,           expirySort: 0,        items: 5,  total: null,    status: 'submitted'    },
-        { num: 'QUO-2026-00061', submitted: 'May 10, 2026', submittedSort: 20260510, expiry: 'Jun 09, 2026', expirySort: 20260609, items: 2,  total: 324.00,  status: 'expired'      },
-        { num: 'QUO-2026-00054', submitted: 'Apr 25, 2026', submittedSort: 20260425, expiry: 'May 25, 2026', expirySort: 20260525, items: 7,  total: 3900.00, status: 'ordered'      },
-        { num: 'QUO-2026-00047', submitted: 'Apr 12, 2026', submittedSort: 20260412, expiry: 'May 12, 2026', expirySort: 20260512, items: 3,  total: 780.00,  status: 'declined'     },
-        { num: 'QUO-2026-00039', submitted: 'Mar 30, 2026', submittedSort: 20260330, expiry: 'Apr 29, 2026', expirySort: 20260429, items: 4,  total: 2100.00, status: 'ordered'      },
-        { num: 'QUO-2026-00031', submitted: 'Mar 10, 2026', submittedSort: 20260310, expiry: 'Apr 09, 2026', expirySort: 20260409, items: 2,  total: 415.00,  status: 'expired'      },
-        { num: 'QUO-2025-00198', submitted: 'Dec 05, 2025', submittedSort: 20251205, expiry: 'Jan 04, 2026', expirySort: 20260104, items: 5,  total: 1820.00, status: 'ordered'      }
+        { num: 'QUO-2026-00089', submitted: 'Jun 18, 2026', submittedSort: 20260618, expiry: 'Jul 25, 2026', expirySort: 20260725, items: 4,  total: 2840.00, status: 'quoted',       orderedFor: 'ABC Industries'      },
+        { num: 'QUO-2026-00085', submitted: 'Jun 15, 2026', submittedSort: 20260615, expiry: 'Jun 29, 2026', expirySort: 20260629, items: 2,  total: 612.50,  status: 'approved',     orderedFor: 'Smith Manufacturing' },
+        { num: 'QUO-2026-00081', submitted: 'Jun 10, 2026', submittedSort: 20260610, expiry: 'Jul 03, 2026', expirySort: 20260703, items: 6,  total: 5100.00, status: 'quoted',       orderedFor: 'Pacific Precision'   },
+        { num: 'QUO-2026-00077', submitted: 'Jun 05, 2026', submittedSort: 20260605, expiry: 'Jul 10, 2026', expirySort: 20260710, items: 1,  total: null,    status: 'under-review', orderedFor: 'ABC Industries'      },
+        { num: 'QUO-2026-00072', submitted: 'May 28, 2026', submittedSort: 20260528, expiry: 'Jun 27, 2026', expirySort: 20260627, items: 3,  total: 1450.00, status: 'quoted',       orderedFor: 'Delta Components'    },
+        { num: 'QUO-2026-00068', submitted: 'May 20, 2026', submittedSort: 20260520, expiry: null,           expirySort: 0,        items: 5,  total: null,    status: 'submitted',    orderedFor: 'Apex Machining'      },
+        { num: 'QUO-2026-00061', submitted: 'May 10, 2026', submittedSort: 20260510, expiry: 'Jun 09, 2026', expirySort: 20260609, items: 2,  total: 324.00,  status: 'expired',      orderedFor: null                  },
+        { num: 'QUO-2026-00054', submitted: 'Apr 25, 2026', submittedSort: 20260425, expiry: 'May 25, 2026', expirySort: 20260525, items: 7,  total: 3900.00, status: 'ordered',      orderedFor: 'Smith Manufacturing' },
+        { num: 'QUO-2026-00047', submitted: 'Apr 12, 2026', submittedSort: 20260412, expiry: 'May 12, 2026', expirySort: 20260512, items: 3,  total: 780.00,  status: 'declined',     orderedFor: null                  },
+        { num: 'QUO-2026-00039', submitted: 'Mar 30, 2026', submittedSort: 20260330, expiry: 'Apr 29, 2026', expirySort: 20260429, items: 4,  total: 2100.00, status: 'ordered',      orderedFor: 'Delta Components'    },
+        { num: 'QUO-2026-00031', submitted: 'Mar 10, 2026', submittedSort: 20260310, expiry: 'Apr 09, 2026', expirySort: 20260409, items: 2,  total: 415.00,  status: 'expired',      orderedFor: null                  },
+        { num: 'QUO-2025-00198', submitted: 'Dec 05, 2025', submittedSort: 20251205, expiry: 'Jan 04, 2026', expirySort: 20260104, items: 5,  total: 1820.00, status: 'ordered',      orderedFor: 'Pacific Precision'   }
       ];
 
       var PAGE_SIZE = 8;
@@ -570,15 +615,35 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
+      var OPEN_STATUSES = { 'submitted': true, 'under-review': true, 'quoted': true, 'approved': true };
+
+      // Populate Ordered For dropdown with unique customer names from quote data
+      (function () {
+        var sel = document.getElementById('customerFilter');
+        if (!sel) return;
+        var names = ALL_QUOTES
+          .map(function (q) { return q.orderedFor; })
+          .filter(function (v, i, a) { return v && a.indexOf(v) === i; })
+          .sort();
+        names.forEach(function (n) {
+          var opt = document.createElement('option');
+          opt.value = n;
+          opt.textContent = n;
+          sel.appendChild(opt);
+        });
+      })();
+
       function applyFilters() {
-        var query  = (document.getElementById('quoteSearch').value || '').toLowerCase().trim();
-        var status = document.getElementById('statusFilter').value;
-        var sort   = document.getElementById('sortFilter').value;
+        var query    = (document.getElementById('quoteSearch').value || '').toLowerCase().trim();
+        var status   = document.getElementById('statusFilter').value;
+        var customer = document.getElementById('customerFilter').value;
+        var sort     = document.getElementById('sortFilter').value;
 
         filteredQuotes = ALL_QUOTES.filter(function (q) {
-          var matchQuery  = !query || q.num.toLowerCase().indexOf(query) !== -1;
-          var matchStatus = !status || q.status === status;
-          return matchQuery && matchStatus;
+          var matchQuery    = !query    || q.num.toLowerCase().indexOf(query) !== -1;
+          var matchStatus   = !status   || (status === 'open' ? !!OPEN_STATUSES[q.status] : q.status === status);
+          var matchCustomer = !customer || q.orderedFor === customer;
+          return matchQuery && matchStatus && matchCustomer;
         });
 
         if (sort === 'oldest') { filteredQuotes.sort(function (a, b) { return a.submittedSort - b.submittedSort; }); }
@@ -586,11 +651,43 @@
 
         currentPage = 1;
         render();
+
+        var clearBar = document.getElementById('clearFilterBar');
+        if (clearBar) clearBar.classList.toggle('visible', !!(status || customer));
       }
 
       window.applyFilters = applyFilters;
 
-      render();
+      var clearFilterBtn = document.getElementById('clearFilterBtn');
+      if (clearFilterBtn) {
+        clearFilterBtn.addEventListener('click', function () {
+          document.getElementById('statusFilter').value   = '';
+          document.getElementById('customerFilter').value = '';
+          applyFilters();
+        });
+      }
+
+      // Set Home breadcrumb to the correct dashboard based on role
+      (function () {
+        var _u = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
+        var el = document.getElementById('breadcrumbHome');
+        if (el && _u && _u.role === 'dealer') el.href = 'dealer-dashboard.html';
+      })();
+
+      // Apply filter from URL params
+      var _params = new URLSearchParams(window.location.search);
+      var _filterParam   = _params.get('filter');
+      var _customerParam = _params.get('customer');
+      if (_filterParam) {
+        var sf = document.getElementById('statusFilter');
+        if (sf) sf.value = _filterParam;
+      }
+      if (_customerParam) {
+        var cf = document.getElementById('customerFilter');
+        if (cf) cf.value = _customerParam;
+      }
+
+      applyFilters();
 
     })();
   </script>

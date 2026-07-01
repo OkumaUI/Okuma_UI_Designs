@@ -756,6 +756,10 @@
       var cust = e.detail && e.detail.name ? e.detail.name : '';
       filterMachineItems(cust);
       syncMachinePickerLabel();
+      var navCartLinkEl = document.getElementById('navCartLink');
+      if (navCartLinkEl && isDealer) {
+        navCartLinkEl.href = cust ? 'dealer-cart.html?customer=' + encodeURIComponent(cust) : 'dealer-cart.html';
+      }
     });
 
     pickerBtn.addEventListener('click', function (e) {
