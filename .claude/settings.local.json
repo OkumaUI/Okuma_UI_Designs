@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "PowerShell($dir = \"C:\\\\Users\\\\ananmohapatra\\\\OneDrive - Deloitte \\(O365D\\)\\\\Okuma Commerce - Implementation\\\\Claude Operations\\\\Okuma_UI_Designs\"; Get-Content -Path \"$dir\\\\create-order.html\" | Select-String -Pattern \"confirm|approval|modal|dialog|address\" -Context 1 | head -100)",
-      "PowerShell($dir = \"C:\\\\Users\\\\ananmohapatra\\\\OneDrive - Deloitte \\(O365D\\)\\\\Okuma Commerce - Implementation\\\\Claude Operations\\\\Okuma_UI_Designs\"; Get-Content -Path \"$dir\\\\create-order.html\" | Select-String -Pattern \"confirm|approval|modal|dialog|address\" -Context 1 | Select-Object -First 100)"
+      "PowerShell($dir = \"C:\\\\Users\\\\ananmohapatra\\\\OneDrive - Deloitte \\(O365D\\)\\\\Okuma Commerce - Implementation\\\\Claude Operations\\\\Okuma_UI_Designs\"; Get-Content -Path \"$dir\\\\create-order.html\" | Select-String -Pattern \"confirm|approval|modal|dialog|address\" -Context 1 | Select-Object -First 100)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(echo \"exit: $?\")",
+      "Bash(awk '/CUST_DATA = \\\\{/,0' dealer-dashboard.html)",
+      "Bash(grep -nE \"^\\\\s*'[A-Za-z].*': \\\\{$\" dealer-dashboard.html)",
+      "Bash(awk '/CUST_DATA = \\\\{/,/^      \\\\};/' dealer-dashboard.html)"
     ]
   }
 }

@@ -348,54 +348,54 @@
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .modal-overlay {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.5);
-      z-index: 1000;
+      z-index: 9999;
       display: none;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
       padding: 16px;
       overflow-y: auto;
-      overflow-x: hidden;
     }
     .modal-overlay.is-open { display: flex; }
 
     .modal {
       width: 100%;
       max-width: 560px;
-      max-height: 85vh;
+      max-height: 90vh;
       overflow: auto;
       background: #fff;
       border-radius: 2px;
       box-shadow: 0 12px 24px rgba(0,0,0,0.25);
       display: flex;
       flex-direction: column;
-      margin: auto 0;
+      margin: auto;
     }
 
     .modal__header {
       height: 60px;
       background: #005EB8;
+      border-radius: 2px 2px 0 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px;
+      padding: 0 20px;
+      flex-shrink: 0;
     }
     .modal__title { font-size: 18px; font-weight: 700; color: #fff; }
     .modal__close {
-      width: 20px;
-      height: 20px;
       border: none;
       background: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0;
+      padding: 4px;
     }
+    .modal__close:hover { opacity: .8; }
 
     .modal__body {
-      padding: 32px;
+      padding: 28px 32px 24px;
       display: flex;
       flex-direction: column;
       gap: 24px;
@@ -464,19 +464,20 @@
     .modal__actions { display: flex; gap: 12px; }
     .modal-btn {
       flex: 1;
-      height: 38px;
+      height: 40px;
       border-radius: 2px;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: background .15s;
     }
     .modal-btn--cancel { background: transparent; border: 1px solid #005EB8; color: #005EB8; }
-    .modal-btn--cancel:hover { background: #F0F6FC; }
-    .modal-btn--proceed { background: #005EB8; border: none; color: #fff; }
+    .modal-btn--cancel:hover { background: #F0F6FF; }
+    .modal-btn--proceed { background: #005EB8; border: 1px solid #005EB8; color: #fff; }
     .modal-btn--proceed:hover { background: #0B308E; }
   </style>
 </head>
@@ -513,7 +514,7 @@
               <div class="kpi-tile__label">Open Quotes</div>
               <div class="kpi-tile__num">3</div>
             </a>
-            <a class="kpi-tile" href="profile.html?tab=machines">
+            <a class="kpi-tile" href="my-machines.html">
               <div class="kpi-tile__label">Registered Machines</div>
               <div class="kpi-tile__num">5</div>
             </a>
@@ -525,6 +526,13 @@
           <p class="account-summary__title">Account Summary</p>
 
           <!-- Contact info -->
+          <div class="account-summary__row">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M2 13V7l6-4 6 4v6a1 1 0 01-1 1H3a1 1 0 01-1-1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+              <path d="M6 13V9h4v4" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+            </svg>
+            Precision Parts Co.
+          </div>
           <div class="account-summary__row">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 2h3l1.5 3.5-1.75 1.25a9 9 0 004.5 4.5L11.5 9.5 15 11v3a1 1 0 01-1 1C6.82 15 1 9.18 1 3a1 1 0 011-1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
@@ -566,7 +574,7 @@
       <section class="section">
         <div class="section__head">
           <h2 class="section__title">My Machines</h2>
-          <a href="#" class="section__link">View All →</a>
+          <a href="my-machines.html" class="section__link">View All →</a>
         </div>
 
         <div class="machine-grid">

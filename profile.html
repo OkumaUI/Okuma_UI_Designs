@@ -231,21 +231,26 @@
 
     /* Address modal */
     .addr-modal-overlay {
-      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,.45); z-index: 9999;
-      align-items: flex-start; justify-content: center; padding: 16px; overflow-y: auto;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 9999;
+      align-items: center; justify-content: center; padding: 16px; overflow-y: auto;
     }
-    .addr-modal-overlay.open { display: flex; }
+    .addr-modal-overlay.is-open { display: flex; }
     .addr-modal {
-      background: #fff; border-radius: 8px; padding: 32px 28px 24px;
-      width: 520px; max-width: 100%; box-shadow: 0 8px 40px rgba(0,0,0,.18);
-      display: flex; flex-direction: column; gap: 20px;
-      max-height: 85vh; overflow-y: auto; margin: auto 0;
+      background: #fff; border-radius: 2px;
+      width: 100%; max-width: 520px; box-shadow: 0 12px 24px rgba(0,0,0,.25);
+      display: flex; flex-direction: column;
+      max-height: 90vh; overflow: hidden; margin: auto;
     }
-    .addr-modal__head { display: flex; align-items: center; justify-content: space-between; }
-    .addr-modal__title { font-size: 18px; font-weight: 700; color: #2C2A29; }
-    .addr-modal__close { background: none; border: none; cursor: pointer; color: #6B7280; padding: 4px; line-height: 1; }
-    .addr-modal__close:hover { color: #1A1A1A; }
+    .addr-modal__hdr {
+      height: 60px; background: #005EB8; border-radius: 2px 2px 0 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; flex-shrink: 0;
+    }
+    .addr-modal__title { font-size: 18px; font-weight: 700; color: #fff; }
+    .addr-modal__close { background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; }
+    .addr-modal__close:hover { opacity: .8; }
+    .addr-modal__bdy { padding: 28px 32px 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
     .addr-form-row { display: flex; gap: 12px; flex-wrap: wrap; }
     .addr-form-field { display: flex; flex-direction: column; gap: 6px; flex: 1; }
     .addr-form-field label { font-size: 12px; font-weight: 700; color: #6B7280; }
@@ -256,19 +261,20 @@
     }
     .addr-form-field input:focus { border-color: #005EB8; }
     .addr-form-field input::placeholder { color: #9E9E9E; }
-    .addr-modal__actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 4px; }
+    .addr-modal__divider { height: 1px; background: #E0E0E0; }
+    .addr-modal__actions { display: flex; gap: 12px; }
     .addr-modal__save {
-      height: 40px; padding: 0 24px; background: #005EB8; color: #fff;
-      border: none; border-radius: 4px; font-family: inherit; font-size: 14px;
-      font-weight: 700; cursor: pointer; transition: background 0.15s;
+      flex: 1; height: 40px; background: #005EB8; color: #fff;
+      border: 1px solid #005EB8; border-radius: 2px; font-family: inherit; font-size: 14px;
+      font-weight: 600; cursor: pointer; transition: background 0.15s;
     }
-    .addr-modal__save:hover { background: #0052A3; }
+    .addr-modal__save:hover { background: #0B308E; }
     .addr-modal__cancel {
-      height: 40px; padding: 0 20px; background: transparent;
-      border: 1px solid #6E6E6E; border-radius: 4px; font-family: inherit;
-      font-size: 14px; font-weight: 500; color: #4B4B4B; cursor: pointer;
+      flex: 1; height: 40px; background: transparent;
+      border: 1px solid #005EB8; border-radius: 2px; font-family: inherit;
+      font-size: 14px; font-weight: 600; color: #005EB8; cursor: pointer;
     }
-    .addr-modal__cancel:hover { background: #F0F0F0; }
+    .addr-modal__cancel:hover { background: #F0F6FF; }
 
     /* ── MY MACHINES ── */
     .mach-search-field {
@@ -315,31 +321,33 @@
       background: none; border: none; cursor: pointer; text-decoration: none; padding: 4px 0;
     }
     .text-link:hover { text-decoration: underline; }
+    .text-link:disabled { color: #BDBDBD; cursor: not-allowed; }
 
     /* ── BROWSE PARTS BOOK MODAL ── */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); z-index: 1000;
-      display: none; align-items: flex-start; justify-content: center;
-      padding: 16px; overflow-y: auto; overflow-x: hidden;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 9999;
+      display: none; align-items: center; justify-content: center;
+      padding: 16px; overflow-y: auto;
     }
     .modal-overlay.is-open { display: flex; }
     .modal {
-      width: 100%; max-width: 560px; max-height: 85vh; overflow: auto;
+      width: 100%; max-width: 560px; max-height: 90vh; overflow: auto;
       background: #fff; border-radius: 2px;
       box-shadow: 0 12px 24px rgba(0,0,0,0.25);
-      display: flex; flex-direction: column; margin: auto 0;
+      display: flex; flex-direction: column; margin: auto;
     }
     .modal__header {
-      height: 60px; background: #005EB8;
-      display: flex; align-items: center; justify-content: space-between; padding: 20px;
+      height: 60px; background: #005EB8; border-radius: 2px 2px 0 0;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0;
     }
     .modal__title { font-size: 18px; font-weight: 700; color: #fff; }
     .modal__close {
-      width: 20px; height: 20px; border: none; background: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; padding: 0;
+      border: none; background: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; padding: 4px;
     }
-    .modal__body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+    .modal__close:hover { opacity: .8; }
+    .modal__body { padding: 28px 32px 24px; display: flex; flex-direction: column; gap: 24px; }
     .modal__instruction { font-size: 14px; font-weight: 400; color: #4B4B4B; }
     .modal__book-list { display: flex; flex-direction: column; gap: 16px; }
     .book-option {
@@ -362,14 +370,15 @@
     .modal__divider { height: 1px; background: #E0E0E0; }
     .modal__actions { display: flex; gap: 12px; }
     .modal-btn {
-      flex: 1; height: 38px; border-radius: 2px;
+      flex: 1; height: 40px; border-radius: 2px;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px; font-weight: 500; cursor: pointer;
+      font-size: 14px; font-weight: 600; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
     }
     .modal-btn--cancel { background: transparent; border: 1px solid #005EB8; color: #005EB8; }
-    .modal-btn--cancel:hover { background: #F0F6FC; }
-    .modal-btn--proceed { background: #005EB8; border: none; color: #fff; }
+    .modal-btn--cancel:hover { background: #F0F6FF; }
+    .modal-btn--proceed { background: #005EB8; border: 1px solid #005EB8; color: #fff; }
     .modal-btn--proceed:hover { background: #0B308E; }
 
     /* ── RESPONSIVE ── */
@@ -391,16 +400,15 @@
       .tab-panel { padding: 20px 16px; }
       .section-divider { margin: 20px 0; }
       .profile-data-label { width: 120px; }
-      .addr-modal-overlay { padding: 64px 16px 16px; }
+      .addr-modal__bdy { padding: 20px 16px 16px; }
       .machine-row__right { width: 100%; justify-content: flex-start; }
       #panel-profile .form-col { max-width: 100%; }
     }
     @media (max-width: 480px) {
       .profile-identity__name { font-size: 18px; }
-      .addr-modal { padding: 20px 16px 16px; }
+      .addr-modal__bdy { padding: 16px; }
       .addr-form-row { flex-direction: column; }
       .addr-modal__actions { flex-direction: column-reverse; }
-      .addr-modal__save, .addr-modal__cancel { width: 100%; }
     }
     @media (max-width: 414px) { .tab-btn { padding: 12px; font-size: 12px; } }
   </style>
@@ -599,41 +607,44 @@
         <!-- Address request modal -->
         <div class="addr-modal-overlay" id="addrModalOverlay">
           <div class="addr-modal" role="dialog" aria-modal="true" aria-labelledby="addrModalTitle">
-            <div class="addr-modal__head">
+            <div class="addr-modal__hdr">
               <span class="addr-modal__title" id="addrModalTitle">Request New Address</span>
               <button type="button" class="addr-modal__close" id="addrModalClose" aria-label="Close">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
               </button>
             </div>
-            <div class="addr-form-row">
-              <div class="addr-form-field">
-                <label for="am-label">Address Label</label>
-                <input type="text" id="am-label" placeholder="e.g. Head Office">
+            <div class="addr-modal__bdy">
+              <div class="addr-form-row">
+                <div class="addr-form-field">
+                  <label for="am-label">Address Label</label>
+                  <input type="text" id="am-label" placeholder="e.g. Head Office">
+                </div>
               </div>
-            </div>
-            <div class="addr-form-row">
-              <div class="addr-form-field" style="flex:2">
-                <label for="am-street">Street Address</label>
-                <input type="text" id="am-street" placeholder="123 Main Street">
+              <div class="addr-form-row">
+                <div class="addr-form-field" style="flex:2">
+                  <label for="am-street">Street Address</label>
+                  <input type="text" id="am-street" placeholder="123 Main Street">
+                </div>
               </div>
-            </div>
-            <div class="addr-form-row">
-              <div class="addr-form-field">
-                <label for="am-city">City</label>
-                <input type="text" id="am-city" placeholder="City">
+              <div class="addr-form-row">
+                <div class="addr-form-field">
+                  <label for="am-city">City</label>
+                  <input type="text" id="am-city" placeholder="City">
+                </div>
+                <div class="addr-form-field">
+                  <label for="am-state">State</label>
+                  <input type="text" id="am-state" placeholder="State">
+                </div>
+                <div class="addr-form-field">
+                  <label for="am-zip">ZIP</label>
+                  <input type="text" id="am-zip" placeholder="00000">
+                </div>
               </div>
-              <div class="addr-form-field">
-                <label for="am-state">State</label>
-                <input type="text" id="am-state" placeholder="State">
+              <div class="addr-modal__divider"></div>
+              <div class="addr-modal__actions">
+                <button type="button" class="addr-modal__cancel" id="addrModalCancel">Cancel</button>
+                <button type="button" class="addr-modal__save" id="addrModalSave">Submit Request</button>
               </div>
-              <div class="addr-form-field">
-                <label for="am-zip">ZIP</label>
-                <input type="text" id="am-zip" placeholder="00000">
-              </div>
-            </div>
-            <div class="addr-modal__actions">
-              <button type="button" class="addr-modal__cancel" id="addrModalCancel">Cancel</button>
-              <button type="button" class="addr-modal__save" id="addrModalSave">Submit Request</button>
             </div>
           </div>
         </div>
@@ -706,6 +717,25 @@
                   INSTALLED
                 </span>
                 <button class="text-link" onclick="openPartsModal('MULTUS U3000', 'MU-9102-L')" aria-label="Browse parts for MULTUS U3000">
+                  Browse Parts →
+                </button>
+              </div>
+            </div>
+
+            <div class="machine-row" data-name="GENOS M460V" data-serial="GN-7745-R">
+              <div class="machine-row__info">
+                <span class="machine-row__name">GENOS M460V</span>
+                <span class="machine-row__serial">Serial: GN-7745-R</span>
+              </div>
+              <div class="machine-row__right">
+                <span class="pending-install-badge">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                    <circle cx="5" cy="5" r="4.25" stroke="#92400E" stroke-width="1.5"/>
+                    <path d="M5 3v2.5l1.5 1.5" stroke="#92400E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  PENDING INSTALLATION
+                </span>
+                <button class="text-link" disabled aria-label="Browse parts unavailable until installed">
                   Browse Parts →
                 </button>
               </div>
@@ -1028,18 +1058,18 @@
       document.getElementById('am-city').value   = '';
       document.getElementById('am-state').value  = '';
       document.getElementById('am-zip').value    = '';
-      overlay.classList.add('open');
+      overlay.classList.add('is-open');
       document.getElementById('am-label').focus();
     }
 
-    function closeModal() { overlay.classList.remove('open'); }
+    function closeModal() { overlay.classList.remove('is-open'); }
 
     addBtn.addEventListener('click', openModal);
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal();
     });
 
     saveBtn.addEventListener('click', function () {

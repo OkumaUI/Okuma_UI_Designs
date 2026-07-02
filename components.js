@@ -51,11 +51,11 @@
     var custPickHTML =
       '<div class="customer-picker" id="customerPicker">' +
         '<button class="customer-picker__btn" id="customerPickerBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Change customer context">' +
-          '<span id="customerPickerLabel">Order for: Stock Order</span>' +
+          '<span id="customerPickerLabel">Order for: Stock Order (Self)</span>' +
           '<svg class="customer-picker__chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2.5 3.5L5 6L7.5 3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
         '</button>' +
         '<div class="customer-picker__menu" id="customerPickerMenu" aria-label="Select customer">' +
-          '<div class="cust-stock-item" id="custStockItem" data-customer="" role="option" tabindex="0">Stock Order</div>' +
+          '<div class="cust-stock-item" id="custStockItem" data-customer="" role="option" tabindex="0">Stock Order (Self)</div>' +
           '<div class="cust-search-wrap">' +
             '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/></svg>' +
             '<input id="custSearchInput" type="text" class="cust-search-input" placeholder="Search customers…" autocomplete="off" aria-label="Search customers">' +
@@ -495,17 +495,20 @@
       var cswSharedStyle = document.createElement('style');
       cswSharedStyle.id = 'okm-csw-styles';
       cswSharedStyle.textContent =
-        '.csw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;}' +
+        '.csw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:16px;}' +
         '.csw-overlay.open{display:flex;}' +
-        '.csw-modal{background:#fff;border-radius:8px;padding:32px 28px 24px;max-width:420px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.22);}' +
-        '.csw-icon{width:48px;height:48px;border-radius:50%;background:#FFF3E0;color:#E65100;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;line-height:1;}' +
-        '.csw-title{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:18px;font-weight:700;color:#1A1A1A;margin:0 0 10px;}' +
-        '.csw-body{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:14px;color:#4B4B4B;line-height:1.6;margin:0 0 24px;}' +
-        '.csw-actions{display:flex;gap:12px;justify-content:center;}' +
-        '.csw-btn{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;padding:10px 22px;border-radius:4px;cursor:pointer;transition:background .15s,color .15s;}' +
-        '.csw-btn--cancel{background:transparent;border:1.5px solid #005EB8;color:#005EB8;}' +
-        '.csw-btn--cancel:hover{background:#F0F6FC;}' +
-        '.csw-btn--confirm{background:#005EB8;border:1.5px solid #005EB8;color:#fff;}' +
+        '.csw-modal{width:100%;max-width:480px;background:#fff;border-radius:2px;box-shadow:0 12px 24px rgba(0,0,0,.25);display:flex;flex-direction:column;margin:auto;}' +
+        '.csw-modal__hdr{height:60px;background:#005EB8;border-radius:2px 2px 0 0;display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;}' +
+        '.csw-modal__ttl{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:18px;font-weight:700;color:#fff;margin:0;}' +
+        '.csw-modal__cls{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;}' +
+        '.csw-modal__cls:hover{opacity:.8;}' +
+        '.csw-modal__bdy{padding:28px 32px 24px;display:flex;flex-direction:column;gap:20px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:14px;color:#4B4B4B;line-height:1.6;}' +
+        '.csw-modal__div{height:1px;background:#E0E0E0;}' +
+        '.csw-modal__act{display:flex;gap:12px;}' +
+        '.csw-btn{flex:1;height:40px;border-radius:2px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,color .15s;}' +
+        '.csw-btn--cancel{background:transparent;border:1px solid #005EB8;color:#005EB8;}' +
+        '.csw-btn--cancel:hover{background:#F0F6FF;}' +
+        '.csw-btn--confirm{background:#005EB8;border:1px solid #005EB8;color:#fff;}' +
         '.csw-btn--confirm:hover{background:#0B308E;}';
       document.head.appendChild(cswSharedStyle);
     }
@@ -517,23 +520,32 @@
     machSwitchEl.id        = 'machSwitchOverlay';
     machSwitchEl.innerHTML =
       '<div class="csw-modal" role="dialog" aria-modal="true" aria-labelledby="machSwitchTitle">' +
-        '<div class="csw-icon">!</div>' +
-        '<h2 class="csw-title" id="machSwitchTitle">Switch Machine?</h2>' +
-        '<p class="csw-body" id="machSwitchBody"></p>' +
-        '<div class="csw-actions">' +
-          '<button class="csw-btn csw-btn--cancel" id="machSwitchCancel">Cancel</button>' +
-          '<button class="csw-btn csw-btn--confirm" id="machSwitchConfirm">Switch Machine</button>' +
+        '<div class="csw-modal__hdr">' +
+          '<h2 class="csw-modal__ttl" id="machSwitchTitle">Switch Machine?</h2>' +
+          '<button class="csw-modal__cls" id="machSwitchClose" aria-label="Close">' +
+            '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>' +
+          '</button>' +
+        '</div>' +
+        '<div class="csw-modal__bdy">' +
+          '<p id="machSwitchBody"></p>' +
+          '<div class="csw-modal__div"></div>' +
+          '<div class="csw-modal__act">' +
+            '<button class="csw-btn csw-btn--cancel" id="machSwitchCancel">Cancel</button>' +
+            '<button class="csw-btn csw-btn--confirm" id="machSwitchConfirm">Switch Machine</button>' +
+          '</div>' +
         '</div>' +
       '</div>';
     document.body.appendChild(machSwitchEl);
-    var machSwitchBody    = document.getElementById('machSwitchBody');
-    var machSwitchCancel  = document.getElementById('machSwitchCancel');
-    var machSwitchConfirm = document.getElementById('machSwitchConfirm');
+    var machSwitchBody    = machSwitchEl.querySelector('#machSwitchBody');
+    var machSwitchCancel  = machSwitchEl.querySelector('#machSwitchCancel');
+    var machSwitchConfirm = machSwitchEl.querySelector('#machSwitchConfirm');
+    var machSwitchClose   = machSwitchEl.querySelector('#machSwitchClose');
     function showMachSwitchModal(name) {
       machSwitchBody.innerHTML = 'Switching to <strong>' + name + '</strong> will update your active machine context across the portal and will clear your cart. Are you sure you want to switch?';
       machSwitchEl.classList.add('open');
     }
     function hideMachSwitchModal() { machSwitchEl.classList.remove('open'); pendingMach = null; }
+    machSwitchClose.addEventListener('click', hideMachSwitchModal);
     machSwitchCancel.addEventListener('click', hideMachSwitchModal);
     machSwitchConfirm.addEventListener('click', function () {
       if (pendingMach) {
@@ -542,6 +554,7 @@
         window.dispatchEvent(new CustomEvent('okuma:machineChanged', { detail: { name: pendingMach } }));
       }
       hideMachSwitchModal();
+      window.location = isMachDealer ? 'dealer-dashboard.html' : 'dashboard.html';
     });
     machSwitchEl.addEventListener('click', function (e) { if (e.target === machSwitchEl) hideMachSwitchModal(); });
 
@@ -682,7 +695,17 @@
         if (name === current) { closePicker(); return; }
         closePicker();
         pendingMach = name;
-        showMachSwitchModal(name);
+        /* If this page already has its own machine-switch modal, skip ours —
+           fire the event directly and let the page handle confirmation. */
+        var pageOwnModal = document.getElementById('machSwitchOverlay');
+        if (pageOwnModal && pageOwnModal !== machSwitchEl) {
+          addRecentMachine(pendingMach);
+          setActiveMachine(pendingMach);
+          window.dispatchEvent(new CustomEvent('okuma:machineChanged', { detail: { name: pendingMach } }));
+          pendingMach = null;
+        } else {
+          showMachSwitchModal(name);
+        }
       });
     }
 
@@ -765,22 +788,30 @@
     cswEl.id = 'custSwitchOverlay';
     cswEl.innerHTML =
       '<div class="csw-modal" role="dialog" aria-modal="true" aria-labelledby="custSwitchTitle">' +
-        '<div class="csw-icon">!</div>' +
-        '<h2 class="csw-title" id="custSwitchTitle">Switch Customer?</h2>' +
-        '<p class="csw-body" id="custSwitchBody"></p>' +
-        '<div class="csw-actions">' +
-          '<button class="csw-btn csw-btn--cancel" id="custSwitchCancel">Cancel</button>' +
-          '<button class="csw-btn csw-btn--confirm" id="custSwitchConfirm">Switch & Clear Cart</button>' +
+        '<div class="csw-modal__hdr">' +
+          '<h2 class="csw-modal__ttl" id="custSwitchTitle">Switch Customer?</h2>' +
+          '<button class="csw-modal__cls" id="custSwitchClose" aria-label="Close">' +
+            '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>' +
+          '</button>' +
+        '</div>' +
+        '<div class="csw-modal__bdy">' +
+          '<p id="custSwitchBody"></p>' +
+          '<div class="csw-modal__div"></div>' +
+          '<div class="csw-modal__act">' +
+            '<button class="csw-btn csw-btn--cancel" id="custSwitchCancel">Cancel</button>' +
+            '<button class="csw-btn csw-btn--confirm" id="custSwitchConfirm">Switch &amp; Clear Cart</button>' +
+          '</div>' +
         '</div>' +
       '</div>';
     document.body.appendChild(cswEl);
 
-    var cswBody    = document.getElementById('custSwitchBody');
-    var cswCancel  = document.getElementById('custSwitchCancel');
-    var cswConfirm = document.getElementById('custSwitchConfirm');
+    var cswBody    = cswEl.querySelector('#custSwitchBody');
+    var cswCancel  = cswEl.querySelector('#custSwitchCancel');
+    var cswConfirm = cswEl.querySelector('#custSwitchConfirm');
+    var cswClose   = cswEl.querySelector('#custSwitchClose');
 
     function showSwitchModal(toName) {
-      var label = toName ? ('<strong>' + toName + '</strong>') : '<strong>Stock Order</strong>';
+      var label = toName ? ('<strong>' + toName + '</strong>') : '<strong>Stock Order (Self)</strong>';
       cswBody.innerHTML = 'Switching to ' + label + ' will clear your current cart. Any unsaved items will be lost.';
       cswEl.classList.add('open');
     }
@@ -790,6 +821,7 @@
       setActiveCustomer(name);
       window.dispatchEvent(new CustomEvent('okuma:customerChanged', { detail: { name: name } }));
     }
+    cswClose.addEventListener('click', hideSwitchModal);
     cswCancel.addEventListener('click', hideSwitchModal);
     cswConfirm.addEventListener('click', function () { commitSwitch(pendingCust); hideSwitchModal(); window.location = 'dealer-dashboard.html'; });
     cswEl.addEventListener('click', function (e) { if (e.target === cswEl) hideSwitchModal(); });
@@ -860,7 +892,7 @@
     /* ── active customer ── */
     function setActiveCustomer(name) {
       localStorage.setItem('okmSelectedCustomer', name);
-      custPickerLabel.textContent = name ? 'Order for: ' + name : 'Order for: Stock Order';
+      custPickerLabel.textContent = name ? 'Order for: ' + name : 'Order for: Stock Order (Self)';
       custStockItem.classList.toggle('active', name === '');
       renderCustList(custSearchInput ? custSearchInput.value : '');
     }

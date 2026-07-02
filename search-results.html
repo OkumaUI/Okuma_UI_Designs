@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -20,102 +20,46 @@
       flex-direction: column;
     }
 
-    /* â"€â"€ MAIN AREA â"€â"€ */
     .main-area { flex: 1; min-width: 0; padding: 32px; overflow-x: hidden; }
 
-    /* Page head */
-    .sr-count { font-size: 13px; font-weight: 400; color: #717171; line-height: 1.2; }
-    .sr-title { font-size: 26px; font-weight: 700; color: #1A1A1A; margin-top: 8px; line-height: 1.2; }
+    /* ── PAGE HEAD ── */
+    .sr-title { font-size: 26px; font-weight: 700; color: #1A1A1A; line-height: 1.2; }
 
-    /* Two-column layout */
-    .sr-layout { display: flex; gap: 28px; margin-top: 28px; align-items: flex-start; min-width: 0; overflow-x: hidden; }
+    /* ── COMPATIBILITY PILLS ── */
+    .sr-meta { margin-top: 20px; }
 
-    /* â"€â"€ FILTERS PANEL (LEFT) â"€â"€ */
-    .filters {
-      width: 240px;
-      flex-shrink: 0;
-      min-width: 0;
+    .compat-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .compat-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      height: 36px; padding: 0 16px;
+      border: 1.5px solid #DEDEDE; border-radius: 100px;
       background: #fff;
-      border: 1px solid #E5E5E5;
-      border-radius: 4px;
-      padding: 20px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; font-weight: 500; color: #4B4B4B;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      white-space: nowrap;
     }
-    .filters__head { display: flex; align-items: center; gap: 8px; }
-    .filters__head svg { width: 16px; height: 16px; color: #1A1A1A; flex-shrink: 0; }
-    .filters__head-label { font-size: 14px; font-weight: 700; color: #1A1A1A; }
-
-    .filters__section-label {
-      font-size: 11px; font-weight: 700; color: #717171;
-      text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .filters__section--cat { margin-top: 20px; }
-    .filters__section--mc, .filters__section--price { margin-top: 24px; }
-
-    .filters__opts { display: flex; flex-direction: column; gap: 11px; margin-top: 12px; }
-    .check {
-      display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;
-    }
-    .check input {
-      appearance: none; -webkit-appearance: none;
-      width: 16px; height: 16px; flex-shrink: 0;
-      border: 1.5px solid #808080; border-radius: 3px; background: #fff;
-      cursor: pointer; position: relative; margin: 0;
-    }
-    .check input:checked { background: #005EB8; border-color: #005EB8; }
-    .check input:checked::after {
-      content: ''; position: absolute; left: 4.5px; top: 1.5px;
-      width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
-    }
-    .check__label { font-size: 13px; font-weight: 500; color: #1A1A1A; }
-
-    /* Price range */
-    .price-range {
-      width: 100%; margin-top: 14px;
-      appearance: none; -webkit-appearance: none;
-      height: 4px; border-radius: 2px; background: #E0E0E0; outline: none;
-      accent-color: #005EB8; cursor: pointer;
-    }
-    .price-range::-webkit-slider-thumb {
-      -webkit-appearance: none; appearance: none;
-      width: 16px; height: 16px; border-radius: 50%;
-      background: #005EB8; cursor: pointer; border: none;
-    }
-    .price-range::-moz-range-thumb {
-      width: 16px; height: 16px; border-radius: 50%;
-      background: #005EB8; cursor: pointer; border: none;
-    }
-    .price-range::-moz-range-track { height: 4px; border-radius: 2px; background: #E0E0E0; }
-    .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
-    .price-row__min { font-size: 12px; font-weight: 400; color: #717171; }
-    .price-row__max { font-size: 12px; font-weight: 500; color: #1A1A1A; }
-
-    /* â"€â"€ RESULTS AREA (RIGHT) â"€â"€ */
-    .results { flex: 1; min-width: 0; }
-
-    /* Sort bar */
-    .results-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
-    }
-    .results-bar__count { font-size: 13px; color: #717171; }
-    .filter-wrap { position: relative; flex-shrink: 0; }
-    .filter-select {
-      height: 42px; border: 1px solid #DEDEDE; border-radius: 4px;
-      padding: 0 36px 0 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 13px; font-weight: 500; color: #1A1A1A;
-      background: #fff; appearance: none; -webkit-appearance: none;
-      cursor: pointer; min-width: 160px;
-    }
-    .filter-select:focus { outline: none; border-color: #005EB8; }
-    .filter-wrap__chevron {
-      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-      pointer-events: none; color: #717171;
+    .compat-pill:hover:not(.active) { border-color: #005EB8; color: #005EB8; }
+    .compat-pill.active {
+      background: #005EB8; border-color: #005EB8;
+      color: #fff; font-weight: 700;
     }
 
-    .cards-grid { display: flex; flex-direction: column; gap: 8px; }
+    .pill-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 20px; height: 18px; padding: 0 5px;
+      border-radius: 9px;
+      font-size: 11px; font-weight: 700;
+      background: rgba(0,0,0,0.10);
+    }
+    .compat-pill.active .pill-count { background: rgba(255,255,255,0.25); }
 
-    /* â"€â"€ PART CARD - 3-zone grid layout â"€â"€ */
+    /* ── CARDS GRID ── */
+    .cards-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+
+    /* ── PART CARD — 3-zone grid ── */
     .part-card {
       background: #fff;
       border: 1px solid #E5E5E5;
@@ -135,9 +79,12 @@
       display: flex; flex-direction: column; gap: 5px;
       border-right: 1px solid #F0F0F0;
     }
+    .part-card__pn-row {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
     .part-card__pn {
       font-size: 11px; font-weight: 700; color: #005EB8;
-      letter-spacing: 0.6px; text-transform: uppercase; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      letter-spacing: 0.6px; text-transform: uppercase; flex-shrink: 0;
     }
     .part-card__name {
       font-size: 15px; font-weight: 700; color: #1A1A1A; line-height: 1.3;
@@ -150,7 +97,19 @@
       font-size: 12px; font-weight: 400; color: #6B7280;
     }
     .part-card__attr svg { width: 12px; height: 12px; flex-shrink: 0; color: #9E9E9E; }
-    .attr-sep { color: #D1D5DB; font-size: 12px; }
+
+    /* "For [machine]" chip — all cards */
+    .compat-chip {
+      display: inline-flex; align-items: center;
+      height: 18px; padding: 0 7px;
+      border-radius: 3px;
+      background: #F3F4F6; color: #6B7280;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .compat-chip--match {
+      background: #EBF5FF; color: #005EB8;
+    }
 
     /* Zone 2 - Availability */
     .part-card__avail {
@@ -159,19 +118,13 @@
       border-right: 1px solid #F0F0F0; align-self: stretch; justify-content: center;
     }
     .avail-status { display: flex; align-items: center; gap: 6px; }
-    .avail-dot {
-      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
-    }
+    .avail-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .avail-dot--in  { background: #208831; box-shadow: 0 0 0 2px #dcfce7; }
     .avail-dot--out { background: #9E9E9E; box-shadow: 0 0 0 2px #f3f4f6; }
-    .avail-text {
-      font-size: 12px; font-weight: 700;
-    }
+    .avail-text { font-size: 12px; font-weight: 700; }
     .avail-text--in  { color: #208831; }
     .avail-text--out { color: #9E9E9E; }
-    .avail-sub {
-      font-size: 11px; font-weight: 400; color: #9E9E9E; line-height: 1.4; padding-left: 13px;
-    }
+    .avail-sub { font-size: 11px; font-weight: 400; color: #9E9E9E; line-height: 1.4; padding-left: 13px; }
 
     /* Zone 3 - Price + CTA */
     .part-card__action {
@@ -182,7 +135,7 @@
     .part-card__price { font-size: 20px; font-weight: 800; color: #1A1A1A; line-height: 1; }
     .part-card__price--sale { color: #AD0000; }
     .part-card__price--original { font-size: 12px; font-weight: 400; color: #6E6E6E; text-decoration: line-through; line-height: 1; }
-    .part-card__unit  { font-size: 11px; color: #9E9E9E; margin-top: 2px; }
+    .part-card__unit { font-size: 11px; color: #9E9E9E; margin-top: 2px; }
 
     .add-btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
@@ -192,22 +145,60 @@
       transition: background 0.15s, color 0.15s;
     }
     .add-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
-    .add-btn--cart {
-      background: #005EB8; color: #fff; border: none;
-    }
+    .add-btn--cart { background: #005EB8; color: #fff; border: none; }
     .add-btn--cart:hover { background: #0052A3; }
-    .add-btn--quote {
-      background: #fff; color: #005EB8; border: 1.5px solid #005EB8;
-    }
+    .add-btn--quote { background: #fff; color: #005EB8; border: 1.5px solid #005EB8; }
     .add-btn--quote:hover { background: #EBF3FF; }
+    .add-btn--done { background: #F0FDF4 !important; color: #15803D !important; border: 1.5px solid #86EFAC !important; cursor: default; }
+    .add-btn--done:hover { background: #DCFCE7 !important; }
+
+    /* ── Cart Toast (matches parts-catalogue) ── */
+    @keyframes toast-in  { from { opacity:0; transform:translateX(60px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes toast-out { from { opacity:1; transform:translateX(0); }   to { opacity:0; transform:translateX(60px); } }
+    #cart-toast {
+      position: fixed; top: 28px; right: 28px;
+      min-width: 300px; max-width: 360px;
+      background: #fff; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none; flex-direction: row; overflow: hidden; z-index: 2000;
+      animation: toast-in 0.28s cubic-bezier(0.22,1,0.36,1);
+    }
+    #cart-toast.hiding { animation: toast-out 0.22s ease forwards; }
+    .toast-accent { width: 5px; flex-shrink: 0; background: #2E7D32; }
+    .toast-body { flex: 1; padding: 14px 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+    .toast-header { color: #2E7D32; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    #toast-name   { font-size: 14px; font-weight: 700; color: #111; }
+    #toast-partnum{ font-size: 14px; font-weight: 400; color: #6E6E6E; }
+    #toast-price  { font-size: 16px; font-weight: 700; color: #111; margin-top: 4px; }
+    #toast-close  { align-self: flex-start; margin: 10px 10px 0 0; background: none; border: none; cursor: pointer; font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px; flex-shrink: 0; }
+    #toast-close:hover { color: #111; }
+
+    /* ── Quote Modal (matches parts-catalogue) ── */
+    .modal-header { height: 60px; background: #005EB8; border-radius: 2px 2px 0 0; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+    .modal-header-left { display: flex; align-items: center; gap: 10px; }
+    .modal-title { font-size: 18px; font-weight: 700; color: #fff; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    #quote-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 9999; display: none;
+      align-items: center; justify-content: center;
+      padding: 16px; overflow-y: auto;
+    }
+    #quote-modal-overlay.is-open { display: flex; }
+    #quote-modal { width: 100%; max-width: 480px; max-height: 90vh; background: #fff; border-radius: 2px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); overflow: auto; margin: auto; }
+    .quote-modal__placeholder { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; padding: 40px 32px 36px; }
+    .quote-modal__icon { width: 52px; height: 52px; border-radius: 50%; background: #EEF3FF; display: flex; align-items: center; justify-content: center; color: #005EB8; }
+    .quote-modal__icon svg { width: 24px; height: 24px; }
+    .quote-modal__chip { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #005EB8; background: #EEF3FF; border-radius: 4px; padding: 3px 10px; }
+    .quote-modal__title { font-size: 17px; font-weight: 700; color: #1A1A1A; }
+    .quote-modal__part-ref { font-size: 12px; color: #717171; background: #F5F5F5; border-radius: 4px; padding: 6px 16px; font-family: 'Courier New', monospace; font-weight: 600; letter-spacing: 0.3px; }
+    .quote-modal__body { font-size: 13px; color: #717171; line-height: 1.6; max-width: 320px; }
+    .quote-modal__cta { width: 100%; height: 40px; background: #005EB8; color: #fff; border: none; border-radius: 2px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; transition: background 0.15s; margin-top: 4px; }
+    .quote-modal__cta:hover { background: #0B308E; }
 
     /* Empty state */
-    .no-results {
-      padding: 48px 20px; text-align: center;
-      font-size: 14px; color: #717171; font-weight: 400;
-    }
+    .no-results { padding: 48px 20px; text-align: center; font-size: 14px; color: #717171; }
 
-    /* Pagination */
+    /* ── PAGINATION ── */
     .pagination {
       display: flex; align-items: center; gap: 4px; margin-top: 24px; justify-content: flex-end;
       flex-wrap: wrap; overflow-x: auto;
@@ -229,100 +220,13 @@
 
     img, svg { max-width: 100%; }
 
-    /* â•â• RESPONSIVE â•â• */
-    /* ── FILTER DRAWER + TRIGGER BAR ─────────────────────────────── */
-
-    .filter-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45); z-index: 800;
-    }
-    .filter-overlay.visible { display: block; }
-
-    /* Mobile-only drawer elements — hidden on desktop */
-    .filters__drawer-head,
-    .filter-sort-mobile,
-    .filters__apply-wrap { display: none; }
-
-    .filters__drawer-head {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-bottom: 16px; border-bottom: 1px solid #E5E5E5; margin-bottom: 4px;
-    }
-    .filters__drawer-title { font-size: 15px; font-weight: 700; color: #1A1A1A; }
-    .filters__close-btn {
-      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-      background: none; border: none; cursor: pointer; color: #1A1A1A; border-radius: 50%;
-    }
-    .filters__close-btn:hover { background: #F0F0F0; }
-
-    .sort-radio-opts { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
-    .sort-radio-opt {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 14px; font-weight: 500; color: #1A1A1A; cursor: pointer;
-    }
-    .sort-radio-opt input { accent-color: #005EB8; width: 16px; height: 16px; margin: 0; flex-shrink: 0; }
-
-    .filters__apply-wrap { padding: 16px 0 4px; border-top: 1px solid #E5E5E5; margin-top: 16px; }
-    .filters__apply-btn {
-      width: 100%; height: 48px; background: #005EB8; color: #fff; border: none;
-      border-radius: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.15s;
-    }
-    .filters__apply-btn:hover { background: #0052A3; }
-
-    /* Sticky trigger bar — hidden on desktop */
-    .filter-trigger-bar {
-      display: none; position: fixed;
-      bottom: 0; left: 0; right: 0; height: 56px;
-      background: #fff; border-top: 1px solid #E5E5E5;
-      z-index: 700; box-shadow: 0 -2px 8px rgba(0,0,0,0.07);
-    }
-    .ftb-btn {
-      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: none; border: none; cursor: pointer;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px; font-weight: 600; color: #1A1A1A;
-    }
-    .ftb-btn:active { background: #F5F5F5; }
-    .ftb-sep { width: 1px; background: #E5E5E5; margin: 12px 0; flex-shrink: 0; }
-    .ftb-badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 18px; height: 18px; padding: 0 5px;
-      background: #005EB8; color: #fff; border-radius: 9px;
-      font-size: 10px; font-weight: 700;
-    }
-    .ftb-badge:empty { display: none; }
-
     /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .main-area { padding: 20px 20px 72px; }
-      .sr-layout { flex-direction: column; gap: 0; margin-top: 16px; align-items: stretch; }
-      .filter-trigger-bar { display: flex; }
-      .filter-wrap { display: none; }
-
-      /* Sidebar → bottom-sheet drawer */
-      .filters {
-        position: fixed; bottom: 56px; left: 0; right: 0;
-        width: auto; max-height: 78vh;
-        overflow-y: auto; -webkit-overflow-scrolling: touch;
-        border-radius: 16px 16px 0 0; border: none;
-        border-top: 1px solid #E0E0E0;
-        box-shadow: 0 -6px 32px rgba(0,0,0,0.14);
-        z-index: 810; padding: 20px 20px 0;
-        transform: translateY(calc(100% + 56px));
-        transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .filters.open { transform: translateY(0); }
-      .filters__drawer-head { display: flex; }
-      .filter-sort-mobile   { display: block; }
-      .filters__apply-wrap  { display: block; }
-      .filters__head        { display: none; }
-    }
-
     @media (max-width: 768px) {
-      .main-area { padding: 16px 16px 72px; }
+      .main-area { padding: 16px; }
       .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 12px; row-gap: 12px; width: 100%; }
       .part-card { grid-template-columns: 1fr; }
       .part-card__identity { border-right: none; border-bottom: 1px solid #F0F0F0; align-items: center; text-align: center; }
+      .part-card__pn-row { justify-content: center; }
       .part-card__attrs { justify-content: center; }
       .part-card__avail { border-right: none; border-bottom: 1px solid #F0F0F0; flex-direction: row; align-items: center; justify-content: center; gap: 16px; }
       .part-card__action { flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
@@ -332,36 +236,26 @@
     @media (max-width: 640px) { .sr-title { font-size: 22px; } }
 
     @media (max-width: 480px) {
-      .main-area { padding: 12px 12px 72px; }
+      .main-area { padding: 12px; }
       .sr-title { font-size: 20px; }
-      .results-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
       .part-card__price { font-size: 17px; }
       .pagination { justify-content: center; gap: 2px; }
     }
 
-    /* iPhone XR (414px): single column, card content centered */
     @media (max-width: 414px) {
       .cards-grid { display: flex; flex-direction: column; gap: 8px; }
-      .part-card__identity { align-items: center; text-align: center; }
-      .part-card__attrs { justify-content: center; }
-      .part-card__avail { justify-content: center; }
-      .part-card__action { justify-content: center; }
-      .part-card__price-wrap { align-items: center; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ HEADER â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
+  <!-- ── HEADER ── -->
   <div id="okuma-header"></div>
 
-  <!-- â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ PAGE â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
-  <!-- Filter backdrop overlay -->
-  <div class="filter-overlay" id="filterOverlay"></div>
-
+  <!-- ── PAGE ── -->
   <div class="app-body-shell">
 
-    <!-- SIDEBAR (no active item) -->
+    <!-- SIDEBAR -->
     <div id="okuma-sidebar" data-active=""></div>
 
     <!-- MAIN AREA -->
@@ -369,127 +263,82 @@
 
       <h1 class="sr-title" id="srTitle">All Parts</h1>
 
-      <div class="sr-layout">
-
-        <!-- FILTERS PANEL (sidebar on desktop, bottom-sheet drawer on mobile) -->
-        <aside class="filters" id="filterDrawer">
-
-          <!-- Drawer header — mobile only -->
-          <div class="filters__drawer-head">
-            <span class="filters__drawer-title">Filters &amp; Sort</span>
-            <button type="button" class="filters__close-btn" id="filterClose" aria-label="Close filters">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                <path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </button>
-          </div>
-
-          <!-- Sort section — mobile drawer only -->
-          <div class="filter-sort-mobile">
-            <div class="filters__section-label">Sort By</div>
-            <div class="sort-radio-opts" id="sortRadioGroup">
-              <label class="sort-radio-opt"><input type="radio" name="mob-sort" value="relevance" checked> Relevance</label>
-              <label class="sort-radio-opt"><input type="radio" name="mob-sort" value="price-asc"> Price: Low to High</label>
-              <label class="sort-radio-opt"><input type="radio" name="mob-sort" value="price-desc"> Price: High to Low</label>
-              <label class="sort-radio-opt"><input type="radio" name="mob-sort" value="name-asc"> Name: A &ndash; Z</label>
-            </div>
-          </div>
-
-          <!-- Desktop filters header -->
-          <div class="filters__head">
-            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1.5 2.5h13L9.5 8.5V13l-3 1.5V8.5L1.5 2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-            </svg>
-            <span class="filters__head-label">Filters</span>
-          </div>
-
-          <!-- Category -->
-          <div class="filters__section filters__section--cat">
-            <div class="filters__section-label">Filter by Category</div>
-            <div class="filters__opts" id="catOpts">
-              <label class="check"><input type="checkbox" data-filter="category" value="Spindle Assembly"><span class="check__label">Spindle Assembly</span></label>
-              <label class="check"><input type="checkbox" data-filter="category" value="Coolant System"><span class="check__label">Coolant System</span></label>
-              <label class="check"><input type="checkbox" data-filter="category" value="Axis Drive"><span class="check__label">Axis Drive</span></label>
-              <label class="check"><input type="checkbox" data-filter="category" value="Electrical Cabinet"><span class="check__label">Electrical Cabinet</span></label>
-              <label class="check"><input type="checkbox" data-filter="category" value="Tooling &amp; Fixtures"><span class="check__label">Tooling &amp; Fixtures</span></label>
-            </div>
-          </div>
-
-          <!-- Machine compatibility -->
-          <div class="filters__section filters__section--mc">
-            <div class="filters__section-label">Machine Compatibility</div>
-            <div class="filters__opts" id="mcOpts">
-              <label class="check"><input type="checkbox" data-filter="machine" value="LU300-M"><span class="check__label">LU300-M</span></label>
-              <label class="check"><input type="checkbox" data-filter="machine" value="GENOS M560-V"><span class="check__label">GENOS M560-V</span></label>
-              <label class="check"><input type="checkbox" data-filter="machine" value="MULTUS U3000"><span class="check__label">MULTUS U3000</span></label>
-              <label class="check"><input type="checkbox" data-filter="machine" value="LB2000 EX III"><span class="check__label">LB2000 EX III</span></label>
-            </div>
-          </div>
-
-          <!-- Price range -->
-          <div class="filters__section filters__section--price">
-            <div class="filters__section-label">Price Range</div>
-            <input type="range" class="price-range" id="priceRange" min="0" max="1000" value="1000" aria-label="Maximum price" aria-valuetext="$1000">
-            <div class="price-row">
-              <span class="price-row__min">$0</span>
-              <span class="price-row__max" id="priceMax">$1000</span>
-            </div>
-          </div>
-
-          <!-- Apply button — mobile drawer only -->
-          <div class="filters__apply-wrap">
-            <button type="button" class="filters__apply-btn" id="filterApply">Show Results</button>
-          </div>
-
-        </aside>
-
-        <!-- RESULTS -->
-        <section class="results">
-          <div class="results-bar">
-            <span class="results-bar__count" id="resultsBarCount"></span>
-            <div class="filter-wrap">
-              <select class="filter-select" id="sortSelect" aria-label="Sort results">
-                <option value="name-asc">Name: A &rarr; Z</option>
-                <option value="name-desc">Name: Z &rarr; A</option>
-              </select>
-              <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-          <div class="cards-grid" id="cardsGrid"></div>
-          <div class="pagination" id="pagination"></div>
-        </section>
-
+      <!-- Compatibility pills -->
+      <div class="sr-meta">
+        <div class="compat-pills" id="compatPills">
+          <button class="compat-pill active" data-tab="all" type="button">
+            All <span class="pill-count" id="pillCountAll">0</span>
+          </button>
+          <button class="compat-pill" data-tab="compatible" type="button">
+            Compatible <span class="pill-count" id="pillCountCompat">0</span>
+          </button>
+          <button class="compat-pill" data-tab="incompatible" type="button">
+            Not Compatible <span class="pill-count" id="pillCountIncompat">0</span>
+          </button>
+        </div>
       </div>
+
+      <div class="cards-grid" id="cardsGrid"></div>
+      <div class="pagination" id="pagination"></div>
+
     </main>
   </div>
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-  <!-- Sticky Filters & Sort bar — mobile/tablet only -->
-  <div class="filter-trigger-bar" id="filterTriggerBar">
-    <button type="button" class="ftb-btn" id="ftbFilters">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M1.5 2.5h13L9.5 8.5V13l-3 1.5V8.5L1.5 2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-      </svg>
-      Filters & Sort
-      <span class="ftb-badge" id="ftbBadge"></span>
-    </button>
-    <div class="ftb-sep"></div>
-    
-  </div>
 
+  <!-- ── FOOTER ── -->
   <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>
-
-
   <script src="components.js"></script>
 
-  <!-- â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ PAGE LOGIC â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ -->
+  <!-- Cart Toast (matches parts-catalogue) -->
+  <div id="cart-toast" role="status" aria-live="polite">
+    <div class="toast-accent"></div>
+    <div class="toast-body">
+      <div class="toast-header">&#10003; Added to Cart</div>
+      <div id="toast-name"></div>
+      <div id="toast-partnum"></div>
+      <div id="toast-price"></div>
+    </div>
+    <button id="toast-close" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <!-- Quote Modal (matches parts-catalogue) -->
+  <div id="quote-modal-overlay">
+    <div id="quote-modal" role="dialog" aria-modal="true" aria-labelledby="quote-modal-title">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
+          </svg>
+          <span class="modal-title" id="quote-modal-title">Add to Quote</span>
+        </div>
+        <button id="quote-modal-close" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;" type="button" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 5L15 15M15 5L5 15"/></svg>
+        </button>
+      </div>
+      <div class="quote-modal__placeholder">
+        <div class="quote-modal__icon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M8 12h8M8 8h5M8 16h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="quote-modal__chip">Coming Soon</span>
+        <p class="quote-modal__title">Design is coming soon</p>
+        <div class="quote-modal__part-ref" id="quote-part-ref">-</div>
+        <p class="quote-modal__body">
+          The Request a Quote flow is yet to be designed. This will allow you to submit out-of-stock parts for a pricing quote from Okuma.
+        </p>
+        <button class="quote-modal__cta" id="quote-modal-dismiss" type="button">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAGE LOGIC ── -->
   <script>
     (function () {
       'use strict';
 
-      /* Parts dataset - 30 parts across 4 machines */
+      /* Parts dataset */
       var PARTS = [
         /* LU300-M */
         { name: 'Spindle Bearing Unit',       number: 'E4809-045-017-A', category: 'Spindle Assembly',   machine: 'LU300-M',       price: 247.50, originalPrice: 329.00, inStock: true },
@@ -521,58 +370,180 @@
         { name: 'Control Relay Module',       number: 'EC809-033-012-B', category: 'Electrical Cabinet', machine: 'MULTUS U3000',  price: 128.00, inStock: false },
         /* LB2000 EX III */
         { name: 'Angular Contact Bearing',    number: 'E4809-045-009-D', category: 'Spindle Assembly',   machine: 'LB2000 EX III', price: 312.00, inStock: true },
+        { name: 'Spindle Housing Seal',       number: 'E4809-061-044-B', category: 'Spindle Assembly',   machine: 'LB2000 EX III', price: 189.00, inStock: true },
         { name: 'Coolant Nozzle Kit',         number: 'C4809-058-002-B', category: 'Coolant System',     machine: 'LB2000 EX III', price: 64.00,  inStock: true },
+        { name: 'Coolant Pump Assembly',      number: 'C4809-045-033-C', category: 'Coolant System',     machine: 'LB2000 EX III', price: 185.00, originalPrice: 240.00, inStock: true },
         { name: 'Servo Drive Belt',           number: 'A4809-072-015-E', category: 'Axis Drive',         machine: 'LB2000 EX III', price: 62.50,  inStock: true },
         { name: 'Ball Screw Assembly',        number: 'A4809-072-206-D', category: 'Axis Drive',         machine: 'LB2000 EX III', price: 498.00, inStock: true },
-        { name: 'Proximity Sensor',           number: 'EC809-033-045-C', category: 'Electrical Cabinet', machine: 'LB2000 EX III', price: 76.00,  inStock: true }
+        { name: 'Z-Axis Linear Guide Rail',   number: 'A4809-072-411-B', category: 'Axis Drive',         machine: 'LB2000 EX III', price: 376.00, inStock: false },
+        { name: 'Proximity Sensor',           number: 'EC809-033-045-C', category: 'Electrical Cabinet', machine: 'LB2000 EX III', price: 76.00,  inStock: true },
+        { name: 'Power Supply Board',         number: 'EC809-033-099-A', category: 'Electrical Cabinet', machine: 'LB2000 EX III', price: 214.00, inStock: true },
+        { name: 'Chuck Jaw Set',              number: 'T4809-091-071-A', category: 'Tooling & Fixtures', machine: 'LB2000 EX III', price: 134.00, originalPrice: 165.00, inStock: true },
+        /* GENOS L200E */
+        { name: 'Spindle Bearing Unit',       number: 'E4809-045-044-C', category: 'Spindle Assembly',   machine: 'GENOS L200E',   price: 247.50, inStock: true },
+        { name: 'Angular Contact Bearing',    number: 'E4809-045-010-E', category: 'Spindle Assembly',   machine: 'GENOS L200E',   price: 312.00, inStock: true },
+        { name: 'O-Ring Seal Kit',            number: 'E4809-045-092-L', category: 'Spindle Assembly',   machine: 'GENOS L200E',   price: 42.50,  originalPrice: 65.00, inStock: true },
+        { name: 'Coolant Pump Assembly',      number: 'C4809-045-044-D', category: 'Coolant System',     machine: 'GENOS L200E',   price: 185.00, inStock: true },
+        { name: 'Hydraulic Filter Kit',       number: 'C4809-058-088-F', category: 'Coolant System',     machine: 'GENOS L200E',   price: 98.00,  inStock: false },
+        { name: 'Ball Screw Assembly',        number: 'A4809-072-207-E', category: 'Axis Drive',         machine: 'GENOS L200E',   price: 498.00, inStock: true },
+        { name: 'X-Axis Servo Motor',         number: 'A4809-072-331-B', category: 'Axis Drive',         machine: 'GENOS L200E',   price: 548.00, originalPrice: 680.00, inStock: true },
+        { name: 'Control Relay Module',       number: 'EC809-033-013-C', category: 'Electrical Cabinet', machine: 'GENOS L200E',   price: 128.00, inStock: true },
+        { name: 'ATC Cam Follower',           number: 'T4809-091-056-D', category: 'Tooling & Fixtures', machine: 'GENOS L200E',   price: 92.00,  inStock: true },
+        { name: 'Tool Presetter Arm',         number: 'T4809-091-018-B', category: 'Tooling & Fixtures', machine: 'GENOS L200E',   price: 155.00, inStock: true },
+        /* SPACE TURN LB3000 */
+        { name: 'Spindle Bearing Unit',       number: 'E4809-061-033-C', category: 'Spindle Assembly',   machine: 'SPACE TURN LB3000', price: 247.50, inStock: true },
+        { name: 'Spindle Housing Seal',       number: 'E4809-061-055-C', category: 'Spindle Assembly',   machine: 'SPACE TURN LB3000', price: 189.00, inStock: true },
+        { name: 'High-Pressure Coolant Pump', number: 'C4809-058-201-B', category: 'Coolant System',     machine: 'SPACE TURN LB3000', price: 268.00, inStock: true },
+        { name: 'Coolant Nozzle Kit',         number: 'C4809-058-003-C', category: 'Coolant System',     machine: 'SPACE TURN LB3000', price: 64.00,  originalPrice: 89.00, inStock: true },
+        { name: 'Ball Screw Assembly',        number: 'A4809-072-208-F', category: 'Axis Drive',         machine: 'SPACE TURN LB3000', price: 498.00, inStock: false },
+        { name: 'Z-Axis Servo Motor',         number: 'A4809-072-521-E', category: 'Axis Drive',         machine: 'SPACE TURN LB3000', price: 615.00, originalPrice: 780.00, inStock: true },
+        { name: 'Servo Drive Belt',           number: 'A4809-072-016-F', category: 'Axis Drive',         machine: 'SPACE TURN LB3000', price: 62.50,  inStock: true },
+        { name: 'Power Supply Board',         number: 'EC809-033-100-B', category: 'Electrical Cabinet', machine: 'SPACE TURN LB3000', price: 214.00, inStock: true },
+        { name: 'Steady Rest Pad Kit',        number: 'T4809-091-034-C', category: 'Tooling & Fixtures', machine: 'SPACE TURN LB3000', price: 88.00,  inStock: true },
+        /* MB-56V AII */
+        { name: 'Spindle Bearing Unit',       number: 'E4809-045-055-D', category: 'Spindle Assembly',   machine: 'MB-56V AII',    price: 247.50, originalPrice: 329.00, inStock: true },
+        { name: 'Angular Contact Bearing',    number: 'E4809-045-011-F', category: 'Spindle Assembly',   machine: 'MB-56V AII',    price: 312.00, inStock: true },
+        { name: 'Coolant Tank Filter',        number: 'C4809-058-121-B', category: 'Coolant System',     machine: 'MB-56V AII',    price: 49.00,  inStock: true },
+        { name: 'Coolant Pump Assembly',      number: 'C4809-045-055-E', category: 'Coolant System',     machine: 'MB-56V AII',    price: 185.00, inStock: true },
+        { name: 'Servo Drive Unit',           number: 'A4809-072-102-B', category: 'Axis Drive',         machine: 'MB-56V AII',    price: 342.50, inStock: true },
+        { name: 'X-Axis Linear Guide Rail',   number: 'A4809-072-312-C', category: 'Axis Drive',         machine: 'MB-56V AII',    price: 376.00, originalPrice: 450.00, inStock: false },
+        { name: 'Control Relay Module',       number: 'EC809-033-014-D', category: 'Electrical Cabinet', machine: 'MB-56V AII',    price: 128.00, inStock: true },
+        { name: 'Proximity Sensor',           number: 'EC809-033-046-D', category: 'Electrical Cabinet', machine: 'MB-56V AII',    price: 76.00,  inStock: true },
+        { name: 'ATC Cam Follower',           number: 'T4809-091-057-E', category: 'Tooling & Fixtures', machine: 'MB-56V AII',    price: 92.00,  inStock: true },
+        { name: 'Tool Presetter Arm',         number: 'T4809-091-019-C', category: 'Tooling & Fixtures', machine: 'MB-56V AII',    price: 155.00, originalPrice: 195.00, inStock: true }
       ];
 
       var PAGE_SIZE = 6;
+      var query        = '';
+      var queryFiltered = [];
+      var currentPage  = 1;
+      var currentTab   = 'all'; /* 'all' | 'compatible' | 'incompatible' */
+      var selectedMachine = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
 
-      /* State */
-      var query = '';
-      var queryFiltered = [];   /* parts matching the URL query */
-      var currentPage = 1;
+      /* ── cart / quote state ── */
+      var _cartParts  = {};
+      var _quoteParts = {};
 
-      /* DOM refs */
-      var elCount = document.getElementById('resultsBarCount');
+      function lsGetArr(key) { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; } }
+      function lsSetArr(key, arr) { try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e) {} }
+
+      function buildCartSet() {
+        var items = lsGetArr('okmCart');
+        _cartParts = {};
+        for (var i = 0; i < items.length; i++) _cartParts[items[i].number] = true;
+      }
+      function buildQuoteSet() {
+        var items = lsGetArr('okmQuote');
+        _quoteParts = {};
+        for (var i = 0; i < items.length; i++) _quoteParts[items[i].number] = true;
+      }
+
+      function addToCart(p) {
+        var items = lsGetArr('okmCart');
+        var found = false;
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].number === p.number) { items[i].qty = (items[i].qty || 1) + 1; found = true; break; }
+        }
+        if (!found) items.push({ number: p.number, name: p.name, price: p.price, originalPrice: p.originalPrice || null, qty: 1, machine: p.machine, category: p.category });
+        lsSetArr('okmCart', items);
+        updateCartBadge();
+      }
+
+      function addToQuote(p) {
+        var items = lsGetArr('okmQuote');
+        var found = false;
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].number === p.number) { items[i].qty = (items[i].qty || 1) + 1; found = true; break; }
+        }
+        if (!found) items.push({ number: p.number, name: p.name, price: p.price, originalPrice: p.originalPrice || null, qty: 1, machine: p.machine, category: p.category });
+        lsSetArr('okmQuote', items);
+      }
+
+      function updateCartBadge() {
+        var items = lsGetArr('okmCart');
+        var count = 0;
+        for (var i = 0; i < items.length; i++) count += (items[i].qty || 1);
+        var badge = document.querySelector('.nav__cart-badge');
+        if (badge) badge.textContent = count > 0 ? count : '0';
+      }
+
+      /* ── Cart toast (matches parts-catalogue pattern) ── */
+      var _toastTimer = null;
+
+      function showCartToast(part, qty) {
+        var q = qty || 1;
+        var total = (part.price * q).toFixed(2);
+        document.getElementById('toast-name').textContent    = part.name;
+        document.getElementById('toast-partnum').textContent = 'Part # ' + part.number;
+        document.getElementById('toast-price').textContent   = 'Qty ' + q + '  ×  $' + part.price.toFixed(2) + '  =  $' + total;
+        var el = document.getElementById('cart-toast');
+        el.classList.remove('hiding');
+        el.style.display = 'flex';
+        clearTimeout(_toastTimer);
+        _toastTimer = setTimeout(dismissToast, 8000);
+      }
+
+      function dismissToast() {
+        var el = document.getElementById('cart-toast');
+        el.classList.add('hiding');
+        el.addEventListener('animationend', function handler() {
+          el.style.display = 'none';
+          el.classList.remove('hiding');
+          el.removeEventListener('animationend', handler);
+        });
+      }
+
+      /* ── Quote modal (matches parts-catalogue pattern) ── */
+      function openQuoteModal(part) {
+        document.getElementById('quote-part-ref').textContent = part.number + ' — ' + part.name;
+        document.getElementById('quote-modal-overlay').classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeQuoteModal() {
+        document.getElementById('quote-modal-overlay').classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+
+      var elGrid = document.getElementById('cardsGrid');
+      var elPag  = document.getElementById('pagination');
       var elTitle = document.getElementById('srTitle');
-      var elGrid  = document.getElementById('cardsGrid');
-      var elPag   = document.getElementById('pagination');
-      var elPriceRange = document.getElementById('priceRange');
-      var elPriceMax   = document.getElementById('priceMax');
-      var elBarCount   = document.getElementById('resultsBarCount');
-      var elSort       = document.getElementById('sortSelect');
 
+      /* ── helpers ── */
       function getParam(name) {
         var m = new RegExp('[?&]' + name + '=([^&]*)').exec(location.search);
         return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
       }
 
       function escapeHtml(s) {
-        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       }
 
-      /* Checked values for a filter group */
-      function checkedValues(filter) {
-        var boxes = document.querySelectorAll('input[data-filter="' + filter + '"]:checked');
-        return Array.prototype.map.call(boxes, function (b) { return b.value; });
+      function isCompatible(p) {
+        return p.machine === selectedMachine;
       }
 
-      /* Apply the live filters (category, machine, price) to the query-filtered set */
-      function applyFilters() {
-        var cats = checkedValues('category');
-        var machines = checkedValues('machine');
-        var maxPrice = parseInt(elPriceRange.value, 10);
+      function getTabParts() {
+        if (currentTab === 'compatible')   return queryFiltered.filter(isCompatible);
+        if (currentTab === 'incompatible') return queryFiltered.filter(function(p) { return !isCompatible(p); });
+        return queryFiltered;
+      }
 
-        return queryFiltered.filter(function (p) {
-          if (cats.length && cats.indexOf(p.category) === -1) return false;
-          if (machines.length && machines.indexOf(p.machine) === -1) return false;
-          if (p.price > maxPrice) return false;
-          return true;
+      /* ── pills ── */
+      function updatePills() {
+        var compat   = queryFiltered.filter(isCompatible).length;
+        var incompat = queryFiltered.length - compat;
+        document.getElementById('pillCountAll').textContent      = queryFiltered.length;
+        document.getElementById('pillCountCompat').textContent   = compat;
+        document.getElementById('pillCountIncompat').textContent = incompat;
+        var pills = document.querySelectorAll('.compat-pill');
+        Array.prototype.forEach.call(pills, function(pill) {
+          if (pill.dataset.tab === currentTab) pill.classList.add('active');
+          else pill.classList.remove('active');
         });
       }
 
+      /* ── card rendering ── */
       var CAT_COLORS = {
         'Spindle Assembly':   '#005EB8',
         'Coolant System':     '#0EA5E9',
@@ -582,36 +553,49 @@
       };
 
       function cardHTML(p) {
-        var catColor = CAT_COLORS[p.category] || '#005EB8';
+        var compatible = isCompatible(p);
+        var catColor   = compatible ? (CAT_COLORS[p.category] || '#005EB8') : '#BDBDBD';
+
+        var compatChip = compatible
+          ? '<span class="compat-chip compat-chip--match">For ' + escapeHtml(selectedMachine) + '</span>'
+          : '<span class="compat-chip">For ' + escapeHtml(p.machine) + '</span>';
 
         var availZone = p.inStock
           ? '<div class="avail-status"><span class="avail-dot avail-dot--in"></span><span class="avail-text avail-text--in">In Stock</span></div>' +
-            '<div class="avail-sub">Ships in 1-3 business days</div>'
+            '<div class="avail-sub">Ships in 1–3 business days</div>'
           : '<div class="avail-status"><span class="avail-dot avail-dot--out"></span><span class="avail-text avail-text--out">Out of Stock</span></div>' +
             '<div class="avail-sub">Contact sales for availability</div>';
 
-        var btn = p.inStock
-          ? '<button class="add-btn add-btn--cart" type="button">' +
-              '<svg viewBox="0 0 20 20" fill="none"><path d="M1 1h2.2l2.1 10.4a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.47-1.2L19 4.5H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="1.3" fill="currentColor"/><circle cx="16" cy="17" r="1.3" fill="currentColor"/></svg>' +
-              'Add to Cart</button>'
-          : '<button class="add-btn add-btn--quote" type="button">' +
-              '<svg viewBox="0 0 20 20" fill="none"><path d="M10 2H4a1 1 0 00-1 1v14a1 1 0 001 1h12a1 1 0 001-1V8l-6-6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 2v6h6M7 13h6M7 10h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
-              'Add to Quote</button>';
+        var _checkSVG = '<svg viewBox="0 0 20 20" fill="none"><path d="M4 10l5 5 7-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        var btn;
+        if (p.inStock) {
+          var _inCart = !!_cartParts[p.number];
+          btn = _inCart
+            ? '<button class="add-btn add-btn--cart add-btn--done" data-pn="' + escapeHtml(p.number) + '" data-act="cart" type="button">' + _checkSVG + 'In Cart</button>'
+            : '<button class="add-btn add-btn--cart" data-pn="' + escapeHtml(p.number) + '" data-act="cart" type="button">' +
+                '<svg viewBox="0 0 20 20" fill="none"><path d="M1 1h2.2l2.1 10.4a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.47-1.2L19 4.5H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="1.3" fill="currentColor"/><circle cx="16" cy="17" r="1.3" fill="currentColor"/></svg>' +
+                'Add to Cart</button>';
+        } else {
+          var _inQuote = !!_quoteParts[p.number];
+          btn = _inQuote
+            ? '<button class="add-btn add-btn--quote add-btn--done" data-pn="' + escapeHtml(p.number) + '" data-act="quote" type="button">' + _checkSVG + 'In Quote</button>'
+            : '<button class="add-btn add-btn--quote" data-pn="' + escapeHtml(p.number) + '" data-act="quote" type="button">' +
+                '<svg viewBox="0 0 20 20" fill="none"><path d="M10 2H4a1 1 0 00-1 1v14a1 1 0 001 1h12a1 1 0 001-1V8l-6-6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 2v6h6M7 13h6M7 10h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
+                'Add to Quote</button>';
+        }
 
         return '<div class="part-card" style="--cat-color:' + catColor + '">' +
 
           '<div class="part-card__identity">' +
-            '<div class="part-card__pn">' + escapeHtml(p.number) + '</div>' +
+            '<div class="part-card__pn-row">' +
+              '<div class="part-card__pn">' + escapeHtml(p.number) + '</div>' +
+              compatChip +
+            '</div>' +
             '<div class="part-card__name">' + escapeHtml(p.name) + '</div>' +
             '<div class="part-card__attrs">' +
               '<span class="part-card__attr">' +
                 '<svg viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h4M4 8h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>' +
                 escapeHtml(p.category) +
-              '</span>' +
-              '<span class="attr-sep">·</span>' +
-              '<span class="part-card__attr">' +
-                '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>' +
-                escapeHtml(p.machine) +
               '</span>' +
             '</div>' +
           '</div>' +
@@ -633,23 +617,32 @@
         '</div>';
       }
 
-      /* Add-to-cart feedback */
       function wireAddButtons() {
-        var btns = elGrid.querySelectorAll('.add-btn:not([disabled])');
-        Array.prototype.forEach.call(btns, function (btn) {
-          btn.addEventListener('click', function () {
-            if (btn.dataset.busy === '1') return;
+        var checkSVG = '<svg viewBox="0 0 20 20" fill="none"><path d="M4 10l5 5 7-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        var btns = elGrid.querySelectorAll('.add-btn[data-pn]');
+        Array.prototype.forEach.call(btns, function(btn) {
+          btn.addEventListener('click', function() {
+            if (btn.dataset.busy === '1' || btn.classList.contains('add-btn--done')) return;
+            var pn = btn.dataset.pn;
+            var part = null;
+            for (var i = 0; i < PARTS.length; i++) { if (PARTS[i].number === pn) { part = PARTS[i]; break; } }
+            if (!part) return;
             btn.dataset.busy = '1';
-            var orig = btn.innerHTML;
-            btn.innerHTML = '<span>&#10003; Added</span>';
-            setTimeout(function () {
-              btn.innerHTML = orig;
-              btn.dataset.busy = '';
-            }, 1200);
+            if (btn.dataset.act === 'cart') {
+              addToCart(part);
+              _cartParts[pn] = true;
+              btn.classList.add('add-btn--done');
+              btn.innerHTML = checkSVG + 'In Cart';
+              showCartToast(part, 1);
+            } else {
+              openQuoteModal(part);
+            }
+            setTimeout(function() { btn.dataset.busy = ''; }, 400);
           });
         });
       }
 
+      /* ── pagination ── */
       function renderPagination(totalPages) {
         elPag.innerHTML = '';
         if (totalPages <= 1) return;
@@ -658,15 +651,12 @@
           var b = document.createElement('button');
           b.type = 'button';
           b.className = 'page-btn' + (extra || '');
-          if (typeof label === 'string') {
-            b.innerHTML = label;
-          } else {
-            b.textContent = label;
-          }
+          if (typeof label === 'string') b.innerHTML = label;
+          else b.textContent = label;
           if (page === null) {
             b.disabled = true;
           } else {
-            b.addEventListener('click', function () {
+            b.addEventListener('click', function() {
               currentPage = page;
               renderResults();
               elPag.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -675,7 +665,6 @@
           return b;
         }
 
-        /* â† Previous */
         var prevBtn = makeBtn(
           '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Previous',
           currentPage > 1 ? currentPage - 1 : null,
@@ -684,7 +673,6 @@
         if (currentPage === 1) prevBtn.disabled = true;
         elPag.appendChild(prevBtn);
 
-        /* Page numbers with ellipsis */
         var pages = [];
         for (var i = 1; i <= totalPages; i++) {
           if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
@@ -701,12 +689,10 @@
             span.textContent = '...';
             elPag.appendChild(span);
           } else {
-            var b = makeBtn(p, p, p === currentPage ? ' active' : '');
-            elPag.appendChild(b);
+            elPag.appendChild(makeBtn(p, p, p === currentPage ? ' active' : ''));
           }
         });
 
-        /* Next → */
         var nextBtn = makeBtn(
           'Next <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
           currentPage < totalPages ? currentPage + 1 : null,
@@ -716,157 +702,69 @@
         elPag.appendChild(nextBtn);
       }
 
-      function sortParts(arr) {
-        var sort = elSort ? elSort.value : 'name-asc';
-        var copy = arr.slice();
-        if (sort === 'name-desc') copy.sort(function(a,b){ return b.name.localeCompare(a.name); });
-        else                      copy.sort(function(a,b){ return a.name.localeCompare(b.name); });
-        return copy;
-      }
-
+      /* ── render ── */
       function renderResults() {
-        var filtered = sortParts(applyFilters());
-
-        /* count */
-        var countText = filtered.length + ' result' + (filtered.length === 1 ? '' : 's') + ' found';
-        elCount.textContent = countText;
-
-        var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        _cartParts  = {};
+        _quoteParts = {};
+        updatePills();
+        var parts = getTabParts();
+        var totalPages = Math.max(1, Math.ceil(parts.length / PAGE_SIZE));
         if (currentPage > totalPages) currentPage = totalPages;
-
-        var start = (currentPage - 1) * PAGE_SIZE;
-        var slice = filtered.slice(start, start + PAGE_SIZE);
+        var slice = parts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
         if (slice.length === 0) {
-          elGrid.innerHTML = '<div class="no-results">No parts match your filters.</div>';
+          elGrid.innerHTML = '<div class="no-results">No parts found.</div>';
         } else {
           elGrid.innerHTML = slice.map(cardHTML).join('');
           wireAddButtons();
         }
-
         renderPagination(totalPages);
       }
 
-      /* ---- init ---- */
+      /* ── init ── */
       query = getParam('q').trim();
-
       if (query) {
         elTitle.textContent = 'Search Results for "' + query + '"';
         var q = query.toLowerCase();
-        queryFiltered = PARTS.filter(function (p) {
+        queryFiltered = PARTS.filter(function(p) {
           return p.name.toLowerCase().indexOf(q) !== -1 ||
                  p.number.toLowerCase().indexOf(q) !== -1 ||
                  p.category.toLowerCase().indexOf(q) !== -1 ||
                  p.machine.toLowerCase().indexOf(q) !== -1;
         });
-        /* Fallback: show all parts if nothing matched the query */
-        if (queryFiltered.length === 0) {
-          queryFiltered = PARTS.slice();
-        }
+        if (queryFiltered.length === 0) queryFiltered = PARTS.slice();
       } else {
         elTitle.textContent = 'All Parts';
         queryFiltered = PARTS.slice();
       }
 
-      /* filter listeners */
-      var checkboxes = document.querySelectorAll('input[data-filter]');
-      Array.prototype.forEach.call(checkboxes, function (cb) {
-        cb.addEventListener('change', function () {
+      /* pill click */
+      var pills = document.querySelectorAll('.compat-pill');
+      Array.prototype.forEach.call(pills, function(pill) {
+        pill.addEventListener('click', function() {
+          currentTab = pill.dataset.tab;
           currentPage = 1;
           renderResults();
         });
       });
-      elPriceRange.addEventListener('input', function () {
-        elPriceMax.textContent = '$' + elPriceRange.value;
-        elPriceRange.setAttribute('aria-valuetext', '$' + elPriceRange.value);
+
+      /* live re-classification when machine changes in header */
+      window.addEventListener('okuma:machineChanged', function(e) {
+        selectedMachine = e.detail.name;
         currentPage = 1;
         renderResults();
       });
 
-      if (elSort) elSort.addEventListener('change', function () { currentPage = 1; renderResults(); });
+      /* ── static event listeners ── */
+      document.getElementById('toast-close').addEventListener('click', dismissToast);
 
+      var _qOverlay = document.getElementById('quote-modal-overlay');
+      document.getElementById('quote-modal-close').addEventListener('click', closeQuoteModal);
+      document.getElementById('quote-modal-dismiss').addEventListener('click', closeQuoteModal);
+      _qOverlay.addEventListener('click', function(e) { if (e.target === _qOverlay) closeQuoteModal(); });
+
+      updateCartBadge();
       renderResults();
-    })();
-
-    /* ── MOBILE FILTER DRAWER ──────────────────────────────────────── */
-    (function () {
-      var overlay   = document.getElementById('filterOverlay');
-      var drawer    = document.getElementById('filterDrawer');
-      var closeBtn  = document.getElementById('filterClose');
-      var applyBtn  = document.getElementById('filterApply');
-      var ftbFilters = document.getElementById('ftbFilters');
-      var ftbSort    = document.getElementById('ftbSort');
-      var badge      = document.getElementById('ftbBadge');
-      var sortSelect = document.getElementById('sortSelect');
-      var sortLbl    = document.getElementById('ftbSortLabel');
-
-      var SORT_LABELS = {
-        'relevance':  'Relevance',
-        'price-asc':  'Price ↑',
-        'price-desc': 'Price ↓',
-        'name-asc':   'Name A–Z'
-      };
-
-      function openDrawer() {
-        drawer.classList.add('open');
-        overlay.classList.add('visible');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeDrawer() {
-        drawer.classList.remove('open');
-        overlay.classList.remove('visible');
-        document.body.style.overflow = '';
-      }
-
-      function updateBadge() {
-        var count = document.querySelectorAll('input[data-filter]:checked').length;
-        if (parseInt(document.getElementById('priceRange').value, 10) < 1000) count++;
-        badge.textContent = count > 0 ? String(count) : '';
-      }
-
-      function syncSortLabel() {
-        sortLbl.textContent = SORT_LABELS[sortSelect.value] || 'Relevance';
-      }
-
-      /* Sort radio → desktop select sync */
-      var radios = document.querySelectorAll('input[name="mob-sort"]');
-      Array.prototype.forEach.call(radios, function (r) {
-        r.addEventListener('change', function () {
-          sortSelect.value = r.value;
-          sortSelect.dispatchEvent(new Event('change'));
-          syncSortLabel();
-        });
-      });
-
-      /* Desktop select → radio sync */
-      function syncRadioFromSelect() {
-        Array.prototype.forEach.call(radios, function (r) {
-          r.checked = r.value === sortSelect.value;
-        });
-      }
-      sortSelect.addEventListener('change', function () {
-        syncRadioFromSelect();
-        syncSortLabel();
-      });
-
-      /* Filter change → badge */
-      var checkboxes = document.querySelectorAll('input[data-filter]');
-      Array.prototype.forEach.call(checkboxes, function (cb) {
-        cb.addEventListener('change', updateBadge);
-      });
-      document.getElementById('priceRange').addEventListener('input', updateBadge);
-
-      ftbFilters.addEventListener('click', openDrawer);
-      ftbSort.addEventListener('click', openDrawer);
-      closeBtn.addEventListener('click', closeDrawer);
-      overlay.addEventListener('click', closeDrawer);
-      applyBtn.addEventListener('click', closeDrawer);
-
-      /* Init */
-      syncSortLabel();
-      syncRadioFromSelect();
-      updateBadge();
     })();
   </script>
 

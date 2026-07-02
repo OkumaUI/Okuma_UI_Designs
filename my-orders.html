@@ -77,7 +77,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 32px;
     }
     .search-wrap {
       flex: 1;
@@ -159,6 +159,19 @@
     }
     .clear-filter-btn:hover { border-color: #005EB8; color: #005EB8; background: #F0F6FF; }
     .clear-filter-btn svg { flex-shrink: 0; }
+
+    /* ── MACHINE FILTER BANNER ── */
+    .machine-filter-bar {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-top: -12px;
+      margin-bottom: 16px;
+    }
+    .machine-filter-bar.visible { display: flex; }
+    .machine-filter-label { font-size: 13px; color: #1A1A1A; }
+    .machine-filter-label strong { color: #005EB8; font-weight: 600; }
+    .machine-filter-serial { color: #717171; font-size: 13px; }
 
     /* â”€â”€ TABLE WRAPPER â”€â”€ */
     .orders-card {
@@ -398,8 +411,8 @@
           </svg>
         </div>
         <div class="filter-wrap">
-          <select class="filter-select" id="customerFilter" onchange="applyFilters()">
-            <option value="">Ordered For</option>
+          <select class="filter-select" id="machineFilter" onchange="applyFilters()">
+            <option value="">All Machines</option>
           </select>
           <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -424,6 +437,19 @@
             <path d="M1 1l8 8M9 1L1 9"/>
           </svg>
           Clear Filter
+        </button>
+      </div>
+
+      <!-- Machine filter banner (shown when arriving from My Machines) -->
+      <div class="machine-filter-bar" id="machineFilterBar">
+        <span class="machine-filter-label">
+          Filtered by machine: <strong id="machineFilterName"></strong><span class="machine-filter-serial" id="machineFilterSerial"></span>
+        </span>
+        <button class="clear-filter-btn" id="clearMachineFilterBtn" type="button">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <path d="M1 1l8 8M9 1L1 9"/>
+          </svg>
+          Clear machine filter
         </button>
       </div>
 
@@ -464,21 +490,21 @@
     (function () {
 
       var ALL_ORDERS = [
-        { num: 'OKU-2026-00421', date: 'Jun 10, 2026', dateSort: 20260610, items: 3,  total: 1284.50, status: 'shipped',    orderedFor: 'ABC Industries'       },
-        { num: 'OKU-2026-00398', date: 'May 28, 2026', dateSort: 20260528, items: 7,  total: 3670.00, status: 'delivered',  orderedFor: 'Delta Components'     },
-        { num: 'OKU-2026-00375', date: 'May 15, 2026', dateSort: 20260515, items: 1,  total: 47.80,   status: 'delivered',  orderedFor: null                   },
-        { num: 'OKU-2026-00342', date: 'Apr 30, 2026', dateSort: 20260430, items: 2,  total: 612.00,  status: 'cancelled',  orderedFor: 'Franklin Engineering'  },
-        { num: 'OKU-2026-00301', date: 'Apr 12, 2026', dateSort: 20260412, items: 5,  total: 2145.00, status: 'processing', orderedFor: null                   },
-        { num: 'OKU-2026-00278', date: 'Mar 22, 2026', dateSort: 20260322, items: 4,  total: 890.00,  status: 'delivered',  orderedFor: 'Keystone Precision'    },
-        { num: 'OKU-2026-00245', date: 'Mar 05, 2026', dateSort: 20260305, items: 2,  total: 324.50,  status: 'delivered',  orderedFor: null                   },
-        { num: 'OKU-2026-00211', date: 'Feb 14, 2026', dateSort: 20260214, items: 6,  total: 4200.00, status: 'delivered',  orderedFor: 'Smith Manufacturing'   },
-        { num: 'OKU-2026-00188', date: 'Jan 30, 2026', dateSort: 20260130, items: 3,  total: 765.00,  status: 'delivered',  orderedFor: 'Global Parts Supply'   },
-        { num: 'OKU-2026-00154', date: 'Jan 12, 2026', dateSort: 20260112, items: 1,  total: 88.50,   status: 'delivered',  orderedFor: null                   },
-        { num: 'OKU-2025-00892', date: 'Dec 19, 2025', dateSort: 20251219, items: 4,  total: 1540.00, status: 'delivered',  orderedFor: 'Apex Machining'        },
-        { num: 'OKU-2025-00841', date: 'Nov 28, 2025', dateSort: 20251128, items: 2,  total: 312.00,  status: 'delivered',  orderedFor: null                   },
-        { num: 'OKU-2025-00790', date: 'Oct 14, 2025', dateSort: 20251014, items: 5,  total: 2260.00, status: 'delivered',  orderedFor: 'East Coast Tooling'    },
-        { num: 'OKU-2025-00733', date: 'Sep 02, 2025', dateSort: 20250902, items: 3,  total: 945.00,  status: 'delivered',  orderedFor: null                   },
-        { num: 'OKU-2025-00681', date: 'Aug 20, 2025', dateSort: 20250820, items: 8,  total: 3120.00, status: 'delivered',  orderedFor: 'Century Fabrication'   }
+        { num: 'OKU-2026-00421', date: 'Jun 10, 2026', dateSort: 20260610, items: 3,  total: 1284.50, status: 'shipped',    orderedFor: 'ABC Industries',      machine: 'M5-2891-K' },
+        { num: 'OKU-2026-00398', date: 'May 28, 2026', dateSort: 20260528, items: 7,  total: 3670.00, status: 'delivered',  orderedFor: 'Delta Components',    machine: 'LB-4431-M' },
+        { num: 'OKU-2026-00375', date: 'May 15, 2026', dateSort: 20260515, items: 1,  total: 47.80,   status: 'delivered',  orderedFor: null,                  machine: 'MU-9102-L' },
+        { num: 'OKU-2026-00342', date: 'Apr 30, 2026', dateSort: 20260430, items: 2,  total: 612.00,  status: 'cancelled',  orderedFor: 'Franklin Engineering', machine: 'MB-2234-P' },
+        { num: 'OKU-2026-00301', date: 'Apr 12, 2026', dateSort: 20260412, items: 5,  total: 2145.00, status: 'processing', orderedFor: null,                  machine: 'M5-2891-K' },
+        { num: 'OKU-2026-00278', date: 'Mar 22, 2026', dateSort: 20260322, items: 4,  total: 890.00,  status: 'delivered',  orderedFor: 'Keystone Precision',   machine: 'L2-1108-A' },
+        { num: 'OKU-2026-00245', date: 'Mar 05, 2026', dateSort: 20260305, items: 2,  total: 324.50,  status: 'delivered',  orderedFor: null,                  machine: 'LB-8821-X' },
+        { num: 'OKU-2026-00211', date: 'Feb 14, 2026', dateSort: 20260214, items: 6,  total: 4200.00, status: 'delivered',  orderedFor: 'Smith Manufacturing',  machine: 'LB-4431-M' },
+        { num: 'OKU-2026-00188', date: 'Jan 30, 2026', dateSort: 20260130, items: 3,  total: 765.00,  status: 'delivered',  orderedFor: 'Global Parts Supply',  machine: 'M5-2891-K' },
+        { num: 'OKU-2026-00154', date: 'Jan 12, 2026', dateSort: 20260112, items: 1,  total: 88.50,   status: 'delivered',  orderedFor: null,                  machine: 'MU-9102-L' },
+        { num: 'OKU-2025-00892', date: 'Dec 19, 2025', dateSort: 20251219, items: 4,  total: 1540.00, status: 'delivered',  orderedFor: 'Apex Machining',       machine: 'LB-4431-M' },
+        { num: 'OKU-2025-00841', date: 'Nov 28, 2025', dateSort: 20251128, items: 2,  total: 312.00,  status: 'delivered',  orderedFor: null,                  machine: 'MB-2234-P' },
+        { num: 'OKU-2025-00790', date: 'Oct 14, 2025', dateSort: 20251014, items: 5,  total: 2260.00, status: 'delivered',  orderedFor: 'East Coast Tooling',   machine: 'L2-1108-A' },
+        { num: 'OKU-2025-00733', date: 'Sep 02, 2025', dateSort: 20250902, items: 3,  total: 945.00,  status: 'delivered',  orderedFor: null,                  machine: 'LB-8821-X' },
+        { num: 'OKU-2025-00681', date: 'Aug 20, 2025', dateSort: 20250820, items: 8,  total: 3120.00, status: 'delivered',  orderedFor: 'Century Fabrication',  machine: 'MB-2234-P' }
       ];
 
       var PAGE_SIZE = 8;
@@ -572,33 +598,37 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
-      // Populate Ordered For dropdown with unique customer names from order data
+      // Populate Machine dropdown from the customer's registered machines
+      var MACHINES_LIST = [
+        { serial: 'M5-2891-K', name: 'LU300-M'         },
+        { serial: 'MU-9102-L', name: 'MULTUS U3000'     },
+        { serial: 'LB-4431-M', name: 'LB2000 EX III'    },
+        { serial: 'L2-1108-A', name: 'GENOS L200E'      },
+        { serial: 'LB-8821-X', name: 'SPACE TURN LB3000'},
+        { serial: 'MB-2234-P', name: 'MB-56V AII'       }
+      ];
       (function () {
-        var sel = document.getElementById('customerFilter');
+        var sel = document.getElementById('machineFilter');
         if (!sel) return;
-        var names = ALL_ORDERS
-          .map(function (o) { return o.orderedFor; })
-          .filter(function (v, i, a) { return v && a.indexOf(v) === i; })
-          .sort();
-        names.forEach(function (n) {
+        MACHINES_LIST.forEach(function (m) {
           var opt = document.createElement('option');
-          opt.value = n;
-          opt.textContent = n;
+          opt.value = m.serial;
+          opt.textContent = m.name + ' (' + m.serial + ')';
           sel.appendChild(opt);
         });
       })();
 
       function applyFilters() {
-        var query    = (document.getElementById('orderSearch').value || '').toLowerCase().trim();
-        var status   = document.getElementById('statusFilter').value;
-        var customer = document.getElementById('customerFilter').value;
-        var sort     = document.getElementById('sortFilter').value;
+        var query   = (document.getElementById('orderSearch').value || '').toLowerCase().trim();
+        var status  = document.getElementById('statusFilter').value;
+        var machine = document.getElementById('machineFilter').value;
+        var sort    = document.getElementById('sortFilter').value;
 
         filteredOrders = ALL_ORDERS.filter(function (o) {
-          var matchQuery    = !query    || o.num.toLowerCase().includes(query) || o.date.toLowerCase().includes(query) || (o.orderedFor && o.orderedFor.toLowerCase().includes(query));
-          var matchStatus   = !status   || (status === 'open' ? (o.status === 'processing' || o.status === 'shipped') : o.status === status);
-          var matchCustomer = !customer || o.orderedFor === customer;
-          return matchQuery && matchStatus && matchCustomer;
+          var matchQuery   = !query   || o.num.toLowerCase().includes(query) || o.date.toLowerCase().includes(query);
+          var matchStatus  = !status  || (status === 'open' ? (o.status === 'processing' || o.status === 'shipped') : o.status === status);
+          var matchMachine = !machine || o.machine === machine;
+          return matchQuery && matchStatus && matchMachine;
         });
 
         if (sort === 'oldest') { filteredOrders.sort(function (a, b) { return a.dateSort - b.dateSort; }); }
@@ -608,7 +638,7 @@
         render();
 
         var clearBar = document.getElementById('clearFilterBar');
-        if (clearBar) clearBar.classList.toggle('visible', !!(status || customer));
+        if (clearBar) clearBar.classList.toggle('visible', !!status);
       }
 
       window.applyFilters = applyFilters;
@@ -616,8 +646,7 @@
       var clearFilterBtn = document.getElementById('clearFilterBtn');
       if (clearFilterBtn) {
         clearFilterBtn.addEventListener('click', function () {
-          document.getElementById('statusFilter').value   = '';
-          document.getElementById('customerFilter').value = '';
+          document.getElementById('statusFilter').value = '';
           applyFilters();
         });
       }
@@ -637,15 +666,34 @@
 
       // Apply filter from URL params
       var _params = new URLSearchParams(window.location.search);
-      var _filterParam   = _params.get('filter');
-      var _customerParam = _params.get('customer');
+      var _filterParam      = _params.get('filter');
+      var _machineParam     = _params.get('machine');
+      var _machineNameParam = _params.get('name');
       if (_filterParam) {
         var sf = document.getElementById('statusFilter');
         if (sf) sf.value = _filterParam;
       }
-      if (_customerParam) {
-        var cf = document.getElementById('customerFilter');
-        if (cf) cf.value = _customerParam;
+      if (_machineParam) {
+        var mfSel = document.getElementById('machineFilter');
+        if (mfSel) mfSel.value = _machineParam;
+        var mfBar = document.getElementById('machineFilterBar');
+        if (mfBar) mfBar.classList.add('visible');
+        var mfName = document.getElementById('machineFilterName');
+        if (mfName) mfName.textContent = _machineNameParam || _machineParam;
+        var mfSerial = document.getElementById('machineFilterSerial');
+        if (mfSerial) mfSerial.textContent = _machineNameParam ? ' (' + _machineParam + ')' : '';
+      }
+
+      var clearMachineBtn = document.getElementById('clearMachineFilterBtn');
+      if (clearMachineBtn) {
+        clearMachineBtn.addEventListener('click', function () {
+          var mfSel2 = document.getElementById('machineFilter');
+          if (mfSel2) mfSel2.value = '';
+          var mfBar2 = document.getElementById('machineFilterBar');
+          if (mfBar2) mfBar2.classList.remove('visible');
+          history.replaceState(null, '', 'my-orders.html');
+          applyFilters();
+        });
       }
 
       // Initial render

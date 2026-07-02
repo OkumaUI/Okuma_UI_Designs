@@ -545,20 +545,29 @@
     #part-popup-close:hover { background: rgba(255,255,255,0.28); color: #fff; }
 
     /* â”€â”€ ALTERNATIVES MODAL â”€â”€ */
-    #alt-modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000; display: none;
-      align-items: flex-start; justify-content: center;
-      padding: 16px; overflow-y: auto; overflow-x: hidden;
+    .modal-header {
+      height: 60px; background: #005EB8; border-radius: 2px 2px 0 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; flex-shrink: 0;
     }
+    .modal-header-left { display: flex; align-items: center; gap: 10px; }
+    .modal-title { font-size: 18px; font-weight: 700; color: #fff; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+
+    #alt-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999; display: none;
+      align-items: center; justify-content: center;
+      padding: 16px; overflow-y: auto;
+    }
+    #alt-modal-overlay.is-open { display: flex; }
     #alt-modal {
       width: 100%; max-width: 580px;
-      max-height: 85vh; overflow-y: auto;
+      max-height: 90vh; overflow-y: auto;
       background: #fff;
       border-radius: 2px;
-      box-shadow: 0px 12px 24px rgba(0,0,0,0.25);
-      margin: auto 0;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+      margin: auto;
     }
     .alt-modal__body { padding: 28px 28px 0; display: flex; flex-direction: column; gap: 20px; }
 
@@ -941,20 +950,21 @@
 
     /* â”€â”€ QUOTE MODAL â”€â”€ */
     #quote-modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      position: fixed; inset: 0;
       background: rgba(0,0,0,0.5);
-      z-index: 1000; display: none;
-      align-items: flex-start; justify-content: center;
-      padding: 16px; overflow-y: auto; overflow-x: hidden;
+      z-index: 9999; display: none;
+      align-items: center; justify-content: center;
+      padding: 16px; overflow-y: auto;
     }
+    #quote-modal-overlay.is-open { display: flex; }
     #quote-modal {
       width: 100%; max-width: 480px;
-      max-height: 85vh;
-      background: white;
+      max-height: 90vh;
+      background: #fff;
       border-radius: 2px;
-      box-shadow: 0px 12px 24px rgba(0,0,0,0.25);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
       overflow: auto;
-      margin: auto 0;
+      margin: auto;
     }
     .quote-modal__placeholder {
       display: flex; flex-direction: column;
@@ -1045,7 +1055,7 @@
       .filter-select { font-size: 16px; }
       /* Modal: reduced padding, header sits flush */
       .modal-body { padding: 20px; gap: 20px; }
-      .modal-header { padding: 16px 20px; }
+      .modal-header { height: 52px; padding: 0 16px; }
       .modal-part-row { gap: 16px; }
     }
 
@@ -1420,7 +1430,7 @@
           </svg>
           <span class="modal-title" id="quote-modal-title">Add to Quote</span>
         </div>
-        <button id="quote-modal-close" class="modal-header" style="background:none;border:none;cursor:pointer;padding:0;display:flex;" type="button" aria-label="Close">
+        <button id="quote-modal-close" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;" type="button" aria-label="Close">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <path d="M5 5L15 15M15 5L5 15"/>
           </svg>
@@ -2373,13 +2383,13 @@
         });
       });
 
-      altModalOverlay.style.display = 'flex';
-      document.body.style.overflow  = 'hidden';
+      altModalOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
     }
 
     function closeAltModal() {
-      altModalOverlay.style.display = 'none';
-      document.body.style.overflow  = '';
+      altModalOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
     }
 
     document.getElementById('alt-modal-close').addEventListener('click', closeAltModal);
@@ -2406,12 +2416,12 @@
 
     function openQuoteModal(part) {
       quotePartRef.textContent = part.partNum + ' - ' + part.name;
-      quoteModalOverlay.style.display = 'flex';
+      quoteModalOverlay.classList.add('is-open');
       document.body.style.overflow = 'hidden';
     }
 
     function closeQuoteModal() {
-      quoteModalOverlay.style.display = 'none';
+      quoteModalOverlay.classList.remove('is-open');
       document.body.style.overflow = '';
     }
 

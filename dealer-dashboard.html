@@ -178,6 +178,8 @@
       color: #000;
     }
     .orders-table tbody tr:last-child td { border-bottom: none; }
+    .orders-table tbody tr.clickable-row { cursor: pointer; }
+    .orders-table tbody tr.clickable-row:hover td { background: #F0F5FB; }
     .col-order { font-weight: 700; }
     .col-date  { font-weight: 400; }
     .col-items { font-weight: 400; }
@@ -298,7 +300,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr class="clickable-row" onclick="window.location='order-detail.html?order=OKU-2026-00418'">
                     <td class="col-order">OKU-2026-00418</td>
                     <td class="col-date">Feb 22, 2026</td>
                     <td class="col-for"><span class="ordered-for-customer">ABC Industries</span></td>
@@ -306,7 +308,7 @@
                     <td class="col-total">$842.25</td>
                     <td class="col-status"><span class="status-badge status-badge--processing"><span class="dot"></span>Processing</span></td>
                   </tr>
-                  <tr>
+                  <tr class="clickable-row" onclick="window.location='order-detail.html?order=OKU-2026-00392'">
                     <td class="col-order">OKU-2026-00392</td>
                     <td class="col-date">Feb 18, 2026</td>
                     <td class="col-for"><span class="ordered-for-self">Self</span></td>
@@ -314,7 +316,7 @@
                     <td class="col-total">$1,204.00</td>
                     <td class="col-status"><span class="status-badge status-badge--shipped"><span class="dot"></span>Shipped</span></td>
                   </tr>
-                  <tr>
+                  <tr class="clickable-row" onclick="window.location='order-detail.html?order=OKU-2026-00355'">
                     <td class="col-order">OKU-2026-00355</td>
                     <td class="col-date">Feb 10, 2026</td>
                     <td class="col-for"><span class="ordered-for-customer">Delta Components</span></td>
@@ -322,7 +324,7 @@
                     <td class="col-total">$412.00</td>
                     <td class="col-status"><span class="status-badge status-badge--delivered"><span class="dot"></span>Delivered</span></td>
                   </tr>
-                  <tr>
+                  <tr class="clickable-row" onclick="window.location='order-detail.html?order=OKU-2026-00310'">
                     <td class="col-order">OKU-2026-00310</td>
                     <td class="col-date">Feb 02, 2026</td>
                     <td class="col-for"><span class="ordered-for-self">Self</span></td>
@@ -396,8 +398,8 @@
             <div class="kpi-tile__label">Customer's Open Orders</div>
             <div class="kpi-tile__num" id="custKpi1Num">47</div>
           </a>
-          <a class="kpi-tile" id="custKpi2Link" href="my-orders.html?type=po" style="text-decoration:none;">
-            <div class="kpi-tile__label">Customer's Open POs</div>
+          <a class="kpi-tile" id="custKpi2Link" href="my-quotes.html?filter=open" style="text-decoration:none;">
+            <div class="kpi-tile__label">Customer's Open Quotes</div>
             <div class="kpi-tile__num" id="custKpi2Num">3</div>
           </a>
           <a class="kpi-tile" id="custKpi3Link" href="dealer-profile.html?tab=addr-requests" style="text-decoration:none;">
@@ -410,7 +412,7 @@
         <section class="section">
           <div class="section__head">
             <h2 class="section__title">Customer's Registered Machines</h2>
-            <a href="#" class="section__link">View All →</a>
+            <a href="my-machines.html" class="section__link">View All →</a>
           </div>
           <div class="machine-grid" id="custMachineGrid">
             <!-- populated by JS -->
@@ -488,7 +490,7 @@
         'ABC Industries': {
           account: 'AC-4421',
           address: '418 Innovation Drive, Detroit, MI 48126, USA',
-          kpi: { orders: 47, pos: 3, pendingAddr: 2 },
+          kpi: { orders: 47, quotes:3, pendingAddr: 2 },
           machines: [
             { name: 'LU300-M',       serial: 'L3-4421-R',  img: 'images/dash-machine-lu300m.png',  reg: '12 Oct 2024' },
             { name: 'MULTUS U3000',  serial: 'MU-9102-L',  img: 'images/dash-machine-multus.png',  reg: '05 Jan 2025' },
@@ -504,7 +506,7 @@
         'Smith Manufacturing': {
           account: 'SM-2891',
           address: '782 Industrial Blvd, Cincinnati, OH 45201, USA',
-          kpi: { orders: 12, pos: 1, pendingAddr: 1 },
+          kpi: { orders: 12, quotes:1, pendingAddr: 1 },
           machines: [
             { name: 'GENOS L200E',       serial: 'GL-2891-A', img: 'images/dash-machine-lu300m.png', reg: '22 Aug 2024' },
             { name: 'SPACE TURN LB3000', serial: 'ST-7743-B', img: 'images/dash-machine-multus.png', reg: '18 Nov 2024' }
@@ -519,7 +521,7 @@
         'Pacific Precision': {
           account: 'PP-5517',
           address: '2140 Tech Park Drive, San Jose, CA 95110, USA',
-          kpi: { orders: 63, pos: 5, pendingAddr: 2 },
+          kpi: { orders: 63, quotes:5, pendingAddr: 2 },
           machines: [
             { name: 'MB-56V AII',   serial: 'MB-5517-C', img: 'images/dash-machine-lu300m.png', reg: '10 Jun 2024' },
             { name: 'LU300-M',      serial: 'L3-5517-D', img: 'images/dash-machine-multus.png', reg: '14 Sep 2024' },
@@ -535,7 +537,7 @@
         'Delta Components': {
           account: 'DC-3302',
           address: '900 Commerce Street, Dallas, TX 75201, USA',
-          kpi: { orders: 21, pos: 2, pendingAddr: 1 },
+          kpi: { orders: 21, quotes:2, pendingAddr: 1 },
           machines: [
             { name: 'LB2000 EX III', serial: 'LB-3302-F', img: 'images/dash-machine-lb2000.png', reg: '09 May 2024' },
             { name: 'GENOS L200E',   serial: 'GL-3302-G', img: 'images/dash-machine-lu300m.png', reg: '27 Jan 2025' }
@@ -550,7 +552,7 @@
         'Apex Machining': {
           account: 'AM-7789',
           address: '3315 West Fullerton Ave, Chicago, IL 60647, USA',
-          kpi: { orders: 34, pos: 4, pendingAddr: 2 },
+          kpi: { orders: 34, quotes:4, pendingAddr: 2 },
           machines: [
             { name: 'MB-56V AII',        serial: 'MB-7789-H', img: 'images/dash-machine-multus.png', reg: '18 Feb 2024' },
             { name: 'MULTUS U3000',      serial: 'MU-7789-I', img: 'images/dash-machine-lb2000.png', reg: '14 Apr 2025' },
@@ -566,7 +568,7 @@
         'Borland Systems': {
           account: 'BS-1101',
           address: '200 State Street, Boston, MA 02109, USA',
-          kpi: { orders: 8, pos: 2, pendingAddr: 1 },
+          kpi: { orders: 8, quotes:2, pendingAddr: 1 },
           machines: [
             { name: 'LU300-M',    serial: 'L3-1101-A', img: 'images/dash-machine-lu300m.png', reg: '14 Aug 2024' },
             { name: 'GENOS L200E',serial: 'GL-1101-B', img: 'images/dash-machine-multus.png', reg: '05 Dec 2024' }
@@ -579,7 +581,7 @@
         'Century Fabrication': {
           account: 'CF-2201',
           address: '450 Music Row, Nashville, TN 37203, USA',
-          kpi: { orders: 5, pos: 1, pendingAddr: 0 },
+          kpi: { orders: 5, quotes:1, pendingAddr: 0 },
           machines: [
             { name: 'MULTUS U3000', serial: 'MU-2201-C', img: 'images/dash-machine-multus.png', reg: '22 Jan 2025' }
           ],
@@ -591,7 +593,7 @@
         'East Coast Tooling': {
           account: 'EC-3301',
           address: '1616 Market Street, Philadelphia, PA 19103, USA',
-          kpi: { orders: 19, pos: 3, pendingAddr: 1 },
+          kpi: { orders: 19, quotes:3, pendingAddr: 1 },
           machines: [
             { name: 'LB2000 EX III', serial: 'LB-3301-D', img: 'images/dash-machine-lb2000.png', reg: '11 Jun 2024' },
             { name: 'MB-56V AII',    serial: 'MB-3301-E', img: 'images/dash-machine-multus.png', reg: '08 Mar 2025' }
@@ -605,7 +607,7 @@
         'Franklin Engineering': {
           account: 'FE-4401',
           address: '250 South High Street, Columbus, OH 43215, USA',
-          kpi: { orders: 11, pos: 2, pendingAddr: 0 },
+          kpi: { orders: 11, quotes:2, pendingAddr: 0 },
           machines: [
             { name: 'LU300-M', serial: 'L3-4401-F', img: 'images/dash-machine-lu300m.png', reg: '17 Oct 2024' }
           ],
@@ -617,7 +619,7 @@
         'Global Parts Supply': {
           account: 'GP-5501',
           address: '100 Peachtree Street NE, Atlanta, GA 30303, USA',
-          kpi: { orders: 26, pos: 4, pendingAddr: 1 },
+          kpi: { orders: 26, quotes:4, pendingAddr: 1 },
           machines: [
             { name: 'SPACE TURN LB3000', serial: 'ST-5501-G', img: 'images/dash-machine-lb2000.png', reg: '09 Sep 2024' },
             { name: 'MULTUS U3000',      serial: 'MU-5501-H', img: 'images/dash-machine-multus.png', reg: '28 Feb 2025' }
@@ -631,7 +633,7 @@
         'Harmon Industries': {
           account: 'HI-6601',
           address: '2800 N Central Ave, Phoenix, AZ 85004, USA',
-          kpi: { orders: 7, pos: 1, pendingAddr: 0 },
+          kpi: { orders: 7, quotes:1, pendingAddr: 0 },
           machines: [
             { name: 'LB2000 EX III', serial: 'LB-6601-I', img: 'images/dash-machine-lb2000.png', reg: '14 Nov 2024' }
           ],
@@ -643,7 +645,7 @@
         'Industrial Solutions': {
           account: 'IS-7701',
           address: '1600 Glenarm Place, Denver, CO 80202, USA',
-          kpi: { orders: 15, pos: 3, pendingAddr: 1 },
+          kpi: { orders: 15, quotes:3, pendingAddr: 1 },
           machines: [
             { name: 'GENOS L200E', serial: 'GL-7701-J', img: 'images/dash-machine-lu300m.png', reg: '08 Jul 2024' },
             { name: 'LU300-M',     serial: 'L3-7701-K', img: 'images/dash-machine-multus.png', reg: '20 Jan 2025' }
@@ -656,7 +658,7 @@
         'Johnson Metal Works': {
           account: 'JM-8801',
           address: '500 Union Street, Seattle, WA 98101, USA',
-          kpi: { orders: 9, pos: 2, pendingAddr: 0 },
+          kpi: { orders: 9, quotes:2, pendingAddr: 0 },
           machines: [
             { name: 'MB-56V AII', serial: 'MB-8801-L', img: 'images/dash-machine-multus.png', reg: '30 Dec 2024' }
           ],
@@ -668,7 +670,7 @@
         'Keystone Precision': {
           account: 'KP-9901',
           address: '625 Liberty Ave, Pittsburgh, PA 15222, USA',
-          kpi: { orders: 22, pos: 3, pendingAddr: 1 },
+          kpi: { orders: 22, quotes:3, pendingAddr: 1 },
           machines: [
             { name: 'MULTUS U3000',      serial: 'MU-9901-M', img: 'images/dash-machine-multus.png', reg: '03 Oct 2024' },
             { name: 'SPACE TURN LB3000', serial: 'ST-9901-N', img: 'images/dash-machine-lb2000.png', reg: '16 Feb 2025' }
@@ -682,7 +684,7 @@
         'Lakeland Manufacturing': {
           account: 'LM-1011',
           address: '80 South 8th Street, Minneapolis, MN 55402, USA',
-          kpi: { orders: 13, pos: 2, pendingAddr: 0 },
+          kpi: { orders: 13, quotes:2, pendingAddr: 0 },
           machines: [
             { name: 'LU300-M', serial: 'L3-1011-O', img: 'images/dash-machine-lu300m.png', reg: '25 Sep 2024' }
           ],
@@ -694,7 +696,7 @@
         'Meridian Toolworks': {
           account: 'MT-2011',
           address: '700 Smith Street, Houston, TX 77002, USA',
-          kpi: { orders: 18, pos: 3, pendingAddr: 1 },
+          kpi: { orders: 18, quotes:3, pendingAddr: 1 },
           machines: [
             { name: 'LB2000 EX III', serial: 'LB-2011-P', img: 'images/dash-machine-lb2000.png', reg: '17 Jul 2024' },
             { name: 'GENOS L200E',   serial: 'GL-2011-Q', img: 'images/dash-machine-lu300m.png', reg: '11 Mar 2025' }
@@ -708,7 +710,7 @@
         'Summit Precision': {
           account: 'SP-3011',
           address: '1120 NW Couch Street, Portland, OR 97209, USA',
-          kpi: { orders: 6, pos: 1, pendingAddr: 0 },
+          kpi: { orders: 6, quotes:1, pendingAddr: 0 },
           machines: [
             { name: 'SPACE TURN LB3000', serial: 'ST-3011-R', img: 'images/dash-machine-lb2000.png', reg: '07 Jan 2025' }
           ],
@@ -720,7 +722,7 @@
         'Tri-State Machining': {
           account: 'TS-4011',
           address: '127 Public Square, Cleveland, OH 44114, USA',
-          kpi: { orders: 16, pos: 2, pendingAddr: 1 },
+          kpi: { orders: 16, quotes:2, pendingAddr: 1 },
           machines: [
             { name: 'LU300-M',    serial: 'L3-4011-S', img: 'images/dash-machine-lu300m.png', reg: '02 Aug 2024' },
             { name: 'MB-56V AII', serial: 'MB-4011-T', img: 'images/dash-machine-multus.png', reg: '19 Feb 2025' }
@@ -734,7 +736,7 @@
         'United Fabricators': {
           account: 'UF-5011',
           address: '200 S Biscayne Blvd, Miami, FL 33131, USA',
-          kpi: { orders: 10, pos: 2, pendingAddr: 0 },
+          kpi: { orders: 10, quotes:2, pendingAddr: 0 },
           machines: [
             { name: 'MULTUS U3000', serial: 'MU-5011-U', img: 'images/dash-machine-multus.png', reg: '04 Oct 2024' }
           ],
@@ -746,7 +748,7 @@
         'Westfield Components': {
           account: 'WC-6011',
           address: '2345 Grand Blvd, Kansas City, MO 64108, USA',
-          kpi: { orders: 14, pos: 2, pendingAddr: 1 },
+          kpi: { orders: 14, quotes:2, pendingAddr: 1 },
           machines: [
             { name: 'LB2000 EX III',     serial: 'LB-6011-V', img: 'images/dash-machine-lb2000.png', reg: '21 Nov 2024' },
             { name: 'SPACE TURN LB3000', serial: 'ST-6011-W', img: 'images/dash-machine-multus.png', reg: '06 Apr 2025' }
@@ -786,7 +788,7 @@
         custCtxAddr.textContent = d.address;
 
         kpi1Num.textContent = d.kpi.orders;
-        kpi2Num.textContent = d.kpi.pos;
+        kpi2Num.textContent = d.kpi.quotes;
         kpi3Num.textContent = d.kpi.pendingAddr;
 
         machGrid.innerHTML = d.machines.map(function (m) {
@@ -810,7 +812,7 @@
         }).join('');
 
         ordersTbody.innerHTML = d.orders.map(function (o) {
-          return '<tr>' +
+          return '<tr class="clickable-row" onclick="window.location=\'order-detail.html?order=' + o.num + '\'">' +
             '<td class="col-order">' + o.num + '</td>' +
             '<td class="col-date">' + o.date + '</td>' +
             '<td class="col-items">' + o.count + '</td>' +
@@ -831,7 +833,7 @@
         var k2 = document.getElementById('custKpi2Link');
         var k3 = document.getElementById('custKpi3Link');
         if (k1) k1.href = 'my-orders.html?filter=open&customer=' + custParam;
-        if (k2) k2.href = 'my-orders.html?type=po&customer=' + custParam;
+        if (k2) k2.href = 'my-quotes.html?filter=open&customer=' + custParam;
         if (k3) k3.href = 'dealer-profile.html?tab=addr-requests&customer=' + custParam;
 
         stateAll.style.display  = 'none';

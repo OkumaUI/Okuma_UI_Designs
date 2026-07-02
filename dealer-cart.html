@@ -257,24 +257,25 @@
 
     /* ===== MACHINE SWITCH MODAL ===== */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); z-index: 1000;
-      display: none; align-items: flex-start; justify-content: center;
-      padding: 16px; overflow-y: auto;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 9999;
+      display: none; align-items: center; justify-content: center;
+      padding: 16px;
     }
     .modal-overlay.is-open { display: flex; }
-    .modal { width: 100%; max-width: 440px; background: #fff; border-radius: 2px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); display: flex; flex-direction: column; margin: auto 0; }
-    .modal__header { height: 60px; background: #005EB8; border-radius: 2px 2px 0 0; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+    .modal { width: 100%; max-width: 480px; background: #fff; border-radius: 2px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); display: flex; flex-direction: column; margin: auto; }
+    .modal__header { height: 60px; background: #005EB8; border-radius: 2px 2px 0 0; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
     .modal__title  { font-size: 18px; font-weight: 700; color: #fff; }
     .modal__close  { background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; }
-    .modal__body   { padding: 32px; display: flex; flex-direction: column; gap: 20px; }
+    .modal__close:hover { opacity: .8; }
+    .modal__body   { padding: 28px 32px 24px; display: flex; flex-direction: column; gap: 20px; }
     .modal__divider{ height: 1px; background: #E0E0E0; }
     .modal__actions{ display: flex; gap: 12px; }
-    .modal-btn { flex: 1; height: 38px; border-radius: 2px; cursor: pointer; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+    .modal-btn { flex: 1; height: 40px; border-radius: 2px; cursor: pointer; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: background .15s; }
     .modal-btn--cancel  { background: transparent; border: 1px solid #005EB8; color: #005EB8; }
     .modal-btn--cancel:hover  { background: #F0F6FF; }
-    .modal-btn--proceed { background: #005EB8; border: none; color: #fff; }
-    .modal-btn--proceed:hover { background: #00509C; }
+    .modal-btn--proceed { background: #005EB8; border: 1px solid #005EB8; color: #fff; }
+    .modal-btn--proceed:hover { background: #0B308E; }
   </style>
 </head>
 <body>
@@ -677,6 +678,7 @@
         clearCart();
         updateBanner(currentMachine);
         closeModal();
+        window.location = 'dealer-dashboard.html';
       });
     })();
   </script>
