@@ -940,62 +940,26 @@
 
     #toast-close:hover { color: #111111; }
 
-    /* â”€â”€ QUOTE MODAL â”€â”€ */
-    #quote-modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 9999; display: none;
-      align-items: center; justify-content: center;
-      padding: 16px; overflow-y: auto;
+    /* ── QUOTE TOAST ── */
+    #quote-toast {
+      position: fixed; top: 28px; right: 28px;
+      min-width: 300px; max-width: 360px;
+      background: #ffffff; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none; flex-direction: row; overflow: hidden; z-index: 2001;
+      animation: toast-in 0.28s cubic-bezier(0.22,1,0.36,1);
     }
-    #quote-modal-overlay.is-open { display: flex; }
-    #quote-modal {
-      width: 100%; max-width: 480px;
-      max-height: 90vh;
-      background: #fff;
-      border-radius: 2px;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
-      overflow: auto;
-      margin: auto;
+    #quote-toast.hiding { animation: toast-out 0.22s ease forwards; }
+    #quote-toast .toast-accent { background: #005EB8; }
+    #quote-toast .toast-header { color: #005EB8; }
+    #quote-toast-name { font-size: 14px; font-weight: 700; color: #111111; }
+    #quote-toast-partnum { font-size: 14px; font-weight: 400; color: #6E6E6E; }
+    #quote-toast-close {
+      align-self: flex-start; margin: 10px 10px 0 0;
+      background: none; border: none; cursor: pointer;
+      font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px; flex-shrink: 0;
     }
-    .quote-modal__placeholder {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 14px;
-      text-align: center;
-      padding: 40px 32px 36px;
-    }
-    .quote-modal__icon {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: #EEF3FF;
-      display: flex; align-items: center; justify-content: center;
-      color: #005EB8;
-    }
-    .quote-modal__icon svg { width: 24px; height: 24px; }
-    .quote-modal__chip {
-      font-size: 10px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1px; color: #005EB8;
-      background: #EEF3FF; border-radius: 4px; padding: 3px 10px;
-    }
-    .quote-modal__title {
-      font-size: 17px; font-weight: 700; color: #1A1A1A;
-    }
-    .quote-modal__part-ref {
-      font-size: 12px; color: #717171;
-      background: #F5F5F5; border-radius: 4px;
-      padding: 6px 16px; font-family: 'Courier New', monospace;
-      font-weight: 600; letter-spacing: 0.3px;
-    }
-    .quote-modal__body {
-      font-size: 13px; color: #717171; line-height: 1.6; max-width: 320px;
-    }
-    .quote-modal__cta {
-      width: 100%; height: 40px;
-      background: #005EB8; color: #fff; border: none; border-radius: 2px;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      transition: background 0.15s; margin-top: 4px;
-    }
-    .quote-modal__cta:hover { background: #0B308E; }
+    #quote-toast-close:hover { color: #111111; }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SAFETY NET + PARTS TABLE SCROLL CONTAINER
@@ -1412,38 +1376,15 @@
     </div>
   </div>
 
-  <!-- Quote Modal -->
-  <div id="quote-modal-overlay">
-    <div id="quote-modal" role="dialog" aria-modal="true" aria-labelledby="quote-modal-title">
-      <div class="modal-header">
-        <div class="modal-header-left">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
-          </svg>
-          <span class="modal-title" id="quote-modal-title">Add to Quote</span>
-        </div>
-        <button id="quote-modal-close" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;" type="button" aria-label="Close">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-            <path d="M5 5L15 15M15 5L5 15"/>
-          </svg>
-        </button>
-      </div>
-      <div class="quote-modal__placeholder">
-        <div class="quote-modal__icon">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/>
-            <path d="M8 12h8M8 8h5M8 16h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <span class="quote-modal__chip">Coming Soon</span>
-        <p class="quote-modal__title">Design is coming soon</p>
-        <div class="quote-modal__part-ref" id="quote-part-ref">-</div>
-        <p class="quote-modal__body">
-          The Request a Quote flow is yet to be designed. This will allow you to submit out-of-stock parts for a pricing quote from Okuma.
-        </p>
-        <button class="quote-modal__cta" id="quote-modal-dismiss" type="button">Got it</button>
-      </div>
+  <!-- Quote Toast -->
+  <div id="quote-toast" role="status" aria-live="polite">
+    <div class="toast-accent"></div>
+    <div class="toast-body">
+      <div class="toast-header">&#10003; Added to Quote Basket</div>
+      <div id="quote-toast-name"></div>
+      <div id="quote-toast-partnum"></div>
     </div>
+    <button id="quote-toast-close" type="button" aria-label="Dismiss">&times;</button>
   </div>
 
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -2238,7 +2179,7 @@
         if (!part) return;
         if (!part.inStock) {
           selectedPartId = id;
-          openQuoteModal(part);
+          showQuoteToast(part);
         } else {
           showCartToast(part, rowQtys[id]);
         }
@@ -2301,7 +2242,7 @@
       const part = partsData.find(p => p.id === selectedPartId);
       if (!part) return;
       if (!part.inStock) {
-        openQuoteModal(part);
+        showQuoteToast(part);
       } else {
         showCartToast(part, popupQty);
       }
@@ -2387,7 +2328,7 @@
     document.getElementById('alt-to-quote-btn').addEventListener('click', () => {
       closeAltModal();
       const part = partsData.find(p => p.id === selectedPartId);
-      if (part) openQuoteModal(part);
+      if (part) showQuoteToast(part);
     });
 
     // Popup "Suggested Alternatives" button
@@ -2398,26 +2339,29 @@
       if (part) openAltModal(part);
     });
 
-    // â”€â”€ Quote modal â”€â”€
-    const quoteModalOverlay = document.getElementById('quote-modal-overlay');
-    const quotePartRef      = document.getElementById('quote-part-ref');
+    // ── Quote toast ──
+    var _quoteToastTimer = null;
+    const quoteToastEl = document.getElementById('quote-toast');
 
-    function openQuoteModal(part) {
-      quotePartRef.textContent = part.partNum + ' - ' + part.name;
-      quoteModalOverlay.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
+    function showQuoteToast(part) {
+      document.getElementById('quote-toast-name').textContent    = part.name;
+      document.getElementById('quote-toast-partnum').textContent = 'Part # ' + part.partNum;
+      quoteToastEl.classList.remove('hiding');
+      quoteToastEl.style.display = 'flex';
+      clearTimeout(_quoteToastTimer);
+      _quoteToastTimer = setTimeout(dismissQuoteToast, 8000);
     }
 
-    function closeQuoteModal() {
-      quoteModalOverlay.classList.remove('is-open');
-      document.body.style.overflow = '';
+    function dismissQuoteToast() {
+      quoteToastEl.classList.add('hiding');
+      quoteToastEl.addEventListener('animationend', function handler() {
+        quoteToastEl.style.display = 'none';
+        quoteToastEl.classList.remove('hiding');
+        quoteToastEl.removeEventListener('animationend', handler);
+      });
     }
 
-    document.getElementById('quote-modal-close').addEventListener('click', closeQuoteModal);
-    document.getElementById('quote-modal-dismiss').addEventListener('click', closeQuoteModal);
-    quoteModalOverlay.addEventListener('click', (e) => {
-      if (e.target === quoteModalOverlay) closeQuoteModal();
-    });
+    document.getElementById('quote-toast-close').addEventListener('click', dismissQuoteToast);
 
     // -- Toast logic --
     var _toastTimer = null;

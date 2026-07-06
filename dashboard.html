@@ -246,7 +246,7 @@
     /* Scroll container so the table scrolls inside its card on small screens
        (the page itself must never scroll horizontally) */
     .orders-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .orders-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    .orders-table { width: 100%; border-collapse: collapse; min-width: 600px; table-layout: fixed; }
     .orders-table thead tr { background: #F5F5F5; }
     .orders-table th {
       font-size: 11px;
@@ -257,6 +257,7 @@
       padding: 13px 16px;
       border-bottom: 1px solid #DEDEDE;
       white-space: nowrap;
+      width: 20%;
     }
     .orders-table td {
       padding: 14px 16px;
@@ -264,14 +265,17 @@
       vertical-align: middle;
       font-size: 13px;
       color: #000;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .orders-table tbody tr:last-child td { border-bottom: none; }
     .orders-table tbody tr:hover td { background: #F5F8FF; }
-    .col-order { width: 200px; font-weight: 700; }
-    .col-date  { width: 150px; font-weight: 400; }
+    .col-order { font-weight: 700; }
+    .col-date  { font-weight: 400; }
     .col-items { font-weight: 400; }
-    .col-total { width: 140px; font-weight: 700; }
-    .col-status { width: 160px; }
+    .col-total { font-weight: 700; }
+    .col-status { }
 
     .status-badge {
       display: inline-flex;

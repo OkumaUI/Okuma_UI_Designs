@@ -308,7 +308,7 @@
     .sum-excl-row__lbl { color: #9E9E9E; font-style: italic; }
     .sum-excl-row__val { color: #C0392B; font-weight: 500; }
 
-    /* TOAST */
+    /* TOAST — dark pill (withdraw / generic) */
     .toast {
       position: fixed; top: 24px; right: 32px;
       transform: translateY(-12px);
@@ -318,6 +318,27 @@
       transition: opacity 0.2s, transform 0.2s;
     }
     .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* CART TOAST — white card (matches parts-catalogue / search-results) */
+    @keyframes ct-in  { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes ct-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(60px); } }
+    #cart-toast {
+      position: fixed; top: 28px; right: 28px;
+      min-width: 300px; max-width: 360px;
+      background: #fff; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none; flex-direction: row; overflow: hidden; z-index: 2000;
+      animation: ct-in 0.28s cubic-bezier(0.22,1,0.36,1);
+    }
+    #cart-toast.hiding { animation: ct-out 0.22s ease forwards; }
+    #cart-toast .ct-accent { width: 5px; flex-shrink: 0; background: #2E7D32; }
+    #cart-toast .ct-body { flex: 1; padding: 14px 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+    #cart-toast .ct-header { color: #2E7D32; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    #ct-name    { font-size: 14px; font-weight: 700; color: #111; }
+    #ct-partnum { font-size: 14px; font-weight: 400; color: #6E6E6E; }
+    #ct-price   { font-size: 16px; font-weight: 700; color: #111; margin-top: 4px; }
+    #ct-close   { align-self: flex-start; margin: 10px 10px 0 0; background: none; border: none; cursor: pointer; font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px; flex-shrink: 0; }
+    #ct-close:hover { color: #111; }
 
     /* WITHDRAW MODAL — danger variant only; base csw-* styles injected by components.js */
     .csw-btn--withdraw { background: #C0392B; border: 1px solid #C0392B; color: #fff; }
@@ -381,6 +402,18 @@
 
   <div id="okuma-auth-footer"></div>
   <div class="toast" id="toast"></div>
+
+  <!-- Cart Toast (white card) -->
+  <div id="cart-toast" role="status" aria-live="polite">
+    <div class="ct-accent"></div>
+    <div class="ct-body">
+      <div class="ct-header">&#10003; Added to Cart</div>
+      <div id="ct-name"></div>
+      <div id="ct-partnum"></div>
+      <div id="ct-price"></div>
+    </div>
+    <button id="ct-close" type="button" aria-label="Dismiss">&times;</button>
+  </div>
 
   <div class="csw-overlay" id="withdrawModal">
     <div class="csw-modal" role="dialog" aria-modal="true" aria-labelledby="withdrawModalTitle">
@@ -763,10 +796,10 @@
     }
 
     /* ── CART HELPERS ─────────────────────────────────────── */
-    function cartKey(quoteId) { return 'okuma_cart_' + quoteId; }
+    var _pageCartState = {};   /* in-memory only — resets on every page load */
 
     function getCartState(quoteId) {
-      return lsGet(cartKey(quoteId)) || {};
+      return _pageCartState[quoteId] || {};
     }
 
     function addToCart(q, dealerResp, idx) {
@@ -775,7 +808,7 @@
       var price = dr.action === 'price' ? parseFloat(dr.priceVal) : itm.listPrice || dr.listPrice;
       var cart  = getCartState(q.num);
       cart[idx] = { name: itm.name, pn: itm.pn, qty: dr.qty || itm.qty, unit: price };
-      lsSet(cartKey(q.num), cart);
+      _pageCartState[q.num] = cart;
 
       /* push to global cart list for cart.html */
       var globalCart = lsGet('okuma_global_cart') || [];
@@ -783,7 +816,7 @@
       globalCart.push({ quoteId: q.num, idx: idx, name: itm.name, pn: itm.pn, qty: dr.qty || itm.qty, unit: price });
       lsSet('okuma_global_cart', globalCart);
 
-      showToast(itm.name + ' added to cart');
+      showCartToast(itm.name, itm.pn, cart[idx].qty, price);
       refreshCartButtons(q, dealerResp);
       checkAllCarted(q, dealerResp);
     }
@@ -820,7 +853,7 @@
         try {
           sessionStorage.setItem('okuma_quote_status_' + q.num, 'closed');
         } catch(e) {}
-        showToast('All items added to cart — quote is now Closed');
+        showCartToast('All items added to cart', null, null, null, true);
         setTimeout(function() {
           var badge = document.getElementById('pgBadge');
           if (badge) badge.innerHTML = '<span class="status-badge status-badge--closed"><span class="dot"></span>Closed</span>';
@@ -844,6 +877,36 @@
       t.textContent = msg;
       t.classList.add('show');
       setTimeout(function() { t.classList.remove('show'); }, 2200);
+    }
+
+    var _ctTimer = null;
+    function showCartToast(name, pn, qty, unitPrice, allItems) {
+      var el = document.getElementById('cart-toast');
+      if (!el) return;
+      var hdr = el.querySelector('.ct-header');
+      hdr.textContent = allItems ? '✓ All items added to cart' : '✓ Added to Cart';
+      document.getElementById('ct-name').textContent    = name || '';
+      document.getElementById('ct-partnum').textContent = pn ? 'Part # ' + pn : '';
+      if (qty && unitPrice) {
+        document.getElementById('ct-price').textContent = 'Qty ' + qty + '  ×  $' + parseFloat(unitPrice).toFixed(2) + '  =  $' + (qty * parseFloat(unitPrice)).toFixed(2);
+      } else {
+        document.getElementById('ct-price').textContent = '';
+      }
+      el.classList.remove('hiding');
+      el.style.display = 'flex';
+      clearTimeout(_ctTimer);
+      _ctTimer = setTimeout(dismissCartToast, 8000);
+    }
+
+    function dismissCartToast() {
+      var el = document.getElementById('cart-toast');
+      if (!el) return;
+      el.classList.add('hiding');
+      el.addEventListener('animationend', function handler() {
+        el.style.display = 'none';
+        el.classList.remove('hiding');
+        el.removeEventListener('animationend', handler);
+      });
     }
 
     /* ── RENDER ───────────────────────────────────────────── */
@@ -1270,6 +1333,8 @@
     var _qRef  = null;
     var _drRef = null;
 
+    document.getElementById('ct-close').addEventListener('click', dismissCartToast);
+
     /* exposed globally so inline onclick="qAddToCart(idx)" works */
     window.qAddToCart = function(idx) {
       if (_qRef && _drRef) addToCart(_qRef, _drRef, idx);
@@ -1278,7 +1343,7 @@
     var id    = new URLSearchParams(window.location.search).get('id');
     var quote = id && DATA[id];
     _qRef  = quote || DATA['QUO-2026-00089'];
-    _drRef = lsGet('okuma_dealer_response_' + _qRef.num);
+    _drRef = lsGet('okuma_dealer_response_' + _qRef.num) || _qRef.dealerResponse || null;
     render(_qRef);
 
     /* ── WITHDRAW MODAL ── */
