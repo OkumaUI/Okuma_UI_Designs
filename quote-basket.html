@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quote Basket - Okuma Parts Portal</title>
+  <script>
+    (function () {
+      var c = new URLSearchParams(window.location.search).get('customer');
+      if (!c) { try { c = localStorage.getItem('okmSelectedCustomer') || ''; } catch(e) {} }
+      if (c) document.title = c + ' Quote Basket - Okuma Parts Portal';
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    main {
+      flex: 1;
+      padding: 48px;
+      background: #FFFFFF;
+    }
+    .cart-layout {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+    }
+    @media (max-width: 900px) and (min-width: 769px) {
+      main { padding: 32px; }
+      .cart-layout { gap: 24px; }
+      .cart-right { width: 340px; }
+    }
+    .cart-left { flex: 1; min-width: 0; }
+    .page-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #2C2A29;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    /* Cart table header */
+    .cart-head {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    .cart-head .col-partno,
+    .cart-row .col-partno { width: 110px; flex-shrink: 0; }
+    .cart-head .col-desc,
+    .cart-row .col-desc { flex: 1; min-width: 0; }
+    .cart-head .col-price,
+    .cart-row .col-price { width: 80px; flex-shrink: 0; }
+    .cart-head .col-qty,
+    .cart-row .col-qty { width: 110px; flex-shrink: 0; display: flex; justify-content: center; }
+    .cart-head .col-total,
+    .cart-row .col-total { width: 100px; flex-shrink: 0; text-align: right; }
+    .cart-head .col-action,
+    .cart-row .col-action { width: 20px; flex-shrink: 0; }
+    .cart-head .head-thumb { display: none; }
+    .cart-head .hcol { font-size: 14px; font-weight: 700; color: #000000; }
+    .cart-head .col-qty .hcol,
+    .cart-head .col-total .hcol { width: 100%; text-align: center; }
+    .cart-head .col-total .hcol { text-align: right; }
+
+    /* Machine context banner */
+    .machine-context {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      padding: 12px 16px;
+      background: #F0F6FF;
+      border-left: 3px solid #005EB8;
+      border-radius: 2px;
+    }
+    .machine-context__label { font-size: 12px; font-weight: 400; color: #6E6E6E; text-transform: uppercase; letter-spacing: 0.4px; flex-shrink: 0; }
+    .machine-context__name  { font-size: 15px; font-weight: 700; color: #005EB8; }
+    .machine-context__sep   { font-size: 14px; color: #BDBDBD; }
+    .machine-context__serial{ font-size: 13px; font-weight: 400; color: #4B4B4B; }
+
+    /* Cart item row */
+    .cart-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    .item-info { display: flex; flex-direction: column; gap: 4px; }
+    .item-name { font-size: 14px; font-weight: 400; color: #000000; line-height: 1; }
+    .item-part { font-size: 14px; font-weight: 700; color: #005EB8; line-height: 1; }
+    .col-price { font-size: 14px; font-weight: 400; color: #000000; }
+
+    /* Qty stepper */
+    .qty-stepper { display: flex; align-items: center; height: 30px; border: 1px solid #E0E0E0; border-radius: 2px; overflow: hidden; }
+    .qty-btn { width: 30px; height: 30px; background: #FFFFFF; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #6E6E6E; transition: background 0.15s, color 0.15s; }
+    .qty-btn:hover { background: #F5F5F5; color: #005EB8; }
+    .qty-value { min-width: 32px; height: 30px; padding: 0 12px; display: flex; align-items: center; justify-content: center; border-left: 1px solid #E0E0E0; border-right: 1px solid #E0E0E0; font-size: 14px; font-weight: 500; color: #000000; }
+
+    /* Total cell */
+    .col-total .total-stack { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .price-plain { font-size: 16px; font-weight: 700; color: #000000; line-height: 1; }
+
+    .trash-btn { background: none; border: none; cursor: pointer; padding: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: #6E6E6E; transition: color 0.15s; }
+    .trash-btn:hover { color: #AD0000; }
+
+    /* ===== QUOTE SUMMARY ===== */
+    .cart-right { width: 380px; flex-shrink: 0; }
+    .summary-card { background: #FFFFFF; border: 1px solid #2C2A29; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+    .summary-title { font-size: 18px; font-weight: 700; color: #000000; line-height: 1; }
+    .summary-lines { display: flex; flex-direction: column; gap: 12px; }
+    .summary-line { display: flex; justify-content: space-between; align-items: baseline; }
+    .summary-line .lbl { font-size: 14px; font-weight: 400; color: #616161; }
+    .summary-line .val { font-size: 14px; font-weight: 500; color: #000000; }
+    .summary-line .val.muted { font-size: 12px; font-weight: 400; color: #6E6E6E; }
+
+    /* Notes */
+    .notes-row { display: flex; flex-direction: column; gap: 8px; }
+    .notes-row label { font-size: 12px; font-weight: 700; color: #2C2A29; text-transform: uppercase; letter-spacing: 0.3px; }
+    .notes-input {
+      width: 100%; height: 88px;
+      border: 1px solid #E5E5E5; border-radius: 4px;
+      padding: 10px 12px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px; font-weight: 400; color: #1A1A1A;
+      resize: vertical; outline: none; line-height: 1.5;
+    }
+    .notes-input:focus { border-color: #005EB8; }
+    .notes-input::placeholder { color: #6B7280; }
+
+    .coupon-msg { font-size: 12px; min-height: 0; }
+    .coupon-msg.show { min-height: 14px; }
+    .coupon-msg.info { color: #6E6E6E; }
+
+    .summary-divider { height: 1px; background: #E0E0E0; }
+    .total-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .total-label  { font-size: 18px; font-weight: 700; color: #000000; }
+    .total-amount { font-size: 24px; font-weight: 700; color: #005EB8; line-height: 1; }
+
+    .checkout-btn { width: 100%; padding: 12px 24px; background: #005EB8; color: #FFFFFF; border: none; border-radius: 2px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+    .checkout-btn:hover { background: #00509C; }
+
+    /* Price disclaimer */
+    .payments { display: flex; flex-direction: column; gap: 12px; padding-top: 12px; }
+    .payments-label { font-size: 11px; font-weight: 500; color: #6E6E6E; text-transform: uppercase; letter-spacing: 0.3px; }
+    .disclaimer-text { font-size: 12px; font-weight: 400; color: #6E6E6E; line-height: 1.6; }
+
+    main img, main svg { max-width: 100%; }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 1350px) and (min-width: 1101px) {
+      main { padding: 32px; }
+      .cart-layout { gap: 32px; }
+      .cart-right { width: 340px; }
+    }
+    @media (max-width: 1100px) {
+      .cart-layout { flex-direction: column; align-items: stretch; gap: 32px; }
+      .cart-right { width: 100%; flex-shrink: 1; }
+    }
+    @media (max-width: 768px) {
+      main { padding: 24px; }
+      .page-title { font-size: 28px; margin-bottom: 24px; }
+      .cart-row { gap: 16px; }
+      .cart-head { gap: 16px; }
+    }
+
+    @media (max-width: 640px) {
+      main { padding: 16px; }
+      .page-title { font-size: 24px; }
+      .cart-head { display: none; }
+      .qty-btn { width: 40px; height: 40px; }
+      .qty-stepper { height: 40px; }
+      .qty-value { height: 40px; font-size: 15px; }
+
+      .cart-row {
+        position: relative;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 4px 0;
+        padding: 16px 44px 16px 0;
+      }
+
+      .cart-row .col-partno { flex: 0 0 100%; order: 0; }
+      .cart-row .col-desc { flex: 0 0 100%; order: 1; }
+
+      .cart-row .col-action {
+        position: absolute; top: 14px; right: 0;
+        width: auto; order: 0;
+      }
+      .cart-row .trash-btn {
+        width: 36px; height: 36px; padding: 6px;
+        border-radius: 4px; color: #9E9E9E;
+      }
+      .cart-row .trash-btn:hover { background: #FFF0F0; color: #AD0000; }
+
+      .cart-row .col-price { display: none; }
+
+      .cart-row .col-qty {
+        order: 2; flex: 0 0 auto;
+        justify-content: flex-start;
+        margin-top: 12px;
+      }
+      .cart-row .col-total {
+        order: 2; flex: 0 0 auto;
+        margin-left: auto; margin-top: 12px;
+        text-align: right;
+      }
+      .cart-row .col-total .total-stack { align-items: flex-end; }
+      .cart-row .col-qty { margin-top: 4px; }
+      .cart-row .col-total { margin-top: 4px; }
+    }
+    @media (max-width: 480px) {
+      main { padding: 16px 12px; }
+      .summary-card { padding: 20px; }
+      .cart-row { padding: 16px 44px 16px 0; }
+    }
+    @media (max-width: 414px) {
+      .page-title { font-size: 22px; }
+      .cart-row { padding: 14px 44px 14px 0; }
+      .summary-card { padding: 16px; }
+      .qty-btn { width: 40px; height: 40px; }
+      .qty-stepper { height: 40px; }
+      .qty-value { height: 40px; }
+    }
+
+    /* ===== MACHINE SWITCH MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 9999;
+      display: none; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.is-open { display: flex; }
+    .modal { width: 100%; max-width: 480px; background: #fff; border-radius: 2px; box-shadow: 0 12px 24px rgba(0,0,0,0.25); display: flex; flex-direction: column; margin: auto; }
+    .modal__header { height: 60px; background: #005EB8; border-radius: 2px 2px 0 0; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+    .modal__title  { font-size: 18px; font-weight: 700; color: #fff; }
+    .modal__close  { background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; }
+    .modal__close:hover { opacity: .8; }
+    .modal__body   { padding: 28px 32px 24px; display: flex; flex-direction: column; gap: 20px; }
+    .modal__divider{ height: 1px; background: #E0E0E0; }
+    .modal__actions{ display: flex; gap: 12px; }
+    .modal-btn { flex: 1; height: 40px; border-radius: 2px; cursor: pointer; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+    .modal-btn--cancel  { background: transparent; border: 1px solid #005EB8; color: #005EB8; }
+    .modal-btn--cancel:hover  { background: #F0F6FF; }
+    .modal-btn--proceed { background: #005EB8; border: 1px solid #005EB8; color: #fff; }
+    .modal-btn--proceed:hover { background: #0B308E; }
+
+    /* ── Quote Submitted Toast ── */
+    @keyframes toast-in  { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toast-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(60px); } }
+    #quote-toast {
+      position: fixed; top: 28px; right: 28px;
+      min-width: 300px; max-width: 360px;
+      background: #ffffff; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none; flex-direction: row; overflow: hidden; z-index: 2000;
+      animation: toast-in 0.28s cubic-bezier(0.22,1,0.36,1);
+    }
+    #quote-toast.hiding { animation: toast-out 0.22s ease forwards; }
+    #quote-toast .toast-accent  { width: 5px; flex-shrink: 0; background: #005EB8; }
+    #quote-toast .toast-body    { flex: 1; padding: 14px 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+    #quote-toast .toast-header  { color: #005EB8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    #quote-toast .toast-line    { font-size: 14px; font-weight: 400; color: #6E6E6E; }
+    #quote-toast .toast-line.bold { font-weight: 700; color: #111111; }
+    #quote-toast-close {
+      align-self: flex-start; margin: 10px 10px 0 0;
+      background: none; border: none; cursor: pointer;
+      font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px; flex-shrink: 0;
+    }
+    #quote-toast-close:hover { color: #111111; }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <!-- ===== BODY ===== -->
+  <div class="app-body-shell">
+
+    <div id="okuma-sidebar" data-active="quotes"></div>
+
+    <!-- ===== MAIN ===== -->
+    <main id="main" tabindex="-1">
+      <div class="cart-layout">
+
+        <!-- LEFT: Quote basket items -->
+        <div class="cart-left">
+          <h1 class="page-title" id="basketTitle">Quote Basket</h1>
+          <script>
+            (function () {
+              var c = new URLSearchParams(window.location.search).get('customer');
+              if (!c) { try { c = localStorage.getItem('okmSelectedCustomer') || ''; } catch(e) {} }
+              var el = document.getElementById('basketTitle');
+              if (c && el) el.textContent = c + "'s Quote Basket";
+            })();
+          </script>
+
+          <!-- Machine context banner -->
+          <div class="machine-context">
+            <span class="machine-context__label">Shopping for</span>
+            <span class="machine-context__name" id="bannerMachineName">LU300-M</span>
+            <span class="machine-context__sep">|</span>
+            <span class="machine-context__serial" id="bannerMachineSerial">Serial No: M5-2891-K</span>
+          </div>
+
+          <!-- Table header -->
+          <div class="cart-head">
+            <div class="head-thumb"></div>
+            <div class="col-partno"><span class="hcol">Part #</span></div>
+            <div class="col-desc"><span class="hcol">Part Name / Description</span></div>
+            <div class="col-price"><span class="hcol">Unit Price</span></div>
+            <div class="col-qty"><span class="hcol">Qty</span></div>
+            <div class="col-total"><span class="hcol">Total</span></div>
+            <div class="col-action"></div>
+          </div>
+
+          <!-- Item 1 -->
+          <div class="cart-row" id="item-row-0">
+            <div class="col-partno">
+              <div class="item-info">
+                <div class="item-part">MJ-4192-L</div>
+              </div>
+            </div>
+            <div class="col-desc">
+              <div class="item-info">
+                <div class="item-name">Spindle Bearing Assembly</div>
+              </div>
+            </div>
+            <div class="col-price">$1,250.00</div>
+            <div class="col-qty">
+              <div class="qty-stepper">
+                <button class="qty-btn" onclick="changeQty(0,-1)" aria-label="Decrease quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/></svg>
+                </button>
+                <span class="qty-value" id="qty-0">2</span>
+                <button class="qty-btn" onclick="changeQty(0,1)" aria-label="Increase quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="col-total">
+              <div class="total-stack">
+                <span class="price-plain" id="row-total-0">$2,500.00</span>
+              </div>
+            </div>
+            <div class="col-action">
+              <button class="trash-btn" onclick="removeItem(0)" aria-label="Remove item">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 5 4 5 17.5 5"/><path d="M15.5 5l-.8 11.5a1.5 1.5 0 01-1.5 1.4H6.8a1.5 1.5 0 01-1.5-1.4L4.5 5"/><path d="M8 5V3.2a1 1 0 011-1h2a1 1 0 011 1V5"/><line x1="8.2" y1="8.5" x2="8.2" y2="14.5"/><line x1="11.8" y1="8.5" x2="11.8" y2="14.5"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="cart-row" id="item-row-1">
+            <div class="col-partno">
+              <div class="item-info">
+                <div class="item-part">CB-1140</div>
+              </div>
+            </div>
+            <div class="col-desc">
+              <div class="item-info">
+                <div class="item-name">Control Board PCB Assembly</div>
+              </div>
+            </div>
+            <div class="col-price">$2,800.00</div>
+            <div class="col-qty">
+              <div class="qty-stepper">
+                <button class="qty-btn" onclick="changeQty(1,-1)" aria-label="Decrease quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/></svg>
+                </button>
+                <span class="qty-value" id="qty-1">1</span>
+                <button class="qty-btn" onclick="changeQty(1,1)" aria-label="Increase quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="col-total">
+              <div class="total-stack">
+                <span class="price-plain" id="row-total-1">$2,800.00</span>
+              </div>
+            </div>
+            <div class="col-action">
+              <button class="trash-btn" onclick="removeItem(1)" aria-label="Remove item">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 5 4 5 17.5 5"/><path d="M15.5 5l-.8 11.5a1.5 1.5 0 01-1.5 1.4H6.8a1.5 1.5 0 01-1.5-1.4L4.5 5"/><path d="M8 5V3.2a1 1 0 011-1h2a1 1 0 011 1V5"/><line x1="8.2" y1="8.5" x2="8.2" y2="14.5"/><line x1="11.8" y1="8.5" x2="11.8" y2="14.5"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="cart-row" id="item-row-2">
+            <div class="col-partno">
+              <div class="item-info">
+                <div class="item-part">FLT-201</div>
+              </div>
+            </div>
+            <div class="col-desc">
+              <div class="item-info">
+                <div class="item-name">Hydraulic Filter Element</div>
+              </div>
+            </div>
+            <div class="col-price">$45.00</div>
+            <div class="col-qty">
+              <div class="qty-stepper">
+                <button class="qty-btn" onclick="changeQty(2,-1)" aria-label="Decrease quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/></svg>
+                </button>
+                <span class="qty-value" id="qty-2">6</span>
+                <button class="qty-btn" onclick="changeQty(2,1)" aria-label="Increase quantity">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="col-total">
+              <div class="total-stack">
+                <span class="price-plain" id="row-total-2">$270.00</span>
+              </div>
+            </div>
+            <div class="col-action">
+              <button class="trash-btn" onclick="removeItem(2)" aria-label="Remove item">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 5 4 5 17.5 5"/><path d="M15.5 5l-.8 11.5a1.5 1.5 0 01-1.5 1.4H6.8a1.5 1.5 0 01-1.5-1.4L4.5 5"/><path d="M8 5V3.2a1 1 0 011-1h2a1 1 0 011 1V5"/><line x1="8.2" y1="8.5" x2="8.2" y2="14.5"/><line x1="11.8" y1="8.5" x2="11.8" y2="14.5"/></svg>
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /cart-left -->
+
+        <!-- RIGHT: Quote Summary -->
+        <div class="cart-right">
+          <div class="summary-card">
+            <!-- Notes -->
+            <div class="notes-row">
+              <label for="basket-notes">Additional Notes</label>
+              <textarea class="notes-input" id="basket-notes" placeholder="Add any special requirements or instructions…"></textarea>
+            </div>
+            <div class="coupon-msg info show" id="notes-hint">Your distributor will review the note with your quote request.</div>
+
+            <button class="checkout-btn" onclick="submitQuoteRequest()">Submit Quote Request</button>
+
+            <div class="payments">
+              <div class="payments-label">About Quote Requests</div>
+              <div class="disclaimer-text">Quoted prices may differ from list prices shown. You will receive a response within 2–3 business days.</div>
+            </div>
+          </div>
+        </div><!-- /cart-right -->
+
+      </div><!-- /cart-layout -->
+    </main>
+  </div><!-- /app-body -->
+
+  <script>
+    var items = [
+      { unitPrice: 1250.00, qty: 2, removed: false },
+      { unitPrice: 2800.00, qty: 1, removed: false },
+      { unitPrice: 45.00,   qty: 6, removed: false }
+    ];
+
+    function money(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+    function changeQty(idx, delta) {
+      if (items[idx].removed) return;
+      var newQty = Math.max(1, items[idx].qty + delta);
+      items[idx].qty = newQty;
+      document.getElementById('qty-' + idx).textContent = newQty;
+      document.getElementById('row-total-' + idx).textContent = money(items[idx].unitPrice * newQty);
+      recalcSummary();
+    }
+
+    function removeItem(idx) {
+      items[idx].removed = true;
+      var row = document.getElementById('item-row-' + idx);
+      if (row) row.style.display = 'none';
+      recalcSummary();
+    }
+
+    function recalcSummary() {
+      var subtotal = 0, count = 0;
+      for (var i = 0; i < items.length; i++) {
+        if (!items[i].removed) { subtotal += items[i].unitPrice * items[i].qty; count++; }
+      }
+      document.getElementById('summary-count').textContent = count;
+      document.getElementById('summary-subtotal').textContent = money(subtotal);
+      document.getElementById('summary-total').textContent = money(subtotal);
+    }
+
+    var _quoteToastTimer = null;
+
+    function submitQuoteRequest() {
+      var count = items.reduce(function(s, i) { return s + i.qty; }, 0);
+      var subtotal = items.reduce(function(s, i) { return s + i.price * i.qty; }, 0);
+      document.getElementById('quote-toast-items').textContent =
+        count + ' item' + (count !== 1 ? 's' : '') + ' submitted';
+      var toast = document.getElementById('quote-toast');
+      toast.classList.remove('hiding');
+      toast.style.display = 'flex';
+      clearTimeout(_quoteToastTimer);
+      _quoteToastTimer = setTimeout(function() {
+        window.location = 'my-quotes.html';
+      }, 2500);
+    }
+
+    document.getElementById('quote-toast-close').addEventListener('click', function() {
+      var toast = document.getElementById('quote-toast');
+      toast.classList.add('hiding');
+      toast.addEventListener('animationend', function handler() {
+        toast.style.display = 'none';
+        toast.classList.remove('hiding');
+        toast.removeEventListener('animationend', handler);
+      });
+      clearTimeout(_quoteToastTimer);
+      window.location = 'my-quotes.html';
+    });
+
+    recalcSummary();
+  </script>
+
+  <!-- Quote Submitted Toast -->
+  <div id="quote-toast" role="status" aria-live="polite">
+    <div class="toast-accent"></div>
+    <div class="toast-body">
+      <div class="toast-header">&#10003; Quote Request Submitted</div>
+      <div id="quote-toast-items" class="toast-line bold"></div>
+    </div>
+    <button id="quote-toast-close" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <div id="okuma-auth-footer"></div>
+
+  <script>
+    var OKUMA_USERS = [
+      { email: 'customer@okuma.com', password: 'customer123', role: 'customer', firstName: 'Jonathan', lastName: 'Hayes' },
+      { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer',   firstName: 'Sarah',    lastName: 'Mitchell' }
+    ];
+    function okuma_checkAuth() {}
+    function okuma_getUser() {
+      try { var s = JSON.parse(sessionStorage.getItem('okuma_session')); if (s && s.firstName) return s; } catch(e) {}
+      return OKUMA_USERS[0];
+    }
+    function okuma_logout() { sessionStorage.removeItem('okuma_session'); window.location.replace('login.html'); }
+  </script>
+
+  <script src="components.js"></script>
+
+  <script>
+    (function () {
+      function lsGet(key, fallback) { try { return localStorage.getItem(key) || fallback; } catch(e) { return fallback; } }
+
+      var MACHINES = [
+        { name: 'LU300-M',           serial: 'M5-2891-K' },
+        { name: 'MULTUS U3000',      serial: 'MU-9102-L' },
+        { name: 'LB2000 EX III',     serial: 'LB-4431-M' },
+        { name: 'GENOS L200E',       serial: 'L2-1108-A' },
+        { name: 'SPACE TURN LB3000', serial: 'LB-8821-X' },
+        { name: 'MB-56V AII',        serial: 'MB-2234-P' }
+      ];
+
+      function getMachineData(name) {
+        for (var i = 0; i < MACHINES.length; i++) { if (MACHINES[i].name === name) return MACHINES[i]; }
+        return null;
+      }
+
+      function updateBanner(name) {
+        var data = getMachineData(name);
+        var nameEl   = document.getElementById('bannerMachineName');
+        var serialEl = document.getElementById('bannerMachineSerial');
+        if (nameEl)   nameEl.textContent   = data ? data.name : name;
+        if (serialEl) serialEl.textContent = data ? 'Serial No: ' + data.serial : '';
+      }
+
+      var currentMachine = lsGet('okmDefaultMachine', 'LU300-M');
+      updateBanner(currentMachine);
+
+      window.addEventListener('okuma:machineChanged', function(e) {
+        var newName = e.detail && e.detail.name;
+        if (!newName || newName === currentMachine) return;
+        currentMachine = newName;
+        updateBanner(currentMachine);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -333,6 +333,26 @@
     </div>
   </div>
 
+  <!-- Machine Switch Modal (reuses shared .csw-overlay/.csw-modal styles from components.js) -->
+  <div class="csw-overlay" id="srMachSwitchOverlay">
+    <div class="csw-modal" role="dialog" aria-modal="true" aria-labelledby="srMachSwitchTitle">
+      <div class="csw-modal__hdr">
+        <h2 class="csw-modal__ttl" id="srMachSwitchTitle">Switch Machine?</h2>
+        <button class="csw-modal__cls" id="srMachSwitchClose" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
+        </button>
+      </div>
+      <div class="csw-modal__bdy">
+        <p id="srMachSwitchBody"></p>
+        <div class="csw-modal__div"></div>
+        <div class="csw-modal__act">
+          <button class="csw-btn csw-btn--cancel" id="srMachSwitchCancel">Cancel</button>
+          <button class="csw-btn csw-btn--confirm" id="srMachSwitchConfirm">Switch &amp; Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── PAGE LOGIC ── -->
   <script>
     (function () {
@@ -505,6 +525,27 @@
         document.body.style.overflow = '';
       }
 
+      /* ── Machine switch modal (cross-machine "Add to Cart" flow) ── */
+      var _pendingMachPart = null;
+      var _pendingMachBtn  = null;
+
+      function showSrMachSwitchModal(part, btn) {
+        _pendingMachPart = part;
+        _pendingMachBtn  = btn;
+        document.getElementById('srMachSwitchBody').innerHTML =
+          'This part is for <strong>' + escapeHtml(part.machine) + '</strong>. Adding it will switch your active machine to ' +
+          '<strong>' + escapeHtml(part.machine) + '</strong> and clear your current cart.';
+        document.getElementById('srMachSwitchOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function hideSrMachSwitchModal() {
+        document.getElementById('srMachSwitchOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+        _pendingMachPart = null;
+        _pendingMachBtn  = null;
+      }
+
       var elGrid = document.getElementById('cardsGrid');
       var elPag  = document.getElementById('pagination');
       var elTitle = document.getElementById('srTitle');
@@ -567,20 +608,20 @@
             '<div class="avail-sub">Contact sales for availability</div>';
 
         var _checkSVG = '<svg viewBox="0 0 20 20" fill="none"><path d="M4 10l5 5 7-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        var _quoteSVG = '<svg viewBox="0 0 20 20" fill="none"><path d="M10 2H4a1 1 0 00-1 1v14a1 1 0 001 1h12a1 1 0 001-1V8l-6-6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 2v6h6M7 13h6M7 10h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+        var _cartSVG  = '<svg viewBox="0 0 20 20" fill="none"><path d="M1 1h2.2l2.1 10.4a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.47-1.2L19 4.5H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="1.3" fill="currentColor"/><circle cx="16" cy="17" r="1.3" fill="currentColor"/></svg>';
         var btn;
         if (p.inStock) {
           var _inCart = !!_cartParts[p.number];
           btn = _inCart
             ? '<button class="add-btn add-btn--cart add-btn--done" data-pn="' + escapeHtml(p.number) + '" data-act="cart" type="button">' + _checkSVG + 'In Cart</button>'
-            : '<button class="add-btn add-btn--cart" data-pn="' + escapeHtml(p.number) + '" data-act="cart" type="button">' +
-                '<svg viewBox="0 0 20 20" fill="none"><path d="M1 1h2.2l2.1 10.4a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.47-1.2L19 4.5H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="1.3" fill="currentColor"/><circle cx="16" cy="17" r="1.3" fill="currentColor"/></svg>' +
-                'Add to Cart</button>';
+            : '<button class="add-btn add-btn--cart" data-pn="' + escapeHtml(p.number) + '" data-act="cart"' + (!compatible ? ' data-cross-machine="true"' : '') + ' type="button">' + _cartSVG + 'Add to Cart</button>';
         } else {
           var _inQuote = !!_quoteParts[p.number];
           btn = _inQuote
             ? '<button class="add-btn add-btn--quote add-btn--done" data-pn="' + escapeHtml(p.number) + '" data-act="quote" type="button">' + _checkSVG + 'In Quote</button>'
             : '<button class="add-btn add-btn--quote" data-pn="' + escapeHtml(p.number) + '" data-act="quote" type="button">' +
-                '<svg viewBox="0 0 20 20" fill="none"><path d="M10 2H4a1 1 0 00-1 1v14a1 1 0 001 1h12a1 1 0 001-1V8l-6-6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 2v6h6M7 13h6M7 10h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
+                _quoteSVG +
                 'Add to Quote</button>';
         }
 
@@ -629,6 +670,11 @@
             if (!part) return;
             btn.dataset.busy = '1';
             if (btn.dataset.act === 'cart') {
+              if (btn.dataset.crossMachine === 'true') {
+                btn.dataset.busy = '';
+                showSrMachSwitchModal(part, btn);
+                return;
+              }
               addToCart(part);
               _cartParts[pn] = true;
               btn.classList.add('add-btn--done');
@@ -704,8 +750,8 @@
 
       /* ── render ── */
       function renderResults() {
-        _cartParts  = {};
-        _quoteParts = {};
+        buildCartSet();
+        buildQuoteSet();
         updatePills();
         var parts = getTabParts();
         var totalPages = Math.max(1, Math.ceil(parts.length / PAGE_SIZE));
@@ -762,6 +808,39 @@
       document.getElementById('quote-modal-close').addEventListener('click', closeQuoteModal);
       document.getElementById('quote-modal-dismiss').addEventListener('click', closeQuoteModal);
       _qOverlay.addEventListener('click', function(e) { if (e.target === _qOverlay) closeQuoteModal(); });
+
+      /* ── machine switch modal listeners ── */
+      var _srMachOverlay = document.getElementById('srMachSwitchOverlay');
+      document.getElementById('srMachSwitchClose').addEventListener('click', hideSrMachSwitchModal);
+      document.getElementById('srMachSwitchCancel').addEventListener('click', hideSrMachSwitchModal);
+      _srMachOverlay.addEventListener('click', function(e) { if (e.target === _srMachOverlay) hideSrMachSwitchModal(); });
+      document.getElementById('srMachSwitchConfirm').addEventListener('click', function() {
+        if (!_pendingMachPart) { hideSrMachSwitchModal(); return; }
+        var part = _pendingMachPart;
+
+        /* 1. Clear cart */
+        lsSetArr('okmCart', []);
+
+        /* 2. Switch active machine */
+        selectedMachine = part.machine;
+        localStorage.setItem('okmDefaultMachine', part.machine);
+
+        /* 3. Add the part */
+        addToCart(part);
+
+        /* 4. Notify header picker + badge */
+        window.dispatchEvent(new CustomEvent('okuma:machineChanged', { detail: { name: part.machine } }));
+        updateCartBadge();
+
+        /* 5. Toast */
+        showCartToast(part, 1);
+
+        hideSrMachSwitchModal();
+
+        /* 6. Re-render cards to reflect new machine context (renderResults also calls buildCartSet) */
+        currentPage = 1;
+        renderResults();
+      });
 
       updateCartBadge();
       renderResults();

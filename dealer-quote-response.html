@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quote Response — Okuma Parts Portal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      padding: 32px 32px 64px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #717171; margin-bottom: 20px; }
+    .breadcrumb a { color: #717171; text-decoration: none; }
+    .breadcrumb a:hover { color: #005EB8; text-decoration: underline; }
+    .breadcrumb__sep { color: #C4C4C4; }
+    .breadcrumb__current { color: #1A1A1A; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 240px; }
+
+    /* PAGE HEADER */
+    .page-head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+    .page-head__back {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 4px; border: 1px solid #DEDEDE;
+      background: #fff; color: #1A1A1A; text-decoration: none; flex-shrink: 0;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .page-head__back:hover { border-color: #005EB8; background: #F0F6FF; color: #005EB8; }
+    .page-head__back svg { width: 16px; height: 16px; }
+    .page-head__info { flex: 1; min-width: 0; }
+    .page-head__title { font-size: 24px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.3px; }
+    .page-head__meta { font-size: 13px; color: #717171; margin-top: 3px; display: block; }
+
+    /* STATUS BADGE */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 2px; padding: 5px 12px;
+      font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0;
+    }
+    .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .status-badge--open { background: #EEF4FF; border: 0.5px solid #4A90D9; color: #4A90D9; }
+    .status-badge--open .dot { background: #4A90D9; }
+
+    /* INFO BANNER */
+    .info-banner {
+      display: flex; align-items: flex-start; gap: 10px;
+      border-radius: 4px; padding: 12px 16px; margin-bottom: 20px;
+      font-size: 13px; line-height: 1.55; color: #003D82;
+      background: #EEF4FF; border: 1px solid #C7DCFA;
+    }
+    .info-banner svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* QUOTE INFO STRIP — Option A */
+    .quote-info-strip {
+      display: flex; align-items: center;
+      background: #fff; border: 1px solid #E2E2E2;
+      border-left: 3px solid #005EB8; border-radius: 4px;
+      height: 48px; margin-bottom: 20px; overflow: hidden;
+    }
+    .quote-info-strip__field {
+      display: flex; align-items: baseline; gap: 6px;
+      padding: 0 20px; flex: 1;
+    }
+    .quote-info-strip__field:first-child { padding-left: 16px; }
+    .quote-info-strip__field + .quote-info-strip__field { border-left: 1px solid #E2E2E2; }
+    .quote-info-strip__lbl {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+      text-transform: uppercase; color: #9E9E9E; white-space: nowrap; flex-shrink: 0;
+    }
+    .quote-info-strip__val {
+      font-size: 13px; font-weight: 600; color: #1A1A1A;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .quote-info-strip__val--blue { color: #005EB8; }
+
+    /* TWO COLUMN LAYOUT */
+    .detail-layout { display: flex; gap: 20px; align-items: flex-start; }
+    .detail-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+    .detail-aside { width: 308px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+
+    /* CARDS */
+    .det-card { border: 1px solid #DEDEDE; border-radius: 4px; overflow: hidden; }
+    .det-card__head {
+      padding: 12px 20px; background: #F5F5F5; border-bottom: 1px solid #DEDEDE;
+      font-size: 11px; font-weight: 700; color: #717171; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .det-card__body { padding: 20px; }
+
+    /* LINE ITEMS COLUMN HEADERS */
+    .items-col-head {
+      display: grid;
+      grid-template-columns: 2fr 130px 2fr 90px;
+      gap: 0 16px;
+      padding: 9px 20px;
+      background: #FAFAFA;
+      border-bottom: 1px solid #DEDEDE;
+    }
+    .ich { font-size: 11px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.3px; }
+    .ich--r { text-align: right; }
+
+    /* LINE ITEM ROW */
+    .item-row {
+      display: grid;
+      grid-template-columns: 2fr 130px 2fr 90px;
+      gap: 0 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #F0F0F0;
+      align-items: start;
+    }
+    .item-row:last-child { border-bottom: none; }
+
+    /* Part column */
+    .item-name { font-size: 13px; font-weight: 700; color: #1A1A1A; line-height: 1.35; }
+    .item-pn { font-size: 11px; color: #9E9E9E; margin-top: 2px; }
+    .item-desc { font-size: 12px; color: #717171; margin-top: 3px; line-height: 1.4; }
+    .item-tags { display: flex; align-items: center; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+    .tag {
+      font-size: 11px; font-weight: 600; border-radius: 2px; padding: 2px 7px;
+      white-space: nowrap;
+    }
+    .tag--qty  { color: #717171; background: #F5F5F5; border: 1px solid #DEDEDE; }
+    .tag--mach { color: #005EB8; background: #EEF4FF; border: 1px solid #C7DCFA; }
+    .item-listprice { font-size: 11px; color: #1A1A1A; margin-top: 5px; }
+
+    /* Action column */
+    .action-select {
+      width: 100%;
+      height: 36px;
+      border: 1px solid #DEDEDE;
+      border-radius: 4px;
+      padding: 0 26px 0 10px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #1A1A1A;
+      background: #fff;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%23717171' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 7px center;
+      transition: border-color 0.15s;
+    }
+    .action-select:focus { outline: none; border-color: #005EB8; }
+
+    /* Response panels */
+    .resp-placeholder { font-size: 12px; color: #C4C4C4; font-style: italic; padding-top: 6px; }
+
+    .resp-badge {
+      display: inline-block;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+      border-radius: 2px; padding: 2px 6px; margin-bottom: 7px;
+    }
+    .resp-badge--price   { background: #EDF7F0; border: 0.5px solid #2D9E5F; color: #1D6B40; }
+    .resp-badge--partno  { background: #FFF9EF; border: 0.5px solid #F0C040; color: #7A4F00; }
+    .resp-badge--invalid { background: #FFF0F0; border: 0.5px solid #F0A0A0; color: #8B2020; }
+    .resp-badge--nochange{ background: #F5F5F5; border: 0.5px solid #DEDEDE; color: #717171; }
+
+    .resp-hint { font-size: 11px; color: #9E9E9E; margin-top: 5px; line-height: 1.4; }
+
+    /* Price input */
+    .price-input-wrap {
+      display: flex; align-items: center;
+      border: 1px solid #DEDEDE; border-radius: 4px; overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .price-input-wrap:focus-within { border-color: #005EB8; }
+    .price-prefix {
+      padding: 0 9px; height: 36px; display: flex; align-items: center;
+      font-size: 13px; font-weight: 600; color: #717171;
+      background: #F5F5F5; border-right: 1px solid #DEDEDE; flex-shrink: 0;
+    }
+    .price-input {
+      flex: 1; height: 36px; border: none; outline: none;
+      padding: 0 10px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; color: #1A1A1A; background: #fff; width: 0;
+    }
+    .price-input::placeholder { color: #BDBDBD; }
+
+    /* Part no + reason inputs */
+    .partno-input, .reason-input {
+      width: 100%;
+      border: 1px solid #DEDEDE; border-radius: 4px;
+      padding: 8px 10px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; color: #1A1A1A; background: #fff;
+      outline: none; transition: border-color 0.15s;
+    }
+    .partno-input { height: 36px; }
+    .reason-input { min-height: 64px; resize: vertical; line-height: 1.5; }
+    .partno-input:focus, .reason-input:focus { border-color: #005EB8; }
+    .partno-input::placeholder, .reason-input::placeholder { color: #BDBDBD; }
+
+    /* Line total column */
+    .line-total { text-align: right; padding-top: 6px; font-size: 13px; font-weight: 700; color: #1A1A1A; }
+    .line-total--pending { color: #C4C4C4; font-style: italic; font-weight: 400; }
+    .line-total--excluded { color: #C0392B; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
+
+    /* MESSAGES CARD */
+    .msg-section { padding: 16px 20px; }
+    .msg-section + .msg-section { border-top: 1px solid #F0F0F0; }
+    .msg-label {
+      font-size: 11px; font-weight: 700; color: #9E9E9E;
+      text-transform: uppercase; letter-spacing: 0.4px;
+      display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
+    }
+    .msg-label span { font-weight: 400; color: #B0B0B0; text-transform: none; letter-spacing: 0; }
+    .msg-customer-bubble {
+      font-size: 13px; color: #1A1A1A; line-height: 1.65;
+      background: #F5F5F5; border-radius: 4px; padding: 11px 14px;
+      white-space: pre-wrap; border-left: 3px solid #DEDEDE;
+    }
+    .msg-reply-area {
+      width: 100%; min-height: 88px; resize: vertical;
+      border: 1px solid #DEDEDE; border-radius: 4px;
+      padding: 10px 12px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; color: #1A1A1A; line-height: 1.6;
+      outline: none; transition: border-color 0.15s;
+    }
+    .msg-reply-area:focus { border-color: #005EB8; }
+    .msg-reply-area::placeholder { color: #BDBDBD; }
+    .char-count { text-align: right; font-size: 11px; color: #9E9E9E; margin-top: 4px; }
+    .char-count--warn { color: #E08A00; }
+    .char-count--over { color: #C0392B; }
+
+    /* SUMMARY CARD */
+    .progress-bar-wrap { height: 4px; background: #EBEBEB; border-radius: 2px; margin: 8px 0 14px; }
+    .progress-bar-fill { height: 100%; background: #005EB8; border-radius: 2px; transition: width 0.25s; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 12px; }
+    .progress-label__txt { color: #717171; }
+    .progress-label__cnt { font-weight: 700; color: #1A1A1A; }
+    .progress-label__cnt--done { color: #1D8348; }
+
+    .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 13px; }
+    .sum-row__lbl { color: #717171; }
+    .sum-row__val { font-weight: 500; color: #1A1A1A; }
+    .sum-row__val--muted { color: #9E9E9E; font-style: italic; font-weight: 400; }
+    .sum-row__val--red { color: #C0392B; }
+    .sum-divider { height: 1px; background: #DEDEDE; margin: 8px 0; }
+    .sum-total { display: flex; justify-content: space-between; align-items: flex-start; padding: 4px 0; }
+    .sum-total__lbl { font-size: 14px; font-weight: 700; color: #1A1A1A; padding-top: 4px; }
+    .sum-total__val { font-size: 20px; font-weight: 800; color: #005EB8; }
+    .sum-total__excl { font-size: 10px; color: #9E9E9E; margin-top: 3px; text-align: right; }
+    .sum-empty { text-align: center; padding: 14px 0 8px; }
+    .sum-empty__msg { font-size: 13px; color: #9E9E9E; line-height: 1.5; margin-top: 8px; }
+
+    /* INFO ROWS */
+    .info-row { display: flex; flex-direction: column; gap: 2px; padding: 9px 0; border-bottom: 1px solid #F0F0F0; }
+    .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-row:first-child { padding-top: 0; }
+    .info-lbl { font-size: 11px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.4px; }
+    .info-val { font-size: 13px; color: #1A1A1A; line-height: 1.5; }
+
+    /* ACTIONS */
+    .action-stack { display: flex; flex-direction: column; gap: 10px; }
+    .btn-det {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; height: 40px; border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      text-decoration: none; border: 1.5px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .btn-det--primary { background: #005EB8; color: #fff; border-color: #005EB8; }
+    .btn-det--primary:hover:not(:disabled) { background: #0B308E; border-color: #0B308E; }
+    .btn-det--primary:disabled { background: #B0C4D8; border-color: #B0C4D8; cursor: not-allowed; }
+    .btn-det--outline { background: #fff; color: #005EB8; border-color: #005EB8; }
+    .btn-det--outline:hover { background: #F0F6FF; }
+    .btn-det svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .submit-note { font-size: 11px; color: #9E9E9E; text-align: center; line-height: 1.4; }
+    .support-link {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 13px; color: #717171; text-decoration: none; padding: 4px 0;
+    }
+    .support-link:hover { color: #005EB8; }
+
+    /* TOAST */
+    @keyframes toast-in  { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toast-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(60px); } }
+    #dealer-toast {
+      position: fixed; top: 28px; right: 28px;
+      min-width: 300px; max-width: 360px;
+      background: #ffffff; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none; flex-direction: row; overflow: hidden; z-index: 2000;
+      animation: toast-in 0.28s cubic-bezier(0.22,1,0.36,1);
+    }
+    #dealer-toast.hiding { animation: toast-out 0.22s ease forwards; }
+    #dealer-toast .toast-accent { width: 5px; flex-shrink: 0; background: #005EB8; }
+    #dealer-toast .toast-body { flex: 1; padding: 14px 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+    #dealer-toast .toast-header { color: #005EB8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    #dealer-toast .toast-line { font-size: 14px; font-weight: 400; color: #6E6E6E; }
+    #dealer-toast .toast-line.bold { font-weight: 700; color: #111111; }
+    #dealer-toast-close {
+      align-self: flex-start; margin: 10px 10px 0 0;
+      background: none; border: none; cursor: pointer;
+      font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px; flex-shrink: 0;
+    }
+    #dealer-toast-close:hover { color: #111111; }
+
+    /* RESPONDED BADGE */
+    .status-badge--responded { background: #EDF7F0; border: 0.5px solid #2D9E5F; color: #1D6B40; }
+    .status-badge--responded .dot { background: #2D9E5F; }
+
+    /* DISABLED INPUTS (read-only responded view) */
+    .action-select:disabled,
+    .price-input:disabled,
+    .partno-input:disabled,
+    .reason-input:disabled,
+    .msg-reply-area:disabled {
+      background: #F5F5F5; color: #717171; cursor: default; opacity: 1;
+    }
+
+    /* CLOSED BADGE */
+    .status-badge--closed { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #717171; }
+    .status-badge--closed .dot { background: #9E9E9E; }
+
+    /* EXPIRY BANNER (closed quotes) */
+    .expiry-banner {
+      display: flex; align-items: flex-start; gap: 10px;
+      border-radius: 4px; padding: 12px 16px; margin-bottom: 20px;
+      font-size: 13px; line-height: 1.55; color: #8B1A1A;
+      background: #FFF0F0; border: 1px solid #F0C0C0;
+    }
+    .expiry-banner svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* MACHINE STRIP */
+    .machine-strip-section { margin-bottom: 20px; }
+    .machine-strip-label {
+      font-size: 11px; font-weight: 700; color: #9E9E9E;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+    }
+    .machine-strip {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px;
+      background: #F0F6FF;
+      border-left: 3px solid #005EB8;
+      border-radius: 2px;
+    }
+    .machine-strip + .machine-strip { margin-top: 6px; }
+    .machine-strip__name { font-size: 14px; font-weight: 700; color: #005EB8; }
+    .machine-strip__sep  { font-size: 13px; color: #BDBDBD; }
+    .machine-strip__sub  { font-size: 13px; color: #4B4B4B; }
+
+    @media (min-width: 769px) and (max-width: 1199px) {
+      .main-area { padding: 24px 24px 48px; }
+      .detail-aside { width: 268px; }
+    }
+    @media (max-width: 900px) {
+      .detail-layout { flex-direction: column; }
+      .detail-aside { width: 100%; }
+    }
+    @media (max-width: 768px) {
+      .main-area { padding: 16px 16px 48px; }
+      .page-head__title { font-size: 20px; }
+      .items-col-head { display: none; }
+      .item-row { grid-template-columns: 1fr; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <div class="app-body-shell">
+    <div id="okuma-sidebar" data-active="quotes"></div>
+
+    <main class="main-area">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="dealer-dashboard.html">Home</a>
+        <span class="breadcrumb__sep">/</span>
+        <a href="my-quotes.html">Open Quotes</a>
+        <span class="breadcrumb__sep">/</span>
+        <span class="breadcrumb__current" id="bcId">Quote Response</span>
+      </nav>
+
+      <div class="page-head">
+        <a href="my-quotes.html" class="page-head__back" aria-label="Back">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <div class="page-head__info">
+          <h1 class="page-head__title" id="pgTitle">Quote Response</h1>
+          <span class="page-head__meta" id="pgMeta"></span>
+        </div>
+        <span class="status-badge status-badge--open">
+          <span class="dot"></span>Open — Response Needed
+        </span>
+      </div>
+
+      <div class="info-banner">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+          <circle cx="7.5" cy="7.5" r="6.5" stroke="#003D82" stroke-width="1.4"/>
+          <path d="M7.5 6.5v3.5" stroke="#003D82" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="7.5" cy="4.75" r="0.7" fill="#003D82"/>
+        </svg>
+        <span>Review each line item below, choose the appropriate action, and submit your response. The customer will be notified once you submit.</span>
+      </div>
+
+      <div id="quoteInfoStrip"></div>
+
+      <div id="machineStrip"></div>
+
+      <div id="quoteContent"></div>
+
+    </main>
+  </div>
+
+  <div id="okuma-auth-footer"></div>
+  <div id="dealer-toast" role="status" aria-live="polite">
+    <div class="toast-accent"></div>
+    <div class="toast-body">
+      <div class="toast-header">&#10003; Response Submitted</div>
+      <div class="toast-line bold">Quote status changed to Responded</div>
+    </div>
+    <button id="dealer-toast-close" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <script>
+    document.getElementById('dealer-toast-close').addEventListener('click', function () {
+      var toast = document.getElementById('dealer-toast');
+      toast.classList.add('hiding');
+      toast.addEventListener('animationend', function handler() {
+        toast.style.display = 'none';
+        toast.classList.remove('hiding');
+        toast.removeEventListener('animationend', handler);
+      });
+      window.location.href = 'my-quotes.html';
+    });
+  </script>
+
+  <script src="auth.js"></script>
+  <script src="components.js"></script>
+
+  <script>
+  (function () {
+
+    /* ── DATA ─────────────────────────────────────────────────────── */
+    var DATA = {
+      'QUO-2026-00077': {
+        num: 'QUO-2026-00077',
+        submitted: 'Jun 05, 2026',
+        customer: 'James Hartwell',
+        company: 'ABC Industries',
+        machine: 'MULTUS U3000',
+        serial: 'MU-9102-L',
+        customerNote: 'Please expedite if possible — machine is currently down and affecting production. Can you also confirm part compatibility with serial no. MU-9102-L before processing?',
+        items: [
+          { name: 'Plate Bearing', pn: '525-0100-11', desc: 'Turret section plate bearing, standard bore', mach: 'MULTUS U3000', ser: 'MU-9102-L', qty: 1, listPrice: 380.00 }
+        ]
+      },
+      'QUO-2026-00095': {
+        num: 'QUO-2026-00095',
+        submitted: 'Jul 01, 2026',
+        customer: 'Robert Chen',
+        company: 'Pacific Precision',
+        machine: 'VTM-200YB',
+        serial: 'VT-6630-S',
+        customerNote: null,
+        items: [
+          { name: 'Turret Locking Pin Set',     pn: 'TLP-0800-R', desc: 'Turret locking pin set, 8-station',          mach: 'VTM-200YB', ser: 'VT-6630-S', qty: 1, listPrice: 340.00 },
+          { name: 'Pneumatic Cylinder Seal Kit', pn: 'PCS-0040-K', desc: 'Pneumatic cylinder seal kit, 40mm bore',     mach: 'VTM-200YB', ser: 'VT-6630-S', qty: 3, listPrice: 125.00 }
+        ]
+      },
+      'QUO-2026-00092': {
+        num: 'QUO-2026-00092',
+        submitted: 'Jun 27, 2026',
+        customer: 'Sandra Kim',
+        company: 'Smith Manufacturing',
+        machine: 'MULTUS B400',
+        serial: 'MB-5510-R',
+        customerNote: 'Urgent — line is down waiting on the chuck seal. Can you expedite shipping?',
+        items: [
+          { name: 'Hydraulic Chuck Seal Set', pn: 'HSC-0250-K', desc: 'Hydraulic chuck seal set, 250mm bore',    mach: 'MULTUS B400', ser: 'MB-5510-R', qty: 1, listPrice: 380.00 },
+          { name: 'X-Axis Servo Belt',        pn: 'XSB-0614-V', desc: 'X-axis servo drive belt, 6-groove',       mach: 'MULTUS B400', ser: 'MB-5510-R', qty: 2, listPrice: 124.00 },
+          { name: 'Spindle Clamp Ring',       pn: 'SCR-1800-A', desc: 'Spindle clamp ring assembly, M180 bore',  mach: 'MULTUS B400', ser: 'MB-5510-R', qty: 1, listPrice: 520.00 }
+        ]
+      },
+      'QUO-2026-00079': {
+        num: 'QUO-2026-00079',
+        submitted: 'Jun 08, 2026',
+        customer: 'James Hartwell',
+        company: 'Apex Machining',
+        machine: 'LU300-M',
+        serial: 'M5-2891-K',
+        customerNote: null,
+        items: [
+          { name: 'Spindle Oil Seal',    pn: 'SOS-0180-B',  desc: 'Main spindle oil seal, 180mm bore',             mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, listPrice: 290.00 },
+          { name: 'Axis Limit Switch',   pn: 'LSW-2200-NC', desc: 'Axis limit switch, normally closed, 22mm',      mach: 'LU300-M', ser: 'M5-2891-K', qty: 2, listPrice: 145.00 },
+          { name: 'Chip Conveyor Belt',  pn: 'CCB-0500-H',  desc: 'Chip conveyor belt, hinged type, 500mm width',  mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, listPrice: 680.00 }
+        ]
+      },
+      'QUO-2026-00083': {
+        num: 'QUO-2026-00083',
+        submitted: 'Jun 12, 2026',
+        customer: 'Lisa Park',
+        company: 'Delta Components',
+        machine: 'LB3000 EXII',
+        serial: 'LB-7203-N',
+        customerNote: null,
+        items: [
+          { name: 'Coolant Level Sensor', pn: 'CLS-0440-D', desc: 'Coolant tank level sensor, digital output', mach: 'LB3000 EXII', ser: 'LB-7203-N', qty: 1, listPrice: 285.00 },
+          { name: 'Z-Axis Way Cover',     pn: 'ZWC-3000-L', desc: 'Z-axis telescopic way cover, left side',   mach: 'LB3000 EXII', ser: 'LB-7203-N', qty: 1, listPrice: 465.00 }
+        ]
+      },
+      'QUO-2026-00068': {
+        num: 'QUO-2026-00068',
+        submitted: 'May 20, 2026',
+        customer: 'James Hartwell',
+        company: 'Apex Machining',
+        machine: 'LU300-M',
+        serial: 'M5-2891-K',
+        customerNote: null,
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', desc: 'Coolant system pump assembly, 110V',          mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 1, listPrice: 520.00 },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    desc: 'Z-axis servo drive belt, 45-tooth',          mach: 'LU300-M',       ser: 'M5-2891-K', qty: 4, listPrice: 86.50  },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     desc: 'Turret section plate bearing, standard bore', mach: 'LU300-M',       ser: 'M5-2891-K', qty: 1, listPrice: 380.00 },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-0045-SLK',     desc: 'Spindle seal kit, O-ring set ×12',           mach: 'MULTUS U3000',  ser: 'MU-9102-L', qty: 6, listPrice: 76.00  },
+          { name: 'Spindle Bearing Unit',  pn: 'SK-2291-001',     desc: 'Main spindle bearing unit, class P4',        mach: 'LU300-M',       ser: 'M5-2891-K', qty: 1, listPrice: 352.50 }
+        ]
+      },
+      'QUO-2026-00089': {
+        num: 'QUO-2026-00089',
+        submitted: 'Jun 18, 2026',
+        customer: 'James Hartwell',
+        company: 'ABC Industries',
+        machine: 'LB2000 EX III',
+        serial: 'LB-7841-P',
+        customerNote: null,
+        items: [
+          { name: 'Servo Motor Encoder',    pn: 'SME-4400-K',  desc: 'Spindle servo encoder unit, 2048-pulse',     mach: 'LB2000 EX III', ser: 'LB-7841-P', qty: 1, listPrice: 520.00  },
+          { name: 'Hydraulic Seal Ring',    pn: 'HSR-0120-N',  desc: 'Hydraulic cylinder seal ring, 120mm bore',   mach: 'LB2000 EX III', ser: 'LB-7841-P', qty: 2, listPrice: 215.00  },
+          { name: 'Z-Axis Ball Screw',      pn: 'BS-Z2200-01', desc: 'Z-axis precision ball screw assembly',       mach: 'LB2000 EX III', ser: 'LB-7841-P', qty: 1, listPrice: 1480.00 },
+          { name: 'Coolant Filter Housing', pn: 'CFH-0600-B',  desc: 'Coolant system filter housing, 60L/min',    mach: 'LB2000 EX III', ser: 'LB-7841-P', qty: 1, listPrice: 450.00  }
+        ]
+      },
+      'QUO-2026-00085': {
+        num: 'QUO-2026-00085',
+        submitted: 'Jun 15, 2026',
+        customer: 'Sandra Kim',
+        company: 'Smith Manufacturing',
+        machine: 'MULTUS B400',
+        serial: 'MB-3342-X',
+        customerNote: 'Please confirm availability before processing.',
+        items: [
+          { name: 'Chuck Jaw Set (3-piece)', pn: 'CJS-120-3P', desc: 'Soft chuck jaw set, 120mm bore, 3-piece', mach: 'MULTUS B400', ser: 'MB-3342-X', qty: 1, listPrice: 312.50 },
+          { name: 'Turret Indexer Relay',    pn: 'TIR-8800-D', desc: 'Turret indexing relay module, 8-station',  mach: 'MULTUS B400', ser: 'MB-3342-X', qty: 1, listPrice: 300.00 }
+        ]
+      },
+      'QUO-2026-00081': {
+        num: 'QUO-2026-00081',
+        submitted: 'Jun 10, 2026',
+        customer: 'Robert Chen',
+        company: 'Pacific Precision',
+        machine: 'VTM-200YB',
+        serial: 'VT-5521-R',
+        customerNote: null,
+        items: [
+          { name: 'Spindle Motor Belt',    pn: 'SMB-440-V',      desc: 'Spindle drive belt, 440V, 5-groove',        mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 1, listPrice: 480.00 },
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017',  desc: 'Coolant system pump assembly, 220V',        mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 1, listPrice: 890.00 },
+          { name: 'Servo Encoder Unit',    pn: 'SEU-2048-R',     desc: 'Servo axis encoder, 2048-pulse resolution', mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 2, listPrice: 620.00 },
+          { name: 'Chuck Adapter Plate',   pn: 'CAP-0200-M',     desc: 'Chuck mounting adapter plate, 200mm',       mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 1, listPrice: 800.00 },
+          { name: 'Guide Bush',            pn: 'GB-0320-SS',     desc: 'Hardened guide bush, 32mm, stainless',     mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 2, listPrice: 540.00 },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-VTM-KIT',    desc: 'Full O-ring seal kit, coolant circuit',     mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 1, listPrice: 610.00 }
+        ]
+      },
+      'QUO-2026-00072': {
+        num: 'QUO-2026-00072',
+        submitted: 'May 28, 2026',
+        customer: 'Lisa Park',
+        company: 'Delta Components',
+        machine: 'LB3000 EXII',
+        serial: 'LB-6612-M',
+        customerNote: null,
+        items: [
+          { name: 'Turret Motor Relay',  pn: 'TMR-2210-F', desc: 'Turret drive motor relay, 22A rated',       mach: 'LB3000 EXII', ser: 'LB-6612-M', qty: 1, listPrice: 520.00 },
+          { name: 'Ball Screw Support',  pn: 'BSS-1140-P', desc: 'Ball screw end support bearing block',      mach: 'LB3000 EXII', ser: 'LB-6612-M', qty: 1, listPrice: 450.00 },
+          { name: 'Coolant Tank Filter', pn: 'CTF-0800-A', desc: 'Coolant tank inline filter, 800L/h flow',  mach: 'LB3000 EXII', ser: 'LB-6612-M', qty: 1, listPrice: 510.00 }
+        ]
+      },
+      'QUO-2026-00061': {
+        num: 'QUO-2026-00061',
+        submitted: 'May 10, 2026',
+        customer: 'James Hartwell',
+        company: 'Apex Machining',
+        machine: 'LU300-M',
+        serial: 'M5-2891-K',
+        customerNote: null,
+        items: [
+          { name: 'Coolant Nozzle Set', pn: 'CN-0800-M', desc: 'Coolant nozzle set, 8-port coolant ring',   mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, listPrice: 168.00 },
+          { name: 'Proximity Sensor',   pn: 'PS-5120-N', desc: 'Axis proximity sensor, NPN output, 12mm',   mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, listPrice: 156.00 }
+        ]
+      },
+      'QUO-2026-00054': {
+        num: 'QUO-2026-00054',
+        submitted: 'Apr 25, 2026',
+        customer: 'Sandra Kim',
+        company: 'Smith Manufacturing',
+        machine: 'MULTUS B400',
+        serial: 'MB-2210-T',
+        customerNote: null,
+        items: [
+          { name: 'Spindle Motor Pulley',     pn: 'SMP-0440-K', desc: 'Spindle motor pulley, 440mm PCD',          mach: 'MULTUS B400', ser: 'MB-2210-T', qty: 1, listPrice: 520.00 },
+          { name: 'Hydraulic Seal Kit',       pn: 'HSK-0180-F', desc: 'Hydraulic cylinder seal kit, 180mm bore',  mach: 'MULTUS B400', ser: 'MB-2210-T', qty: 2, listPrice: 190.00 },
+          { name: 'Servo Amplifier Module',   pn: 'SAM-2100-D', desc: 'Servo amplifier module, 21A rated',        mach: 'MULTUS B400', ser: 'MB-2210-T', qty: 1, listPrice: 780.00 },
+          { name: 'Way Cover Set',            pn: 'WCS-B400-T', desc: 'Telescopic way cover set, B400 series',    mach: 'MULTUS B400', ser: 'MB-2210-T', qty: 1, listPrice: 290.00 },
+          { name: 'Chuck Cylinder Nut',       pn: 'CCN-0120-P', desc: 'Chuck cylinder draw nut, M120 thread',     mach: 'MULTUS B400', ser: 'MB-2210-T', qty: 1, listPrice: 560.00 },
+          { name: 'O-Ring Set (assorted)',    pn: 'ORS-ASST-M', desc: 'Assorted O-ring set, hydraulic circuit',   mach: 'MULTUS B400', ser: 'MB-2210-T', qty: 3, listPrice: 180.00 },
+          { name: 'NC Control Battery',       pn: 'NCB-3600-L', desc: 'NC control backup battery, lithium 3.6V', mach: 'MULTUS B400', ser: 'MB-2210-T', qty: 1, listPrice: 830.00 }
+        ]
+      },
+      'QUO-2026-00047': {
+        num: 'QUO-2026-00047',
+        submitted: 'Apr 12, 2026',
+        customer: 'James Hartwell',
+        company: 'ABC Industries',
+        machine: 'LB2000 EX III',
+        serial: 'LB-5520-Q',
+        customerNote: null,
+        items: [
+          { name: 'Ball Screw Nut',    pn: 'BSN-2500-H', desc: 'Ball screw nut, 25mm lead, class C3',     mach: 'LB2000 EX III', ser: 'LB-5520-Q', qty: 1, listPrice: 215.00 },
+          { name: 'Encoder Cable',     pn: 'ENC-0450-S', desc: 'Servo encoder cable, 4.5m shielded',      mach: 'LB2000 EX III', ser: 'LB-5520-Q', qty: 2, listPrice: 185.00 },
+          { name: 'Spindle Lock Pin',  pn: 'SLP-0060-A', desc: 'Spindle orientation lock pin, 6mm bore',  mach: 'LB2000 EX III', ser: 'LB-5520-Q', qty: 1, listPrice: 195.00 }
+        ]
+      },
+      'QUO-2026-00039': {
+        num: 'QUO-2026-00039',
+        submitted: 'Mar 30, 2026',
+        customer: 'Lisa Park',
+        company: 'Delta Components',
+        machine: 'LB3000 EXII',
+        serial: 'LB-6612-M',
+        customerNote: null,
+        items: [
+          { name: 'Turret Drive Belt',       pn: 'TDB-1250-K', desc: 'Turret indexer drive belt, 125-tooth',    mach: 'LB3000 EXII', ser: 'LB-6612-M', qty: 1, listPrice: 520.00 },
+          { name: 'Z-Axis Servo Motor',      pn: 'ZSM-3000-B', desc: 'Z-axis servo motor, 3kW, 200V',           mach: 'LB3000 EXII', ser: 'LB-6612-M', qty: 1, listPrice: 380.00 },
+          { name: 'Hydraulic Manifold Block',pn: 'HMB-0800-S', desc: 'Hydraulic manifold block, 8-port',        mach: 'LB3000 EXII', ser: 'LB-6612-M', qty: 1, listPrice: 850.00 },
+          { name: 'Coolant Pump Seal',       pn: 'CPS-0350-N', desc: 'Coolant pump mechanical seal, 35mm shaft',mach: 'LB3000 EXII', ser: 'LB-6612-M', qty: 1, listPrice: 350.00 }
+        ]
+      },
+      'QUO-2026-00031': {
+        num: 'QUO-2026-00031',
+        submitted: 'Mar 10, 2026',
+        customer: 'James Hartwell',
+        company: 'Apex Machining',
+        machine: 'LU300-M',
+        serial: 'M5-2891-K',
+        customerNote: null,
+        items: [
+          { name: 'Way Wiper Set',          pn: 'WWS-0250-F', desc: 'Linear way wiper set, 25mm width, felt',  mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, listPrice: 215.00 },
+          { name: 'Spindle Drawbar Spring', pn: 'SDS-0180-K', desc: 'Spindle drawbar return spring, 18mm OD',  mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, listPrice: 200.00 }
+        ]
+      },
+      'QUO-2025-00198': {
+        num: 'QUO-2025-00198',
+        submitted: 'Dec 05, 2025',
+        customer: 'Robert Chen',
+        company: 'Pacific Precision',
+        machine: 'VTM-200YB',
+        serial: 'VT-5521-R',
+        customerNote: null,
+        items: [
+          { name: 'Spindle Brake Pad Set',  pn: 'SBP-0640-V', desc: 'Spindle brake pad set, 64mm diameter',   mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 1, listPrice: 380.00 },
+          { name: 'Servo Brake Cable',      pn: 'SBC-0450-M', desc: 'Servo motor brake cable, 4.5m',           mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 2, listPrice: 290.00 },
+          { name: 'Turret Cam Follower',    pn: 'TCF-1800-R', desc: 'Turret cam follower bearing, 18mm stud',  mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 1, listPrice: 420.00 },
+          { name: 'Air Cylinder Seal Kit',  pn: 'ACS-0040-P', desc: 'Air cylinder seal kit, 40mm bore',        mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 2, listPrice: 200.00 },
+          { name: 'Control Panel Gasket',   pn: 'CPG-0010-A', desc: 'Control panel door gasket, foam strip',   mach: 'VTM-200YB', ser: 'VT-5521-R', qty: 1, listPrice: 40.00  }
+        ]
+      }
+    };
+
+    /* ── MOCK RESPONSES (pre-filled read-only view for hardcoded responded quotes) */
+    var MOCK_RESPONSES = {
+      'QUO-2026-00089': {
+        items: [
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 520.00,  qty: 1 },
+          { action: 'price', priceVal: '195', partnVal: '', reasonVal: '', listPrice: 215.00,  qty: 2 },
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 1480.00, qty: 1 },
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 450.00,  qty: 1 }
+        ],
+        replyText: 'Hi James, all items reviewed. Item 2 (Hydraulic Seal Ring) has been updated to our current contract price. All other items accepted at list price.',
+        submittedAt: 'Jun 22, 2026'
+      },
+      'QUO-2026-00085': {
+        items: [
+          { action: 'none', priceVal: '', partnVal: '', reasonVal: '', listPrice: 312.50, qty: 1 },
+          { action: 'none', priceVal: '', partnVal: '', reasonVal: '', listPrice: 300.00, qty: 1 }
+        ],
+        replyText: '',
+        submittedAt: 'Jun 19, 2026'
+      },
+      'QUO-2026-00081': {
+        items: [
+          { action: 'none',    priceVal: '', partnVal: '',              reasonVal: '',                                                                                               listPrice: 480.00, qty: 1 },
+          { action: 'partno',  priceVal: '', partnVal: 'E4809-045-019', reasonVal: '',                                                                                               listPrice: 890.00, qty: 1 },
+          { action: 'none',    priceVal: '', partnVal: '',              reasonVal: '',                                                                                               listPrice: 620.00, qty: 2 },
+          { action: 'none',    priceVal: '', partnVal: '',              reasonVal: '',                                                                                               listPrice: 800.00, qty: 1 },
+          { action: 'none',    priceVal: '', partnVal: '',              reasonVal: '',                                                                                               listPrice: 540.00, qty: 2 },
+          { action: 'invalid', priceVal: '', partnVal: '',              reasonVal: 'OR-VTM-KIT is not compatible with the VT-5521-R serial range. Please contact us for the correct kit.', listPrice: 610.00, qty: 1 }
+        ],
+        replyText: 'Robert, item 2 part number corrected — please order E4809-045-019 instead. Item 6 is not valid for your serial range; we will follow up with the right kit.',
+        submittedAt: 'Jun 14, 2026'
+      },
+      'QUO-2026-00072': {
+        items: [
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 520.00, qty: 1 },
+          { action: 'price', priceVal: '420', partnVal: '', reasonVal: '', listPrice: 450.00, qty: 1 },
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 510.00, qty: 1 }
+        ],
+        replyText: '',
+        submittedAt: 'Jun 02, 2026'
+      },
+      'QUO-2026-00061': {
+        status: 'closed', expiry: 'Jun 09, 2026',
+        items: [
+          { action: 'none', priceVal: '', partnVal: '', reasonVal: '', listPrice: 168.00, qty: 1 },
+          { action: 'none', priceVal: '', partnVal: '', reasonVal: '', listPrice: 156.00, qty: 1 }
+        ],
+        replyText: '', submittedAt: 'May 14, 2026'
+      },
+      'QUO-2026-00054': {
+        status: 'closed', expiry: 'May 25, 2026',
+        items: [
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 520.00, qty: 1 },
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 190.00, qty: 2 },
+          { action: 'price', priceVal: '740', partnVal: '', reasonVal: '', listPrice: 780.00, qty: 1 },
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 290.00, qty: 1 },
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 560.00, qty: 1 },
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 180.00, qty: 3 },
+          { action: 'none',  priceVal: '',    partnVal: '', reasonVal: '', listPrice: 830.00, qty: 1 }
+        ],
+        replyText: 'Sandra, item 3 (Servo Amplifier Module) has been adjusted to our current distributor pricing. All other items accepted at list.', submittedAt: 'Apr 29, 2026'
+      },
+      'QUO-2026-00047': {
+        status: 'closed', expiry: 'May 12, 2026',
+        items: [
+          { action: 'none', priceVal: '', partnVal: '', reasonVal: '', listPrice: 215.00, qty: 1 },
+          { action: 'none', priceVal: '', partnVal: '', reasonVal: '', listPrice: 185.00, qty: 2 },
+          { action: 'none', priceVal: '', partnVal: '', reasonVal: '', listPrice: 195.00, qty: 1 }
+        ],
+        replyText: '', submittedAt: 'Apr 16, 2026'
+      },
+      'QUO-2026-00039': {
+        status: 'closed', expiry: 'Apr 29, 2026',
+        items: [
+          { action: 'none',   priceVal: '', partnVal: '',          reasonVal: '',                                                     listPrice: 520.00, qty: 1 },
+          { action: 'none',   priceVal: '', partnVal: '',          reasonVal: '',                                                     listPrice: 380.00, qty: 1 },
+          { action: 'partno', priceVal: '', partnVal: 'HMB-0800-T', reasonVal: '',                                                    listPrice: 850.00, qty: 1 },
+          { action: 'none',   priceVal: '', partnVal: '',          reasonVal: '',                                                     listPrice: 350.00, qty: 1 }
+        ],
+        replyText: 'Lisa, item 3 part number corrected to HMB-0800-T — the S suffix is discontinued for the LB-6612-M serial range.', submittedAt: 'Apr 03, 2026'
+      },
+      'QUO-2026-00031': {
+        status: 'closed', expiry: 'Apr 09, 2026',
+        items: [
+          { action: 'none', priceVal: '', partnVal: '', reasonVal: '', listPrice: 215.00, qty: 1 },
+          { action: 'none', priceVal: '', partnVal: '', reasonVal: '', listPrice: 200.00, qty: 1 }
+        ],
+        replyText: '', submittedAt: 'Mar 14, 2026'
+      },
+      'QUO-2025-00198': {
+        status: 'closed', expiry: 'Jan 04, 2026',
+        items: [
+          { action: 'none',    priceVal: '', partnVal: '', reasonVal: '',                                                listPrice: 380.00, qty: 1 },
+          { action: 'none',    priceVal: '', partnVal: '', reasonVal: '',                                                listPrice: 290.00, qty: 2 },
+          { action: 'none',    priceVal: '', partnVal: '', reasonVal: '',                                                listPrice: 420.00, qty: 1 },
+          { action: 'invalid', priceVal: '', partnVal: '', reasonVal: 'ACS-0040-P is not listed for VT-5521-R. Please contact us — the correct kit for your serial range is ACS-0040-R.', listPrice: 200.00, qty: 2 },
+          { action: 'none',    priceVal: '', partnVal: '', reasonVal: '',                                                listPrice: 40.00,  qty: 1 }
+        ],
+        replyText: 'Robert, item 4 is not valid for your serial range — see reason noted. All other items are confirmed.', submittedAt: 'Dec 09, 2025'
+      }
+    };
+
+    /* ── MODULE STATE ─────────────────────────────────────────────── */
+    var q = null;
+    var rowStates = [];
+
+    /* ── HELPERS ──────────────────────────────────────────────────── */
+    function fmt(n) {
+      return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function getRowState(idx) {
+      var s   = rowStates[idx];
+      var itm = q.items[idx];
+      var a   = s.action;
+
+      if (!a) return { complete: false, total: null, excluded: false };
+
+      if (a === 'none') {
+        return { complete: true, total: itm.qty * itm.listPrice, excluded: false };
+      }
+      if (a === 'price') {
+        var v = parseFloat(s.priceVal);
+        if (!isNaN(v) && v > 0) return { complete: true, total: itm.qty * v, excluded: false };
+        return { complete: false, total: null, excluded: false };
+      }
+      if (a === 'partno') {
+        var pn = (s.partnVal || '').trim();
+        if (pn) return { complete: true, total: itm.qty * itm.listPrice, excluded: false };
+        return { complete: false, total: null, excluded: false };
+      }
+      if (a === 'invalid') {
+        var r = (s.reasonVal || '').trim();
+        if (r) return { complete: true, total: 0, excluded: true };
+        return { complete: false, total: null, excluded: false };
+      }
+      return { complete: false, total: null, excluded: false };
+    }
+
+    /* ── LINE TOTAL CELL ──────────────────────────────────────────── */
+    function refreshLineTotal(idx) {
+      var rs   = getRowState(idx);
+      var cell = document.getElementById('lt-' + idx);
+      if (!cell) return;
+      if (rs.excluded) {
+        cell.innerHTML = '<span class="line-total line-total--excluded">Excluded</span>';
+      } else if (rs.total !== null) {
+        cell.innerHTML = '<span class="line-total">' + fmt(rs.total) + '</span>';
+      } else {
+        cell.innerHTML = '<span class="line-total line-total--pending">—</span>';
+      }
+    }
+
+    /* ── LIVE SUMMARY ─────────────────────────────────────────────── */
+    function updateSummary() {
+      var total   = q.items.length;
+      var actioned = 0, excluded = 0, subtotal = 0;
+
+      q.items.forEach(function (_, idx) {
+        var rs = getRowState(idx);
+        refreshLineTotal(idx);
+        if (!rs.complete) return;
+        actioned++;
+        if (rs.excluded) { excluded++; }
+        else { subtotal += rs.total; }
+      });
+
+      var pct = total > 0 ? Math.round((actioned / total) * 100) : 0;
+
+      var fill = document.getElementById('progressFill');
+      if (fill) fill.style.width = pct + '%';
+
+      var cnt = document.getElementById('progressCount');
+      if (cnt) {
+        cnt.textContent = actioned + ' / ' + total + ' items actioned';
+        cnt.className = 'progress-label__cnt' + (actioned === total ? ' progress-label__cnt--done' : '');
+      }
+
+      var sumBody = document.getElementById('sumBody');
+      if (!sumBody) return;
+
+      if (actioned === 0) {
+        sumBody.innerHTML =
+          '<div class="sum-empty">' +
+          '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="11" stroke="#DEDEDE" stroke-width="1.5"/><path d="M14 9v5.5l3.5 2" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '<p class="sum-empty__msg">Fill in responses above to<br>see the live quote total.</p>' +
+          '</div>';
+      } else {
+        var pricedN = actioned - excluded;
+        var pendingN = total - actioned;
+        var html = '';
+
+        if (pricedN > 0) {
+          html += '<div class="sum-row"><span class="sum-row__lbl">Priced (' + pricedN + ' item' + (pricedN !== 1 ? 's' : '') + ')</span><span class="sum-row__val">' + fmt(subtotal) + '</span></div>';
+        }
+        if (excluded > 0) {
+          html += '<div class="sum-row"><span class="sum-row__lbl">Invalid / excluded (' + excluded + ')</span><span class="sum-row__val sum-row__val--red">—</span></div>';
+        }
+        if (pendingN > 0) {
+          html += '<div class="sum-row"><span class="sum-row__lbl">Pending (' + pendingN + ')</span><span class="sum-row__val sum-row__val--muted">Not actioned</span></div>';
+        }
+
+        html += '<div class="sum-divider"></div>';
+        html += '<div class="sum-row"><span class="sum-row__lbl">Shipping &amp; Handling</span><span class="sum-row__val sum-row__val--muted">Added at shipment</span></div>';
+        html += '<div class="sum-row"><span class="sum-row__lbl">Tax</span><span class="sum-row__val sum-row__val--muted">At checkout</span></div>';
+        html += '<div class="sum-divider"></div>';
+        html += '<div class="sum-total">' +
+          '<span class="sum-total__lbl">Total</span>' +
+          '<div style="text-align:right">' +
+          '<div class="sum-total__val">' + fmt(subtotal) + '</div>' +
+          '<div class="sum-total__excl">excl. shipping &amp; tax</div>' +
+          '</div></div>';
+
+        sumBody.innerHTML = html;
+      }
+
+      var btn = document.getElementById('btnSubmit');
+      if (btn) btn.disabled = (actioned < total);
+    }
+
+    /* ── ROW INTERACTION ──────────────────────────────────────────── */
+    window.onActionChange = function (idx, val) {
+      rowStates[idx].action = val;
+
+      var placeholder = document.getElementById('rp-placeholder-' + idx);
+      if (placeholder) placeholder.style.display = 'none';
+
+      ['none', 'price', 'partno', 'invalid'].forEach(function (type) {
+        var el = document.getElementById('rp-' + type + '-' + idx);
+        if (el) el.style.display = (type === val ? '' : 'none');
+      });
+
+      updateSummary();
+    };
+
+    window.onPriceInput   = function (idx, v) { rowStates[idx].priceVal  = v; updateSummary(); };
+    window.onPartnInput   = function (idx, v) { rowStates[idx].partnVal  = v; updateSummary(); };
+    window.onReasonInput  = function (idx, v) { rowStates[idx].reasonVal = v; updateSummary(); };
+
+    window.updateCharCount = function (el) {
+      var len = el.value.length;
+      var cc  = document.getElementById('charCount');
+      if (!cc) return;
+      cc.textContent = len + ' / 500';
+      cc.className = 'char-count' + (len > 450 ? (len >= 500 ? ' char-count--over' : ' char-count--warn') : '');
+    };
+
+    /* ── SUBMIT ───────────────────────────────────────────────────── */
+    window.submitResponse = function () {
+      var replyText = (document.getElementById('replyText') || {}).value || '';
+
+      var toast = document.getElementById('dealer-toast');
+      toast.classList.remove('hiding');
+      toast.style.display = 'flex';
+      setTimeout(function () {
+        window.location.href = 'my-quotes.html';
+      }, 2500);
+    };
+
+    /* ── READ-ONLY (dealer re-opens a responded or closed quote) ─── */
+    function applyReadOnlyState(payload) {
+      var isClosed = payload.status === 'closed';
+
+      var badge = document.querySelector('.status-badge');
+      if (badge) {
+        if (isClosed) {
+          badge.className = 'status-badge status-badge--closed';
+          badge.innerHTML = '<span class="dot"></span>Closed';
+        } else {
+          badge.className = 'status-badge status-badge--responded';
+          badge.innerHTML = '<span class="dot"></span>Responded';
+        }
+      }
+
+      var infoBanner = document.querySelector('.info-banner');
+      if (isClosed && infoBanner) {
+        var redBanner = document.createElement('div');
+        redBanner.className = 'expiry-banner';
+        redBanner.innerHTML =
+          '<svg width="15" height="15" viewBox="0 0 15 15" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="7.5" cy="7.5" r="6.5" stroke="#C0392B" stroke-width="1.4"/><path d="M7.5 4.5v3.5" stroke="#C0392B" stroke-width="1.5" stroke-linecap="round"/><circle cx="7.5" cy="10.25" r="0.7" fill="#C0392B"/></svg>' +
+          '<span>This quote expired on ' + escHtml(payload.expiry || '') + ' without being approved. Request a new quote to proceed.</span>';
+        infoBanner.parentNode.insertBefore(redBanner, infoBanner);
+        infoBanner.style.display = 'none';
+      } else {
+        var bannerTxt = document.querySelector('.info-banner span');
+        if (bannerTxt) {
+          bannerTxt.textContent = 'You have already submitted a response for this quote. All fields are read-only.';
+        }
+      }
+
+      payload.items.forEach(function (item, idx) {
+        rowStates[idx] = { action: item.action, priceVal: item.priceVal || '', partnVal: item.partnVal || '', reasonVal: item.reasonVal || '' };
+      });
+
+      updateSummary();
+
+      var selects = document.querySelectorAll('.action-select');
+      payload.items.forEach(function (item, idx) {
+        var sel = selects[idx];
+        if (sel) { sel.value = item.action; sel.disabled = true; }
+
+        var ph = document.getElementById('rp-placeholder-' + idx);
+        if (ph) ph.style.display = 'none';
+        ['none', 'price', 'partno', 'invalid'].forEach(function (type) {
+          var el = document.getElementById('rp-' + type + '-' + idx);
+          if (el) el.style.display = (type === item.action ? '' : 'none');
+        });
+
+        if (item.action === 'price') {
+          var pi = document.querySelector('#rp-price-' + idx + ' .price-input');
+          if (pi) { pi.value = item.priceVal || ''; pi.disabled = true; }
+        }
+        if (item.action === 'partno') {
+          var pni = document.querySelector('#rp-partno-' + idx + ' .partno-input');
+          if (pni) { pni.value = item.partnVal || ''; pni.disabled = true; }
+        }
+        if (item.action === 'invalid') {
+          var ri = document.querySelector('#rp-invalid-' + idx + ' .reason-input');
+          if (ri) { ri.value = item.reasonVal || ''; ri.disabled = true; }
+        }
+      });
+
+      var replyArea = document.getElementById('replyText');
+      if (replyArea) {
+        replyArea.value = payload.replyText || '';
+        replyArea.disabled = true;
+        var cc = document.getElementById('charCount');
+        if (cc) cc.textContent = (payload.replyText || '').length + ' / 500';
+      }
+
+      var stack = document.querySelector('.action-stack');
+      if (stack) {
+        stack.innerHTML = isClosed
+          ? '<a href="my-quotes.html" class="btn-det btn-det--outline">Back to My Quotes</a>'
+          : '<div style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 0;font-size:13px;font-weight:600;color:#1D8348;">' +
+              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7l3.5 3.5L13 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              'Response Submitted' +
+            '</div>' +
+            '<a href="my-quotes.html" class="btn-det btn-det--outline">Back to My Quotes</a>';
+      }
+    }
+
+    /* ── RENDER ───────────────────────────────────────────────────── */
+    function render(data) {
+      q = data;
+      rowStates = q.items.map(function () {
+        return { action: '', priceVal: '', partnVal: '', reasonVal: '' };
+      });
+
+      document.title = q.num + ' — Response — Okuma Parts Portal';
+      document.getElementById('bcId').textContent   = q.num;
+      document.getElementById('pgTitle').textContent = q.num;
+      document.getElementById('pgMeta').textContent  = 'Submitted ' + q.submitted;
+      document.getElementById('quoteInfoStrip').innerHTML = renderQuoteInfoStrip();
+
+      var html = '<div class="detail-layout">';
+      html += '<div class="detail-main">' + renderItems() + renderMessages() + '</div>';
+      html += '<div class="detail-aside">' + renderSummaryCard() + renderActions() + '</div>';
+      html += '</div>';
+
+      document.getElementById('machineStrip').innerHTML = renderMachineStrip();
+      document.getElementById('quoteContent').innerHTML = html;
+      updateSummary();
+    }
+
+    /* ── MACHINE STRIP ───────────────────────────────────────────── */
+    function renderMachineStrip() {
+      if (!q.machine) return '';
+
+      var machIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#005EB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>';
+
+      return '<div class="machine-strip-section">' +
+        '<div class="machine-strip-label">Ordered For</div>' +
+        '<div class="machine-strip">' +
+          machIcon +
+          '<span class="machine-strip__name">' + escHtml(q.machine) + '</span>' +
+          (q.serial ? '<span class="machine-strip__sep">|</span><span class="machine-strip__sub">Serial No: ' + escHtml(q.serial) + '</span>' : '') +
+        '</div>' +
+        '</div>';
+    }
+
+    /* ── ITEMS CARD ───────────────────────────────────────────────── */
+    function renderItems() {
+      var rows = q.items.map(function (itm, idx) {
+        return '<div class="item-row">' +
+
+          /* Part column */
+          '<div>' +
+            '<div class="item-name">' + escHtml(itm.name) + '</div>' +
+            '<div class="item-pn">P/N: ' + escHtml(itm.pn) + '</div>' +
+            '<div class="item-desc">' + escHtml(itm.desc) + '</div>' +
+            '<div class="item-tags">' +
+              '<span class="tag tag--qty">Qty: ' + itm.qty + '</span>' +
+            '</div>' +
+            '<div class="item-listprice">List price: ' + fmt(itm.listPrice) + ' / ea</div>' +
+          '</div>' +
+
+          /* Action dropdown column */
+          '<div>' +
+            '<select class="action-select" onchange="onActionChange(' + idx + ', this.value)" aria-label="Action for ' + escAttr(itm.name) + '">' +
+              '<option value="" disabled selected>Select…</option>' +
+              '<option value="none">No Change</option>' +
+              '<option value="price">Corrected Price</option>' +
+              '<option value="partno">Part Correction</option>' +
+              '<option value="invalid">Invalid</option>' +
+            '</select>' +
+          '</div>' +
+
+          /* Response panel column */
+          '<div>' +
+            /* default placeholder */
+            '<div id="rp-placeholder-' + idx + '">' +
+              '<p class="resp-placeholder">Select an action to continue</p>' +
+            '</div>' +
+
+            /* No Change */
+            '<div id="rp-none-' + idx + '" style="display:none;">' +
+              '<span class="resp-badge resp-badge--nochange">No Change</span>' +
+              '<p class="resp-hint">Accepted at list price &mdash; no changes to this line.</p>' +
+            '</div>' +
+
+            /* Corrected Price */
+            '<div id="rp-price-' + idx + '" style="display:none;">' +
+              '<span class="resp-badge resp-badge--price">Price Override</span>' +
+              '<div class="price-input-wrap">' +
+                '<span class="price-prefix">$</span>' +
+                '<input type="number" class="price-input" min="0.01" step="0.01" placeholder="0.00"' +
+                  ' oninput="onPriceInput(' + idx + ', this.value)"' +
+                  ' aria-label="Corrected unit price for ' + escAttr(itm.name) + '">' +
+              '</div>' +
+              '<p class="resp-hint">Overrides the price shown to the customer on this line.</p>' +
+            '</div>' +
+
+            /* Part Correction */
+            '<div id="rp-partno-' + idx + '" style="display:none;">' +
+              '<span class="resp-badge resp-badge--partno">Part Correction</span>' +
+              '<input type="text" class="partno-input" placeholder="Enter corrected P/N"' +
+                ' oninput="onPartnInput(' + idx + ', this.value)"' +
+                ' aria-label="Corrected part number for ' + escAttr(itm.name) + '">' +
+              '<p class="resp-hint">Tell the customer the correct part number for their machine.</p>' +
+            '</div>' +
+
+            /* Invalid */
+            '<div id="rp-invalid-' + idx + '" style="display:none;">' +
+              '<span class="resp-badge resp-badge--invalid">Invalid</span>' +
+              '<textarea class="reason-input" placeholder="Explain why this part isn\'t valid for this machine…"' +
+                ' oninput="onReasonInput(' + idx + ', this.value)"' +
+                ' aria-label="Reason invalid for ' + escAttr(itm.name) + '"></textarea>' +
+              '<p class="resp-hint">Explain why this part isn\'t valid for the customer\'s machine.</p>' +
+            '</div>' +
+          '</div>' +
+
+          /* Line total column */
+          '<div id="lt-' + idx + '">' +
+            '<span class="line-total line-total--pending">—</span>' +
+          '</div>' +
+
+        '</div>';
+      }).join('');
+
+      return '<div class="det-card">' +
+        '<div class="det-card__head">Line Items &mdash; Choose an Action for Each (' + q.items.length + ')</div>' +
+        '<div class="items-col-head">' +
+          '<span class="ich">Part</span>' +
+          '<span class="ich">Action</span>' +
+          '<span class="ich">Response Details</span>' +
+          '<span class="ich ich--r">Line Total</span>' +
+        '</div>' +
+        rows +
+        '</div>';
+    }
+
+    /* ── MESSAGES CARD ────────────────────────────────────────────── */
+    function renderMessages() {
+      var msgSvg = '<svg width="11" height="11" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 1.5H2A1.5 1.5 0 0 0 .5 3v5A1.5 1.5 0 0 0 2 9.5h1.5L5 11.5l1.5-2H11a1.5 1.5 0 0 0 1.5-1.5V3A1.5 1.5 0 0 0 11 1.5z"/></svg>';
+
+      var html = '<div class="det-card"><div class="det-card__head">Messages</div>';
+
+      if (q.customerNote) {
+        html += '<div class="msg-section">' +
+          '<div class="msg-label" style="color:#717171">' + msgSvg + " Customer's Message</div>" +
+          '<div class="msg-customer-bubble">' + escHtml(q.customerNote) + '</div>' +
+          '</div>';
+      }
+
+      html += '<div class="msg-section">' +
+        '<div class="msg-label" style="color:#717171">' + msgSvg +
+          ' Your Reply <span>(sent to customer, visible on quote)</span></div>' +
+        '<textarea class="msg-reply-area" id="replyText" maxlength="500"' +
+          ' oninput="updateCharCount(this)"' +
+          ' placeholder="Write your reply to the customer…"></textarea>' +
+        '<div class="char-count" id="charCount">0 / 500</div>' +
+        '</div>';
+
+      html += '</div>';
+      return html;
+    }
+
+    /* ── SUMMARY CARD ─────────────────────────────────────────────── */
+    function renderSummaryCard() {
+      return '<div class="det-card"><div class="det-card__head">Quote Summary</div><div class="det-card__body">' +
+        '<div class="progress-label">' +
+          '<span class="progress-label__txt">Progress</span>' +
+          '<span class="progress-label__cnt" id="progressCount">0 / ' + q.items.length + ' items actioned</span>' +
+        '</div>' +
+        '<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>' +
+        '<div id="sumBody"></div>' +
+        '</div></div>';
+    }
+
+    /* ── QUOTE INFO STRIP ────────────────────────────────────────── */
+    function renderQuoteInfoStrip() {
+      return '<div class="quote-info-strip">' +
+        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Quote No</span><span class="quote-info-strip__val quote-info-strip__val--blue">' + escHtml(q.num) + '</span></div>' +
+        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Submitted</span><span class="quote-info-strip__val">' + escHtml(q.submitted) + '</span></div>' +
+        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Customer</span><span class="quote-info-strip__val">' + escHtml(q.customer) + '</span></div>' +
+        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Company</span><span class="quote-info-strip__val">' + escHtml(q.company) + '</span></div>' +
+        '</div>';
+    }
+
+    /* ── ACTIONS ──────────────────────────────────────────────────── */
+    function renderActions() {
+      var icoSend = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7l3.5 3.5L13 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var icoDl   = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v8M4 7l3 3.5L10 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 11v1A1.5 1.5 0 0 0 2.5 13.5h9A1.5 1.5 0 0 0 13 12v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+
+      return '<div class="action-stack">' +
+        '<button class="btn-det btn-det--primary" id="btnSubmit" disabled onclick="submitResponse()">' + icoSend + 'Submit Response</button>' +
+        '<p class="submit-note">Submitting changes this quote\'s status to <strong>Responded</strong>.</p>' +
+        '<button class="btn-det btn-det--outline" onclick="return false;">' + icoDl + 'Save Draft</button>' +
+        '<a href="#" class="support-link" onclick="return false;">' +
+          '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5.5"/><path d="M6.5 6v2M6.5 4a1 1 0 1 1 0 2.01"/></svg>' +
+          'Contact Support' +
+        '</a>' +
+        '</div>';
+    }
+
+    /* ── ESCAPING ─────────────────────────────────────────────────── */
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
+    }
+    function escAttr(s) { return escHtml(s); }
+
+    /* ── INIT ─────────────────────────────────────────────────────── */
+    var id    = new URLSearchParams(window.location.search).get('id');
+    var quote = (id && DATA[id]) || DATA['QUO-2026-00068'];
+    render(quote);
+
+    try {
+      var savedResp = sessionStorage.getItem('okuma_dealer_response_' + quote.num);
+      if (savedResp) {
+        applyReadOnlyState(JSON.parse(savedResp));
+      } else if (MOCK_RESPONSES[quote.num]) {
+        applyReadOnlyState(MOCK_RESPONSES[quote.num]);
+      }
+    } catch (e) {}
+
+  })();
+  </script>
+
+</body>
+</html>

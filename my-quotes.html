@@ -230,20 +230,12 @@
     }
     .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
-    .status-badge--submitted    { background: #EEF4FF; border: 0.5px solid #4A90D9; color: #4A90D9; }
-    .status-badge--submitted .dot { background: #4A90D9; }
-    .status-badge--under-review { background: #FFF9EF; border: 0.5px solid #FFB549; color: #E08A00; }
-    .status-badge--under-review .dot { background: #FFB549; }
-    .status-badge--quoted       { background: #EDF9FA; border: 0.5px solid #2DB8C5; color: #2099A5; }
-    .status-badge--quoted .dot { background: #2DB8C5; }
-    .status-badge--approved     { background: #F4F9F1; border: 0.5px solid #74AA50; color: #74AA50; }
-    .status-badge--approved .dot { background: #74AA50; }
-    .status-badge--ordered      { background: #EDFAF0; border: 0.5px solid #3D9A5A; color: #3D9A5A; }
-    .status-badge--ordered .dot { background: #3D9A5A; }
-    .status-badge--expired      { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #9E9E9E; }
-    .status-badge--expired .dot { background: #9E9E9E; }
-    .status-badge--declined     { background: #FFF5F5; border: 0.5px solid #D04B4B; color: #D04B4B; }
-    .status-badge--declined .dot { background: #D04B4B; }
+    .status-badge--open         { background: #EEF4FF; border: 0.5px solid #4A90D9; color: #4A90D9; }
+    .status-badge--open .dot    { background: #4A90D9; }
+    .status-badge--responded    { background: #EDF9FA; border: 0.5px solid #2DB8C5; color: #2099A5; }
+    .status-badge--responded .dot { background: #2DB8C5; }
+    .status-badge--closed       { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #9E9E9E; }
+    .status-badge--closed .dot  { background: #9E9E9E; }
 
     /* ── TABLE FOOTER ── */
     .quotes-foot {
@@ -402,13 +394,8 @@
           <select class="filter-select" id="statusFilter" onchange="applyFilters()">
             <option value="">Filter by Status</option>
             <option value="open">Open</option>
-            <option value="submitted">Submitted</option>
-            <option value="under-review">Under Review</option>
-            <option value="quoted">Quoted</option>
-            <option value="approved">Approved</option>
-            <option value="ordered">Ordered</option>
-            <option value="expired">Expired</option>
-            <option value="declined">Declined</option>
+            <option value="responded">Responded</option>
+            <option value="closed">Closed</option>
           </select>
           <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -480,6 +467,7 @@
 
       /* today = 2026-06-26, used to compute expiry urgency */
       var TODAY = 20260626;
+      var isDealer = (typeof okuma_getUser === 'function' && okuma_getUser() && okuma_getUser().role === 'dealer');
 
       function daysDiff(expirySort) {
         /* rough day diff without Date arithmetic */
@@ -493,18 +481,22 @@
       }
 
       var ALL_QUOTES = [
-        { num: 'QUO-2026-00089', submitted: 'Jun 18, 2026', submittedSort: 20260618, expiry: 'Jul 25, 2026', expirySort: 20260725, items: 4,  total: 2840.00, status: 'quoted',       orderedFor: 'ABC Industries'      },
-        { num: 'QUO-2026-00085', submitted: 'Jun 15, 2026', submittedSort: 20260615, expiry: 'Jun 29, 2026', expirySort: 20260629, items: 2,  total: 612.50,  status: 'approved',     orderedFor: 'Smith Manufacturing' },
-        { num: 'QUO-2026-00081', submitted: 'Jun 10, 2026', submittedSort: 20260610, expiry: 'Jul 03, 2026', expirySort: 20260703, items: 6,  total: 5100.00, status: 'quoted',       orderedFor: 'Pacific Precision'   },
-        { num: 'QUO-2026-00077', submitted: 'Jun 05, 2026', submittedSort: 20260605, expiry: 'Jul 10, 2026', expirySort: 20260710, items: 1,  total: null,    status: 'under-review', orderedFor: 'ABC Industries'      },
-        { num: 'QUO-2026-00072', submitted: 'May 28, 2026', submittedSort: 20260528, expiry: 'Jun 27, 2026', expirySort: 20260627, items: 3,  total: 1450.00, status: 'quoted',       orderedFor: 'Delta Components'    },
-        { num: 'QUO-2026-00068', submitted: 'May 20, 2026', submittedSort: 20260520, expiry: null,           expirySort: 0,        items: 5,  total: null,    status: 'submitted',    orderedFor: 'Apex Machining'      },
-        { num: 'QUO-2026-00061', submitted: 'May 10, 2026', submittedSort: 20260510, expiry: 'Jun 09, 2026', expirySort: 20260609, items: 2,  total: 324.00,  status: 'expired',      orderedFor: null                  },
-        { num: 'QUO-2026-00054', submitted: 'Apr 25, 2026', submittedSort: 20260425, expiry: 'May 25, 2026', expirySort: 20260525, items: 7,  total: 3900.00, status: 'ordered',      orderedFor: 'Smith Manufacturing' },
-        { num: 'QUO-2026-00047', submitted: 'Apr 12, 2026', submittedSort: 20260412, expiry: 'May 12, 2026', expirySort: 20260512, items: 3,  total: 780.00,  status: 'declined',     orderedFor: null                  },
-        { num: 'QUO-2026-00039', submitted: 'Mar 30, 2026', submittedSort: 20260330, expiry: 'Apr 29, 2026', expirySort: 20260429, items: 4,  total: 2100.00, status: 'ordered',      orderedFor: 'Delta Components'    },
-        { num: 'QUO-2026-00031', submitted: 'Mar 10, 2026', submittedSort: 20260310, expiry: 'Apr 09, 2026', expirySort: 20260409, items: 2,  total: 415.00,  status: 'expired',      orderedFor: null                  },
-        { num: 'QUO-2025-00198', submitted: 'Dec 05, 2025', submittedSort: 20251205, expiry: 'Jan 04, 2026', expirySort: 20260104, items: 5,  total: 1820.00, status: 'ordered',      orderedFor: 'Pacific Precision'   }
+        { num: 'QUO-2026-00095', submitted: 'Jul 01, 2026', submittedSort: 20260701, expiry: 'Aug 01, 2026', expirySort: 20260801, items: 2,  total: null,    status: 'open',      orderedFor: 'Pacific Precision'   },
+        { num: 'QUO-2026-00092', submitted: 'Jun 27, 2026', submittedSort: 20260627, expiry: 'Jul 31, 2026', expirySort: 20260731, items: 3,  total: null,    status: 'open',      orderedFor: 'Smith Manufacturing' },
+        { num: 'QUO-2026-00089', submitted: 'Jun 18, 2026', submittedSort: 20260618, expiry: 'Jul 25, 2026', expirySort: 20260725, items: 4,  total: 2840.00, status: 'responded', orderedFor: 'ABC Industries'      },
+        { num: 'QUO-2026-00085', submitted: 'Jun 15, 2026', submittedSort: 20260615, expiry: 'Jun 29, 2026', expirySort: 20260629, items: 2,  total: 612.50,  status: 'responded', orderedFor: 'Smith Manufacturing' },
+        { num: 'QUO-2026-00083', submitted: 'Jun 12, 2026', submittedSort: 20260612, expiry: 'Jul 15, 2026', expirySort: 20260715, items: 2,  total: null,    status: 'open',      orderedFor: 'Delta Components'    },
+        { num: 'QUO-2026-00081', submitted: 'Jun 10, 2026', submittedSort: 20260610, expiry: 'Jul 03, 2026', expirySort: 20260703, items: 6,  total: 5100.00, status: 'responded', orderedFor: 'Pacific Precision'   },
+        { num: 'QUO-2026-00079', submitted: 'Jun 08, 2026', submittedSort: 20260608, expiry: 'Jul 13, 2026', expirySort: 20260713, items: 3,  total: null,    status: 'open',      orderedFor: 'Apex Machining'      },
+        { num: 'QUO-2026-00077', submitted: 'Jun 05, 2026', submittedSort: 20260605, expiry: 'Jul 10, 2026', expirySort: 20260710, items: 1,  total: null,    status: 'open',      orderedFor: 'ABC Industries'      },
+        { num: 'QUO-2026-00072', submitted: 'May 28, 2026', submittedSort: 20260528, expiry: 'Jun 27, 2026', expirySort: 20260627, items: 3,  total: 1450.00, status: 'responded', orderedFor: 'Delta Components'    },
+        { num: 'QUO-2026-00068', submitted: 'May 20, 2026', submittedSort: 20260520, expiry: null,           expirySort: 0,        items: 5,  total: null,    status: 'open',      orderedFor: 'Apex Machining'      },
+        { num: 'QUO-2026-00061', submitted: 'May 10, 2026', submittedSort: 20260510, expiry: 'Jun 09, 2026', expirySort: 20260609, items: 2,  total: 324.00,  status: 'closed',    orderedFor: null                  },
+        { num: 'QUO-2026-00054', submitted: 'Apr 25, 2026', submittedSort: 20260425, expiry: 'May 25, 2026', expirySort: 20260525, items: 7,  total: 3900.00, status: 'closed',    orderedFor: 'Smith Manufacturing' },
+        { num: 'QUO-2026-00047', submitted: 'Apr 12, 2026', submittedSort: 20260412, expiry: 'May 12, 2026', expirySort: 20260512, items: 3,  total: 780.00,  status: 'closed',    orderedFor: null                  },
+        { num: 'QUO-2026-00039', submitted: 'Mar 30, 2026', submittedSort: 20260330, expiry: 'Apr 29, 2026', expirySort: 20260429, items: 4,  total: 2100.00, status: 'closed',    orderedFor: 'Delta Components'    },
+        { num: 'QUO-2026-00031', submitted: 'Mar 10, 2026', submittedSort: 20260310, expiry: 'Apr 09, 2026', expirySort: 20260409, items: 2,  total: 415.00,  status: 'closed',    orderedFor: null                  },
+        { num: 'QUO-2025-00198', submitted: 'Dec 05, 2025', submittedSort: 20251205, expiry: 'Jan 04, 2026', expirySort: 20260104, items: 5,  total: 1820.00, status: 'closed',    orderedFor: 'Pacific Precision'   }
       ];
 
       var PAGE_SIZE = 8;
@@ -512,27 +504,23 @@
       var filteredQuotes = ALL_QUOTES.slice();
 
       var BADGE_CLASS = {
-        'submitted':    'status-badge--submitted',
-        'under-review': 'status-badge--under-review',
-        'quoted':       'status-badge--quoted',
-        'approved':     'status-badge--approved',
-        'ordered':      'status-badge--ordered',
-        'expired':      'status-badge--expired',
-        'declined':     'status-badge--declined'
+        'open':      'status-badge--open',
+        'responded': 'status-badge--responded',
+        'closed':    'status-badge--closed'
       };
 
       var STATUS_LABEL = {
-        'submitted':    'Submitted',
-        'under-review': 'Under Review',
-        'quoted':       'Quoted',
-        'approved':     'Approved',
-        'ordered':      'Ordered',
-        'expired':      'Expired',
-        'declined':     'Declined'
+        'open':      'Open',
+        'responded': 'Responded',
+        'closed':    'Closed'
       };
 
       function formatTotal(n) {
         return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+
+      function lsStatus(num) {
+        try { return sessionStorage.getItem('okuma_quote_status_' + num) || null; } catch (e) { return null; }
       }
 
       function statusBadge(s) {
@@ -541,9 +529,7 @@
 
       function expiryCell(q) {
         if (!q.expiry) return '<span class="expiry-val expiry-val--plain">—</span>';
-        var inactive = q.status === 'ordered' || q.status === 'declined';
-        if (inactive) return '<span class="expiry-val expiry-val--plain">' + q.expiry + '</span>';
-        if (q.status === 'expired') return '<span class="expiry-val expiry-val--plain">' + q.expiry + '</span>';
+        if (q.status === 'closed') return '<span class="expiry-val expiry-val--plain">' + q.expiry + '</span>';
         var days = daysDiff(q.expirySort);
         if (days <= 0) return '<span class="expiry-val expiry-val--plain">' + q.expiry + '</span>';
         if (days <= 6) {
@@ -570,13 +556,17 @@
             var totalCell = q.total !== null
               ? '<span class="col-total-val">' + formatTotal(q.total) + '</span>'
               : '<span class="col-total-pending">Pending</span>';
-            return '<tr onclick="window.location=\'quote-detail.html?id=' + q.num + '\'">' +
+            var effectiveStatus = lsStatus(q.num) || q.status;
+          var dest = (isDealer && (effectiveStatus === 'open' || effectiveStatus === 'responded' || effectiveStatus === 'closed'))
+            ? 'dealer-quote-response.html?id=' + q.num
+            : 'quote-detail.html?id=' + q.num;
+          return '<tr onclick="window.location=\'' + dest + '\'">' +
               '<td class="col-quote"><span class="quote-num-label">' + q.num + '</span></td>' +
               '<td class="col-date">' + q.submitted + '</td>' +
               '<td class="col-expiry">' + expiryCell(q) + '</td>' +
               '<td class="col-items">' + itemLabel + '</td>' +
               '<td class="col-total">' + totalCell + '</td>' +
-              '<td class="col-status">' + statusBadge(q.status) + '</td>' +
+              '<td class="col-status">' + statusBadge(effectiveStatus) + '</td>' +
               '</tr>';
           }).join('');
         }
@@ -615,8 +605,6 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
-      var OPEN_STATUSES = { 'submitted': true, 'under-review': true, 'quoted': true, 'approved': true };
-
       // Populate Ordered For dropdown with unique customer names from quote data
       (function () {
         var sel = document.getElementById('customerFilter');
@@ -641,7 +629,7 @@
 
         filteredQuotes = ALL_QUOTES.filter(function (q) {
           var matchQuery    = !query    || q.num.toLowerCase().indexOf(query) !== -1;
-          var matchStatus   = !status   || (status === 'open' ? !!OPEN_STATUSES[q.status] : q.status === status);
+          var matchStatus   = !status   || q.status === status;
           var matchCustomer = !customer || q.orderedFor === customer;
           return matchQuery && matchStatus && matchCustomer;
         });

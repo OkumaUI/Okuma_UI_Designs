@@ -706,14 +706,14 @@
       vertical-align: middle;
     }
 
-    /* Column widths - total 1010px */
+    /* Column widths */
     .parts-table th:nth-child(1) { width: 70px; }   /* Part #  */
     .parts-table th:nth-child(2) { width: 150px; }  /* Part Name */
-    .parts-table th:nth-child(3) { width: 140px; }  /* Description */
-    .parts-table th:nth-child(4) { width: 160px; }  /* Compatibility */
-    .parts-table th:nth-child(5) { width: 110px; }  /* Unit Price */
-    .parts-table th:nth-child(6) { width: 130px; }  /* Available */
-    .parts-table th:nth-child(7) { width: 250px; }  /* Qty + actions */
+    .parts-table th:nth-child(3) { width: 200px; }  /* Description */
+    .parts-table th:nth-child(4) { width: 110px; }  /* Unit Price */
+    .parts-table th:nth-child(5) { width: 130px; }  /* Available */
+    .parts-table th:nth-child(6) { width: 120px; }  /* Qty */
+    .parts-table th:nth-child(7) { width: 180px; }  /* Action */
 
     .parts-table td {
       height: 52px;
@@ -782,18 +782,10 @@
     .stock-badge.in-stock  { background: #29AA3F; }
     .stock-badge.out-of-stock { background: #9BA2AE; }
 
-    /* Qty cell wrapper: stepper + action button */
-    .qty-cell {
-      display: flex;
-      align-items: flex-start;
-      gap: 24px;
-      justify-content: flex-end;
-    }
-    .qty-cell__actions {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      min-width: 120px;
+    .parts-table th:nth-child(7),
+    .parts-table td:nth-child(7) {
+      text-align: right;
+      padding-right: 16px;
     }
 
     .row-stepper {
@@ -1340,10 +1332,10 @@
               <th>Part #</th>
               <th>Part Name</th>
               <th>Description</th>
-              <th>Compatibility</th>
               <th>Unit Price</th>
               <th>Available</th>
               <th>Qty</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="parts-tbody">
@@ -1651,23 +1643,19 @@
           <td class="cell-rownum">${part.num}</td>
           <td class="cell-part-num">${part.partNum}</td>
           <td class="cell-desc">${part.name}</td>
-          <td class="cell-compat">${part.compat}</td>
           <td class="cell-price">$${part.price.toFixed(2)}</td>
           <td><span class="stock-badge ${stockClass}">${stockLabel}</span></td>
           <td>
-            <div class="qty-cell">
-              <div class="row-stepper">
-                <button class="row-stepper-btn row-step-btn" data-id="${part.id}" data-dir="-1" type="button">&minus;</button>
-                <span class="row-qty-val" id="row-qty-${part.id}">${rowQtys[part.id]}</span>
-                <button class="row-stepper-btn row-step-btn" data-id="${part.id}" data-dir="1" type="button">+</button>
-              </div>
-              <div class="qty-cell__actions">
-                <button class="action-btn-inline" data-id="${part.id}" data-action="add" type="button">${part.action}</button>
-                ${!part.inStock && (ALTERNATIVES_MAP[part.partNum] || []).length > 0
-                  ? `<button class="alt-tertiary-btn" data-id="${part.id}" data-action="alt" type="button">Suggested Alternatives</button>`
-                  : ''}
-              </div>
+            <div class="row-stepper">
+              <button class="row-stepper-btn row-step-btn" data-id="${part.id}" data-dir="-1" type="button">&minus;</button>
+              <span class="row-qty-val" id="row-qty-${part.id}">${rowQtys[part.id]}</span>
+              <button class="row-stepper-btn row-step-btn" data-id="${part.id}" data-dir="1" type="button">+</button>
             </div>
+          </td>
+          <td>
+            ${part.inStock
+              ? `<button class="action-btn-inline" data-id="${part.id}" data-action="add" type="button">${part.action}</button>`
+              : `<button class="action-btn-inline" data-id="${part.id}" data-action="alt" type="button">Suggested Alternative</button>`}
           </td>
         `;
         tbody.appendChild(tr);
@@ -2257,8 +2245,8 @@
         return;
       }
 
-      // Tertiary "Suggested Alternatives" link in table
-      if (e.target.classList.contains('alt-tertiary-btn') && e.target.getAttribute('data-action') === 'alt') {
+      // "Suggested Alternative" button in table (out-of-stock rows)
+      if (e.target.getAttribute('data-action') === 'alt') {
         e.stopPropagation();
         const id = parseInt(e.target.getAttribute('data-id'), 10);
         const part = partsData.find(p => p.id === id);

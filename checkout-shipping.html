@@ -180,7 +180,8 @@
       font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 12px;
       transition: background 0.15s;
     }
-    .btn-primary:hover { background: #0052A3; }
+    .btn-primary:hover:not(:disabled) { background: #0052A3; }
+    .btn-primary:disabled { background: #B0C4DE; cursor: not-allowed; opacity: 1; }
     .btn-secondary {
       background: transparent; border: 1px solid #005EB8; color: #005EB8;
       height: 56px; width: 100%; border-radius: 2px; font-size: 14px; font-weight: 700;
@@ -678,7 +679,7 @@
 
           <!-- CTA -->
           <div class="cta-block">
-            <button class="btn-primary" onclick="(function(){var s;try{s=JSON.parse(sessionStorage.getItem('okuma_session'));}catch(e){}window.location=(s&&s.role==='dealer')?'dealer-order-payment.html':'checkout-payment.html';})()">
+            <button class="btn-primary" id="btnContinue" onclick="(function(){var s;try{s=JSON.parse(sessionStorage.getItem('okuma_session'));}catch(e){}window.location=(s&&s.role==='dealer')?'dealer-order-payment.html':'checkout-payment.html';})()">
               Continue to Payment Details
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="3" y1="8" x2="13" y2="8"/><polyline points="8.5 3.5 13 8 8.5 12.5"/>
@@ -749,7 +750,7 @@
     var selectedShipping = 1;
     var addrCount = 2;
 
-    document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); });
+    document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); updateContinueBtn(); });
 
     document.querySelectorAll('input[name="address"]').forEach(function (r) {
       r.addEventListener('change', function () { selectedAddress = parseInt(this.value, 10); });
@@ -776,6 +777,19 @@
       document.body.classList.toggle('prepaid-active', isPrepaid);
 
       if (isPrepaid) input.value = '';
+      updateContinueBtn();
+    }
+
+    function onAcctNumberChange() {
+      updateContinueBtn();
+    }
+
+    function updateContinueBtn() {
+      var carrier   = document.getElementById('acct-carrier').value;
+      var acctNum   = document.getElementById('acct-number').value.trim();
+      var isPrepaid = (carrier === 'okuma');
+      var ready     = isPrepaid || acctNum.length > 0;
+      document.getElementById('btnContinue').disabled = !ready;
     }
   </script>
 
