@@ -660,9 +660,8 @@
                     <tr id="addRow" style="background:#F9FAFB;">
                       <td colspan="7" style="padding:10px 14px;">
                         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                          <div style="flex:1;position:relative;">
+                          <div style="flex:1;">
                             <input class="input-sm" id="newPn" placeholder="Search by part number or keyword…" oninput="searchManualParts(this.value)" autocomplete="off" style="width:100%">
-                            <div id="manualSearchDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #DEDEDE;border-radius:4px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:200;overflow:hidden;"></div>
                           </div>
                           <input class="input-sm" id="newQty" placeholder="Qty" type="number" min="1" style="width:72px;flex-shrink:0;">
                           <button class="btn-add" onclick="addManualRow()" style="flex-shrink:0;">Add</button>
@@ -754,6 +753,15 @@
 
     var _selectedDesc = '';
 
+    function positionDropdown() {
+      var input    = document.getElementById('newPn');
+      var dropdown = document.getElementById('manualSearchDropdown');
+      var rect = input.getBoundingClientRect();
+      dropdown.style.left  = rect.left + 'px';
+      dropdown.style.top   = (rect.bottom + 4) + 'px';
+      dropdown.style.width = rect.width + 'px';
+    }
+
     window.searchManualParts = function (q) {
       var dropdown = document.getElementById('manualSearchDropdown');
       var term = (q || '').trim().toLowerCase();
@@ -765,6 +773,7 @@
 
       if (!hits.length) {
         dropdown.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:#9E9E9E;">No parts found</div>';
+        positionDropdown();
         dropdown.style.display = 'block';
         return;
       }
@@ -776,6 +785,7 @@
           '<span style="font-size:12px;font-weight:600;color:#1A1A1A;margin-left:16px;white-space:nowrap;">$' + p.price.toFixed(2) + '</span>' +
         '</div>';
       }).join('');
+      positionDropdown();
       dropdown.style.display = 'block';
     };
 
@@ -836,7 +846,8 @@
     document.addEventListener('click', function (e) {
       var dropdown = document.getElementById('manualSearchDropdown');
       if (!dropdown) return;
-      if (!e.target.closest('#addRow')) {
+      var input = document.getElementById('newPn');
+      if (!e.target.closest('#manualSearchDropdown') && e.target !== input) {
         dropdown.style.display = 'none';
       }
     });
@@ -1103,6 +1114,9 @@
 
   })();
   </script>
+
+  <!-- Search dropdown rendered at body level to escape overflow:auto clipping -->
+  <div id="manualSearchDropdown" style="display:none;position:fixed;background:#fff;border:1px solid #DEDEDE;border-radius:4px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:9999;overflow:hidden;"></div>
 
   <style>
     .msd-item:hover { background: #F5F7FF; }
