@@ -518,7 +518,7 @@
               <div class="kpi-tile__label">Open Quotes</div>
               <div class="kpi-tile__num">3</div>
             </a>
-            <a class="kpi-tile" href="my-machines.html">
+            <a class="kpi-tile" href="profile.html?tab=machines">
               <div class="kpi-tile__label">Registered Machines</div>
               <div class="kpi-tile__num">5</div>
             </a>
@@ -578,7 +578,7 @@
       <section class="section">
         <div class="section__head">
           <h2 class="section__title">My Machines</h2>
-          <a href="my-machines.html" class="section__link">View All →</a>
+          <a href="profile.html?tab=machines" class="section__link">View All →</a>
         </div>
 
         <div class="machine-grid">
@@ -596,7 +596,7 @@
                   <div class="machine-card__reg-label">Install Date</div>
                   <div class="machine-card__reg-date">Nov 22, 2023</div>
                 </div>
-                <button class="btn-browse" onclick="openModal('LB2000 EX III','LB-4431-M')">Browse Parts Book</button>
+                <button class="btn-browse" onclick="browsePartsClick('LB2000 EX III','LB-4431-M')">Browse Parts Book</button>
               </div>
             </div>
           </div>
@@ -615,7 +615,7 @@
                   <div class="machine-card__reg-label">Install Date</div>
                   <div class="machine-card__reg-date">Mar 15, 2021</div>
                 </div>
-                <button class="btn-browse" onclick="openModal('LU300-M','M5-2891-K')">Browse Parts Book</button>
+                <button class="btn-browse" onclick="browsePartsClick('LU300-M','M5-2891-K')">Browse Parts Book</button>
               </div>
             </div>
           </div>
@@ -634,7 +634,7 @@
                   <div class="machine-card__reg-label">Install Date</div>
                   <div class="machine-card__reg-date">Jul 08, 2022</div>
                 </div>
-                <button class="btn-browse" onclick="openModal('MULTUS U3000','MU-9102-L')">Browse Parts Book</button>
+                <button class="btn-browse" onclick="browsePartsClick('MULTUS U3000','MU-9102-L')">Browse Parts Book</button>
               </div>
             </div>
           </div>
@@ -929,6 +929,75 @@
       if (nameEl)    nameEl.textContent    = m.name + ' · Serial: ' + m.serial;
       if (installEl) installEl.textContent = 'Install Date: ' + m.installDate;
     });
+  </script>
+
+  <!-- Browse Parts — switch machine confirmation modal -->
+  <div class="csw-overlay" id="bpSwitchOverlay">
+    <div class="csw-modal" role="dialog" aria-modal="true" aria-labelledby="bpSwitchTitle">
+      <div class="csw-modal__hdr">
+        <h2 class="csw-modal__ttl" id="bpSwitchTitle">Switch Machine?</h2>
+        <button class="csw-modal__cls" id="bpSwitchClose" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
+        </button>
+      </div>
+      <div class="csw-modal__bdy">
+        <p id="bpSwitchBody"></p>
+        <div class="csw-modal__div"></div>
+        <div class="csw-modal__act">
+          <button class="csw-btn csw-btn--cancel" id="bpSwitchCancel">Cancel</button>
+          <button class="csw-btn csw-btn--confirm" id="bpSwitchConfirm">Switch &amp; Browse Parts</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    var _pendingBp = null;
+    var bpOverlay  = document.getElementById('bpSwitchOverlay');
+    var bpBody     = document.getElementById('bpSwitchBody');
+    var bpClose    = document.getElementById('bpSwitchClose');
+    var bpCancel   = document.getElementById('bpSwitchCancel');
+    var bpConfirm  = document.getElementById('bpSwitchConfirm');
+
+    function openBpSwitch(name, serial) {
+      _pendingBp = { name: name, serial: serial };
+      var cur = localStorage.getItem('okmDefaultMachine') || 'your current machine';
+      bpBody.innerHTML =
+        'You\'re about to browse parts for <strong>' + name + '</strong>, but your active machine is currently <strong>' + cur + '</strong>.' +
+        ' Switching will update your machine context across the portal.';
+      bpOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeBpSwitch() {
+      bpOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      _pendingBp = null;
+    }
+    function confirmBpSwitch() {
+      if (!_pendingBp) return;
+      localStorage.setItem('okmDefaultMachine', _pendingBp.name);
+      window.dispatchEvent(new CustomEvent('okuma:machineChanged', { detail: { name: _pendingBp.name } }));
+      var name = _pendingBp.name, serial = _pendingBp.serial;
+      closeBpSwitch();
+      openModal(name, serial);
+    }
+
+    bpClose.addEventListener('click', closeBpSwitch);
+    bpCancel.addEventListener('click', closeBpSwitch);
+    bpConfirm.addEventListener('click', confirmBpSwitch);
+    bpOverlay.addEventListener('click', function (e) { if (e.target === bpOverlay) closeBpSwitch(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bpOverlay.classList.contains('open')) closeBpSwitch(); });
+
+    window.browsePartsClick = function (name, serial) {
+      var cur = localStorage.getItem('okmDefaultMachine') || '';
+      if (cur === name) {
+        openModal(name, serial);
+      } else {
+        openBpSwitch(name, serial);
+      }
+    };
+  })();
   </script>
 
 </body>

@@ -412,7 +412,7 @@
         <section class="section">
           <div class="section__head">
             <h2 class="section__title">Customer's Registered Machines</h2>
-            <a href="my-machines.html" class="section__link">View All →</a>
+            <a href="dealer-profile.html?tab=customers" id="custMachViewAllLink" class="section__link">View All →</a>
           </div>
           <div class="machine-grid" id="custMachineGrid">
             <!-- populated by JS -->
@@ -805,7 +805,7 @@
                   '<div class="machine-card__reg-label">Registered</div>' +
                   '<div class="machine-card__reg-date">' + m.reg + '</div>' +
                 '</div>' +
-                '<button class="btn-browse" onclick="browseMachineBook(\'' + m.name + '\', \'' + m.serial + '\')">Browse Parts Book</button>' +
+                '<button class="btn-browse" onclick="browsePartsClick(\'' + m.name + '\', \'' + m.serial + '\')">Browse Parts Book</button>' +
               '</div>' +
             '</div>' +
           '</div>';
@@ -835,6 +835,9 @@
         if (k1) k1.href = 'my-orders.html?filter=open&customer=' + custParam;
         if (k2) k2.href = 'my-quotes.html?filter=open&customer=' + custParam;
         if (k3) k3.href = 'dealer-profile.html?tab=addr-requests&customer=' + custParam;
+
+        var machViewAll = document.getElementById('custMachViewAllLink');
+        if (machViewAll) machViewAll.href = 'dealer-profile.html?tab=customers&customer=' + custParam;
 
         stateAll.style.display  = 'none';
         stateCust.style.display = '';
@@ -878,6 +881,74 @@
     })();
   </script>
 
+  <!-- Browse Parts — switch machine confirmation modal -->
+  <div class="csw-overlay" id="bpSwitchOverlay">
+    <div class="csw-modal" role="dialog" aria-modal="true" aria-labelledby="bpSwitchTitle">
+      <div class="csw-modal__hdr">
+        <h2 class="csw-modal__ttl" id="bpSwitchTitle">Switch Machine?</h2>
+        <button class="csw-modal__cls" id="bpSwitchClose" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
+        </button>
+      </div>
+      <div class="csw-modal__bdy">
+        <p id="bpSwitchBody"></p>
+        <div class="csw-modal__div"></div>
+        <div class="csw-modal__act">
+          <button class="csw-btn csw-btn--cancel" id="bpSwitchCancel">Cancel</button>
+          <button class="csw-btn csw-btn--confirm" id="bpSwitchConfirm">Switch &amp; Browse Parts</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    var _pendingBp = null;
+    var bpOverlay  = document.getElementById('bpSwitchOverlay');
+    var bpBody     = document.getElementById('bpSwitchBody');
+    var bpClose    = document.getElementById('bpSwitchClose');
+    var bpCancel   = document.getElementById('bpSwitchCancel');
+    var bpConfirm  = document.getElementById('bpSwitchConfirm');
+
+    function openBpSwitch(name, serial) {
+      _pendingBp = { name: name, serial: serial };
+      var cur = localStorage.getItem('okmDefaultMachine') || 'your current machine';
+      bpBody.innerHTML =
+        'You\'re about to browse parts for <strong>' + name + '</strong>, but your active machine is currently <strong>' + cur + '</strong>.' +
+        ' Switching will update your machine context across the portal.';
+      bpOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeBpSwitch() {
+      bpOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      _pendingBp = null;
+    }
+    function confirmBpSwitch() {
+      if (!_pendingBp) return;
+      localStorage.setItem('okmDefaultMachine', _pendingBp.name);
+      localStorage.setItem('okmCatalogueMachine', _pendingBp.name);
+      localStorage.setItem('okmCatalogueMachineSerial', _pendingBp.serial);
+      window.dispatchEvent(new CustomEvent('okuma:machineChanged', { detail: { name: _pendingBp.name } }));
+      window.location = 'parts-catalogue.html';
+    }
+
+    bpClose.addEventListener('click', closeBpSwitch);
+    bpCancel.addEventListener('click', closeBpSwitch);
+    bpConfirm.addEventListener('click', confirmBpSwitch);
+    bpOverlay.addEventListener('click', function (e) { if (e.target === bpOverlay) closeBpSwitch(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bpOverlay.classList.contains('open')) closeBpSwitch(); });
+
+    window.browsePartsClick = function (name, serial) {
+      var cur = localStorage.getItem('okmDefaultMachine') || '';
+      if (cur === name) {
+        browseMachineBook(name, serial);
+      } else {
+        openBpSwitch(name, serial);
+      }
+    };
+  })();
+  </script>
 
 </body>
 </html>

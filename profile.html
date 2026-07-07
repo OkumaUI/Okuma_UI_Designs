@@ -277,11 +277,14 @@
     .addr-modal__cancel:hover { background: #F0F6FF; }
 
     /* ── MY MACHINES ── */
+    .mach-toolbar {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    }
     .mach-search-field {
       display: flex; align-items: center; gap: 10px;
       padding: 0 12px; height: 40px;
       border: 1px solid #DEDEDE; border-radius: 4px; background: #fff;
-      margin-bottom: 16px;
+      flex: 1;
     }
     .mach-search-field:focus-within { border-color: #005EB8; }
     .mach-search-field svg { color: #9E9E9E; flex-shrink: 0; }
@@ -291,6 +294,13 @@
       color: #1A1A1A; background: transparent;
     }
     .mach-search-field input::placeholder { color: #9E9E9E; }
+    .mach-sort-select {
+      height: 40px; padding: 0 32px 0 12px; border: 1px solid #DEDEDE;
+      border-radius: 4px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239E9E9E' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+      font-size: 13px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #1A1A1A; cursor: pointer; outline: none; appearance: none; flex-shrink: 0;
+    }
+    .mach-sort-select:focus { border-color: #005EB8; }
     .mach-empty { font-size: 13px; color: #9E9E9E; padding: 16px 0; }
 
     .machines-list { display: flex; flex-direction: column; }
@@ -300,9 +310,15 @@
       gap: 16px; flex-wrap: wrap;
     }
     .machine-row:last-child { border-bottom: none; }
-    .machine-row__info { display: flex; flex-direction: column; gap: 4px; }
+    .machine-row__thumb {
+      width: 72px; height: 72px; flex-shrink: 0;
+      border: 1px solid #EFEFEF; border-radius: 4px; background: #F8F8F8;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .machine-row__thumb img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+    .machine-row__info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
     .machine-row__name { font-size: 15px; font-weight: 700; color: #2C2A29; }
-    .machine-row__serial { font-size: 12px; font-weight: 400; color: #9E9E9E; }
+    .machine-row__meta { font-size: 12px; font-weight: 400; color: #9E9E9E; }
     .machine-row__right { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
     .verified-badge {
       display: inline-flex; align-items: center; gap: 5px;
@@ -402,6 +418,9 @@
       .profile-data-label { width: 120px; }
       .addr-modal__bdy { padding: 20px 16px 16px; }
       .machine-row__right { width: 100%; justify-content: flex-start; }
+      .mach-toolbar { flex-wrap: wrap; }
+      .mach-sort-select { width: 100%; }
+      .machine-row__thumb { width: 56px; height: 56px; }
       #panel-profile .form-col { max-width: 100%; }
     }
     @media (max-width: 480px) {
@@ -653,22 +672,35 @@
         <div role="tabpanel" id="panel-machines" class="tab-panel"
              aria-labelledby="tab-machines" tabindex="0" hidden>
 
-          <!-- Search -->
-          <div class="mach-search-field">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
-              <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            <input type="search" id="machSearch" placeholder="Search by machine name or serial..."
-                   autocomplete="off" oninput="filterMachines(this.value)">
+          <!-- Search + Sort toolbar -->
+          <div class="mach-toolbar">
+            <div class="mach-search-field">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
+                <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <input type="search" id="machSearch" placeholder="Search by machine name or serial..."
+                     autocomplete="off" oninput="filterMachines(this.value)">
+            </div>
+            <select class="mach-sort-select" id="machSort" aria-label="Sort machines" onchange="sortMachines(this.value)">
+              <option value="name-asc">Name A → Z</option>
+              <option value="name-desc">Name Z → A</option>
+              <option value="date-desc">Install Date (Newest)</option>
+              <option value="date-asc">Install Date (Oldest)</option>
+              <option value="status">Status (Installed first)</option>
+            </select>
           </div>
 
           <div class="machines-list" id="machinesList" aria-label="Your registered machines">
 
-            <div class="machine-row" data-name="LB2000 EX III" data-serial="LB-4431-M">
+            <div class="machine-row" data-name="LB2000 EX III" data-serial="LB-4431-M" data-date="20231122" data-status="installed">
+              <div class="machine-row__thumb">
+                <img src="images/dash-machine-lb2000.png" alt="LB2000 EX III">
+              </div>
               <div class="machine-row__info">
                 <span class="machine-row__name">LB2000 EX III</span>
-                <span class="machine-row__serial">Serial: LB-4431-M &nbsp;·&nbsp; Install Date: Nov 22, 2023</span>
+                <span class="machine-row__meta">Serial: LB-4431-M</span>
+                <span class="machine-row__meta">Install Date: Nov 22, 2023</span>
               </div>
               <div class="machine-row__right">
                 <span class="verified-badge">
@@ -678,16 +710,20 @@
                   </svg>
                   INSTALLED
                 </span>
-                <button class="text-link" onclick="openPartsModal('LB2000 EX III', 'LB-4431-M')" aria-label="Browse parts for LB2000 EX III">
+                <button class="text-link" onclick="browsePartsClick('LB2000 EX III', 'LB-4431-M')" aria-label="Browse parts for LB2000 EX III">
                   Browse Parts →
                 </button>
               </div>
             </div>
 
-            <div class="machine-row" data-name="LU300-M" data-serial="M5-2891-K">
+            <div class="machine-row" data-name="LU300-M" data-serial="M5-2891-K" data-date="20220315" data-status="installed">
+              <div class="machine-row__thumb">
+                <img src="images/dash-machine-lu300m.png" alt="LU300-M">
+              </div>
               <div class="machine-row__info">
                 <span class="machine-row__name">LU300-M</span>
-                <span class="machine-row__serial">Serial: M5-2891-K &nbsp;·&nbsp; Install Date: Mar 15, 2022</span>
+                <span class="machine-row__meta">Serial: M5-2891-K</span>
+                <span class="machine-row__meta">Install Date: Mar 15, 2022</span>
               </div>
               <div class="machine-row__right">
                 <span class="verified-badge">
@@ -697,16 +733,20 @@
                   </svg>
                   INSTALLED
                 </span>
-                <button class="text-link" onclick="openPartsModal('LU300-M', 'M5-2891-K')" aria-label="Browse parts for LU300-M">
+                <button class="text-link" onclick="browsePartsClick('LU300-M', 'M5-2891-K')" aria-label="Browse parts for LU300-M">
                   Browse Parts →
                 </button>
               </div>
             </div>
 
-            <div class="machine-row" data-name="MULTUS U3000" data-serial="MU-9102-L">
+            <div class="machine-row" data-name="MULTUS U3000" data-serial="MU-9102-L" data-date="20210708" data-status="installed">
+              <div class="machine-row__thumb">
+                <img src="images/dash-machine-multus.png" alt="MULTUS U3000">
+              </div>
               <div class="machine-row__info">
                 <span class="machine-row__name">MULTUS U3000</span>
-                <span class="machine-row__serial">Serial: MU-9102-L &nbsp;·&nbsp; Install Date: Jul 08, 2021</span>
+                <span class="machine-row__meta">Serial: MU-9102-L</span>
+                <span class="machine-row__meta">Install Date: Jul 08, 2021</span>
               </div>
               <div class="machine-row__right">
                 <span class="verified-badge">
@@ -716,16 +756,20 @@
                   </svg>
                   INSTALLED
                 </span>
-                <button class="text-link" onclick="openPartsModal('MULTUS U3000', 'MU-9102-L')" aria-label="Browse parts for MULTUS U3000">
+                <button class="text-link" onclick="browsePartsClick('MULTUS U3000', 'MU-9102-L')" aria-label="Browse parts for MULTUS U3000">
                   Browse Parts →
                 </button>
               </div>
             </div>
 
-            <div class="machine-row" data-name="GENOS M460V" data-serial="GN-7745-R">
+            <div class="machine-row" data-name="GENOS M460V" data-serial="GN-7745-R" data-date="" data-status="pending">
+              <div class="machine-row__thumb">
+                <img src="machine-genos-l200e.png" alt="GENOS M460V">
+              </div>
               <div class="machine-row__info">
                 <span class="machine-row__name">GENOS M460V</span>
-                <span class="machine-row__serial">Serial: GN-7745-R</span>
+                <span class="machine-row__meta">Serial: GN-7745-R</span>
+                <span class="machine-row__meta">Install Date: Pending</span>
               </div>
               <div class="machine-row__right">
                 <span class="pending-install-badge">
@@ -735,7 +779,7 @@
                   </svg>
                   PENDING INSTALLATION
                 </span>
-                <button class="text-link" disabled aria-label="Browse parts unavailable until installed">
+                <button class="text-link" onclick="browsePartsClick('GENOS M460V', 'GN-7745-R')" aria-label="Browse parts for GENOS M460V">
                   Browse Parts →
                 </button>
               </div>
@@ -960,21 +1004,47 @@
     if (pwConfirmOverlay) pwConfirmOverlay.addEventListener('click', function(e) { if (e.target === pwConfirmOverlay) closePwConfirm(); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && pwConfirmOverlay && pwConfirmOverlay.classList.contains('is-open')) closePwConfirm(); });
 
-    /* ── MACHINE SEARCH ── */
-    window.filterMachines = function(query) {
-      var q = (query || '').toLowerCase().trim();
-      var rows = document.querySelectorAll('#machinesList .machine-row');
-      var visible = 0;
+    /* ── MACHINE SEARCH + SORT ── */
+    function applyMachineView() {
+      var q      = ((document.getElementById('machSearch') || {}).value || '').toLowerCase().trim();
+      var sortBy = ((document.getElementById('machSort')   || {}).value || 'name-asc');
+      var list   = document.getElementById('machinesList');
+      if (!list) return;
+
+      var rows = Array.prototype.slice.call(list.querySelectorAll('.machine-row'));
+
       rows.forEach(function(row) {
         var name   = (row.getAttribute('data-name')   || '').toLowerCase();
         var serial = (row.getAttribute('data-serial')  || '').toLowerCase();
         var match  = !q || name.indexOf(q) !== -1 || serial.indexOf(q) !== -1;
         row.style.display = match ? '' : 'none';
-        if (match) visible++;
       });
+
+      var visible = rows.filter(function(r) { return r.style.display !== 'none'; });
+
+      visible.sort(function(a, b) {
+        var na = (a.getAttribute('data-name')   || '').toLowerCase();
+        var nb = (b.getAttribute('data-name')   || '').toLowerCase();
+        var da = a.getAttribute('data-date') || '0';
+        var db = b.getAttribute('data-date') || '0';
+        var sa = a.getAttribute('data-status') || '';
+        var sb = b.getAttribute('data-status') || '';
+        if (sortBy === 'name-asc')   return na < nb ? -1 : na > nb ? 1 : 0;
+        if (sortBy === 'name-desc')  return na > nb ? -1 : na < nb ? 1 : 0;
+        if (sortBy === 'date-desc')  return db < da ? -1 : db > da ? 1 : 0;
+        if (sortBy === 'date-asc')   return da < db ? -1 : da > db ? 1 : 0;
+        if (sortBy === 'status')     return sa === sb ? 0 : sa === 'installed' ? -1 : 1;
+        return 0;
+      });
+
+      visible.forEach(function(row) { list.appendChild(row); });
+
       var empty = document.getElementById('machEmpty');
-      if (empty) empty.hidden = visible > 0;
-    };
+      if (empty) empty.hidden = visible.length > 0;
+    }
+
+    window.filterMachines = function() { applyMachineView(); };
+    window.sortMachines   = function() { applyMachineView(); };
 
     /* ── PARTS BOOK MODAL ── */
     window.openPartsModal = function(machineName, serial) {
@@ -1085,6 +1155,75 @@
     });
 
     renderList();
+  })();
+  </script>
+
+  <!-- Browse Parts — switch machine confirmation modal -->
+  <div class="csw-overlay" id="bpSwitchOverlay">
+    <div class="csw-modal" role="dialog" aria-modal="true" aria-labelledby="bpSwitchTitle">
+      <div class="csw-modal__hdr">
+        <h2 class="csw-modal__ttl" id="bpSwitchTitle">Switch Machine?</h2>
+        <button class="csw-modal__cls" id="bpSwitchClose" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
+        </button>
+      </div>
+      <div class="csw-modal__bdy">
+        <p id="bpSwitchBody"></p>
+        <div class="csw-modal__div"></div>
+        <div class="csw-modal__act">
+          <button class="csw-btn csw-btn--cancel" id="bpSwitchCancel">Cancel</button>
+          <button class="csw-btn csw-btn--confirm" id="bpSwitchConfirm">Switch &amp; Browse Parts</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    var _pendingBp = null;
+    var bpOverlay  = document.getElementById('bpSwitchOverlay');
+    var bpBody     = document.getElementById('bpSwitchBody');
+    var bpClose    = document.getElementById('bpSwitchClose');
+    var bpCancel   = document.getElementById('bpSwitchCancel');
+    var bpConfirm  = document.getElementById('bpSwitchConfirm');
+
+    function openBpSwitch(name, serial) {
+      _pendingBp = { name: name, serial: serial };
+      var cur = localStorage.getItem('okmDefaultMachine') || 'your current machine';
+      bpBody.innerHTML =
+        'You\'re about to browse parts for <strong>' + name + '</strong>, but your active machine is currently <strong>' + cur + '</strong>.' +
+        ' Switching will update your machine context across the portal.';
+      bpOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeBpSwitch() {
+      bpOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      _pendingBp = null;
+    }
+    function confirmBpSwitch() {
+      if (!_pendingBp) return;
+      localStorage.setItem('okmDefaultMachine', _pendingBp.name);
+      window.dispatchEvent(new CustomEvent('okuma:machineChanged', { detail: { name: _pendingBp.name } }));
+      var name = _pendingBp.name, serial = _pendingBp.serial;
+      closeBpSwitch();
+      openPartsModal(name, serial);
+    }
+
+    bpClose.addEventListener('click', closeBpSwitch);
+    bpCancel.addEventListener('click', closeBpSwitch);
+    bpConfirm.addEventListener('click', confirmBpSwitch);
+    bpOverlay.addEventListener('click', function (e) { if (e.target === bpOverlay) closeBpSwitch(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bpOverlay.classList.contains('open')) closeBpSwitch(); });
+
+    window.browsePartsClick = function (name, serial) {
+      var cur = localStorage.getItem('okmDefaultMachine') || '';
+      if (cur === name) {
+        openPartsModal(name, serial);
+      } else {
+        openBpSwitch(name, serial);
+      }
+    };
   })();
   </script>
 
