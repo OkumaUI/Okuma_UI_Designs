@@ -220,7 +220,7 @@
     .qty-stepper__btn { width: 28px; height: 28px; background: #F5F5F5; border: none; cursor: pointer; font-size: 15px; line-height: 1; color: #717171; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
     .qty-stepper__btn:hover { background: #E0E0E0; }
     .qty-stepper__val { width: 36px; text-align: center; font-size: 13px; font-weight: 700; border: none; border-left: 1px solid #DEDEDE; border-right: 1px solid #DEDEDE; height: 28px; font-family: inherit; }
-    .del-btn { background: none; border: none; cursor: pointer; color: #C4C4C4; padding: 6px; border-radius: 2px; transition: color 0.15s; display: inline-flex; align-items: center; justify-content: center; }
+    .del-btn { background: none; border: none; cursor: pointer; color: #8C93AD; padding: 6px; border-radius: 2px; transition: color 0.15s; display: inline-flex; align-items: center; justify-content: center; }
     .del-btn:hover { color: #D94F4F; }
 
     /* ── ORDER CONTEXT SIDEBAR ── */
@@ -229,7 +229,7 @@
     .ctx-row { display: flex; flex-direction: column; gap: 4px; }
     .ctx-row__lbl { font-size: 11px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; }
     .ctx-row__val { font-size: 14px; font-weight: 500; color: #2C2A29; }
-    .ctx-row__val--empty { color: #C4C4C4; font-weight: 400; }
+    .ctx-row__val--empty { color: #8C93AD; font-weight: 400; }
 
     /* ── PAYMENT NOTICE ── */
     .pay-notice { border: 1px solid #B4CBE6; border-radius: 4px; padding: 16px; background: #F0F6FF; display: flex; gap: 12px; }
@@ -322,7 +322,7 @@
     .badge-notfound { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #D94F4F; background: #FFF0F0; border: 0.5px solid #D94F4F; border-radius: 2px; padding: 3px 8px; }
     .input-sm { height: 32px; border: 1px solid #DEDEDE; border-radius: 4px; padding: 0 10px; font-size: 13px; font-family: inherit; outline: none; width: 100%; }
     .input-sm:focus { border-color: #005EB8; }
-    .input-sm::placeholder { color: #C4C4C4; }
+    .input-sm::placeholder { color: #8C93AD; }
     .btn-add { height: 32px; padding: 0 16px; background: #0B308E; color: #fff; border: none; border-radius: 4px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: inherit; }
     .btn-add:hover { opacity: 0.88; }
 
@@ -814,10 +814,10 @@
         : '<span class="badge-notfound">✕ Not found</span>';
       var priceCell = part
         ? '<td class="m-price">$' + part.price.toFixed(2) + '</td>'
-        : '<td class="m-price" style="color:#C4C4C4;">—</td>';
+        : '<td class="m-price" style="color:#8C93AD;">—</td>';
       var totalCell = part
         ? '<td class="m-total">$' + (part.price * qtyNum).toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) + '</td>'
-        : '<td class="m-total" style="color:#C4C4C4;">—</td>';
+        : '<td class="m-total" style="color:#8C93AD;">—</td>';
       var addRow = document.getElementById('addRow');
       var tr = document.createElement('tr');
       if (!part) tr.style.background = '#FFF8F8';

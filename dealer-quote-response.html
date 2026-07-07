@@ -30,7 +30,7 @@
     .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #717171; margin-bottom: 20px; }
     .breadcrumb a { color: #717171; text-decoration: none; }
     .breadcrumb a:hover { color: #005EB8; text-decoration: underline; }
-    .breadcrumb__sep { color: #C4C4C4; }
+    .breadcrumb__sep { color: #8C93AD; }
     .breadcrumb__current { color: #1A1A1A; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 240px; }
 
     /* PAGE HEADER */
@@ -46,6 +46,7 @@
     .page-head__info { flex: 1; min-width: 0; }
     .page-head__title { font-size: 24px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.3px; }
     .page-head__meta { font-size: 13px; color: #717171; margin-top: 3px; display: block; }
+    .page-head__meta-divider { display: inline-block; width: 1px; height: 11px; background: #DEDEDE; vertical-align: middle; margin: 0 8px; }
 
     /* STATUS BADGE */
     .status-badge {
@@ -161,7 +162,7 @@
     .action-select:focus { outline: none; border-color: #005EB8; }
 
     /* Response panels */
-    .resp-placeholder { font-size: 12px; color: #C4C4C4; font-style: italic; padding-top: 6px; }
+    .resp-placeholder { font-size: 12px; color: #8C93AD; font-style: italic; padding-top: 6px; }
 
     .resp-badge {
       display: inline-block;
@@ -170,8 +171,7 @@
     }
     .resp-badge--price   { background: #EDF7F0; border: 0.5px solid #2D9E5F; color: #1D6B40; }
     .resp-badge--partno  { background: #FFF9EF; border: 0.5px solid #F0C040; color: #7A4F00; }
-    .resp-badge--invalid { background: #FFF0F0; border: 0.5px solid #F0A0A0; color: #8B2020; }
-    .resp-badge--nochange{ background: #F5F5F5; border: 0.5px solid #DEDEDE; color: #717171; }
+    .resp-badge--other   { background: #F5F5F5; border: 0.5px solid #DEDEDE; color: #717171; }
 
     .resp-hint { font-size: 11px; color: #9E9E9E; margin-top: 5px; line-height: 1.4; }
 
@@ -194,6 +194,24 @@
     }
     .price-input::placeholder { color: #BDBDBD; }
 
+    /* Part search */
+    .part-search-wrap { margin-top: 6px; position: relative; }
+    .part-search-input-row { display: flex; align-items: center; gap: 6px; border: 1px solid #DEDEDE; border-radius: 4px; padding: 0 10px; background: #fff; transition: border-color 0.15s; }
+    .part-search-input-row:focus-within { border-color: #005EB8; }
+    .part-search-icon { color: #9E9E9E; flex-shrink: 0; }
+    .part-search-input { border: none; outline: none; height: 36px; font-family: inherit; font-size: 13px; color: #1A1A1A; width: 100%; background: transparent; }
+    .part-search-input::placeholder { color: #BDBDBD; }
+    .part-search-results { position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: #fff; border: 1px solid #E0E0E0; border-top: none; border-radius: 0 0 4px 4px; box-shadow: 0 4px 10px rgba(0,0,0,.08); }
+    .part-search-result { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; cursor: pointer; border-bottom: 1px solid #F5F5F5; }
+    .part-search-result:last-child { border-bottom: none; }
+    .part-search-result:hover { background: #F0F6FF; }
+    .psr-pn   { font-size: 12px; font-weight: 700; color: #005EB8; }
+    .psr-name { font-size: 12px; color: #4B4B4B; }
+    .part-search-selected { margin-top: 6px; }
+    .part-selected-item { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; background: #F0F6FF; border: 1px solid #B0D0F0; border-radius: 4px; }
+    .psi-pn   { font-size: 13px; font-weight: 700; color: #005EB8; }
+    .psi-name { font-size: 12px; color: #4B4B4B; }
+
     /* Part no + reason inputs */
     .partno-input, .reason-input {
       width: 100%;
@@ -209,9 +227,6 @@
     .partno-input::placeholder, .reason-input::placeholder { color: #BDBDBD; }
 
     /* Line total column */
-    .line-total { text-align: right; padding-top: 6px; font-size: 13px; font-weight: 700; color: #1A1A1A; }
-    .line-total--pending { color: #C4C4C4; font-style: italic; font-weight: 400; }
-    .line-total--excluded { color: #C0392B; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
 
     /* MESSAGES CARD */
     .msg-section { padding: 16px 20px; }
@@ -222,6 +237,7 @@
       display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
     }
     .msg-label span { font-weight: 400; color: #B0B0B0; text-transform: none; letter-spacing: 0; }
+    .msg-label-sub { font-size: 11px; font-weight: 400; color: #B0B0B0; margin-top: 2px; margin-bottom: 8px; }
     .msg-customer-bubble {
       font-size: 13px; color: #1A1A1A; line-height: 1.65;
       background: #F5F5F5; border-radius: 4px; padding: 11px 14px;
@@ -254,11 +270,6 @@
     .sum-row__val { font-weight: 500; color: #1A1A1A; }
     .sum-row__val--muted { color: #9E9E9E; font-style: italic; font-weight: 400; }
     .sum-row__val--red { color: #C0392B; }
-    .sum-divider { height: 1px; background: #DEDEDE; margin: 8px 0; }
-    .sum-total { display: flex; justify-content: space-between; align-items: flex-start; padding: 4px 0; }
-    .sum-total__lbl { font-size: 14px; font-weight: 700; color: #1A1A1A; padding-top: 4px; }
-    .sum-total__val { font-size: 20px; font-weight: 800; color: #005EB8; }
-    .sum-total__excl { font-size: 10px; color: #9E9E9E; margin-top: 3px; text-align: right; }
     .sum-empty { text-align: center; padding: 14px 0 8px; }
     .sum-empty__msg { font-size: 13px; color: #9E9E9E; line-height: 1.5; margin-top: 8px; }
 
@@ -807,103 +818,28 @@
 
       if (!a) return { complete: false, total: null, excluded: false };
 
-      if (a === 'none') {
-        return { complete: true, total: itm.qty * itm.listPrice, excluded: false };
-      }
       if (a === 'price') {
         var v = parseFloat(s.priceVal);
-        if (!isNaN(v) && v > 0) return { complete: true, total: itm.qty * v, excluded: false };
-        return { complete: false, total: null, excluded: false };
+        return (!isNaN(v) && v > 0) ? { complete: true } : { complete: false };
       }
       if (a === 'partno') {
-        var pn = (s.partnVal || '').trim();
-        if (pn) return { complete: true, total: itm.qty * itm.listPrice, excluded: false };
-        return { complete: false, total: null, excluded: false };
+        return (s.partnVal || '').trim() ? { complete: true } : { complete: false };
       }
-      if (a === 'invalid') {
-        var r = (s.reasonVal || '').trim();
-        if (r) return { complete: true, total: 0, excluded: true };
-        return { complete: false, total: null, excluded: false };
+      if (a === 'other') {
+        return (s.otherVal || '').trim() ? { complete: true } : { complete: false };
       }
-      return { complete: false, total: null, excluded: false };
+      return { complete: false };
     }
 
     /* ── LINE TOTAL CELL ──────────────────────────────────────────── */
-    function refreshLineTotal(idx) {
-      var rs   = getRowState(idx);
-      var cell = document.getElementById('lt-' + idx);
-      if (!cell) return;
-      if (rs.excluded) {
-        cell.innerHTML = '<span class="line-total line-total--excluded">Excluded</span>';
-      } else if (rs.total !== null) {
-        cell.innerHTML = '<span class="line-total">' + fmt(rs.total) + '</span>';
-      } else {
-        cell.innerHTML = '<span class="line-total line-total--pending">—</span>';
-      }
-    }
-
     /* ── LIVE SUMMARY ─────────────────────────────────────────────── */
     function updateSummary() {
-      var total   = q.items.length;
-      var actioned = 0, excluded = 0, subtotal = 0;
+      var total    = q.items.length;
+      var actioned = 0;
 
       q.items.forEach(function (_, idx) {
-        var rs = getRowState(idx);
-        refreshLineTotal(idx);
-        if (!rs.complete) return;
-        actioned++;
-        if (rs.excluded) { excluded++; }
-        else { subtotal += rs.total; }
+        if (getRowState(idx).complete) actioned++;
       });
-
-      var pct = total > 0 ? Math.round((actioned / total) * 100) : 0;
-
-      var fill = document.getElementById('progressFill');
-      if (fill) fill.style.width = pct + '%';
-
-      var cnt = document.getElementById('progressCount');
-      if (cnt) {
-        cnt.textContent = actioned + ' / ' + total + ' items actioned';
-        cnt.className = 'progress-label__cnt' + (actioned === total ? ' progress-label__cnt--done' : '');
-      }
-
-      var sumBody = document.getElementById('sumBody');
-      if (!sumBody) return;
-
-      if (actioned === 0) {
-        sumBody.innerHTML =
-          '<div class="sum-empty">' +
-          '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="11" stroke="#DEDEDE" stroke-width="1.5"/><path d="M14 9v5.5l3.5 2" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-          '<p class="sum-empty__msg">Fill in responses above to<br>see the live quote total.</p>' +
-          '</div>';
-      } else {
-        var pricedN = actioned - excluded;
-        var pendingN = total - actioned;
-        var html = '';
-
-        if (pricedN > 0) {
-          html += '<div class="sum-row"><span class="sum-row__lbl">Priced (' + pricedN + ' item' + (pricedN !== 1 ? 's' : '') + ')</span><span class="sum-row__val">' + fmt(subtotal) + '</span></div>';
-        }
-        if (excluded > 0) {
-          html += '<div class="sum-row"><span class="sum-row__lbl">Invalid / excluded (' + excluded + ')</span><span class="sum-row__val sum-row__val--red">—</span></div>';
-        }
-        if (pendingN > 0) {
-          html += '<div class="sum-row"><span class="sum-row__lbl">Pending (' + pendingN + ')</span><span class="sum-row__val sum-row__val--muted">Not actioned</span></div>';
-        }
-
-        html += '<div class="sum-divider"></div>';
-        html += '<div class="sum-row"><span class="sum-row__lbl">Shipping &amp; Handling</span><span class="sum-row__val sum-row__val--muted">Added at shipment</span></div>';
-        html += '<div class="sum-row"><span class="sum-row__lbl">Tax</span><span class="sum-row__val sum-row__val--muted">At checkout</span></div>';
-        html += '<div class="sum-divider"></div>';
-        html += '<div class="sum-total">' +
-          '<span class="sum-total__lbl">Total</span>' +
-          '<div style="text-align:right">' +
-          '<div class="sum-total__val">' + fmt(subtotal) + '</div>' +
-          '<div class="sum-total__excl">excl. shipping &amp; tax</div>' +
-          '</div></div>';
-
-        sumBody.innerHTML = html;
-      }
 
       var btn = document.getElementById('btnSubmit');
       if (btn) btn.disabled = (actioned < total);
@@ -916,7 +852,7 @@
       var placeholder = document.getElementById('rp-placeholder-' + idx);
       if (placeholder) placeholder.style.display = 'none';
 
-      ['none', 'price', 'partno', 'invalid'].forEach(function (type) {
+      ['price', 'partno', 'other'].forEach(function (type) {
         var el = document.getElementById('rp-' + type + '-' + idx);
         if (el) el.style.display = (type === val ? '' : 'none');
       });
@@ -924,9 +860,69 @@
       updateSummary();
     };
 
-    window.onPriceInput   = function (idx, v) { rowStates[idx].priceVal  = v; updateSummary(); };
-    window.onPartnInput   = function (idx, v) { rowStates[idx].partnVal  = v; updateSummary(); };
-    window.onReasonInput  = function (idx, v) { rowStates[idx].reasonVal = v; updateSummary(); };
+    window.onPriceInput  = function (idx, v) { rowStates[idx].priceVal = v; updateSummary(); };
+    window.onPartnInput  = function (idx, v) { rowStates[idx].partnVal = v; updateSummary(); };
+    window.onOtherInput  = function (idx, v) { rowStates[idx].otherVal = v; updateSummary(); };
+
+    var PARTS_CATALOG = [
+      { pn: 'E4809-045-017-A', name: 'Coolant Pump Assembly' },
+      { pn: 'E4809-045-017',   name: 'Coolant Pump Assembly (220V)' },
+      { pn: 'B0612-045-H8',    name: 'Servo Drive Belt' },
+      { pn: '525-0100-11',     name: 'Plate Bearing' },
+      { pn: 'OR-0045-SLK',     name: 'O-Ring Seal Kit' },
+      { pn: 'OR-0045-SLK-V2',  name: 'O-Ring Seal Kit (V2)' },
+      { pn: 'SK-2291-001',     name: 'Spindle Bearing Unit' },
+      { pn: 'TLP-0800-R',      name: 'Turret Locking Pin Set' },
+      { pn: 'PCS-0040-K',      name: 'Pneumatic Cylinder Seal Kit' },
+      { pn: 'HSC-0250-K',      name: 'Hydraulic Chuck Seal Set' },
+      { pn: 'XSB-0614-V',      name: 'X-Axis Servo Belt' },
+      { pn: 'SCR-1800-A',      name: 'Spindle Clamp Ring' },
+      { pn: 'SOS-0180-B',      name: 'Spindle Oil Seal' },
+      { pn: 'LSW-2200-NC',     name: 'Axis Limit Switch' },
+      { pn: 'CCB-0500-H',      name: 'Chip Conveyor Belt' },
+      { pn: 'CLS-0440-D',      name: 'Coolant Level Sensor' },
+      { pn: 'ZWC-3000-L',      name: 'Z-Axis Way Cover' },
+      { pn: 'SME-4400-K',      name: 'Servo Motor Encoder' },
+      { pn: 'BS-Z2200-01',     name: 'Z-Axis Ball Screw' },
+      { pn: 'CFH-0600-B',      name: 'Coolant Filter Housing' },
+    ];
+
+    window.onPartSearch = function (idx, val) {
+      var q2 = val.trim().toLowerCase();
+      var resultsEl = document.getElementById('psr-' + idx);
+      if (!resultsEl) return;
+      if (!q2) { resultsEl.style.display = 'none'; resultsEl.innerHTML = ''; return; }
+      var matches = PARTS_CATALOG.filter(function (p) {
+        return p.pn.toLowerCase().indexOf(q2) !== -1 || p.name.toLowerCase().indexOf(q2) !== -1;
+      }).slice(0, 6);
+      if (!matches.length) { resultsEl.style.display = 'none'; return; }
+      resultsEl.innerHTML = matches.map(function (p) {
+        var safePn   = p.pn.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        var safeName = p.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        return '<div class="part-search-result" onclick="onPartSelect(' + idx + ',\'' + safePn + '\',\'' + safeName + '\')">' +
+          '<span class="psr-pn">' + p.pn + '</span>' +
+          '<span class="psr-name">' + p.name + '</span>' +
+          '</div>';
+      }).join('');
+      resultsEl.style.display = 'block';
+    };
+
+    window.onPartSelect = function (idx, pn, name) {
+      rowStates[idx].partnVal = pn;
+      var input = document.getElementById('psi-' + idx);
+      if (input) input.value = pn;
+      var resultsEl = document.getElementById('psr-' + idx);
+      if (resultsEl) { resultsEl.style.display = 'none'; resultsEl.innerHTML = ''; }
+      var selectedEl = document.getElementById('pss-' + idx);
+      if (selectedEl) {
+        selectedEl.style.display = 'block';
+        selectedEl.innerHTML = '<div class="part-selected-item">' +
+          '<span class="psi-pn">' + pn + '</span>' +
+          '<span class="psi-name">' + name + '</span>' +
+          '</div>';
+      }
+      updateSummary();
+    };
 
     window.updateCharCount = function (el) {
       var len = el.value.length;
@@ -1041,12 +1037,14 @@
       document.title = q.num + ' — Response — Okuma Parts Portal';
       document.getElementById('bcId').textContent   = q.num;
       document.getElementById('pgTitle').textContent = q.num;
-      document.getElementById('pgMeta').textContent  = 'Submitted ' + q.submitted;
-      document.getElementById('quoteInfoStrip').innerHTML = renderQuoteInfoStrip();
+      document.getElementById('pgMeta').innerHTML =
+        'Submitted ' + escHtml(q.submitted) +
+        '<span class="page-head__meta-divider"></span>' +
+        escHtml(q.company || '—');
 
       var html = '<div class="detail-layout">';
-      html += '<div class="detail-main">' + renderItems() + renderMessages() + '</div>';
-      html += '<div class="detail-aside">' + renderSummaryCard() + renderActions() + '</div>';
+      html += '<div class="detail-main">' + renderItems() + '</div>';
+      html += '<div class="detail-aside">' + renderMessages() + renderActions() + '</div>';
       html += '</div>';
 
       document.getElementById('machineStrip').innerHTML = renderMachineStrip();
@@ -1079,21 +1077,15 @@
           '<div>' +
             '<div class="item-name">' + escHtml(itm.name) + '</div>' +
             '<div class="item-pn">P/N: ' + escHtml(itm.pn) + '</div>' +
-            '<div class="item-desc">' + escHtml(itm.desc) + '</div>' +
-            '<div class="item-tags">' +
-              '<span class="tag tag--qty">Qty: ' + itm.qty + '</span>' +
-            '</div>' +
-            '<div class="item-listprice">List price: ' + fmt(itm.listPrice) + ' / ea</div>' +
           '</div>' +
 
           /* Action dropdown column */
           '<div>' +
             '<select class="action-select" onchange="onActionChange(' + idx + ', this.value)" aria-label="Action for ' + escAttr(itm.name) + '">' +
               '<option value="" disabled selected>Select…</option>' +
-              '<option value="none">No Change</option>' +
-              '<option value="price">Corrected Price</option>' +
-              '<option value="partno">Part Correction</option>' +
-              '<option value="invalid">Invalid</option>' +
+              '<option value="price">Add Price</option>' +
+              '<option value="partno">Correct Part</option>' +
+              '<option value="other">Other</option>' +
             '</select>' +
           '</div>' +
 
@@ -1104,46 +1096,43 @@
               '<p class="resp-placeholder">Select an action to continue</p>' +
             '</div>' +
 
-            /* No Change */
-            '<div id="rp-none-' + idx + '" style="display:none;">' +
-              '<span class="resp-badge resp-badge--nochange">No Change</span>' +
-              '<p class="resp-hint">Accepted at list price &mdash; no changes to this line.</p>' +
-            '</div>' +
-
-            /* Corrected Price */
+            /* Add Price */
             '<div id="rp-price-' + idx + '" style="display:none;">' +
-              '<span class="resp-badge resp-badge--price">Price Override</span>' +
+              '<span class="resp-badge resp-badge--price">Add Price</span>' +
               '<div class="price-input-wrap">' +
                 '<span class="price-prefix">$</span>' +
                 '<input type="number" class="price-input" min="0.01" step="0.01" placeholder="0.00"' +
                   ' oninput="onPriceInput(' + idx + ', this.value)"' +
-                  ' aria-label="Corrected unit price for ' + escAttr(itm.name) + '">' +
+                  ' aria-label="Unit price for ' + escAttr(itm.name) + '">' +
               '</div>' +
-              '<p class="resp-hint">Overrides the price shown to the customer on this line.</p>' +
+              '<p class="resp-hint">Enter the unit price for this part.</p>' +
             '</div>' +
 
-            /* Part Correction */
+            /* Correct Part */
             '<div id="rp-partno-' + idx + '" style="display:none;">' +
-              '<span class="resp-badge resp-badge--partno">Part Correction</span>' +
-              '<input type="text" class="partno-input" placeholder="Enter corrected P/N"' +
-                ' oninput="onPartnInput(' + idx + ', this.value)"' +
-                ' aria-label="Corrected part number for ' + escAttr(itm.name) + '">' +
-              '<p class="resp-hint">Tell the customer the correct part number for their machine.</p>' +
+              '<span class="resp-badge resp-badge--partno">Correct Part</span>' +
+              '<div class="part-search-wrap" id="psw-' + idx + '">' +
+                '<div class="part-search-input-row">' +
+                  '<svg class="part-search-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="6" r="4.5"/><line x1="9.5" y1="9.5" x2="13" y2="13"/></svg>' +
+                  '<input type="text" class="part-search-input" id="psi-' + idx + '" placeholder="Search part number or name…"' +
+                    ' oninput="onPartSearch(' + idx + ', this.value)"' +
+                    ' autocomplete="off"' +
+                    ' aria-label="Search for replacement part for ' + escAttr(itm.name) + '">' +
+                '</div>' +
+                '<div class="part-search-results" id="psr-' + idx + '" style="display:none;"></div>' +
+                '<div class="part-search-selected" id="pss-' + idx + '" style="display:none;"></div>' +
+              '</div>' +
+              '<p class="resp-hint">Search and select the correct replacement part.</p>' +
             '</div>' +
 
-            /* Invalid */
-            '<div id="rp-invalid-' + idx + '" style="display:none;">' +
-              '<span class="resp-badge resp-badge--invalid">Invalid</span>' +
-              '<textarea class="reason-input" placeholder="Explain why this part isn\'t valid for this machine…"' +
-                ' oninput="onReasonInput(' + idx + ', this.value)"' +
-                ' aria-label="Reason invalid for ' + escAttr(itm.name) + '"></textarea>' +
-              '<p class="resp-hint">Explain why this part isn\'t valid for the customer\'s machine.</p>' +
+            /* Other */
+            '<div id="rp-other-' + idx + '" style="display:none;">' +
+              '<span class="resp-badge resp-badge--other">Other</span>' +
+              '<textarea class="reason-input" placeholder="Add a note for the customer…"' +
+                ' oninput="onOtherInput(' + idx + ', this.value)"' +
+                ' aria-label="Note for ' + escAttr(itm.name) + '"></textarea>' +
+              '<p class="resp-hint">Add any notes or clarifications for the customer.</p>' +
             '</div>' +
-          '</div>' +
-
-          /* Line total column */
-          '<div id="lt-' + idx + '">' +
-            '<span class="line-total line-total--pending">—</span>' +
           '</div>' +
 
         '</div>';
@@ -1155,7 +1144,6 @@
           '<span class="ich">Part</span>' +
           '<span class="ich">Action</span>' +
           '<span class="ich">Response Details</span>' +
-          '<span class="ich ich--r">Line Total</span>' +
         '</div>' +
         rows +
         '</div>';
@@ -1176,7 +1164,8 @@
 
       html += '<div class="msg-section">' +
         '<div class="msg-label" style="color:#717171">' + msgSvg +
-          ' Your Reply <span>(sent to customer, visible on quote)</span></div>' +
+          ' Your Reply</div>' +
+        '<div class="msg-label-sub">(sent to customer, visible on quote)</div>' +
         '<textarea class="msg-reply-area" id="replyText" maxlength="500"' +
           ' oninput="updateCharCount(this)"' +
           ' placeholder="Write your reply to the customer…"></textarea>' +
@@ -1188,27 +1177,6 @@
     }
 
     /* ── SUMMARY CARD ─────────────────────────────────────────────── */
-    function renderSummaryCard() {
-      return '<div class="det-card"><div class="det-card__head">Quote Summary</div><div class="det-card__body">' +
-        '<div class="progress-label">' +
-          '<span class="progress-label__txt">Progress</span>' +
-          '<span class="progress-label__cnt" id="progressCount">0 / ' + q.items.length + ' items actioned</span>' +
-        '</div>' +
-        '<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>' +
-        '<div id="sumBody"></div>' +
-        '</div></div>';
-    }
-
-    /* ── QUOTE INFO STRIP ────────────────────────────────────────── */
-    function renderQuoteInfoStrip() {
-      return '<div class="quote-info-strip">' +
-        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Quote No</span><span class="quote-info-strip__val quote-info-strip__val--blue">' + escHtml(q.num) + '</span></div>' +
-        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Submitted</span><span class="quote-info-strip__val">' + escHtml(q.submitted) + '</span></div>' +
-        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Customer</span><span class="quote-info-strip__val">' + escHtml(q.customer) + '</span></div>' +
-        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Company</span><span class="quote-info-strip__val">' + escHtml(q.company) + '</span></div>' +
-        '</div>';
-    }
-
     /* ── ACTIONS ──────────────────────────────────────────────────── */
     function renderActions() {
       var icoSend = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7l3.5 3.5L13 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';

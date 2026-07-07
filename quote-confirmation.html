@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quote Confirmed — Okuma Parts Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: #F7F8F9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      justify-content: center;
+      padding: 40px 24px 80px;
+    }
+
+    /* ─── CONFIRMATION CARD ─── */
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.063);
+      width: 100%;
+      max-width: 720px;
+      padding: 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ─── HERO: Icon + Title ─── */
+    .card__hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .card__icon-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #E6FFFA;
+      border: 2px solid #38B2AC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card__icon-inner {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #38B2AC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card__icon-inner svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .card__title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #2C2A29;
+      line-height: 1.2;
+    }
+
+    .card__subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: #6B7280;
+      line-height: 1.5;
+    }
+
+    /* ─── REFERENCE NUMBER ─── */
+    .card__reference {
+      background: #005EB8;
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .card__ref-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card__ref-number {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── INFO NOTICE ─── */
+    .card__notice {
+      background: #F0F6FF;
+      border-radius: 4px;
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .card__notice-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: #005EB8;
+      margin-top: 1px;
+    }
+
+    .card__notice-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: #005EB8;
+      line-height: 1.5;
+    }
+
+    /* ─── DIVIDER ─── */
+    .card__divider {
+      height: 1px;
+      background: #E5E5E5;
+    }
+
+    /* ─── SECTIONS ─── */
+    .card__section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card__section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #2C2A29;
+    }
+
+    /* ─── MACHINE CONTEXT STRIP ─── */
+    .machine-context {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #F0F6FF;
+      border-left: 3px solid #005EB8;
+      border-radius: 2px;
+    }
+
+    .machine-context__name   { font-size: 15px; font-weight: 700; color: #005EB8; }
+    .machine-context__sep    { font-size: 14px; color: #BDBDBD; }
+    .machine-context__serial { font-size: 13px; font-weight: 400; color: #4B4B4B; }
+
+    /* ─── ITEMS TABLE ─── */
+    .items-table { display: flex; flex-direction: column; }
+
+    .items-table__head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #E5E5E5;
+    }
+
+    .items-table__row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid #F0F0F0;
+    }
+
+    .items-table__row:last-child { border-bottom: none; }
+
+    .it-hcol {
+      font-size: 11px;
+      font-weight: 700;
+      color: #9E9E9E;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .it-col-pn   { width: 140px; flex-shrink: 0; }
+    .it-col-name { flex: 1; min-width: 0; }
+
+    .it-part-pn   { font-size: 13px; font-weight: 700; color: #005EB8; }
+    .it-part-name { font-size: 13px; font-weight: 400; color: #2C2A29; line-height: 1.4; }
+
+    /* ─── ACTION BUTTONS ─── */
+    .card__actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 160px;
+      height: 48px;
+      border-radius: 4px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.15s;
+      text-decoration: none;
+    }
+
+    .btn:hover { opacity: 0.88; }
+
+    .btn--primary {
+      background: #005EB8;
+      color: #fff;
+      border: none;
+    }
+
+    .btn--outline {
+      background: #fff;
+      color: #005EB8;
+      border: 1.5px solid #005EB8;
+    }
+
+    img, svg { max-width: 100%; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .page-content { padding: 24px 16px 56px; }
+      .card { padding: 40px 24px; gap: 24px; }
+      .card__title { font-size: 26px; }
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 32px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .page-content { padding: 16px 16px 48px; }
+      .card { padding: 28px 16px; }
+      .card__title { font-size: 22px; }
+      .card__ref-number { font-size: 20px; }
+      .card__reference { padding: 16px 12px; gap: 2px; }
+      .card__notice { padding: 14px 12px; }
+      .card__actions { flex-direction: column; }
+      .btn { flex: none; width: 100%; height: 48px; min-width: 0; }
+      .it-col-pn { width: 110px; }
+    }
+
+    @media (max-width: 414px) {
+      .card { padding: 24px 14px; }
+      .card__ref-number { font-size: 18px; letter-spacing: 0; }
+      .card__title { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <div class="app-body-shell">
+    <div id="okuma-sidebar" data-active="quotes"></div>
+
+    <main class="page-content">
+      <div class="card">
+
+        <!-- 1. Hero: icon + title + subtitle -->
+        <div class="card__hero">
+          <div class="card__icon-wrap">
+            <div class="card__icon-inner">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M5 12.5L10 17.5L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <h1 class="card__title">Quote Confirmed!</h1>
+            <p class="card__subtitle" id="conf-subtitle" style="margin-top:8px;">Thank you. Your quote request has been submitted successfully.</p>
+          </div>
+        </div>
+
+        <!-- 2. Reference number -->
+        <div class="card__reference">
+          <span class="card__ref-label">Quote Reference</span>
+          <span class="card__ref-number" id="quoteRef">#QRF-2026-00147</span>
+        </div>
+
+        <!-- 3. Info notice -->
+        <div class="card__notice">
+          <svg class="card__notice-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="10" cy="10" r="8" stroke="#005EB8" stroke-width="1.5"/>
+            <path d="M10 9v5" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="10" cy="6.5" r="0.75" fill="#005EB8"/>
+          </svg>
+          <span class="card__notice-text">The Okuma team will review this quote and get back to you within 2–3 business days.</span>
+        </div>
+
+        <!-- Divider -->
+        <div class="card__divider"></div>
+
+        <!-- 4. Ordered for -->
+        <div class="card__section">
+          <p class="card__section-title">Ordered For</p>
+          <div class="machine-context">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#005EB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+            <span class="machine-context__name" id="machineName">LU300-M</span>
+            <span class="machine-context__sep">|</span>
+            <span class="machine-context__serial" id="machineSerial">Serial No: M5-2891-K</span>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="card__divider"></div>
+
+        <!-- 5. Items -->
+        <div class="card__section">
+          <p class="card__section-title" id="itemsHeading">Items Requested</p>
+
+          <div class="items-table">
+            <div class="items-table__head">
+              <div class="it-col-pn"><span class="it-hcol">Part Number</span></div>
+              <div class="it-col-name"><span class="it-hcol">Part Name</span></div>
+            </div>
+            <div id="itemsBody"></div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="card__divider"></div>
+
+        <!-- 6. Action buttons -->
+        <div class="card__actions">
+          <button class="btn btn--primary" onclick="window.location='my-quotes.html'">View My Quotes</button>
+          <button class="btn btn--outline" onclick="window.location='dashboard.html'">Go to Dashboard</button>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div id="okuma-auth-footer"></div>
+  <script src="auth.js"></script>
+  <script src="components.js"></script>
+
+  <script>
+  (function () {
+
+    /* ─── Personalise subtitle ─── */
+    var user = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
+    if (user && user.firstName) {
+      var el = document.getElementById('conf-subtitle');
+      if (el) el.textContent = 'Thank you, ' + user.firstName + '. Your quote request has been submitted successfully.';
+    }
+
+    /* ─── Machine context ─── */
+    var MACHINES = [
+      { name: 'LU300-M',           serial: 'M5-2891-K' },
+      { name: 'MULTUS U3000',      serial: 'MU-9102-L' },
+      { name: 'LB2000 EX III',     serial: 'LB-4431-M' },
+      { name: 'GENOS L200E',       serial: 'L2-1108-A' },
+      { name: 'SPACE TURN LB3000', serial: 'LB-8821-X' },
+      { name: 'MB-56V AII',        serial: 'MB-2234-P' }
+    ];
+
+    function getMachine(name) {
+      for (var i = 0; i < MACHINES.length; i++) {
+        if (MACHINES[i].name === name) return MACHINES[i];
+      }
+      return null;
+    }
+
+    var machineName = '';
+    try { machineName = localStorage.getItem('okmDefaultMachine') || 'LU300-M'; } catch(e) { machineName = 'LU300-M'; }
+    var machineData = getMachine(machineName);
+
+    var nameEl   = document.getElementById('machineName');
+    var serialEl = document.getElementById('machineSerial');
+    if (nameEl)   nameEl.textContent   = machineData ? machineData.name   : machineName;
+    if (serialEl) serialEl.textContent = machineData ? 'Serial No: ' + machineData.serial : '';
+
+    /* ─── Items from session storage (passed by quote-basket) ─── */
+    var DEFAULT_ITEMS = [
+      { pn: 'MJ-4192-L', name: 'Spindle Bearing Assembly' },
+      { pn: 'CB-1140',   name: 'Control Board PCB Assembly' },
+      { pn: 'FLT-201',   name: 'Hydraulic Filter Element' }
+    ];
+
+    var items = DEFAULT_ITEMS;
+    try {
+      var stored = sessionStorage.getItem('okmQuoteItems');
+      if (stored) items = JSON.parse(stored);
+    } catch(e) {}
+
+    var headingEl = document.getElementById('itemsHeading');
+    if (headingEl) headingEl.textContent = 'Items Requested (' + items.length + ')';
+
+    var bodyEl = document.getElementById('itemsBody');
+    if (bodyEl) {
+      bodyEl.innerHTML = items.map(function(it) {
+        return '<div class="items-table__row">' +
+          '<div class="it-col-pn"><span class="it-part-pn">' + it.pn + '</span></div>' +
+          '<div class="it-col-name"><span class="it-part-name">' + it.name + '</span></div>' +
+          '</div>';
+      }).join('');
+    }
+
+    /* ─── Reference number ─── */
+    var refEl = document.getElementById('quoteRef');
+    try {
+      var storedRef = sessionStorage.getItem('okmQuoteRef');
+      if (storedRef && refEl) refEl.textContent = storedRef;
+    } catch(e) {}
+
+  })();
+  </script>
+
+</body>
+</html>
