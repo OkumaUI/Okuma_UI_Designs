@@ -30,7 +30,7 @@
     .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #717171; margin-bottom: 20px; }
     .breadcrumb a { color: #717171; text-decoration: none; }
     .breadcrumb a:hover { color: #005EB8; text-decoration: underline; }
-    .breadcrumb__sep { color: #C4C4C4; }
+    .breadcrumb__sep { color: #8C93AD; }
     .breadcrumb__current { color: #1A1A1A; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
 
     /* PAGE HEADER */
@@ -61,28 +61,10 @@
     .status-badge--closed       { background: #F5F5F5; border: 0.5px solid #9E9E9E; color: #9E9E9E; }
     .status-badge--closed .dot  { background: #9E9E9E; }
 
-    /* QUOTE INFO STRIP — Option A */
-    .quote-info-strip {
-      display: flex; align-items: center;
-      background: #fff; border: 1px solid #E2E2E2;
-      border-left: 3px solid #005EB8; border-radius: 4px;
-      height: 48px; margin-bottom: 20px; overflow: hidden;
+    .page-head__meta-divider {
+      display: inline-block; width: 1px; height: 11px;
+      background: #DEDEDE; vertical-align: middle; margin: 0 8px;
     }
-    .quote-info-strip__field {
-      display: flex; align-items: baseline; gap: 6px;
-      padding: 0 20px; flex: 1;
-    }
-    .quote-info-strip__field:first-child { padding-left: 16px; }
-    .quote-info-strip__field + .quote-info-strip__field { border-left: 1px solid #E2E2E2; }
-    .quote-info-strip__lbl {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
-      text-transform: uppercase; color: #9E9E9E; white-space: nowrap; flex-shrink: 0;
-    }
-    .quote-info-strip__val {
-      font-size: 13px; font-weight: 600; color: #1A1A1A;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .quote-info-strip__val--blue { color: #005EB8; }
 
     /* BANNERS */
     .alert-banner {
@@ -124,7 +106,7 @@
     .det-card__body { padding: 20px; }
 
     /* ITEMS TABLE */
-    .items-tbl { width: 100%; border-collapse: collapse; min-width: 520px; }
+    .items-tbl { width: 100%; border-collapse: collapse; }
     .items-tbl th {
       padding: 10px 16px; font-size: 11px; font-weight: 700; color: #9E9E9E;
       text-transform: uppercase; letter-spacing: 0.3px; text-align: left;
@@ -139,7 +121,7 @@
     .ordered-for-label { font-size: 11px; font-weight: 700; color: #717171; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
     .ordered-for-strip { display: flex; align-items: center; gap: 10px; padding: 11px 16px; background: #EAF2FF; border-left: 3px solid #005EB8; border-radius: 2px; }
     .ordered-for-strip__mach { font-size: 14px; font-weight: 700; color: #005EB8; }
-    .ordered-for-strip__sep  { color: #C4C4C4; margin: 0 2px; }
+    .ordered-for-strip__sep  { color: #8C93AD; margin: 0 2px; }
     .ordered-for-strip__ser  { font-size: 13px; color: #4B4B4B; }
     .it-pending { font-size: 12px; color: #9E9E9E; font-style: italic; }
     .r          { text-align: right; }
@@ -235,19 +217,17 @@
     .resp-part-qty  { font-size: 12px; color: #717171; margin-top: 5px; }
 
     .resp-action-card { border-radius: 4px; padding: 13px 14px; }
-    .resp-action-card--none    { background: #F9FFF9; border: 1px solid #B8DCCA; }
     .resp-action-card--price   { background: #FAFFFE; border: 1px solid #B0D8D0; }
     .resp-action-card--partno  { background: #FFFDF4; border: 1px solid #E8D87A; }
-    .resp-action-card--invalid { background: #FFF8F8; border: 1px solid #F0BABA; }
+    .resp-action-card--other   { background: #F8F8F8; border: 1px solid #DEDEDE; }
 
     .resp-action-label {
       font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
       display: flex; align-items: center; gap: 5px; margin-bottom: 8px;
     }
-    .resp-action-label--none    { color: #1D6B40; }
     .resp-action-label--price   { color: #1D6B40; }
     .resp-action-label--partno  { color: #7A4F00; }
-    .resp-action-label--invalid { color: #8B2020; }
+    .resp-action-label--other   { color: #717171; }
 
     .resp-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
     .resp-price-old { font-size: 12px; color: #9E9E9E; text-decoration: line-through; }
@@ -418,17 +398,17 @@
   <div class="csw-overlay" id="withdrawModal">
     <div class="csw-modal" role="dialog" aria-modal="true" aria-labelledby="withdrawModalTitle">
       <div class="csw-modal__hdr">
-        <h2 class="csw-modal__ttl" id="withdrawModalTitle">Withdraw Quote Request?</h2>
+        <h2 class="csw-modal__ttl" id="withdrawModalTitle">Cancel Quote?</h2>
         <button class="csw-modal__cls" onclick="closeWithdrawModal()" aria-label="Close">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
         </button>
       </div>
       <div class="csw-modal__bdy">
-        <p id="withdrawModalBody">Are you sure you want to withdraw this quote? This action cannot be undone.</p>
+        <p id="withdrawModalBody">Are you sure you want to cancel this quote? This action cannot be undone.</p>
         <div class="csw-modal__div"></div>
         <div class="csw-modal__act">
           <button class="csw-btn csw-btn--cancel" onclick="closeWithdrawModal()">Keep Quote</button>
-          <button class="csw-btn csw-btn--withdraw" onclick="confirmWithdraw()">Withdraw Request</button>
+          <button class="csw-btn csw-btn--withdraw" onclick="confirmWithdraw()">Cancel Quote</button>
         </div>
       </div>
     </div>
@@ -544,10 +524,10 @@
         dealerResponse: {
           submittedAt: 'Jun 22, 2026', replyText: null,
           items: [
-            { action: 'none',    listPrice: 520.00,                                                                                                                qty: 2 },
-            { action: 'price',   listPrice: 420.00, priceVal: '380.00',                                                                                           qty: 2 },
-            { action: 'invalid', reasonVal: 'Part has been discontinued and is no longer available. Please contact your distributor for a suitable alternative.',  qty: 1 },
-            { action: 'partno',  partnVal: 'OR-0045-SLK-V2', qty: 5 }
+            { action: 'price',  priceVal: '520.00', listPrice: 520.00,                                                                                                qty: 2 },
+            { action: 'price',  priceVal: '380.00', listPrice: 420.00,                                                                                            qty: 2 },
+            { action: 'other',  otherVal: 'Part has been discontinued and is no longer available. Please contact your distributor for a suitable alternative.',    qty: 1 },
+            { action: 'partno', partnVal: 'OR-0045-SLK-V2', qty: 5 }
           ]
         }
       },
@@ -570,8 +550,8 @@
         dealerResponse: {
           submittedAt: 'Jun 18, 2026', replyText: null,
           items: [
-            { action: 'none', listPrice: 352.50, qty: 1 },
-            { action: 'none', listPrice: 260.00, qty: 1 }
+            { action: 'price', priceVal: '352.50', listPrice: 352.50, qty: 1 },
+            { action: 'price', priceVal: '260.00', listPrice: 260.00, qty: 1 }
           ]
         }
       },
@@ -599,12 +579,12 @@
           submittedAt: 'Jun 14, 2026',
           replyText: 'Availability confirmed on all 6 lines. Note that spindle bearing lead time is 5–7 business days from distributor stock.',
           items: [
-            { action: 'price', listPrice: 780.00, priceVal: '720.00', qty: 2 },
-            { action: 'none',  listPrice: 520.00,              qty: 2 },
-            { action: 'none',  listPrice: 380.00,              qty: 2 },
-            { action: 'price', listPrice: 350.00, priceVal: '310.00', qty: 2 },
-            { action: 'none',  listPrice:  86.50,              qty: 4 },
-            { action: 'none',  listPrice:  89.40,              qty: 10 }
+            { action: 'price', priceVal: '720.00', listPrice: 780.00, qty: 2 },
+            { action: 'price', priceVal: '520.00', listPrice: 520.00, qty: 2 },
+            { action: 'price', priceVal: '380.00', listPrice: 380.00, qty: 2 },
+            { action: 'price', priceVal: '310.00', listPrice: 350.00, qty: 2 },
+            { action: 'price', priceVal:  '86.50', listPrice:  86.50, qty: 4 },
+            { action: 'price', priceVal:  '89.40', listPrice:  89.40, qty: 10 }
           ]
         }
       },
@@ -644,9 +624,9 @@
         dealerResponse: {
           submittedAt: 'Jun 01, 2026', replyText: null,
           items: [
-            { action: 'none',  listPrice:  86.50,              qty: 5 },
-            { action: 'none',  listPrice:  47.80,              qty: 8 },
-            { action: 'price', listPrice: 700.00, priceVal: '635.10', qty: 1 }
+            { action: 'price', priceVal:  '86.50', listPrice:  86.50, qty: 5 },
+            { action: 'price', priceVal:  '47.80', listPrice:  47.80, qty: 8 },
+            { action: 'price', priceVal: '635.10', listPrice: 700.00, qty: 1 }
           ]
         }
       },
@@ -689,8 +669,8 @@
         dealerResponse: {
           submittedAt: 'May 15, 2026', replyText: null,
           items: [
-            { action: 'none', listPrice: 124.00, qty: 2 },
-            { action: 'none', listPrice:  38.00, qty: 2 }
+            { action: 'price', priceVal: '124.00', listPrice: 124.00, qty: 2 },
+            { action: 'price', priceVal:  '38.00', listPrice:  38.00, qty: 2 }
           ]
         }
       },
@@ -718,13 +698,13 @@
         dealerResponse: {
           submittedAt: 'Apr 29, 2026', replyText: null,
           items: [
-            { action: 'none', listPrice: 820.00, qty: 1 },
-            { action: 'none', listPrice: 520.00, qty: 2 },
-            { action: 'none', listPrice: 390.00, qty: 2 },
-            { action: 'none', listPrice: 410.00, qty: 1 },
-            { action: 'none', listPrice:  97.00, qty: 2 },
-            { action: 'none', listPrice:  59.00, qty: 6 },
-            { action: 'none', listPrice: 302.00, qty: 1 }
+            { action: 'price', priceVal: '820.00', listPrice: 820.00, qty: 1 },
+            { action: 'price', priceVal: '520.00', listPrice: 520.00, qty: 2 },
+            { action: 'price', priceVal: '390.00', listPrice: 390.00, qty: 2 },
+            { action: 'price', priceVal: '410.00', listPrice: 410.00, qty: 1 },
+            { action: 'price', priceVal:  '97.00', listPrice:  97.00, qty: 2 },
+            { action: 'price', priceVal:  '59.00', listPrice:  59.00, qty: 6 },
+            { action: 'price', priceVal: '302.00', listPrice: 302.00, qty: 1 }
           ]
         }
       },
@@ -748,9 +728,9 @@
         dealerResponse: {
           submittedAt: 'Apr 16, 2026', replyText: null,
           items: [
-            { action: 'none', listPrice: 480.00, qty: 1 },
-            { action: 'none', listPrice: 200.00, qty: 1 },
-            { action: 'none', listPrice: 100.00, qty: 1 }
+            { action: 'price', priceVal: '480.00', listPrice: 480.00, qty: 1 },
+            { action: 'price', priceVal: '200.00', listPrice: 200.00, qty: 1 },
+            { action: 'price', priceVal: '100.00', listPrice: 100.00, qty: 1 }
           ]
         }
       }
@@ -887,11 +867,7 @@
       hdr.textContent = allItems ? '✓ All items added to cart' : '✓ Added to Cart';
       document.getElementById('ct-name').textContent    = name || '';
       document.getElementById('ct-partnum').textContent = pn ? 'Part # ' + pn : '';
-      if (qty && unitPrice) {
-        document.getElementById('ct-price').textContent = 'Qty ' + qty + '  ×  $' + parseFloat(unitPrice).toFixed(2) + '  =  $' + (qty * parseFloat(unitPrice)).toFixed(2);
-      } else {
-        document.getElementById('ct-price').textContent = '';
-      }
+      document.getElementById('ct-price').textContent = unitPrice ? '$' + parseFloat(unitPrice).toFixed(2) : '';
       el.classList.remove('hiding');
       el.style.display = 'flex';
       clearTimeout(_ctTimer);
@@ -914,7 +890,10 @@
       document.title = q.num + ' — Okuma Parts Portal';
       document.getElementById('bcId').textContent = q.num;
       document.getElementById('pgTitle').textContent = q.num;
-      document.getElementById('pgMeta').textContent = 'Submitted ' + q.submitted;
+      document.getElementById('pgMeta').innerHTML =
+        'Submitted ' + escHtml(q.submitted) +
+        '<span class="page-head__meta-divider"></span>' +
+        escHtml(q.company || '—');
 
       /* check sessionStorage status override */
       var lsStatus = lsRaw('okuma_quote_status_' + q.num);
@@ -944,7 +923,6 @@
       }
 
       var html = renderBanner(q, effectiveStatus) + renderTimelineSteps(stepsForTimeline);
-      html += renderQuoteInfoStrip(q);
       html += '<div class="detail-layout">';
 
       if (isResponded) {
@@ -1053,10 +1031,7 @@
         /* ── Col 1: Part info ── */
         var col1 =
           '<div class="resp-part-name">' + escHtml(itm.name) + '</div>' +
-          '<div class="resp-part-pn">P/N: ' + escHtml(itm.pn) + '</div>' +
-          (itm.desc ? '<div class="resp-part-desc">' + escHtml(itm.desc) + '</div>' : '') +
-          '<div class="resp-part-qty">Qty: ' + qty + '</div>' +
-          (listPrice ? '<div class="resp-part-listprice">List price: ' + fmt(listPrice) + ' / ea</div>' : '');
+          '<div class="resp-part-pn">P/N: ' + escHtml(itm.pn) + '</div>';
 
         /* ── Col 2: Response scenario card ── */
         var col2 = '';
@@ -1071,23 +1046,14 @@
           ? '<span class="resp-btn resp-btn--contact" style="opacity:0.4;cursor:not-allowed;" aria-disabled="true">' + phoneSvg + ' Contact Distributor</span>'
           : '<a href="https://www.okuma.com/distributors" target="_blank" rel="noopener" class="resp-btn resp-btn--contact">' + phoneSvg + ' Contact Distributor</a>';
 
-        if (dr.action === 'none') {
-          col2 = '<div class="resp-action-card resp-action-card--none">' +
-            '<div class="resp-action-label resp-action-label--none">' + chkSvg + ' No Change</div>' +
-            '<p class="resp-nochange-msg">Confirmed at list price</p>' +
-            '</div>';
-          col3 = addCartBtns;
-
-        } else if (dr.action === 'price') {
+        if (dr.action === 'price') {
           var newPrice = parseFloat(dr.priceVal) || listPrice;
           col2 = '<div class="resp-action-card resp-action-card--price">' +
-            '<div class="resp-action-label resp-action-label--price">' + chkSvg + ' Price Corrected</div>' +
+            '<div class="resp-action-label resp-action-label--price">' + chkSvg + ' Price Added</div>' +
             '<div class="resp-price-row">' +
-              '<span class="resp-price-old">' + fmt(listPrice) + '</span>' +
               '<span class="resp-price-new">' + fmt(newPrice) + '</span>' +
               '<span class="resp-price-unit">/ ea</span>' +
             '</div>' +
-            '<div style="font-size:11px;color:#717171;margin-top:2px;">Total: ' + fmt(qty * newPrice) + '</div>' +
             '</div>';
           col3 = addCartBtns;
 
@@ -1095,18 +1061,18 @@
           col2 = '<div class="resp-action-card resp-action-card--partno">' +
             '<div class="resp-action-label resp-action-label--partno">' +
               '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1v5M6 9v2M1 6h2M9 6h2"/></svg>' +
-              ' Part Corrected</div>' +
-            '<div style="margin-bottom:4px;font-size:12px;color:#717171;">Corrected Part No.</div>' +
+              ' Part Correction</div>' +
+            '<div style="margin-bottom:4px;font-size:12px;color:#717171;">Replacement Part No.</div>' +
             '<div class="resp-partno-new">' + escHtml(dr.partnVal || '—') + '</div>' +
             '</div>';
           col3 = contactBtn;
 
-        } else if (dr.action === 'invalid') {
-          col2 = '<div class="resp-action-card resp-action-card--invalid">' +
-            '<div class="resp-action-label resp-action-label--invalid">' +
-              '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 2l8 8M10 2L2 10"/></svg>' +
-              ' Part Invalid</div>' +
-            '<div class="resp-reason">&ldquo;' + escHtml(dr.reasonVal || 'No reason provided.') + '&rdquo;</div>' +
+        } else if (dr.action === 'other') {
+          col2 = '<div class="resp-action-card resp-action-card--other">' +
+            '<div class="resp-action-label resp-action-label--other">' +
+              '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="6" r="5"/><path d="M6 5v3M6 3.5v.5"/></svg>' +
+              ' Note</div>' +
+            '<div class="resp-reason">&ldquo;' + escHtml(dr.otherVal || dr.reasonVal || 'No note provided.') + '&rdquo;</div>' +
             '</div>';
           col3 = contactBtn;
         }
@@ -1162,8 +1128,7 @@
         var itm  = q.items[idx] || {};
         var qty  = itm.qty || dr.qty || 1;
         var list = itm.listPrice || dr.listPrice || 0;
-        if (dr.action === 'none')  { subtotal += qty * list; }
-        else if (dr.action === 'price') { subtotal += qty * (parseFloat(dr.priceVal) || list); }
+        if (dr.action === 'price') { subtotal += qty * (parseFloat(dr.priceVal) || list); }
         else { excluded++; }
       });
 
@@ -1203,17 +1168,9 @@
         : '';
 
       var rows = q.items.map(function(it) {
-        var unitCell = it.unit !== null
-          ? '<span style="color:#4B4B4B">' + fmt(it.unit) + '</span>'
-          : '<span class="it-pending">TBD</span>';
-        var lineCell = it.unit !== null
-          ? '<span class="it-linetotal">' + fmt(it.qty * it.unit) + '</span>'
-          : '<span class="it-pending">—</span>';
         return '<tr>' +
-          '<td><div class="it-name">' + it.name + '</div><div class="it-pn">P/N: ' + it.pn + '</div></td>' +
-          '<td class="r" style="width:50px">' + it.qty + '</td>' +
-          '<td class="r" style="width:105px">' + unitCell + '</td>' +
-          '<td class="r" style="width:105px">' + lineCell + '</td>' +
+          '<td style="width:140px"><div class="it-pn">' + escHtml(it.pn) + '</div></td>' +
+          '<td><div class="it-name">' + escHtml(it.name) + '</div></td>' +
           '</tr>';
       }).join('');
 
@@ -1223,10 +1180,8 @@
         '<div class="tbl-scroll">' +
         '<table class="items-tbl">' +
         '<thead><tr>' +
-        '<th>Part</th>' +
-        '<th class="r" style="width:50px">Qty</th>' +
-        '<th class="r" style="width:105px">Unit Price</th>' +
-        '<th class="r" style="width:105px">Line Total</th>' +
+        '<th style="width:140px">Part #</th>' +
+        '<th>Part Name</th>' +
         '</tr></thead>' +
         '<tbody>' + rows + '</tbody>' +
         '</table>' +
@@ -1257,15 +1212,6 @@
       }
       html += '</div></div>';
       return html;
-    }
-
-    function renderQuoteInfoStrip(q) {
-      return '<div class="quote-info-strip">' +
-        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Quote No</span><span class="quote-info-strip__val quote-info-strip__val--blue">' + q.num + '</span></div>' +
-        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Submitted</span><span class="quote-info-strip__val">' + q.submitted + '</span></div>' +
-        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Customer</span><span class="quote-info-strip__val">' + q.requestedBy + '</span></div>' +
-        '<div class="quote-info-strip__field"><span class="quote-info-strip__lbl">Company</span><span class="quote-info-strip__val">' + (q.company || '—') + '</span></div>' +
-        '</div>';
     }
 
     function renderNote(q) {
@@ -1299,10 +1245,10 @@
 
       if (s === 'responded') {
         html += '<a href="cart.html" class="btn-det btn-det--primary">' + icoCart + 'View Cart</a>';
-        html += '<button class="btn-det btn-det--danger" onclick="openWithdrawModal()">' + icoWithdraw + 'Withdraw Quote Request</button>';
+        html += '<button class="btn-det btn-det--danger" onclick="openWithdrawModal()">' + icoWithdraw + 'Cancel Quote</button>';
       } else if (s === 'open') {
         html += '<span class="btn-det btn-det--primary" style="opacity:0.35;cursor:not-allowed;" aria-disabled="true">' + icoCart + 'View Cart</span>';
-        html += '<button class="btn-det btn-det--danger" onclick="openWithdrawModal()">' + icoWithdraw + 'Withdraw Quote Request</button>';
+        html += '<button class="btn-det btn-det--danger" onclick="openWithdrawModal()">' + icoWithdraw + 'Cancel Quote</button>';
       } else if (s === 'closed' && q.closeReason === 'ordered') {
         html += '<a href="order-detail.html?id=' + q.linkedOrderId + '" class="btn-det btn-det--primary">' + icoArrow + 'View Order</a>';
         html += '<a href="#" class="btn-det btn-det--outline" onclick="return false;">' + icoDl + 'Download Quote (PDF)</a>';
@@ -1350,7 +1296,7 @@
     window.openWithdrawModal = function() {
       var body = document.getElementById('withdrawModalBody');
       if (body && _qRef) {
-        body.innerHTML = 'Are you sure you want to withdraw <strong>' + _qRef.num + '</strong>? This action cannot be undone.';
+        body.innerHTML = 'Are you sure you want to cancel <strong>' + _qRef.num + '</strong>? This action cannot be undone.';
       }
       document.getElementById('withdrawModal').classList.add('open');
     };
@@ -1359,7 +1305,17 @@
     };
     window.confirmWithdraw = function() {
       closeWithdrawModal();
-      showToast('Quote request withdrawn');
+      var el = document.getElementById('cart-toast');
+      if (el) {
+        el.querySelector('.ct-header').textContent = '✓ Quote Cancelled';
+        document.getElementById('ct-name').textContent = 'Your quote has been successfully cancelled.';
+        document.getElementById('ct-partnum').textContent = '';
+        document.getElementById('ct-price').textContent = '';
+        el.classList.remove('hiding');
+        el.style.display = 'flex';
+        clearTimeout(_ctTimer);
+        _ctTimer = setTimeout(dismissCartToast, 4000);
+      }
     };
     document.getElementById('withdrawModal').addEventListener('click', function(e) {
       if (e.target === this) closeWithdrawModal();
