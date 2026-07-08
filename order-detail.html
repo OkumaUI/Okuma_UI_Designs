@@ -488,9 +488,6 @@
     function dlIcon() {
       return '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v8M4 7l3 3.5L10 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 11v1A1.5 1.5 0 0 0 2.5 13.5h9A1.5 1.5 0 0 0 13 12v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
     }
-    function reorderIcon() {
-      return '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
-    }
 
     /* ─── RENDER ───────────────────────────────────────── */
     function render(o) {
@@ -660,9 +657,6 @@
     function renderActions(o) {
       var html = '<div class="action-stack">';
       html += '<a href="#" class="btn-det btn-det--outline" onclick="return false;">' + dlIcon() + 'Download Invoice</a>';
-      if (o.status === 'delivered') {
-        html += '<button class="btn-det btn-det--primary" onclick="window.location=\'create-order.html\'">' + reorderIcon() + 'Reorder Items</button>';
-      }
       html += '<a href="#" class="support-link" onclick="return false;">' +
         '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5.5"/><path d="M6.5 6v2M6.5 4a1 1 0 1 1 0 2.01"/></svg>' +
         'Contact Support' +

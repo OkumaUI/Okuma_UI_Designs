@@ -379,14 +379,14 @@
 
     /* ── UPLOAD RESULT SUMMARY ── */
     .upload-result {
-      display: flex; flex-direction: column; gap: 10px;
-      padding: 12px 14px; margin-top: 8px;
+      display: flex; flex-direction: column;
+      margin-top: 8px;
       background: #F4FBF0; border: 1px solid #C3DABB; border-radius: 4px;
-      font-size: 13px;
+      font-size: 13px; overflow: hidden;
     }
     .upload-result__header {
       display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer; user-select: none;
+      cursor: pointer; user-select: none; padding: 10px 14px;
     }
     .upload-result__header-left { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
     .upload-result__valid {
@@ -401,7 +401,7 @@
     }
     .upload-result__skipped svg { width: 14px; height: 14px; }
     .upload-result__chevron { width: 16px; height: 16px; color: #74AA50; flex-shrink: 0; transition: transform 0.2s; }
-    .upload-result--collapsed .upload-result__parts { display: none; }
+    .upload-result--collapsed .added-tbl-wrap { display: none; }
     .upload-result--collapsed .upload-result__chevron { transform: rotate(-90deg); }
     .upload-result__parts { display: flex; flex-direction: column; gap: 5px; padding-left: 2px; }
     .upload-result__part-row {
@@ -422,30 +422,82 @@
     /* ── SKIPPED PARTS WARNING ── */
     .upload-skipped {
       margin-top: 8px; border: 1px solid #FFB549;
-      border-radius: 4px; background: #FFF9EF; padding: 12px 14px;
+      border-radius: 4px; background: #fff;
     }
     .upload-skipped__head {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; background: #FFF9EF;
       font-size: 12px; font-weight: 700; color: #E07B10;
-      display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer; user-select: none;
+      border-bottom: 1px solid #FFB549;
+      border-radius: 4px 4px 0 0;
     }
-    .upload-skipped__head-left { display: flex; align-items: center; gap: 6px; }
-    .upload-skipped__head svg.warn-icon { width: 14px; height: 14px; }
-    .upload-skipped__chevron { width: 16px; height: 16px; color: #E07B10; flex-shrink: 0; transition: transform 0.2s; }
-    .upload-skipped--collapsed .upload-skipped__body,
-    .upload-skipped--collapsed .upload-skipped__parts,
-    .upload-skipped--collapsed .upload-skipped__note { display: none; }
-    .upload-skipped--collapsed .upload-skipped__chevron { transform: rotate(-90deg); }
-    .upload-skipped__body { font-size: 12px; color: #4B4B4B; line-height: 1.6; margin-top: 8px; }
-    .upload-skipped__parts {
-      margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px;
+
+    /* ── ADDED PARTS TABLE (inside upload-result accordion) ── */
+    .added-tbl-wrap { border-top: 1px solid #C3DABB; }
+    .added-tbl { width: 100%; border-collapse: collapse; }
+    .added-tbl th {
+      font-size: 11px; font-weight: 700; color: #2E7D32; text-transform: uppercase; letter-spacing: 0.5px;
+      text-align: left; padding: 8px 14px; background: #EBF7E6; border-bottom: 1px solid #C3DABB;
+      white-space: nowrap;
     }
-    .upload-skipped__tag {
-      font-family: 'Courier New', monospace; font-size: 11px; font-weight: 700;
-      color: #D94F4F; background: #FFF0F0; border: 1px solid #F5C0C0;
-      border-radius: 3px; padding: 2px 8px;
+    .added-tbl td {
+      padding: 9px 14px; border-bottom: 1px solid #D7EED0; font-size: 13px; color: #1A1A1A; vertical-align: middle;
     }
-    .upload-skipped__note { font-size: 11px; color: #9E9E9E; margin-top: 8px; }
+    .added-tbl tbody tr:last-child td { border-bottom: none; }
+    .added-tbl .at-pn { width: 130px; font-family: 'Inter', 'Courier New', monospace; font-size: 12px; font-weight: 700; }
+    .added-tbl .at-qty { width: 60px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    /* ── ATTENTION TABLE (inside upload-skipped) ── */
+    .att-tbl { width: 100%; border-collapse: collapse; }
+    .att-tbl th {
+      font-size: 11px; font-weight: 700; color: #717171; text-transform: uppercase; letter-spacing: 0.5px;
+      text-align: left; padding: 10px 14px; background: #FFF3E0; border-bottom: 1px solid #FFD580;
+      white-space: nowrap;
+    }
+    .att-tbl td {
+      padding: 10px 14px; border-bottom: 1px solid #FFD580; font-size: 13px; color: #1A1A1A; vertical-align: middle;
+    }
+    .att-tbl tbody tr:last-child td { border-bottom: none; }
+
+    /* Invalid part number */
+    .pn-invalid {
+      font-family: 'Inter', 'Courier New', monospace;
+      font-size: 12px; font-weight: 700; color: #D94F4F;
+    }
+
+    /* Inline search in attention row */
+    .att-s-wrap { position: relative; }
+    .att-s-input {
+      width: 100%; height: 32px;
+      border: 1px solid #DEDEDE; border-radius: 4px;
+      padding: 0 10px 0 30px;
+      font-size: 13px; font-family: inherit; color: #1A1A1A;
+      outline: none; background: #fff;
+      transition: border-color 0.15s;
+    }
+    .att-s-input:focus { border-color: #005EB8; }
+    .att-s-input::placeholder { color: #8C93AD; }
+    .att-s-input.resolved { border-color: #74AA50; }
+    .att-s-icon {
+      position: absolute; left: 9px; top: 50%; transform: translateY(-50%);
+      color: #717171; pointer-events: none;
+    }
+    .att-s-desc {
+      font-size: 11px; color: #74AA50; font-weight: 600; margin-top: 3px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      display: none;
+    }
+
+    /* Per-row add-to-cart button */
+    .btn-att-cart {
+      height: 32px; padding: 0 16px;
+      background: #005EB8; color: #fff; border: none; border-radius: 4px;
+      font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
+      font-family: inherit; transition: opacity 0.15s;
+    }
+    .btn-att-cart:hover:not(:disabled) { opacity: 0.88; }
+    .btn-att-cart:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-att-cart--added { background: #74AA50 !important; cursor: default !important; opacity: 1 !important; }
 
     /* ── GO TO CART BUTTON ── */
     .btn-go-cart {
@@ -490,11 +542,9 @@
       .action-grid { grid-template-columns: 1fr; }
       /* Drop zone: reduce padding on tablet */
       .drop-zone { padding: 24px 16px; }
-      /* Manual add-row: allow wrapping on tablet */
-      #addRow td > div { gap: 8px; }
-      #addRow td > div > div:first-child { flex: 1 1 100%; }
-      /* Qty input: slightly smaller on tablet */
-      #newQty { width: 60px; }
+      /* Manual add bar: allow wrapping on tablet */
+      .manual-add-bar { flex-wrap: wrap; }
+      .manual-add-bar__search { flex: 1 1 100%; }
     }
 
     @media (max-width: 480px) {
@@ -529,6 +579,124 @@
       .action-card { padding: 14px 12px; }
       .drop-zone { padding: 20px 12px; }
     }
+
+    /* ── CART TOAST ── */
+    @keyframes toast-in  { from { opacity:0; transform:translateX(60px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes toast-out { from { opacity:1; transform:translateX(0); }   to { opacity:0; transform:translateX(60px); } }
+    #cartToast {
+      position: fixed; top: 28px; right: 28px;
+      min-width: 300px; max-width: 360px;
+      background: #fff; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none; flex-direction: row; overflow: hidden;
+      z-index: 10000;
+      animation: toast-in 0.28s cubic-bezier(0.22,1,0.36,1);
+    }
+    #cartToast.hiding { animation: toast-out 0.22s ease forwards; }
+    #cartToast .toast-accent { width: 5px; flex-shrink: 0; background: #2E7D32; }
+    #cartToast .toast-body { flex: 1; padding: 14px 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+    #cartToast .toast-header { color: #2E7D32; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+    #cartToastName   { font-size: 14px; font-weight: 700; color: #111; }
+    #cartToastPn     { font-size: 14px; font-weight: 400; color: #6E6E6E; }
+    #cartToastQty    { font-size: 14px; font-weight: 700; color: #111; margin-top: 4px; }
+    #cartToastClose  { align-self: flex-start; margin: 10px 10px 0 0; background: none; border: none; cursor: pointer; font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px; flex-shrink: 0; }
+    #cartToastClose:hover { color: #111; }
+
+    /* ── MANUAL ADD BAR (sits above manual table) ── */
+    .manual-add-bar {
+      display: flex; align-items: center; gap: 12px;
+      background: #F9FAFB; border: 1px solid #DEDEDE;
+      border-bottom: none; border-radius: 4px 4px 0 0;
+      padding: 10px 14px;
+    }
+    .manual-add-bar__search { flex: 1; min-width: 180px; position: relative; }
+    .manual-wrap--no-top-radius { border-radius: 0 0 4px 4px; }
+
+    /* ── ATTENTION TABLE PAGINATION ── */
+    .att-pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; background: #fff; border-top: 1px solid #FFD580;
+      font-size: 12px; color: #717171;
+    }
+    .att-pag-btns { display: flex; gap: 6px; }
+    .att-pag-btn {
+      height: 28px; padding: 0 12px;
+      background: #fff; border: 1px solid #FFB549; border-radius: 4px;
+      font-size: 12px; font-weight: 600; color: #E07B10;
+      cursor: pointer; font-family: inherit;
+      transition: background 0.15s;
+    }
+    .att-pag-btn:hover:not(:disabled) { background: #FFF3E0; }
+    .att-pag-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-att-del {
+      width: 28px; height: 28px; padding: 0;
+      background: transparent; border: 1px solid #FECACA;
+      border-radius: 4px; cursor: pointer;
+      color: #DC2626; display: inline-flex; align-items: center; justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-att-del:hover { background: #FEF2F2; border-color: #FCA5A5; }
+
+    .del-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 10100;
+      align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .del-modal-overlay--visible { display: flex; }
+    .del-modal {
+      width: 100%; max-width: 480px;
+      background: #fff; border-radius: 2px;
+      box-shadow: 0 12px 24px rgba(0,0,0,.25);
+      display: flex; flex-direction: column; margin: auto;
+    }
+    .del-modal__hdr {
+      height: 60px; background: #005EB8; border-radius: 2px 2px 0 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; flex-shrink: 0;
+    }
+    .del-modal__ttl {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 18px; font-weight: 700; color: #fff; margin: 0;
+    }
+    .del-modal__cls {
+      background: none; border: none; cursor: pointer;
+      padding: 4px; display: flex; align-items: center; justify-content: center;
+    }
+    .del-modal__cls:hover { opacity: .8; }
+    .del-modal__bdy {
+      padding: 28px 32px 24px; display: flex; flex-direction: column; gap: 20px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px; color: #4B4B4B; line-height: 1.6;
+    }
+    .del-modal__detail {
+      background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 2px;
+      padding: 12px 16px;
+      display: grid; grid-template-columns: auto 1fr; gap: 4px 12px;
+      font-size: 13px;
+    }
+    .del-modal__detail-label { color: #9CA3AF; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .del-modal__detail-value { color: #111827; font-weight: 600; font-family: monospace; }
+    .del-modal__div { height: 1px; background: #E0E0E0; }
+    .del-modal__act { display: flex; gap: 12px; }
+    .del-modal__btn-cancel {
+      flex: 1; height: 40px;
+      background: transparent; border: 1px solid #005EB8; border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px; font-weight: 600; color: #005EB8;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .del-modal__btn-cancel:hover { background: #F0F6FF; }
+    .del-modal__btn-confirm {
+      flex: 1; height: 40px;
+      background: #DC2626; border: 1px solid #DC2626; border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px; font-weight: 600; color: #fff;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .del-modal__btn-confirm:hover { background: #B91C1C; border-color: #B91C1C; }
   </style>
 </head>
 <body>
@@ -621,28 +789,57 @@
                   </div>
                   <svg class="upload-result__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
-                <div class="upload-result__parts" id="uploadResultParts"></div>
+                <div class="added-tbl-wrap" id="addedTblWrap">
+                  <table class="added-tbl">
+                    <thead>
+                      <tr>
+                        <th class="at-pn">Part Number</th>
+                        <th>Description</th>
+                        <th class="at-qty">Qty</th>
+                      </tr>
+                    </thead>
+                    <tbody id="addedTblBody"></tbody>
+                  </table>
+                </div>
               </div>
 
               <!-- Skipped parts detail (hidden until there are skipped parts) -->
               <div id="uploadSkipped" class="upload-skipped" style="display:none;">
-                <div class="upload-skipped__head" onclick="toggleUploadSkipped()">
-                  <span class="upload-skipped__head-left">
-                    <svg class="warn-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 2L1 12h12L7 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 6v3M7 10v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-                    Parts not found in catalog
-                  </span>
-                  <svg class="upload-skipped__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div class="upload-skipped__head">
+                  <svg style="width:14px;height:14px;flex-shrink:0;" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M7 2L1 12h12L7 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                    <path d="M7 6v3M7 10v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                  </svg>
+                  <span id="uploadSkippedHeadText">0 parts not found in catalogue — find replacements below</span>
                 </div>
-                <div class="upload-skipped__body">The following part numbers were not recognised and were skipped:</div>
-                <div class="upload-skipped__parts" id="uploadSkippedTags"></div>
-                <div class="upload-skipped__note">These parts can still be added manually using the table below.</div>
+                <table class="att-tbl">
+                  <thead>
+                    <tr>
+                      <th style="width:150px;">Part No. (from file)</th>
+                      <th>Find Replacement</th>
+                      <th style="width:60px;text-align:center;">Qty</th>
+                      <th style="width:130px;text-align:center;">Action</th>
+                      <th style="width:44px;text-align:center;"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="attTblBody"></tbody>
+                </table>
+                <div id="attPagination" class="att-pagination" style="display:none;"></div>
               </div>
             </div>
 
             <!-- Manual entry -->
             <div>
               <div class="sec-label" style="margin-top:8px">Add Part Numbers Manually</div>
-              <div class="manual-wrap">
+              <div class="manual-add-bar">
+                <div class="manual-add-bar__search">
+                  <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#717171;pointer-events:none;" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="5.5" cy="5.5" r="3.5" stroke="currentColor" stroke-width="1.4"/><path d="M8.5 8.5l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                  <input class="input-sm" id="newPn" placeholder="Search by part number or keyword…" oninput="searchManualParts(this.value)" autocomplete="off" style="width:100%;padding-left:32px;">
+                </div>
+                <input class="input-sm" id="newQty" placeholder="Qty" type="number" min="1" style="width:72px;flex-shrink:0;">
+                <button class="btn-add" onclick="addManualRow()" style="flex-shrink:0;">Add</button>
+              </div>
+              <div class="manual-wrap manual-wrap--no-top-radius">
                 <table class="manual-table">
                   <thead>
                     <tr>
@@ -655,20 +852,7 @@
                       <th class="m-act"></th>
                     </tr>
                   </thead>
-                  <tbody id="manualBody">
-                    <!-- Add row — always first -->
-                    <tr id="addRow" style="background:#F9FAFB;">
-                      <td colspan="7" style="padding:10px 14px;">
-                        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                          <div style="flex:1;">
-                            <input class="input-sm" id="newPn" placeholder="Search by part number or keyword…" oninput="searchManualParts(this.value)" autocomplete="off" style="width:100%">
-                          </div>
-                          <input class="input-sm" id="newQty" placeholder="Qty" type="number" min="1" style="width:72px;flex-shrink:0;">
-                          <button class="btn-add" onclick="addManualRow()" style="flex-shrink:0;">Add</button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <tbody id="manualBody"></tbody>
                 </table>
               </div>
             </div>
@@ -818,7 +1002,6 @@
       var totalCell = part
         ? '<td class="m-total">$' + (part.price * qtyNum).toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) + '</td>'
         : '<td class="m-total" style="color:#8C93AD;">—</td>';
-      var addRow = document.getElementById('addRow');
       var tr = document.createElement('tr');
       if (!part) tr.style.background = '#FFF8F8';
       tr.innerHTML =
@@ -829,7 +1012,7 @@
         totalCell +
         '<td class="m-st">' + badge + '</td>' +
         '<td class="m-act"><button class="del-btn" onclick="delManualRow(this)"><svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5 3.5V2h4v1.5M6 6v4M8 6v4M2.5 3.5l.7 7.5a1 1 0 001 .9h5.6a1 1 0 001-.9l.7-7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></td>';
-      addRow.insertAdjacentElement('afterend', tr);
+      document.getElementById('manualBody').insertAdjacentElement('afterbegin', tr);
 
       document.getElementById('newPn').value  = '';
       document.getElementById('newQty').value = '';
@@ -843,6 +1026,149 @@
       refreshSummary();
     };
 
+    /* ── ATTENTION TABLE SEARCH ── */
+    function positionAttDrop(inputEl) {
+      var drop = document.getElementById('attDropdown');
+      var r = inputEl.getBoundingClientRect();
+      drop.style.left  = r.left + 'px';
+      drop.style.top   = (r.bottom + 2) + 'px';
+      drop.style.width = r.width + 'px';
+    }
+
+    window.attSearch = function(inputEl, rowNum) {
+      var drop = document.getElementById('attDropdown');
+      var q = (inputEl.value || '').trim().toLowerCase();
+      if (!q) { drop.style.display = 'none'; return; }
+
+      var hits = PARTS_CATALOGUE.filter(function(p) {
+        return p.id.toLowerCase().indexOf(q) !== -1 || p.desc.toLowerCase().indexOf(q) !== -1;
+      }).slice(0, 7);
+
+      if (!hits.length) {
+        drop.innerHTML = '<div class="msd-item" style="color:#9E9E9E;cursor:default;padding:10px 14px;font-size:13px;">No parts found</div>';
+        positionAttDrop(inputEl);
+        drop.style.display = 'block';
+        return;
+      }
+
+      drop.innerHTML = hits.map(function(p) {
+        var sd = p.desc.replace(/'/g, "\\'");
+        return '<div class="msd-item" onmousedown="event.preventDefault();attSelect(' + rowNum + ',\'' + p.id + '\',\'' + sd + '\')" style="padding:9px 14px;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">' +
+          '<span><span style="font-family:\'Courier New\',monospace;font-size:12px;font-weight:700;letter-spacing:.3px;">' + p.id + '</span><span style="color:#717171;margin-left:10px;">' + p.desc + '</span></span>' +
+          '<span style="font-size:12px;font-weight:600;color:#1A1A1A;margin-left:16px;white-space:nowrap;">$' + p.price.toFixed(2) + '</span>' +
+        '</div>';
+      }).join('');
+      positionAttDrop(inputEl);
+      drop.style.display = 'block';
+    };
+
+    window.attSelect = function(rowNum, id, desc) {
+      var inp    = document.getElementById('att' + rowNum + '-inp');
+      var descEl = document.getElementById('att' + rowNum + '-desc');
+      var btn    = document.getElementById('att' + rowNum + '-btn');
+      inp.value = id;
+      inp.classList.add('resolved');
+      descEl.textContent = '✓ ' + desc;
+      descEl.style.display = 'block';
+      btn.disabled = false;
+      document.getElementById('attDropdown').style.display = 'none';
+    };
+
+    window.attAddToCart = function(globalIdx, btn) {
+      var inp  = document.getElementById('att' + globalIdx + '-inp');
+      var item = _attSkippedItems[globalIdx];
+      if (!inp || !item) return;
+
+      var partId = inp.value.trim();
+      var part   = lookupPart(partId);
+      if (!part) return;
+
+      // Add to localStorage cart
+      var existing = [];
+      try { existing = JSON.parse(localStorage.getItem('okmCartItems') || '[]'); } catch(e) {}
+      var match = existing.find(function(e) { return e.pn === part.id; });
+      if (match) { match.qty += item.qty; }
+      else { existing.push({ pn: part.id, desc: part.desc, price: part.price, qty: item.qty }); }
+      localStorage.setItem('okmCartItems', JSON.stringify(existing));
+
+      csvCartItems.push({ pn: part.id, desc: part.desc, price: part.price, qty: item.qty });
+
+      // Append to added accordion table
+      var addedBody = document.getElementById('addedTblBody');
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td class="at-pn">' + part.id + '</td>' +
+        '<td style="color:#4B5563;">' + part.desc + '</td>' +
+        '<td class="at-qty">' + item.qty + '</td>';
+      addedBody.appendChild(tr);
+
+      // Ensure upload-result accordion is visible and expanded
+      var resultEl = document.getElementById('uploadResult');
+      resultEl.style.display = 'flex';
+      resultEl.classList.remove('upload-result--collapsed');
+
+      // Update valid count in accordion header
+      _csvValidCount++;
+      var validEl = document.getElementById('uploadValidCount');
+      validEl.innerHTML =
+        '<svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7l4 4 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        _csvValidCount + ' part' + (_csvValidCount !== 1 ? 's' : '') + ' added to cart';
+
+      showToast(part.id, part.desc, item.qty);
+
+      // Mark done and re-render pagination
+      item.done = true;
+      var activeCount = _attSkippedItems.filter(function(x) { return !x.done; }).length;
+      if (activeCount === 0) {
+        document.getElementById('uploadSkipped').style.display = 'none';
+      } else {
+        document.getElementById('uploadSkippedHeadText').textContent =
+          activeCount + ' part' + (activeCount !== 1 ? 's' : '') + ' not found in catalogue — find replacements below';
+        window.renderAttPage(_attPage);
+      }
+
+      refreshSummary();
+    };
+
+    var _delPendingIdx = null;
+
+    window.attDeleteRow = function(globalIdx) {
+      var item = _attSkippedItems[globalIdx];
+      if (!item) return;
+      _delPendingIdx = globalIdx;
+      document.getElementById('delModalPn').textContent  = item.pn;
+      document.getElementById('delModalQty').textContent = item.qty;
+      document.getElementById('delModal').classList.add('del-modal-overlay--visible');
+    };
+
+    window.closeDelModal = function() {
+      _delPendingIdx = null;
+      document.getElementById('delModal').classList.remove('del-modal-overlay--visible');
+    };
+
+    window.confirmDelModal = function() {
+      var globalIdx = _delPendingIdx;
+      closeDelModal();
+      if (globalIdx === null) return;
+      var item = _attSkippedItems[globalIdx];
+      if (!item) return;
+      item.done = true;
+      var activeCount = _attSkippedItems.filter(function(x) { return !x.done; }).length;
+      if (activeCount === 0) {
+        document.getElementById('uploadSkipped').style.display = 'none';
+      } else {
+        document.getElementById('uploadSkippedHeadText').textContent =
+          activeCount + ' part' + (activeCount !== 1 ? 's' : '') + ' not found in catalogue — find replacements below';
+        window.renderAttPage(_attPage);
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var overlay = document.getElementById('delModal');
+      if (overlay) overlay.addEventListener('click', function(e) {
+        if (e.target === this) closeDelModal();
+      });
+    });
+
     document.addEventListener('click', function (e) {
       var dropdown = document.getElementById('manualSearchDropdown');
       if (!dropdown) return;
@@ -850,12 +1176,17 @@
       if (!e.target.closest('#manualSearchDropdown') && e.target !== input) {
         dropdown.style.display = 'none';
       }
+      var attDrop = document.getElementById('attDropdown');
+      if (attDrop && !e.target.closest('.att-s-wrap') && !e.target.closest('#attDropdown')) {
+        attDrop.style.display = 'none';
+      }
     });
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && document.activeElement && document.activeElement.id === 'newQty') {
         window.addManualRow();
       }
+      if (e.key === 'Escape') { closeDelModal(); }
     });
 
     /* ── Catalogue lookup ── */
@@ -869,7 +1200,7 @@
 
     function refreshSummary() {
       // Manual table rows
-      var rows = document.querySelectorAll('#manualBody tr:not(#addRow)');
+      var rows = document.querySelectorAll('#manualBody tr');
       var lineCount = 0, totalQty = 0, subtotal = 0, notFound = 0;
       rows.forEach(function(tr) {
         var cells = tr.querySelectorAll('td');
@@ -914,6 +1245,10 @@
     var DEL_ICON = '<svg width="18" height="18" viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5 3.5V2h4v1.5M6 6v4M8 6v4M2.5 3.5l.7 7.5a1 1 0 001 .9h5.6a1 1 0 001-.9l.7-7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
     var csvCartItems = []; // valid items added to cart from the last CSV upload
+    var _attSkippedItems = [];
+    var _attPage = 0;
+    var ATT_PAGE_SIZE = 6;
+    var _csvValidCount = 0;
 
     function formatFileSize(bytes) {
       if (bytes < 1024) return bytes + ' B';
@@ -929,42 +1264,126 @@
       card.style.display = 'flex';
     }
 
-    function showUploadResult(validItems, skipped) {
-      var resultEl    = document.getElementById('uploadResult');
-      var validEl     = document.getElementById('uploadValidCount');
-      var skipCountEl = document.getElementById('uploadSkippedCount');
-      var sepEl       = document.getElementById('uploadResultSep');
-      var partsEl     = document.getElementById('uploadResultParts');
+    function buildAttRow(item, globalIdx) {
+      return '<tr id="att-row-' + globalIdx + '">' +
+        '<td><span class="pn-invalid">' + item.pn + '</span></td>' +
+        '<td>' +
+          '<div class="att-s-wrap">' +
+            '<svg class="att-s-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">' +
+              '<circle cx="5.5" cy="5.5" r="3.5" stroke="currentColor" stroke-width="1.4"/>' +
+              '<path d="M8.5 8.5l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>' +
+            '</svg>' +
+            '<input class="att-s-input" id="att' + globalIdx + '-inp" placeholder="Search by part number or keyword…" oninput="attSearch(this,' + globalIdx + ')" autocomplete="off">' +
+          '</div>' +
+          '<div class="att-s-desc" id="att' + globalIdx + '-desc"></div>' +
+        '</td>' +
+        '<td style="text-align:center;font-weight:700;font-size:13px;color:#4B5563;font-variant-numeric:tabular-nums;">' + item.qty + '</td>' +
+        '<td style="text-align:center;">' +
+          '<button class="btn-att-cart" id="att' + globalIdx + '-btn" disabled onclick="attAddToCart(' + globalIdx + ',this)">Add to Cart</button>' +
+        '</td>' +
+        '<td style="text-align:center;">' +
+          '<button class="btn-att-del" onclick="attDeleteRow(' + globalIdx + ')" title="Remove this row" aria-label="Delete row">' +
+            '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">' +
+              '<path d="M2 2l9 9M11 2l-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>' +
+            '</svg>' +
+          '</button>' +
+        '</td>' +
+      '</tr>';
+    }
 
-      // Header count
+    window.renderAttPage = function(page) {
+      var activeItems = _attSkippedItems
+        .map(function(item, idx) { return { item: item, idx: idx }; })
+        .filter(function(x) { return !x.item.done; });
+
+      var totalPages = Math.ceil(activeItems.length / ATT_PAGE_SIZE);
+      if (page >= totalPages && totalPages > 0) page = totalPages - 1;
+      if (page < 0) page = 0;
+      _attPage = page;
+
+      var start = page * ATT_PAGE_SIZE;
+      var pageItems = activeItems.slice(start, start + ATT_PAGE_SIZE);
+
+      document.getElementById('attTblBody').innerHTML = pageItems.map(function(x) {
+        return buildAttRow(x.item, x.idx);
+      }).join('');
+
+      var pagDiv = document.getElementById('attPagination');
+      if (totalPages <= 1) {
+        pagDiv.style.display = 'none';
+      } else {
+        pagDiv.style.display = 'flex';
+        pagDiv.innerHTML =
+          '<span>Showing ' + (start + 1) + '–' + Math.min(start + ATT_PAGE_SIZE, activeItems.length) + ' of ' + activeItems.length + '</span>' +
+          '<div class="att-pag-btns">' +
+            '<button class="att-pag-btn" onclick="renderAttPage(' + (_attPage - 1) + ')"' + (_attPage === 0 ? ' disabled' : '') + '>← Prev</button>' +
+            '<button class="att-pag-btn" onclick="renderAttPage(' + (_attPage + 1) + ')"' + (_attPage >= totalPages - 1 ? ' disabled' : '') + '>Next →</button>' +
+          '</div>';
+      }
+    };
+
+    function showToast(partId, desc, qty) {
+      var t = document.getElementById('cartToast');
+      if (!t) return;
+      document.getElementById('cartToastName').textContent = desc || partId;
+      document.getElementById('cartToastPn').textContent   = 'Part # ' + partId;
+      document.getElementById('cartToastQty').textContent  = 'Qty ' + qty;
+      t.classList.remove('hiding');
+      t.style.display = 'flex';
+      clearTimeout(t._toastTimer);
+      t._toastTimer = setTimeout(function() {
+        t.classList.add('hiding');
+        t.addEventListener('animationend', function handler() {
+          t.style.display = 'none';
+          t.classList.remove('hiding');
+          t.removeEventListener('animationend', handler);
+        });
+      }, 5000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var closeBtn = document.getElementById('cartToastClose');
+      if (closeBtn) closeBtn.addEventListener('click', function() {
+        var t = document.getElementById('cartToast');
+        t.classList.add('hiding');
+        t.addEventListener('animationend', function handler() {
+          t.style.display = 'none';
+          t.classList.remove('hiding');
+          t.removeEventListener('animationend', handler);
+        });
+      });
+    });
+
+    function showUploadResult(validItems, skipped) {
+      var resultEl = document.getElementById('uploadResult');
+      var validEl  = document.getElementById('uploadValidCount');
+
+      _csvValidCount = validItems.length;
+
       validEl.innerHTML =
         '<svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7l4 4 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        validItems.length + ' part' + (validItems.length !== 1 ? 's' : '') + ' added to cart';
+        _csvValidCount + ' part' + (_csvValidCount !== 1 ? 's' : '') + ' added to cart';
       resultEl.style.display = 'flex';
 
-      // Parts list
-      partsEl.innerHTML = validItems.map(function(item) {
-        return '<div class="upload-result__part-row">' +
-          '<span class="upload-result__part-pn">' + item.pn + '</span>' +
-          '<span class="upload-result__part-desc">' + item.desc + '</span>' +
-          '<span class="upload-result__part-qty">×' + item.qty + '</span>' +
-        '</div>';
+      document.getElementById('addedTblBody').innerHTML = validItems.map(function(item) {
+        return '<tr>' +
+          '<td class="at-pn">' + item.pn + '</td>' +
+          '<td style="color:#4B5563;">' + item.desc + '</td>' +
+          '<td class="at-qty">' + item.qty + '</td>' +
+        '</tr>';
       }).join('');
 
       if (skipped.length > 0) {
-        var tagsHtml = skipped.map(function(pn) {
-          return '<span class="upload-skipped__tag">' + pn + '</span>';
-        }).join('');
-        document.getElementById('uploadSkippedTags').innerHTML = tagsHtml;
+        _attSkippedItems = skipped.map(function(item) { return { pn: item.pn, qty: item.qty, done: false }; });
+        _attPage = 0;
 
-        var skippedCard = document.getElementById('uploadSkipped');
-        skippedCard.querySelector('.upload-skipped__head-left').innerHTML =
-          '<svg class="warn-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 2L1 12h12L7 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M7 6v3M7 10v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
-          skipped.length + ' part' + (skipped.length !== 1 ? 's' : '') + ' skipped';
-        skippedCard.style.display = 'block';
+        var headText = document.getElementById('uploadSkippedHeadText');
+        if (headText) headText.textContent = skipped.length + ' part' + (skipped.length !== 1 ? 's' : '') + ' not found in catalogue — find replacements below';
+
+        window.renderAttPage(0);
+        document.getElementById('uploadSkipped').style.display = 'block';
       }
 
-      // Swap CTA buttons
       document.getElementById('addToCartBtn').style.display = 'none';
       document.getElementById('goToCartBtn').style.display  = 'flex';
     }
@@ -973,16 +1392,13 @@
       document.getElementById('uploadResult').classList.toggle('upload-result--collapsed');
     };
 
-    window.toggleUploadSkipped = function() {
-      document.getElementById('uploadSkipped').classList.toggle('upload-skipped--collapsed');
-    };
-
     window.clearUpload = function() {
       // Reset upload UI
       document.getElementById('uploadFileCard').style.display = 'none';
       document.getElementById('uploadResult').style.display   = 'none';
       document.getElementById('uploadSkipped').style.display  = 'none';
-      document.getElementById('uploadSkippedTags').innerHTML  = '';
+      document.getElementById('addedTblBody').innerHTML       = '';
+      document.getElementById('attTblBody').innerHTML         = '';
       document.getElementById('dropZone').style.display       = '';
       document.getElementById('csvInput').value               = '';
 
@@ -992,6 +1408,10 @@
 
       // Clear CSV cart items from localStorage and local state
       csvCartItems = [];
+      _attSkippedItems = [];
+      _csvValidCount = 0;
+      _attPage = 0;
+      document.getElementById('attPagination').style.display = 'none';
       var existing = [];
       try { existing = JSON.parse(localStorage.getItem('okmCartItems') || '[]'); } catch(ex) {}
       // Remove items that came from this upload (tracked by pn)
@@ -1032,7 +1452,7 @@
           if (part) {
             valid.push({ pn: part.id, desc: part.desc, price: part.price, qty: qtyNum });
           } else {
-            skipped.push(r.pn);
+            skipped.push({ pn: r.pn, qty: qtyNum });
           }
         });
 
@@ -1084,7 +1504,7 @@
 
     /* ── Add to Cart ── */
     window.addAllToCart = function() {
-      var rows = document.querySelectorAll('#manualBody tr:not(#addRow)');
+      var rows = document.querySelectorAll('#manualBody tr');
       var items = [];
       rows.forEach(function(tr) {
         var cells = tr.querySelectorAll('td');
@@ -1115,8 +1535,46 @@
   })();
   </script>
 
-  <!-- Search dropdown rendered at body level to escape overflow:auto clipping -->
+  <!-- Dropdowns rendered at body level to escape overflow clipping -->
   <div id="manualSearchDropdown" style="display:none;position:fixed;background:#fff;border:1px solid #DEDEDE;border-radius:4px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:9999;overflow:hidden;"></div>
+  <div id="attDropdown" style="display:none;position:fixed;background:#fff;border:1px solid #DEDEDE;border-radius:4px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:9999;overflow:hidden;"></div>
+  <div id="cartToast" role="status" aria-live="polite">
+    <div class="toast-accent"></div>
+    <div class="toast-body">
+      <div class="toast-header">&#10003; Added to Cart</div>
+      <div id="cartToastName"></div>
+      <div id="cartToastPn"></div>
+      <div id="cartToastQty"></div>
+    </div>
+    <button id="cartToastClose" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <div id="delModal" class="del-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="delModalTitle">
+    <div class="del-modal">
+      <div class="del-modal__hdr">
+        <h2 class="del-modal__ttl" id="delModalTitle">Remove Part?</h2>
+        <button class="del-modal__cls" onclick="closeDelModal()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2 2l12 12M14 2L2 14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="del-modal__bdy">
+        <span>This row will be permanently removed from the list. You won't be able to undo this action.</span>
+        <div class="del-modal__detail">
+          <span class="del-modal__detail-label">Part No.</span>
+          <span class="del-modal__detail-value" id="delModalPn">—</span>
+          <span class="del-modal__detail-label">Qty</span>
+          <span class="del-modal__detail-value" id="delModalQty">—</span>
+        </div>
+        <div class="del-modal__div"></div>
+        <div class="del-modal__act">
+          <button class="del-modal__btn-cancel" onclick="closeDelModal()">Cancel</button>
+          <button class="del-modal__btn-confirm" onclick="confirmDelModal()">Yes, Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <style>
     .msd-item:hover { background: #F5F7FF; }

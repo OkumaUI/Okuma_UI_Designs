@@ -392,22 +392,6 @@
           </div>
         </div>
 
-        <!-- KPIs -->
-        <div class="kpi-row">
-          <a class="kpi-tile" id="custKpi1Link" href="my-orders.html" style="text-decoration:none;">
-            <div class="kpi-tile__label">Customer's Open Orders</div>
-            <div class="kpi-tile__num" id="custKpi1Num">47</div>
-          </a>
-          <a class="kpi-tile" id="custKpi2Link" href="my-quotes.html?filter=open" style="text-decoration:none;">
-            <div class="kpi-tile__label">Customer's Open Quotes</div>
-            <div class="kpi-tile__num" id="custKpi2Num">3</div>
-          </a>
-          <a class="kpi-tile" id="custKpi3Link" href="dealer-profile.html?tab=addr-requests" style="text-decoration:none;">
-            <div class="kpi-tile__label">Customer's Pending Address Approvals</div>
-            <div class="kpi-tile__num" id="custKpi3Num">1</div>
-          </a>
-        </div>
-
         <!-- Customer's Registered Machines -->
         <section class="section">
           <div class="section__head">
@@ -416,58 +400,6 @@
           </div>
           <div class="machine-grid" id="custMachineGrid">
             <!-- populated by JS -->
-          </div>
-        </section>
-
-        <!-- Quick Links -->
-        <div class="quick-links quick-links--3">
-          <a href="dealer-cart.html" class="link-card" id="custCartLink">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 2h2.5l2.5 12.5a1.8 1.8 0 001.8 1.5h9a1.8 1.8 0 001.77-1.5L21 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="9.5" cy="20" r="1.5" fill="currentColor"/>
-              <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
-            </svg>
-            <span class="link-card__label">View Cart</span>
-          </a>
-          <a href="my-quotes.html" class="link-card" id="custQuoteHistLink">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 2h9l5 5v15a0 0 0 010 0H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-              <path d="M14 2v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <span class="link-card__label">Quote History</span>
-          </a>
-          <a href="my-orders.html" class="link-card" id="custOrderHistLink">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 2h9l5 5v15a0 0 0 010 0H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-              <path d="M14 2v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <span class="link-card__label">Order History</span>
-          </a>
-        </div>
-
-        <!-- Customer's Recent Orders -->
-        <section class="section">
-          <div class="section__head">
-            <h2 class="section__title">Customer's Recent Orders</h2>
-            <a href="my-orders.html" class="section__link">View All Orders →</a>
-          </div>
-          <div class="orders-wrap">
-            <div class="orders-scroll">
-              <table class="orders-table">
-                <thead>
-                  <tr>
-                    <th class="col-order">Order #</th>
-                    <th class="col-date">Date</th>
-                    <th class="col-items">Items</th>
-                    <th class="col-total">Total</th>
-                    <th class="col-status">Status</th>
-                  </tr>
-                </thead>
-                <tbody id="custOrdersTbody">
-                  <!-- populated by JS -->
-                </tbody>
-              </table>
-            </div>
           </div>
         </section>
 
@@ -766,18 +698,7 @@
       var custCtxName = document.getElementById('custCtxName');
       var custCtxAcct = document.getElementById('custCtxAccount');
       var custCtxAddr = document.getElementById('custCtxAddress');
-      var kpi1Num     = document.getElementById('custKpi1Num');
-      var kpi2Num     = document.getElementById('custKpi2Num');
-      var kpi3Num     = document.getElementById('custKpi3Num');
       var machGrid    = document.getElementById('custMachineGrid');
-      var ordersTbody = document.getElementById('custOrdersTbody');
-
-      /* â”€â”€ helpers â”€â”€ */
-      var BADGE = { processing: 'status-badge--processing', shipped: 'status-badge--shipped', delivered: 'status-badge--delivered' };
-      function statusBadge(s) {
-        return '<span class="status-badge ' + (BADGE[s] || '') + '"><span class="dot"></span>' +
-          s.charAt(0).toUpperCase() + s.slice(1) + '</span>';
-      }
 
       function showCustomer(name) {
         var d = CUST_DATA[name];
@@ -786,10 +707,6 @@
         custCtxName.textContent = name;
         custCtxAcct.textContent = 'Account #' + d.account;
         custCtxAddr.textContent = d.address;
-
-        kpi1Num.textContent = d.kpi.orders;
-        kpi2Num.textContent = d.kpi.quotes;
-        kpi3Num.textContent = d.kpi.pendingAddr;
 
         machGrid.innerHTML = d.machines.map(function (m) {
           return '<div class="machine-card">' +
@@ -811,31 +728,7 @@
           '</div>';
         }).join('');
 
-        ordersTbody.innerHTML = d.orders.map(function (o) {
-          return '<tr class="clickable-row" onclick="window.location=\'order-detail.html?order=' + o.num + '\'">' +
-            '<td class="col-order">' + o.num + '</td>' +
-            '<td class="col-date">' + o.date + '</td>' +
-            '<td class="col-items">' + o.count + '</td>' +
-            '<td class="col-total">' + o.total + '</td>' +
-            '<td class="col-status">' + statusBadge(o.status) + '</td>' +
-          '</tr>';
-        }).join('');
-
         var custParam = encodeURIComponent(name);
-        var qLink = document.getElementById('custQuoteHistLink');
-        var oLink = document.getElementById('custOrderHistLink');
-        var cLink = document.getElementById('custCartLink');
-        if (qLink) qLink.href = 'my-quotes.html?customer=' + custParam;
-        if (oLink) oLink.href = 'my-orders.html?customer=' + custParam;
-        if (cLink) cLink.href = 'dealer-cart.html?customer=' + custParam;
-
-        var k1 = document.getElementById('custKpi1Link');
-        var k2 = document.getElementById('custKpi2Link');
-        var k3 = document.getElementById('custKpi3Link');
-        if (k1) k1.href = 'my-orders.html?filter=open&customer=' + custParam;
-        if (k2) k2.href = 'my-quotes.html?filter=open&customer=' + custParam;
-        if (k3) k3.href = 'dealer-profile.html?tab=addr-requests&customer=' + custParam;
-
         var machViewAll = document.getElementById('custMachViewAllLink');
         if (machViewAll) machViewAll.href = 'dealer-profile.html?tab=customers&customer=' + custParam;
 

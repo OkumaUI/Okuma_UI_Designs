@@ -103,7 +103,9 @@
     .qty-stepper { display: flex; align-items: center; height: 30px; border: 1px solid #E0E0E0; border-radius: 2px; overflow: hidden; }
     .qty-btn { width: 30px; height: 30px; background: #FFFFFF; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #6E6E6E; transition: background 0.15s, color 0.15s; }
     .qty-btn:hover { background: #F5F5F5; color: #005EB8; }
-    .qty-value { min-width: 32px; height: 30px; padding: 0 12px; display: flex; align-items: center; justify-content: center; border-left: 1px solid #E0E0E0; border-right: 1px solid #E0E0E0; font-size: 14px; font-weight: 500; color: #000000; }
+    .qty-value { width: 54px; height: 30px; padding: 0; text-align: center; border: none; border-left: 1px solid #E0E0E0; border-right: 1px solid #E0E0E0; font-size: 14px; font-weight: 500; color: #000000; background: transparent; cursor: text; font-family: inherit; -moz-appearance: textfield; box-sizing: border-box; }
+    .qty-value::-webkit-outer-spin-button, .qty-value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .qty-value:focus { outline: none; background: #EDF4FF; }
 
     /* Total cell */
     .col-total .total-stack { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
@@ -406,7 +408,7 @@
                 <button class="qty-btn" onclick="changeQty(0,-1)" aria-label="Decrease quantity">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/></svg>
                 </button>
-                <span class="qty-value" id="qty-0">2</span>
+                <input class="qty-value" type="number" id="qty-0" value="2" min="1" aria-label="Quantity" onchange="onQtyInput(this,0)" onkeydown="if(event.key==='Enter')this.blur()">
                 <button class="qty-btn" onclick="changeQty(0,1)" aria-label="Increase quantity">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
                 </button>
@@ -440,7 +442,7 @@
                 <button class="qty-btn" onclick="changeQty(1,-1)" aria-label="Decrease quantity">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/></svg>
                 </button>
-                <span class="qty-value" id="qty-1">1</span>
+                <input class="qty-value" type="number" id="qty-1" value="1" min="1" aria-label="Quantity" onchange="onQtyInput(this,1)" onkeydown="if(event.key==='Enter')this.blur()">
                 <button class="qty-btn" onclick="changeQty(1,1)" aria-label="Increase quantity">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
                 </button>
@@ -473,7 +475,7 @@
                 <button class="qty-btn" onclick="changeQty(2,-1)" aria-label="Decrease quantity">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/></svg>
                 </button>
-                <span class="qty-value" id="qty-2">1</span>
+                <input class="qty-value" type="number" id="qty-2" value="1" min="1" aria-label="Quantity" onchange="onQtyInput(this,2)" onkeydown="if(event.key==='Enter')this.blur()">
                 <button class="qty-btn" onclick="changeQty(2,1)" aria-label="Increase quantity">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="11" y2="7"/><line x1="7" y1="3" x2="7" y2="11"/></svg>
                 </button>
@@ -527,6 +529,7 @@
               <span class="total-label">Total</span>
               <span class="total-amount" id="summary-total">$742.50+</span>
             </div>
+            <p style="margin:0;font-size:11px;color:#6E6E6E;text-align:right;">Excl. taxes &amp; shipping</p>
 
             <button class="checkout-btn" onclick="window.location='checkout-shipping.html'">Proceed To Checkout</button>
 
@@ -587,11 +590,25 @@
       if (items[idx].removed) return;
       var newQty = Math.max(1, items[idx].qty + delta);
       items[idx].qty = newQty;
-      document.getElementById('qty-' + idx).textContent = newQty;
+      document.getElementById('qty-' + idx).value = newQty;
       document.getElementById('row-total-' + idx).textContent = money(items[idx].unitPrice * newQty);
       if (items[idx].sale) {
         var origEl = document.getElementById('orig-' + idx);
         if (origEl) origEl.textContent = money(items[idx].listPrice * newQty);
+      }
+      recalcSummary();
+    }
+
+    function onQtyInput(el, idx) {
+      if (items[idx].removed) return;
+      var val = parseInt(el.value, 10);
+      if (isNaN(val) || val < 1) val = 1;
+      el.value = val;
+      items[idx].qty = val;
+      document.getElementById('row-total-' + idx).textContent = money(items[idx].unitPrice * val);
+      if (items[idx].sale) {
+        var origEl = document.getElementById('orig-' + idx);
+        if (origEl) origEl.textContent = money(items[idx].listPrice * val);
       }
       recalcSummary();
     }

@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Customers – Concepts – Okuma Parts Portal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background: #F5F5F5;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    .main-area {
+      flex: 1; min-width: 0; padding: 32px;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+
+    /* ── PROFILE HERO (reused from dealer-profile) ── */
+    .profile-hero {
+      background: #fff; border: 1px solid #E0E0E0; border-radius: 4px;
+      overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    }
+    .profile-hero__body { padding: 28px 32px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .avatar-initials {
+      display: flex; align-items: center; justify-content: center;
+      width: 80px; height: 80px; border-radius: 50%;
+      background: #0B308E; color: #fff; font-size: 26px; font-weight: 700; letter-spacing: 1px;
+      flex-shrink: 0; user-select: none;
+    }
+    .profile-identity__info { display: flex; flex-direction: column; gap: 6px; }
+    .profile-identity__name { font-size: 22px; font-weight: 700; color: #2C2A29; line-height: 1.2; }
+    .profile-identity__company { font-size: 14px; color: #4B4B4B; }
+    .role-tag {
+      display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; color: #0B308E;
+      background: #EAF2FF; border: 1px solid #B3D1F5; border-radius: 10px; padding: 2px 10px;
+      letter-spacing: 0.3px; text-transform: uppercase; width: fit-content;
+    }
+
+    /* ── TABS ── */
+    .profile-tabs { background: #fff; border: 1px solid #E0E0E0; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); overflow: hidden; }
+    .tab-list { display: flex; border-bottom: 1px solid #E0E0E0; padding: 0 32px; overflow-x: auto; scrollbar-width: none; }
+    .tab-list::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      position: relative; flex-shrink: 0; padding: 16px 24px; background: none; border: none;
+      border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer;
+      font-family: inherit; font-size: 14px; font-weight: 400; color: #4B4B4B; white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-btn:hover { color: #1A1A1A; }
+    .tab-btn[aria-selected="true"] { font-weight: 700; color: #005EB8; border-bottom-color: #005EB8; }
+    .tab-panel { padding: 32px; }
+    @media (max-width: 768px) { .tab-panel { padding: 20px 16px; } .tab-list { padding: 0 16px; } .tab-btn { padding: 14px 16px; font-size: 13px; } }
+
+    /* ── CONCEPT SWITCHER (demo scaffold only — not part of final portal) ── */
+    .concept-bar {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      background: #0B308E; color: #fff; border-radius: 6px; padding: 14px 20px;
+    }
+    .concept-bar__label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; opacity: 0.85; }
+    .concept-seg { display: inline-flex; background: rgba(255,255,255,0.12); border-radius: 8px; padding: 3px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+    .concept-seg::-webkit-scrollbar { display: none; }
+    .concept-seg button {
+      border: none; background: transparent; color: #DCE7FF; font-family: inherit;
+      font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 6px; cursor: pointer;
+      transition: background 0.15s, color 0.15s; white-space: nowrap;
+    }
+    .concept-seg button[aria-pressed="true"] { background: #fff; color: #0B308E; }
+    .concept-bar__hint { font-size: 12.5px; color: #C7D6F5; margin-left: auto; }
+    @media (max-width: 640px) { .concept-bar__hint { margin-left: 0; flex-basis: 100%; } }
+
+    /* ══════════════════════════════════════════════════════════════
+       SHARED — customer list toolbar + status badges + skeletons
+       ══════════════════════════════════════════════════════════════ */
+    .cust-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .cust-search-wrap { position: relative; flex: 1; min-width: 200px; }
+    .cust-search-wrap > svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9E9E9E; pointer-events: none; }
+    .cust-search {
+      width: 100%; height: 40px; border: 1px solid #D1D5DB; border-radius: 6px; padding: 0 12px 0 36px;
+      font-family: inherit; font-size: 14px; color: #1A1A1A; background: #fff; outline: none;
+    }
+    .cust-search:focus { border-color: #005EB8; box-shadow: 0 0 0 2px rgba(0,94,184,0.12); }
+    .cust-count-pill { font-size: 13px; color: #717171; font-weight: 500; white-space: nowrap; }
+
+    .stat-badge {
+      display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700;
+      border-radius: 12px; padding: 2px 9px; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap;
+    }
+    .stat-badge--installed { color: #74AA50; background: #EBF7F2; border: 1px solid #74AA50; }
+    .stat-badge--pending { color: #92400E; background: #FFFBEB; border: 1px solid #FCD34D; }
+
+    /* Browse parts button (shared) */
+    .browse-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      font-family: inherit; font-size: 13px; font-weight: 700; color: #005EB8;
+      background: #fff; border: 1px solid #B4CBE6; border-radius: 6px; padding: 8px 14px;
+      cursor: pointer; transition: background 0.15s, border-color 0.15s;
+    }
+    .browse-btn:hover { background: #F0F6FC; border-color: #005EB8; }
+
+    /* Skeleton shimmer */
+    @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+    .sk {
+      background: #ECEEF1; background-image: linear-gradient(90deg, #ECEEF1 0px, #F6F7F9 200px, #ECEEF1 400px);
+      background-size: 800px 100%; border-radius: 4px; animation: shimmer 1.2s infinite linear;
+    }
+    .sk-line { height: 12px; }
+
+    /* API loading inline note */
+    .api-loading-note {
+      display: flex; align-items: center; gap: 10px; font-size: 13px; color: #717171;
+      padding: 4px 0 14px;
+    }
+    .api-spinner {
+      width: 16px; height: 16px; border: 2px solid #D6E0EE; border-top-color: #005EB8;
+      border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONCEPT A — Master / Detail drill-in + machine cards
+       ══════════════════════════════════════════════════════════════ */
+    .ca-listwrap { border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden; }
+    .ca-row {
+      display: grid; grid-template-columns: 1.6fr 1fr 0.9fr auto; align-items: center; gap: 16px;
+      padding: 18px 20px; border-bottom: 1px solid #EDEDED; background: #fff; transition: background 0.12s;
+    }
+    .ca-row:last-child { border-bottom: none; }
+    .ca-row:hover { background: #F9FBFF; }
+    .ca-cust { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .ca-cust__mono {
+      width: 44px; height: 44px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #EAF2FF; color: #0B308E; font-weight: 700; font-size: 15px; letter-spacing: 0.5px;
+    }
+    .ca-cust__name { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+    .ca-cust__acct { font-size: 12px; color: #9E9E9E; margin-top: 2px; }
+    .ca-cell-label { font-size: 10px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.5px; display: none; }
+    .ca-loc { font-size: 13.5px; color: #4B4B4B; display: flex; align-items: center; gap: 6px; }
+    .ca-mcount { font-size: 13.5px; color: #4B4B4B; font-weight: 600; }
+    .ca-see-btn {
+      display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px;
+      background: #005EB8; color: #fff; border: none; border-radius: 6px;
+      font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: background 0.15s; white-space: nowrap;
+    }
+    .ca-see-btn:hover { background: #0B308E; }
+    .ca-see-btn:disabled { opacity: 0.6; cursor: wait; }
+
+    /* Detail view */
+    .ca-detail-back {
+      display: inline-flex; align-items: center; gap: 7px; background: none; border: none;
+      font-family: inherit; font-size: 13px; font-weight: 700; color: #005EB8; cursor: pointer;
+      padding: 4px 0; margin-bottom: 16px;
+    }
+    .ca-detail-back:hover { text-decoration: underline; }
+    .ca-detail-head {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+      padding: 20px 24px; background: #F7F9FC; border: 1px solid #E0E0E0; border-radius: 8px; margin-bottom: 20px;
+    }
+    .ca-detail-title { font-size: 20px; font-weight: 700; color: #1A1A1A; }
+    .ca-detail-sub { font-size: 13px; color: #717171; margin-top: 5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .ca-detail-stats { display: flex; gap: 10px; flex-wrap: wrap; }
+    .ca-stat {
+      background: #fff; border: 1px solid #E0E0E0; border-radius: 8px; padding: 10px 16px;
+      display: flex; flex-direction: column; gap: 2px; min-width: 84px;
+    }
+    .ca-stat__num { font-size: 20px; font-weight: 700; color: #0B308E; line-height: 1; }
+    .ca-stat__lbl { font-size: 10.5px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.4px; }
+
+    .ca-machine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .ca-mcard {
+      border: 1px solid #E0E0E0; border-radius: 10px; background: #fff; padding: 18px;
+      display: flex; flex-direction: column; gap: 14px; transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .ca-mcard:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.07); border-color: #CBD5E1; }
+    .ca-mcard__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .ca-mcard__model { font-size: 16px; font-weight: 700; color: #1A1A1A; line-height: 1.25; }
+    .ca-mcard__icon {
+      width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; background: #F0F4FA; color: #005EB8;
+    }
+    .ca-mcard__meta { display: flex; flex-direction: column; gap: 8px; }
+    .ca-mcard__metarow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 13px; }
+    .ca-mcard__k { color: #9E9E9E; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+    .ca-mcard__v { color: #1A1A1A; font-weight: 600; font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; }
+    .ca-mcard__foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 2px; }
+    .ca-mcard .browse-btn { width: 100%; }
+
+    @media (max-width: 720px) {
+      .ca-row { grid-template-columns: 1fr; gap: 10px; }
+      .ca-cell-label { display: block; margin-bottom: 2px; }
+      .ca-see-btn { width: 100%; justify-content: center; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONCEPT B — Inline expandable customer cards + machine table
+       ══════════════════════════════════════════════════════════════ */
+    .cb-list { display: flex; flex-direction: column; gap: 12px; }
+    .cb-card { border: 1px solid #E0E0E0; border-radius: 10px; background: #fff; overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; }
+    .cb-card.open { border-color: #B4CBE6; box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
+    .cb-head {
+      display: grid; grid-template-columns: 1.7fr 1fr 1fr auto; align-items: center; gap: 16px;
+      padding: 18px 20px; cursor: pointer;
+    }
+    .cb-head:hover { background: #F9FBFF; }
+    .cb-cust { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .cb-cust__mono {
+      width: 44px; height: 44px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #EAF2FF; color: #0B308E; font-weight: 700; font-size: 15px; letter-spacing: 0.5px;
+    }
+    .cb-cust__name { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+    .cb-cust__acct { font-size: 12px; color: #9E9E9E; margin-top: 2px; }
+    .cb-kv { display: flex; flex-direction: column; gap: 2px; }
+    .cb-kv__k { font-size: 10px; font-weight: 700; color: #9E9E9E; text-transform: uppercase; letter-spacing: 0.5px; }
+    .cb-kv__v { font-size: 13.5px; color: #1A1A1A; font-weight: 500; }
+    .cb-cta {
+      display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px;
+      background: #fff; border: 1px solid #005EB8; color: #005EB8; border-radius: 6px;
+      font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .cb-cta:hover { background: #F0F6FC; }
+    .cb-card.open .cb-cta { background: #005EB8; color: #fff; }
+    .cb-cta__chev { transition: transform 0.2s; }
+    .cb-card.open .cb-cta__chev { transform: rotate(180deg); }
+
+    .cb-body { display: none; border-top: 1px solid #EDEDED; padding: 20px; background: #FCFDFE; }
+    .cb-card.open .cb-body { display: block; }
+    .cb-body__head {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .cb-body__title { font-size: 11px; font-weight: 700; color: #717171; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .cb-mtable { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #E8E8E8; border-radius: 8px; overflow: hidden; }
+    .cb-mtable thead tr { background: #F5F7FA; }
+    .cb-mtable th {
+      font-size: 11px; font-weight: 700; color: #717171; text-transform: uppercase; letter-spacing: 0.3px;
+      text-align: left; padding: 11px 16px; border-bottom: 1px solid #E8E8E8; white-space: nowrap;
+    }
+    .cb-mtable td { padding: 13px 16px; border-bottom: 1px solid #F0F0F0; vertical-align: middle; font-size: 13px; color: #1A1A1A; }
+    .cb-mtable tbody tr:last-child td { border-bottom: none; }
+    .cb-mtable tbody tr:hover { background: #F9FBFF; }
+    .cb-mtable td.mono { font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 12.5px; color: #4B4B4B; }
+    .cb-mtable .m-model { font-weight: 700; color: #1A1A1A; }
+    .cb-mtable th:last-child, .cb-mtable td:last-child { text-align: right; }
+
+    /* Card fallback for machine table on narrow screens */
+    .cb-mtable-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    @media (max-width: 720px) {
+      .cb-head { grid-template-columns: 1fr; gap: 12px; }
+      .cb-cta { width: 100%; justify-content: center; }
+      .cb-mtable { min-width: 560px; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONCEPT C — Split view (persistent list + detail pane)
+       ══════════════════════════════════════════════════════════════ */
+    .cc-wrap { display: grid; grid-template-columns: 300px 1fr; border: 1px solid #E0E0E0; border-radius: 10px; overflow: hidden; min-height: 480px; }
+    .cc-list { border-right: 1px solid #EDEDED; background: #FBFCFE; overflow-y: auto; max-height: 640px; }
+    .cc-item {
+      display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #EDEDED;
+      cursor: pointer; border-left: 3px solid transparent; transition: background 0.12s;
+    }
+    .cc-item:last-child { border-bottom: none; }
+    .cc-item:hover { background: #F2F6FC; }
+    .cc-item.active { background: #EAF2FF; border-left-color: #005EB8; }
+    .cc-item__mono { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #EAF2FF; color: #0B308E; font-weight: 700; font-size: 13px; }
+    .cc-item.active .cc-item__mono { background: #005EB8; color: #fff; }
+    .cc-item__name { font-size: 14px; font-weight: 700; color: #1A1A1A; }
+    .cc-item__sub { font-size: 11.5px; color: #9E9E9E; margin-top: 2px; }
+    .cc-detail { padding: 22px 24px; overflow-y: auto; max-height: 640px; }
+    .cc-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 320px; text-align: center; color: #9E9E9E; gap: 14px; padding: 40px; }
+    .cc-empty svg { color: #CBD5E1; }
+    .cc-back {
+      display: none; align-items: center; gap: 6px; background: none; border: none; font-family: inherit;
+      font-size: 13px; font-weight: 700; color: #005EB8; cursor: pointer; padding: 4px 0; margin-bottom: 12px;
+    }
+    .cc-mrow { display: flex; align-items: center; gap: 20px; padding: 14px 16px; border: 1px solid #EDEDED; border-radius: 8px; background: #fff; margin-bottom: 10px; flex-wrap: wrap; }
+    .cc-mrow__main { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 200px; }
+    .cc-mrow__icon { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #F0F4FA; color: #005EB8; }
+    .cc-mrow__model { font-size: 14px; font-weight: 700; color: #1A1A1A; margin-bottom: 5px; }
+    .cc-mrow__meta { display: flex; gap: 28px; }
+    .cc-mrow .browse-btn { margin-left: auto; }
+    @media (max-width: 860px) {
+      .cc-wrap { grid-template-columns: 1fr; }
+      .cc-list { max-height: none; }
+      .cc-detail { display: none; }
+      .cc-wrap.detail-open .cc-list { display: none; }
+      .cc-wrap.detail-open .cc-detail { display: block; }
+      .cc-back { display: inline-flex; }
+    }
+    @media (max-width: 560px) {
+      .cc-mrow .browse-btn { margin-left: 0; width: 100%; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONCEPT D — Customer tiles + slide-in machine drawer
+       ══════════════════════════════════════════════════════════════ */
+    .cd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .cd-tile { border: 1px solid #E0E0E0; border-radius: 10px; background: #fff; padding: 18px; display: flex; flex-direction: column; gap: 13px; transition: box-shadow 0.15s, border-color 0.15s; }
+    .cd-tile:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.07); border-color: #CBD5E1; }
+    .cd-tile__top { display: flex; align-items: center; gap: 12px; }
+    .cd-tile__mono { width: 46px; height: 46px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #EAF2FF; color: #0B308E; font-weight: 700; font-size: 15px; letter-spacing: 0.5px; }
+    .cd-tile__name { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+    .cd-tile__acct { font-size: 12px; color: #9E9E9E; margin-top: 2px; }
+    .cd-tile__row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4B4B4B; }
+    .cd-tile__btn {
+      margin-top: 4px; height: 40px; width: 100%; background: #005EB8; color: #fff; border: none; border-radius: 6px;
+      font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .cd-tile__btn:hover { background: #0B308E; }
+
+    .cd-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.25s, visibility 0.25s; }
+    .cd-overlay.open { opacity: 1; visibility: visible; }
+    .cd-drawer {
+      position: fixed; top: 0; right: 0; height: 100%; width: 480px; max-width: 92vw; background: #fff;
+      box-shadow: -6px 0 24px rgba(0,0,0,0.18); transform: translateX(100%);
+      transition: transform 0.28s cubic-bezier(.4,0,.2,1); z-index: 1001; display: flex; flex-direction: column;
+    }
+    .cd-drawer.open { transform: translateX(0); }
+    .cd-drawer__header { min-height: 66px; background: #005EB8; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; flex-shrink: 0; }
+    .cd-drawer__title { color: #fff; font-size: 17px; font-weight: 700; line-height: 1.2; }
+    .cd-drawer__sub { color: #CDE0F5; font-size: 12px; margin-top: 3px; }
+    .cd-drawer__close { width: 22px; height: 22px; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cd-drawer__close:hover { opacity: 0.75; }
+    .cd-drawer__body { padding: 22px; overflow-y: auto; flex: 1; }
+    .cd-mitem { border: 1px solid #EDEDED; border-radius: 8px; padding: 15px 16px; margin-bottom: 12px; }
+    .cd-mitem__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .cd-mitem__model { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+    .cd-mitem__meta { display: flex; gap: 28px; margin: 12px 0; }
+    .cd-mitem .browse-btn { width: 100%; }
+
+    /* ══════════════════════════════════════════════════════════════
+       BROWSE PARTS MODAL (reused pattern from portal)
+       ══════════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1100;
+      display: none; align-items: flex-start; justify-content: center; padding: 16px; overflow-y: auto;
+    }
+    .modal-overlay.is-open { display: flex; }
+    .modal {
+      width: 100%; max-width: 560px; max-height: 85vh; overflow: auto; background: #fff; border-radius: 4px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25); display: flex; flex-direction: column; margin: auto 0;
+    }
+    .modal__header { height: 60px; background: #005EB8; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+    .modal__title { font-size: 18px; font-weight: 700; color: #fff; }
+    .modal__close { width: 20px; height: 20px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .modal__body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+    .modal__instruction { font-size: 14px; color: #4B4B4B; }
+    .modal__book-list { display: flex; flex-direction: column; gap: 16px; }
+    .book-option { display: flex; align-items: center; gap: 16px; border: 1px solid #E5E5E5; border-radius: 4px; padding: 20px; cursor: pointer; }
+    .book-option.is-selected { border: 2px solid #005EB8; padding: 19px; }
+    .book-option__radio { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #757575; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .book-option.is-selected .book-option__radio { border: 1px solid #005EB8; }
+    .book-option.is-selected .book-option__radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: #005EB8; }
+    .book-option__info { display: flex; flex-direction: column; gap: 7px; }
+    .book-option__title { font-size: 15px; font-weight: 700; color: #2C2A29; }
+    .book-option__line { font-size: 14px; color: #6B7280; }
+    .modal__divider { height: 1px; background: #E0E0E0; }
+    .modal__actions { display: flex; gap: 12px; }
+    .modal-btn { flex: 1; height: 38px; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .modal-btn--cancel { background: transparent; border: 1px solid #005EB8; color: #005EB8; }
+    .modal-btn--cancel:hover { background: #F0F6FC; }
+    .modal-btn--proceed { background: #005EB8; border: none; color: #fff; }
+    .modal-btn--proceed:hover { background: #0B308E; }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div id="okuma-header"></div>
+
+  <div class="app-body-shell">
+    <div id="okuma-sidebar" data-active="account"></div>
+
+    <main class="main-area" id="main" tabindex="-1" aria-label="My Account — My Customers concepts">
+
+      <!-- PROFILE HERO -->
+      <section class="profile-hero" aria-label="Profile overview">
+        <div class="profile-hero__body">
+          <div class="avatar-initials" aria-label="Profile initials">JH</div>
+          <div class="profile-identity__info">
+            <h1 class="profile-identity__name">Jonathan Hayes</h1>
+            <span class="role-tag">Distributor</span>
+            <p class="profile-identity__company">Okuma America Corporation</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONCEPT SWITCHER (demo scaffold) -->
+      <div class="concept-bar" role="region" aria-label="Concept switcher">
+        <span class="concept-bar__label">My Customers — redesign concepts</span>
+        <div class="concept-seg" id="conceptSeg" role="group" aria-label="Choose concept"></div>
+        <span class="concept-bar__hint" id="conceptHint"></span>
+      </div>
+
+      <!-- TABS -->
+      <div class="profile-tabs">
+        <div role="tablist" class="tab-list" aria-label="Account settings">
+          <button role="tab" class="tab-btn" aria-selected="false" tabindex="-1">Profile</button>
+          <button role="tab" class="tab-btn" aria-selected="false" tabindex="-1">Address Book</button>
+          <button role="tab" class="tab-btn" aria-selected="true">My Customers</button>
+          <button role="tab" class="tab-btn" aria-selected="false" tabindex="-1">Address Approval Requests</button>
+        </div>
+
+        <!-- ═══ My Customers panel ═══ -->
+        <div role="tabpanel" class="tab-panel" aria-label="My Customers">
+
+          <!-- Toolbar (shared) -->
+          <div class="cust-toolbar">
+            <div class="cust-search-wrap">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
+                <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <input type="text" class="cust-search" id="custSearch" placeholder="Search customers by name, account, or location">
+            </div>
+            <span class="cust-count-pill" id="custCountPill"></span>
+          </div>
+
+          <!-- Concept A mount -->
+          <div id="conceptA"></div>
+          <!-- Concept B mount -->
+          <div id="conceptB" hidden></div>
+          <!-- Concept C mount -->
+          <div id="conceptC" hidden></div>
+          <!-- Concept D mount -->
+          <div id="conceptD" hidden></div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Concept D — machine drawer -->
+  <div class="cd-overlay" id="cdOverlay"></div>
+  <aside class="cd-drawer" id="cdDrawer" role="dialog" aria-modal="true" aria-labelledby="cdDrawerTitle">
+    <div class="cd-drawer__header">
+      <div>
+        <div class="cd-drawer__title" id="cdDrawerTitle">Customer</div>
+        <div class="cd-drawer__sub" id="cdDrawerSub"></div>
+      </div>
+      <button class="cd-drawer__close" id="cdDrawerClose" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5L15 15M15 5L5 15" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="cd-drawer__body" id="cdDrawerBody"></div>
+  </aside>
+
+  <!-- Browse Parts modal -->
+  <div class="modal-overlay" id="partsModalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal__header">
+        <h2 class="modal__title" id="modalTitle">Browse Parts Book</h2>
+        <button class="modal__close" id="partsModalClose" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5L15 15M15 5L5 15" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <p class="modal__instruction">Select Parts Book</p>
+        <div class="modal__book-list">
+          <div class="book-option is-selected" data-book="1">
+            <div class="book-option__radio"></div>
+            <div class="book-option__info">
+              <div class="book-option__title" id="bookTitle1">Parts Book 1</div>
+              <div class="book-option__line" id="bookSerial1">Serial: —</div>
+              <div class="book-option__line">Pub No. LE15-221-R1 Jan. 2008</div>
+            </div>
+          </div>
+          <div class="book-option" data-book="2">
+            <div class="book-option__radio"></div>
+            <div class="book-option__info">
+              <div class="book-option__title" id="bookTitle2">Parts Book 2</div>
+              <div class="book-option__line" id="bookSerial2">Serial: —</div>
+              <div class="book-option__line">Pub No. LE15-173-R2 Aug. 2003</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal__divider"></div>
+        <div class="modal__actions">
+          <button class="modal-btn modal-btn--cancel" id="partsModalCancel">Cancel</button>
+          <button class="modal-btn modal-btn--proceed" id="partsModalProceed">Proceed</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="okuma-auth-footer"></div>
+
+  <script>
+    /* Seed a dealer session so the shared header/sidebar render in this standalone demo */
+    try {
+      if (!sessionStorage.getItem('okuma_session')) {
+        sessionStorage.setItem('okuma_session', JSON.stringify({
+          email: 'dealer@okuma.com', password: 'dealer123', role: 'dealer', firstName: 'Jonathan', lastName: 'Hayes'
+        }));
+      }
+    } catch (e) {}
+  </script>
+  <script src="auth.js"></script>
+  <script src="components.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* ══════════════ DATA ══════════════ */
+    var CUSTOMERS = [
+      { name:'ABC Industries', acct:'AC-4421', location:'Detroit, MI', machines:[
+        { model:'LU300-M',    serial:'M5-2891-K', installed:'Jan 2021', status:'installed' },
+        { model:'MB-5000H',   serial:'H9-4412-A', installed:'Jun 2019', status:'installed' },
+        { model:'GENOS L200', serial:'GL-7731-C', installed:'Sep 2022', status:'installed' },
+        { model:'LU300-M',    serial:'M5-3312-F', installed:'—',        status:'pending'   },
+        { model:'MB-4000H',   serial:'H9-0021-B', installed:'Dec 2020', status:'installed' }
+      ]},
+      { name:'Smith Manufacturing', acct:'SM-2891', location:'Cincinnati, OH', machines:[
+        { model:'MULTUS B300',  serial:'MB-1120-X', installed:'Mar 2022', status:'installed' },
+        { model:'LB3000 EX II', serial:'LB-8821-D', installed:'Jul 2020', status:'installed' }
+      ]},
+      { name:'Pacific Precision', acct:'PP-5517', location:'San Jose, CA', machines:[
+        { model:'MU-6300V',    serial:'MV-4401-G', installed:'Apr 2021', status:'installed' },
+        { model:'LU300-M',     serial:'M5-9981-K', installed:'Nov 2019', status:'installed' },
+        { model:'MB-5000H',    serial:'H9-6612-E', installed:'Aug 2022', status:'installed' },
+        { model:'GENOS M460V', serial:'GM-3302-P', installed:'—',        status:'pending'   },
+        { model:'LB4000 EX',   serial:'LB-5540-Q', installed:'Mar 2020', status:'installed' },
+        { model:'MU-8000V',    serial:'MV-7721-R', installed:'Oct 2023', status:'installed' }
+      ]},
+      { name:'Delta Components', acct:'DC-3302', location:'Dallas, TX', machines:[
+        { model:'GENOS L300', serial:'GL-2211-T', installed:'May 2021', status:'installed' },
+        { model:'LU300-M',    serial:'M5-6643-U', installed:'Feb 2022', status:'installed' },
+        { model:'MB-4000H',   serial:'H9-8834-V', installed:'Dec 2019', status:'installed' }
+      ]},
+      { name:'Apex Machining', acct:'AM-7789', location:'Chicago, IL', machines:[
+        { model:'MU-6300V',    serial:'MV-5501-W', installed:'Jun 2022', status:'installed' },
+        { model:'LB3000 EX II',serial:'LB-9912-X', installed:'Sep 2021', status:'installed' },
+        { model:'MB-5000H',    serial:'H9-3321-Y', installed:'Jan 2020', status:'installed' },
+        { model:'GENOS M460V', serial:'GM-7743-Z', installed:'—',        status:'pending'   },
+        { model:'LU300-M',     serial:'M5-1127-A', installed:'Apr 2021', status:'installed' }
+      ]}
+    ];
+
+    /* Simulated backend: returns customer's machines after a delay */
+    function fetchMachines(custIndex) {
+      return new Promise(function (resolve) {
+        setTimeout(function () { resolve(CUSTOMERS[custIndex].machines); }, 750);
+      });
+    }
+
+    /* ══════════════ HELPERS ══════════════ */
+    function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]); }); }
+    function initials(name) {
+      var p = name.trim().split(/\s+/);
+      return ((p[0]||'')[0] || '') + ((p[1]||'')[0] || (p[0]||'')[1] || '');
+    }
+    function statusBadge(status) {
+      if (status === 'pending') {
+        return '<span class="stat-badge stat-badge--pending">' +
+          '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><circle cx="5" cy="5" r="4.25" stroke="#92400E" stroke-width="1.5"/><path d="M5 3v2.5l1.5 1.5" stroke="#92400E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          ' Pending Installation</span>';
+      }
+      return '<span class="stat-badge stat-badge--installed">' +
+        '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><circle cx="5" cy="5" r="4.25" stroke="#74AA50" stroke-width="1.5"/><path d="M3 5l1.5 1.5L7.5 3" stroke="#74AA50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        ' Installed</span>';
+    }
+    var PIN = '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1.5c-2.2 0-4 1.7-4 3.9 0 2.8 4 7.1 4 7.1s4-4.3 4-7.1c0-2.2-1.8-3.9-4-3.9z" stroke="#9E9E9E" stroke-width="1.2"/><circle cx="7" cy="5.4" r="1.4" stroke="#9E9E9E" stroke-width="1.2"/></svg>';
+    var MACHINE_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M8 18v2M16 18v2M6 20h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="7.5" cy="6.5" r=".9" fill="currentColor"/></svg>';
+    var CHEVRON = '<svg class="cb-cta__chev" width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    function stats(machines) {
+      var inst = machines.filter(function (m) { return m.status === 'installed'; }).length;
+      return { total: machines.length, installed: inst, pending: machines.length - inst };
+    }
+
+    var searchTerm = '';
+    function matches(c) {
+      var q = searchTerm.toLowerCase();
+      return !q || c.name.toLowerCase().indexOf(q) !== -1 ||
+             c.acct.toLowerCase().indexOf(q) !== -1 ||
+             c.location.toLowerCase().indexOf(q) !== -1;
+    }
+    function visibleCustomers() {
+      return CUSTOMERS.map(function (c, i) { return { c: c, i: i }; }).filter(function (x) { return matches(x.c); });
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONCEPT A — Master list ⇄ Detail drill-in
+       ══════════════════════════════════════════════════════════════ */
+    var mountA = document.getElementById('conceptA');
+
+    function renderA_list() {
+      var rows = visibleCustomers();
+      if (!rows.length) {
+        mountA.innerHTML = '<div style="padding:48px;text-align:center;color:#9E9E9E;">No customers match your search.</div>';
+        return;
+      }
+      mountA.innerHTML = '<div class="ca-listwrap">' + rows.map(function (x) {
+        var c = x.c;
+        return '<div class="ca-row">' +
+          '<div class="ca-cust">' +
+            '<div class="ca-cust__mono">' + esc(initials(c.name)) + '</div>' +
+            '<div><div class="ca-cust__name">' + esc(c.name) + '</div><div class="ca-cust__acct">Acct ' + esc(c.acct) + '</div></div>' +
+          '</div>' +
+          '<div><span class="ca-cell-label">Location</span><span class="ca-loc">' + PIN + esc(c.location) + '</span></div>' +
+          '<div><span class="ca-cell-label">Machines</span><span class="ca-mcount">' + c.machines.length + ' machines</span></div>' +
+          '<button class="ca-see-btn" data-idx="' + x.i + '">See Machines' +
+            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>' +
+        '</div>';
+      }).join('') + '</div>';
+
+      Array.prototype.forEach.call(mountA.querySelectorAll('.ca-see-btn'), function (btn) {
+        btn.addEventListener('click', function () {
+          var idx = +btn.getAttribute('data-idx');
+          btn.disabled = true;
+          btn.innerHTML = '<span class="api-spinner" style="border-top-color:#fff;border-color:rgba(255,255,255,.4);border-top-color:#fff;"></span> Loading…';
+          renderA_detailLoading(idx);
+          fetchMachines(idx).then(function (machines) { renderA_detail(idx, machines); });
+        });
+      });
+    }
+
+    function detailHeadHTML(c, s) {
+      return '<button class="ca-detail-back" id="caBack">' +
+          '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M11 7H3M6.5 3.5L3 7l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          'Back to Customers</button>' +
+        '<div class="ca-detail-head">' +
+          '<div>' +
+            '<div class="ca-detail-title">' + esc(c.name) + '</div>' +
+            '<div class="ca-detail-sub">Acct ' + esc(c.acct) + ' <span>·</span> ' + PIN + esc(c.location) + '</div>' +
+          '</div>' +
+          '<div class="ca-detail-stats">' +
+            '<div class="ca-stat"><span class="ca-stat__num">' + s.total + '</span><span class="ca-stat__lbl">Machines</span></div>' +
+            '<div class="ca-stat"><span class="ca-stat__num" style="color:#74AA50;">' + s.installed + '</span><span class="ca-stat__lbl">Installed</span></div>' +
+            '<div class="ca-stat"><span class="ca-stat__num" style="color:#92400E;">' + s.pending + '</span><span class="ca-stat__lbl">Pending</span></div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    function renderA_detailLoading(idx) {
+      var c = CUSTOMERS[idx];
+      var skCards = '';
+      for (var i = 0; i < Math.min(c.machines.length, 6); i++) {
+        skCards += '<div class="ca-mcard">' +
+          '<div class="ca-mcard__top"><div style="flex:1"><div class="sk sk-line" style="width:60%;height:16px;margin-bottom:8px;"></div></div><div class="sk" style="width:40px;height:40px;border-radius:8px;"></div></div>' +
+          '<div class="sk sk-line" style="width:80%;"></div>' +
+          '<div class="sk sk-line" style="width:70%;"></div>' +
+          '<div class="sk" style="width:100%;height:34px;border-radius:6px;"></div>' +
+        '</div>';
+      }
+      mountA.innerHTML = detailHeadHTML(c, stats(c.machines)) +
+        '<div class="api-loading-note"><span class="api-spinner"></span> Fetching registered machines for ' + esc(c.name) + '…</div>' +
+        '<div class="ca-machine-grid">' + skCards + '</div>';
+      var back = document.getElementById('caBack');
+      if (back) back.addEventListener('click', renderA_list);
+    }
+
+    function renderA_detail(idx, machines) {
+      var c = CUSTOMERS[idx];
+      var cards = machines.map(function (m) {
+        var pending = m.status === 'pending';
+        return '<div class="ca-mcard">' +
+          '<div class="ca-mcard__top">' +
+            '<div class="ca-mcard__model">' + esc(m.model) + '</div>' +
+            '<div class="ca-mcard__icon">' + MACHINE_ICON + '</div>' +
+          '</div>' +
+          '<div>' + statusBadge(m.status) + '</div>' +
+          '<div class="ca-mcard__meta">' +
+            '<div class="ca-mcard__metarow"><span class="ca-mcard__k">Serial No.</span><span class="ca-mcard__v">' + esc(m.serial) + '</span></div>' +
+            '<div class="ca-mcard__metarow"><span class="ca-mcard__k">Install Date</span><span class="ca-mcard__v">' + esc(m.installed) + '</span></div>' +
+          '</div>' +
+          '<div class="ca-mcard__foot">' +
+            '<button class="browse-btn" data-model="' + esc(m.model) + '" data-serial="' + esc(m.serial) + '"' + (pending ? ' disabled title="Available after installation"' : '') + '>' +
+              'Browse Parts' +
+              '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      mountA.innerHTML = detailHeadHTML(c, stats(machines)) + '<div class="ca-machine-grid">' + cards + '</div>';
+      document.getElementById('caBack').addEventListener('click', renderA_list);
+      wireBrowseButtons(mountA);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONCEPT B — Inline expandable cards, lazy-loaded table
+       ══════════════════════════════════════════════════════════════ */
+    var mountB = document.getElementById('conceptB');
+    var loadedB = {}; /* cache of fetched machines per index */
+
+    function renderB_list() {
+      var rows = visibleCustomers();
+      if (!rows.length) {
+        mountB.innerHTML = '<div style="padding:48px;text-align:center;color:#9E9E9E;">No customers match your search.</div>';
+        return;
+      }
+      mountB.innerHTML = '<div class="cb-list">' + rows.map(function (x) {
+        var c = x.c;
+        return '<div class="cb-card" data-idx="' + x.i + '">' +
+          '<div class="cb-head">' +
+            '<div class="cb-cust">' +
+              '<div class="cb-cust__mono">' + esc(initials(c.name)) + '</div>' +
+              '<div><div class="cb-cust__name">' + esc(c.name) + '</div><div class="cb-cust__acct">Acct ' + esc(c.acct) + '</div></div>' +
+            '</div>' +
+            '<div class="cb-kv"><span class="cb-kv__k">Location</span><span class="cb-kv__v">' + esc(c.location) + '</span></div>' +
+            '<div class="cb-kv"><span class="cb-kv__k">Machines</span><span class="cb-kv__v">' + c.machines.length + ' registered</span></div>' +
+            '<button class="cb-cta" data-idx="' + x.i + '"><span class="cb-cta-label">See Machines</span> ' + CHEVRON + '</button>' +
+          '</div>' +
+          '<div class="cb-body" id="cbBody-' + x.i + '"></div>' +
+        '</div>';
+      }).join('') + '</div>';
+
+      Array.prototype.forEach.call(mountB.querySelectorAll('.cb-head'), function (head) {
+        head.addEventListener('click', function () { toggleB(+head.parentNode.getAttribute('data-idx')); });
+      });
+      /* prevent double-trigger: CTA click bubbles to head, which is fine — single handler */
+    }
+
+    function toggleB(idx) {
+      var card = mountB.querySelector('.cb-card[data-idx="' + idx + '"]');
+      var body = document.getElementById('cbBody-' + idx);
+      var wasOpen = card.classList.contains('open');
+      if (wasOpen) {
+        card.classList.remove('open');
+        setCTALabel(card, 'See Machines');
+        return;
+      }
+      card.classList.add('open');
+      setCTALabel(card, 'Hide Machines');
+
+      if (loadedB[idx]) { body.innerHTML = machineTableHTML(loadedB[idx]); wireBrowseButtons(body); return; }
+
+      /* Loading skeleton */
+      var skRows = '';
+      for (var i = 0; i < Math.min(CUSTOMERS[idx].machines.length, 4); i++) {
+        skRows += '<tr>' +
+          '<td><div class="sk sk-line" style="width:70%"></div></td>' +
+          '<td><div class="sk sk-line" style="width:80%"></div></td>' +
+          '<td><div class="sk sk-line" style="width:50%"></div></td>' +
+          '<td><div class="sk sk-line" style="width:60%"></div></td>' +
+          '<td><div class="sk sk-line" style="width:70px;height:30px;margin-left:auto;"></div></td>' +
+        '</tr>';
+      }
+      body.innerHTML =
+        '<div class="cb-body__head"><span class="cb-body__title">Registered Machines</span><span class="api-spinner"></span><span style="font-size:12.5px;color:#9E9E9E;">Loading from service…</span></div>' +
+        machineTableWrap(skRows);
+
+      fetchMachines(idx).then(function (machines) {
+        if (!card.classList.contains('open')) return; /* user closed before load finished */
+        loadedB[idx] = machines;
+        body.innerHTML = machineTableHTML(machines);
+        wireBrowseButtons(body);
+      });
+    }
+
+    function setCTALabel(card, text) {
+      var lbl = card.querySelector('.cb-cta-label');
+      if (lbl) lbl.textContent = text;
+    }
+
+    function machineTableWrap(innerRows) {
+      return '<div class="cb-mtable-scroll"><table class="cb-mtable"><thead><tr>' +
+        '<th>Model</th><th>Serial Number</th><th>Install Date</th><th>Status</th><th></th>' +
+        '</tr></thead><tbody>' + innerRows + '</tbody></table></div>';
+    }
+
+    function machineTableHTML(machines) {
+      var s = stats(machines);
+      var rows = machines.map(function (m) {
+        var pending = m.status === 'pending';
+        return '<tr>' +
+          '<td class="m-model">' + esc(m.model) + '</td>' +
+          '<td class="mono">' + esc(m.serial) + '</td>' +
+          '<td>' + esc(m.installed) + '</td>' +
+          '<td>' + statusBadge(m.status) + '</td>' +
+          '<td><button class="browse-btn" data-model="' + esc(m.model) + '" data-serial="' + esc(m.serial) + '"' + (pending ? ' disabled title="Available after installation"' : '') + '>Browse Parts →</button></td>' +
+        '</tr>';
+      }).join('');
+      return '<div class="cb-body__head">' +
+          '<span class="cb-body__title">Registered Machines</span>' +
+          '<span class="stat-badge stat-badge--installed">' + s.installed + ' Installed</span>' +
+          (s.pending ? '<span class="stat-badge stat-badge--pending">' + s.pending + ' Pending</span>' : '') +
+        '</div>' + machineTableWrap(rows);
+    }
+
+    /* ══════════════ SHARED bits for concepts C & D ══════════════ */
+    var MACHINE_ICON_SM = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="1.5" stroke="#9E9E9E" stroke-width="1.6"/><path d="M3 9h18M8 18v2M16 18v2M6 20h12" stroke="#9E9E9E" stroke-width="1.6" stroke-linecap="round"/></svg>';
+    var MACHINE_ICON_BIG = '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M3 9h18M8 18v2M16 18v2M6 20h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+
+    function statChips(s) {
+      return '<div class="ca-stat"><span class="ca-stat__num">' + s.total + '</span><span class="ca-stat__lbl">Machines</span></div>' +
+        '<div class="ca-stat"><span class="ca-stat__num" style="color:#74AA50;">' + s.installed + '</span><span class="ca-stat__lbl">Installed</span></div>' +
+        '<div class="ca-stat"><span class="ca-stat__num" style="color:#92400E;">' + s.pending + '</span><span class="ca-stat__lbl">Pending</span></div>';
+    }
+    function metaPair(k, v) {
+      return '<span><span class="ca-mcard__k">' + k + '</span><br><span class="ca-mcard__v">' + esc(v) + '</span></span>';
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONCEPT C — Split view (persistent list ⇄ detail pane)
+       ══════════════════════════════════════════════════════════════ */
+    var mountC = document.getElementById('conceptC');
+    var selectedC = null;
+
+    function renderC() {
+      var rows = visibleCustomers();
+      mountC.innerHTML = '<div class="cc-wrap' + (selectedC != null ? ' detail-open' : '') + '">' +
+          '<div class="cc-list" id="ccList"></div>' +
+          '<div class="cc-detail" id="ccDetail"></div>' +
+        '</div>';
+      var listEl = document.getElementById('ccList');
+      if (!rows.length) {
+        listEl.innerHTML = '<div style="padding:24px;color:#9E9E9E;font-size:13px;">No customers match your search.</div>';
+        selectedC = null;
+      } else {
+        listEl.innerHTML = rows.map(function (x) {
+          var c = x.c;
+          return '<div class="cc-item' + (selectedC === x.i ? ' active' : '') + '" data-idx="' + x.i + '">' +
+              '<div class="cc-item__mono">' + esc(initials(c.name)) + '</div>' +
+              '<div><div class="cc-item__name">' + esc(c.name) + '</div><div class="cc-item__sub">' + esc(c.acct) + ' · ' + esc(c.location) + '</div></div>' +
+            '</div>';
+        }).join('');
+        Array.prototype.forEach.call(listEl.querySelectorAll('.cc-item'), function (it) {
+          it.addEventListener('click', function () { selectC(+it.getAttribute('data-idx')); });
+        });
+      }
+      /* detail pane */
+      if (selectedC == null) {
+        document.getElementById('ccDetail').innerHTML =
+          '<div class="cc-empty">' + MACHINE_ICON_BIG + '<div>Select a customer to view their registered machines.</div></div>';
+      } else {
+        showC_machines(selectedC, CUSTOMERS[selectedC].machines);
+      }
+    }
+
+    function selectC(idx) {
+      selectedC = idx;
+      Array.prototype.forEach.call(mountC.querySelectorAll('.cc-item'), function (it) {
+        it.classList.toggle('active', +it.getAttribute('data-idx') === idx);
+      });
+      var wrap = mountC.querySelector('.cc-wrap');
+      if (wrap) wrap.classList.add('detail-open');
+      showC_loading(idx);
+      fetchMachines(idx).then(function (m) { if (selectedC === idx) showC_machines(idx, m); });
+    }
+
+    function ccHead(c, s) {
+      return '<button class="cc-back" id="ccBack"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M11 7H3M6.5 3.5L3 7l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Customers</button>' +
+        '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">' +
+          '<div><div style="font-size:19px;font-weight:700;color:#1A1A1A;">' + esc(c.name) + '</div>' +
+          '<div style="font-size:12.5px;color:#717171;margin-top:5px;">Acct ' + esc(c.acct) + ' · ' + esc(c.location) + '</div></div>' +
+          '<div class="ca-detail-stats">' + statChips(s) + '</div>' +
+        '</div>';
+    }
+    function wireCcBack() {
+      var b = document.getElementById('ccBack');
+      if (b) b.addEventListener('click', function () { selectedC = null; renderC(); });
+    }
+
+    function showC_loading(idx) {
+      var c = CUSTOMERS[idx];
+      var sk = '';
+      for (var i = 0; i < Math.min(c.machines.length, 5); i++) {
+        sk += '<div class="cc-mrow"><div class="cc-mrow__main"><div class="sk" style="width:38px;height:38px;border-radius:8px;"></div><div style="flex:1"><div class="sk sk-line" style="width:60%;margin-bottom:8px;"></div><div class="sk sk-line" style="width:40%;height:10px;"></div></div></div><div class="sk" style="width:110px;height:34px;border-radius:6px;margin-left:auto;"></div></div>';
+      }
+      document.getElementById('ccDetail').innerHTML = ccHead(c, stats(c.machines)) +
+        '<div class="api-loading-note"><span class="api-spinner"></span> Fetching registered machines…</div>' + sk;
+      wireCcBack();
+    }
+
+    function showC_machines(idx, machines) {
+      var c = CUSTOMERS[idx];
+      var rows = machines.map(function (m) {
+        var pending = m.status === 'pending';
+        return '<div class="cc-mrow">' +
+            '<div class="cc-mrow__main"><div class="cc-mrow__icon">' + MACHINE_ICON + '</div>' +
+              '<div><div class="cc-mrow__model">' + esc(m.model) + '</div>' + statusBadge(m.status) + '</div></div>' +
+            '<div class="cc-mrow__meta">' + metaPair('Serial', m.serial) + metaPair('Installed', m.installed) + '</div>' +
+            '<button class="browse-btn" data-model="' + esc(m.model) + '" data-serial="' + esc(m.serial) + '"' + (pending ? ' disabled title="Available after installation"' : '') + '>Browse Parts →</button>' +
+          '</div>';
+      }).join('');
+      var detail = document.getElementById('ccDetail');
+      detail.innerHTML = ccHead(c, stats(machines)) + rows;
+      wireCcBack();
+      wireBrowseButtons(detail);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONCEPT D — Customer tiles + slide-in machine drawer
+       ══════════════════════════════════════════════════════════════ */
+    var mountD = document.getElementById('conceptD');
+    var cdOverlay = document.getElementById('cdOverlay');
+    var cdDrawer  = document.getElementById('cdDrawer');
+    var cdOpenIdx = null;
+
+    function renderD() {
+      var rows = visibleCustomers();
+      if (!rows.length) {
+        mountD.innerHTML = '<div style="padding:48px;text-align:center;color:#9E9E9E;">No customers match your search.</div>';
+        return;
+      }
+      mountD.innerHTML = '<div class="cd-grid">' + rows.map(function (x) {
+        var c = x.c;
+        return '<div class="cd-tile">' +
+            '<div class="cd-tile__top"><div class="cd-tile__mono">' + esc(initials(c.name)) + '</div>' +
+              '<div><div class="cd-tile__name">' + esc(c.name) + '</div><div class="cd-tile__acct">Acct ' + esc(c.acct) + '</div></div></div>' +
+            '<div class="cd-tile__row">' + PIN + esc(c.location) + '</div>' +
+            '<div class="cd-tile__row">' + MACHINE_ICON_SM + esc(c.machines.length) + ' machines registered</div>' +
+            '<button class="cd-tile__btn" data-idx="' + x.i + '">See Machines' +
+              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            '</button>' +
+          '</div>';
+      }).join('') + '</div>';
+      Array.prototype.forEach.call(mountD.querySelectorAll('.cd-tile__btn'), function (b) {
+        b.addEventListener('click', function () { openDrawer(+b.getAttribute('data-idx')); });
+      });
+    }
+
+    function openDrawer(idx) {
+      cdOpenIdx = idx;
+      var c = CUSTOMERS[idx];
+      document.getElementById('cdDrawerTitle').textContent = c.name;
+      document.getElementById('cdDrawerSub').textContent = 'Acct ' + c.acct + ' · ' + c.location;
+      var body = document.getElementById('cdDrawerBody');
+      var sk = '';
+      for (var i = 0; i < Math.min(c.machines.length, 5); i++) {
+        sk += '<div class="cd-mitem"><div class="cd-mitem__top"><div class="sk sk-line" style="width:50%;height:15px;"></div><div class="sk" style="width:80px;height:20px;border-radius:12px;"></div></div><div class="sk sk-line" style="width:80%;margin:14px 0;"></div><div class="sk" style="width:100%;height:34px;border-radius:6px;"></div></div>';
+      }
+      body.innerHTML = '<div class="api-loading-note"><span class="api-spinner"></span> Fetching registered machines…</div>' + sk;
+      cdOverlay.classList.add('open');
+      cdDrawer.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      fetchMachines(idx).then(function (m) {
+        if (cdOpenIdx !== idx) return;
+        body.innerHTML = drawerBody(m);
+        wireBrowseButtons(body);
+      });
+    }
+    function drawerBody(machines) {
+      var s = stats(machines);
+      return '<div class="ca-detail-stats" style="margin-bottom:18px;">' + statChips(s) + '</div>' +
+        machines.map(function (m) {
+          var pending = m.status === 'pending';
+          return '<div class="cd-mitem">' +
+              '<div class="cd-mitem__top"><div class="cd-mitem__model">' + esc(m.model) + '</div>' + statusBadge(m.status) + '</div>' +
+              '<div class="cd-mitem__meta">' + metaPair('Serial No.', m.serial) + metaPair('Install Date', m.installed) + '</div>' +
+              '<button class="browse-btn" data-model="' + esc(m.model) + '" data-serial="' + esc(m.serial) + '"' + (pending ? ' disabled title="Available after installation"' : '') + '>Browse Parts →</button>' +
+            '</div>';
+        }).join('');
+    }
+    function closeDrawer() {
+      cdOpenIdx = null;
+      cdOverlay.classList.remove('open');
+      cdDrawer.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    cdOverlay.addEventListener('click', closeDrawer);
+    document.getElementById('cdDrawerClose').addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && cdDrawer.classList.contains('open')) closeDrawer(); });
+
+    /* ══════════════════════════════════════════════════════════════
+       BROWSE PARTS MODAL wiring (shared)
+       ══════════════════════════════════════════════════════════════ */
+    var overlay = document.getElementById('partsModalOverlay');
+    function openParts(model, serial) {
+      document.getElementById('modalTitle').textContent = model + ' — Browse Parts Book';
+      document.getElementById('bookTitle1').textContent = model + ' - Parts Book 1';
+      document.getElementById('bookTitle2').textContent = model + ' - Parts Book 2';
+      document.getElementById('bookSerial1').textContent = 'Serial: ' + serial;
+      document.getElementById('bookSerial2').textContent = 'Serial: ' + serial;
+      var opts = overlay.querySelectorAll('.book-option');
+      opts.forEach(function (o) { o.classList.remove('is-selected'); });
+      if (opts[0]) opts[0].classList.add('is-selected');
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeParts() { overlay.classList.remove('is-open'); document.body.style.overflow = ''; }
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) closeParts(); });
+    document.getElementById('partsModalClose').addEventListener('click', closeParts);
+    document.getElementById('partsModalCancel').addEventListener('click', closeParts);
+    document.getElementById('partsModalProceed').addEventListener('click', function () { closeParts(); window.location.href = 'parts-book.html'; });
+    overlay.querySelectorAll('.book-option').forEach(function (o) {
+      o.addEventListener('click', function () {
+        overlay.querySelectorAll('.book-option').forEach(function (x) { x.classList.remove('is-selected'); });
+        o.classList.add('is-selected');
+      });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeParts(); });
+
+    function wireBrowseButtons(scope) {
+      Array.prototype.forEach.call(scope.querySelectorAll('.browse-btn'), function (btn) {
+        if (btn.disabled) return;
+        btn.addEventListener('click', function () { openParts(btn.getAttribute('data-model'), btn.getAttribute('data-serial')); });
+      });
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONCEPT SWITCHER + SEARCH
+       ══════════════════════════════════════════════════════════════ */
+    var CONCEPTS = [
+      { id: 'A', label: 'A · Drill-in',     mount: 'conceptA', render: renderA_list, hint: 'Master list → a focused detail page with machine cards and fleet stats.' },
+      { id: 'B', label: 'B · Inline Table', mount: 'conceptB', render: renderB_list, hint: 'Expand a customer in place; machines lazy-load into a dense table.' },
+      { id: 'C', label: 'C · Split View',   mount: 'conceptC', render: renderC,      hint: 'Persistent customer list on the left; machines fill the right pane.' },
+      { id: 'D', label: 'D · Side Drawer',  mount: 'conceptD', render: renderD,      hint: '“See Machines” slides the fleet in from the right over the tile grid.' }
+    ];
+    function conceptById(id) { for (var i = 0; i < CONCEPTS.length; i++) if (CONCEPTS[i].id === id) return CONCEPTS[i]; }
+
+    var seg = document.getElementById('conceptSeg');
+    var hintEl = document.getElementById('conceptHint');
+    var current = 'A';
+
+    CONCEPTS.forEach(function (cn) {
+      var b = document.createElement('button');
+      b.textContent = 'Concept ' + cn.label;
+      b.setAttribute('data-id', cn.id);
+      b.setAttribute('aria-pressed', cn.id === current);
+      b.addEventListener('click', function () { setConcept(cn.id); });
+      seg.appendChild(b);
+    });
+
+    function updateCount() {
+      var n = visibleCustomers().length;
+      document.getElementById('custCountPill').textContent = n + (n === 1 ? ' customer' : ' customers');
+    }
+    function renderCurrent() { updateCount(); conceptById(current).render(); }
+
+    function setConcept(id) {
+      current = id;
+      Array.prototype.forEach.call(seg.children, function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-id') === id); });
+      CONCEPTS.forEach(function (cn) { document.getElementById(cn.mount).hidden = cn.id !== id; });
+      hintEl.textContent = conceptById(id).hint;
+      if (typeof closeDrawer === 'function') closeDrawer();
+      renderCurrent();
+    }
+
+    document.getElementById('custSearch').addEventListener('input', function () {
+      searchTerm = this.value.trim();
+      loadedB = {};      /* reset Concept B lazy cache on filter */
+      selectedC = null;  /* reset Concept C selection on filter */
+      renderCurrent();
+    });
+
+    /* init */
+    setConcept('A');
+  })();
+  </script>
+
+</body>
+</html>

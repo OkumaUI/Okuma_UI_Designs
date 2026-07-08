@@ -476,12 +476,19 @@
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       color: white;
       padding: 0 12px;
-      min-width: 20px;
+      width: 52px;
       text-align: center;
+      border: none;
       border-left: 1px solid rgba(255,255,255,0.3);
       border-right: 1px solid rgba(255,255,255,0.3);
-      line-height: 22px;
+      background: transparent;
+      cursor: text;
+      height: 100%;
+      box-sizing: border-box;
+      -moz-appearance: textfield;
     }
+    #popup-qty::-webkit-outer-spin-button, #popup-qty::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    #popup-qty:focus { outline: 1px solid rgba(255,255,255,0.5); }
 
     #popup-add-btn {
       background: #005EB8;
@@ -602,10 +609,15 @@
     }
     .alt-stepper__btn:hover { background: #E5E5E5; }
     .alt-stepper__val {
-      min-width: 28px; text-align: center; font-size: 13px; font-weight: 600;
-      color: #1A1A1A; padding: 0 6px;
+      width: 44px; text-align: center; font-size: 13px; font-weight: 600;
+      color: #1A1A1A; padding: 0 6px; height: 100%;
+      border: none;
       border-left: 1px solid #DEDEDE; border-right: 1px solid #DEDEDE;
+      background: transparent; cursor: text; font-family: inherit;
+      -moz-appearance: textfield; box-sizing: border-box;
     }
+    .alt-stepper__val::-webkit-outer-spin-button, .alt-stepper__val::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .alt-stepper__val:focus { outline: none; background: #EDF4FF; }
     .alt-add-btn {
       height: 32px; padding: 0 14px;
       background: #005EB8; color: #fff; border: none; border-radius: 4px;
@@ -793,9 +805,16 @@
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 13px;
       color: #000000;
-      min-width: 10px;
+      width: 32px;
       text-align: center;
+      border: none;
+      background: transparent;
+      cursor: text;
+      padding: 0;
+      -moz-appearance: textfield;
     }
+    .row-qty-val::-webkit-outer-spin-button, .row-qty-val::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .row-qty-val:focus { outline: 1px solid #005EB8; border-radius: 2px; }
 
     .action-btn-inline {
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -1583,7 +1602,7 @@
     <div id="popup-price" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;font-weight:700;color:#fff;margin-top:6px;"></div>
     <div class="popup-stepper">
       <button id="popup-minus" type="button">&minus;</button>
-      <span id="popup-qty">1</span>
+      <input type="number" id="popup-qty" min="1" value="1">
       <button id="popup-plus" type="button">+</button>
     </div>
     <button id="popup-add-btn" type="button">Add to Cart</button>
@@ -1781,7 +1800,7 @@
             <div class="qty-cell">
               <div class="row-stepper">
                 <button class="row-stepper-btn row-step-btn" data-id="${part.id}" data-dir="-1" type="button">&minus;</button>
-                <span class="row-qty-val" id="row-qty-${part.id}">${rowQtys[part.id]}</span>
+                <input class="row-qty-val" type="number" id="row-qty-${part.id}" value="${rowQtys[part.id]}" min="1" data-id="${part.id}">
                 <button class="row-stepper-btn row-step-btn" data-id="${part.id}" data-dir="1" type="button">+</button>
               </div>
               <div class="qty-cell__actions">
@@ -2247,7 +2266,7 @@
         highlightRow(part.id);
         scrollRowIntoView(part.id);
         popupQty = 1;
-        popupQtyEl.textContent = popupQty;
+        popupQtyEl.value = popupQty;
         showPopupNearPin(pin, part);
       });
     });
@@ -2324,7 +2343,7 @@
         const dir = parseInt(e.target.getAttribute('data-dir'), 10);
         rowQtys[id] = Math.max(1, rowQtys[id] + dir);
         const qtyEl = document.getElementById('row-qty-' + id);
-        if (qtyEl) qtyEl.textContent = rowQtys[id];
+        if (qtyEl) qtyEl.value = rowQtys[id];
         return;
       }
 
@@ -2362,10 +2381,23 @@
       selectPart(id);
       highlightRow(id);
       popupQty = 1;
-      popupQtyEl.textContent = popupQty;
+      popupQtyEl.value = popupQty;
       const pinEl = document.querySelector(`.pin[data-pin="${part.num}"]`);
       if (pinEl) showPopupNearPin(pinEl, part);
       else showPopupFixed(part);
+    });
+
+    document.getElementById('parts-tbody').addEventListener('change', (e) => {
+      if (e.target.classList.contains('row-qty-val')) {
+        e.stopPropagation();
+        const id = parseInt(e.target.getAttribute('data-id'), 10);
+        const val = parseInt(e.target.value, 10);
+        rowQtys[id] = isNaN(val) || val < 1 ? 1 : val;
+        e.target.value = rowQtys[id];
+      }
+    });
+    document.getElementById('parts-tbody').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.classList.contains('row-qty-val')) { e.stopPropagation(); e.target.blur(); }
     });
 
     function highlightRow(id) {
@@ -2383,14 +2415,22 @@
     popupMinus.addEventListener('click', (e) => {
       e.stopPropagation();
       popupQty = Math.max(1, popupQty - 1);
-      popupQtyEl.textContent = popupQty;
+      popupQtyEl.value = popupQty;
     });
 
     popupPlus.addEventListener('click', (e) => {
       e.stopPropagation();
       popupQty++;
-      popupQtyEl.textContent = popupQty;
+      popupQtyEl.value = popupQty;
     });
+
+    popupQtyEl.addEventListener('change', (e) => {
+      e.stopPropagation();
+      const val = parseInt(popupQtyEl.value, 10);
+      popupQty = isNaN(val) || val < 1 ? 1 : val;
+      popupQtyEl.value = popupQty;
+    });
+    popupQtyEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.stopPropagation(); popupQtyEl.blur(); } });
 
     // â”€â”€ Add To Cart / Add to Quote (popup) â”€â”€
     popupAddBtn.addEventListener('click', (e) => {
@@ -2439,7 +2479,7 @@
               <span class="alt-part-row__price">$${alt.price.toFixed(2)}</span>
               <div class="alt-stepper">
                 <button class="alt-stepper__btn" type="button" data-altid="${alt.id}" data-dir="-1">&minus;</button>
-                <span class="alt-stepper__val" id="alt-qty-${alt.id}">1</span>
+                <input class="alt-stepper__val" type="number" id="alt-qty-${alt.id}" value="1" min="1" data-altid="${alt.id}">
                 <button class="alt-stepper__btn" type="button" data-altid="${alt.id}" data-dir="1">+</button>
               </div>
               <button class="alt-add-btn" type="button" data-altid="${alt.id}">Add to Cart</button>
@@ -2453,8 +2493,17 @@
           const id  = parseInt(btn.dataset.altid);
           const dir = parseInt(btn.dataset.dir);
           altQtys[id] = Math.max(1, (altQtys[id] || 1) + dir);
-          document.getElementById('alt-qty-' + id).textContent = altQtys[id];
+          document.getElementById('alt-qty-' + id).value = altQtys[id];
         });
+      });
+      altPartsList.querySelectorAll('.alt-stepper__val').forEach(inp => {
+        inp.addEventListener('change', () => {
+          const id = parseInt(inp.dataset.altid);
+          const val = parseInt(inp.value, 10);
+          altQtys[id] = isNaN(val) || val < 1 ? 1 : val;
+          inp.value = altQtys[id];
+        });
+        inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') inp.blur(); });
       });
 
       // Add to Cart events
