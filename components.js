@@ -127,7 +127,7 @@
               <div class="user-menu__sep"></div>
               <a href="#" onclick="if(typeof okuma_logout==='function'){okuma_logout();}else{sessionStorage.removeItem('okuma_session');window.location.replace('login.html');}return false;" class="user-menu__item" role="menuitem">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5.5 12H2.5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round"/><path d="M9 9.5L12 7 9 4.5M12 7H5.5" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Logout
+                Sign Out
               </a>
             </div>
           </div>

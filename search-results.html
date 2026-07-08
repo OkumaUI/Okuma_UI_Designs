@@ -398,6 +398,8 @@
       var currentPage   = 1;
       var currentSort   = 'az'; /* 'az' | 'za' */
       var selectedMachine = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
+      var _user = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
+      var _role = _user ? _user.role : 'customer';
 
       /* ── cart / quote state ── */
       var _cartParts  = {};
@@ -569,7 +571,7 @@
             '</div>'
           : '<div class="status-section">' +
               '<div class="status-badge"><span class="status-dot status-dot--out"></span><span class="status-text status-text--out">Back Order</span></div>' +
-              '<div class="status-sub">Contact sales for availability</div>' +
+              '<div class="status-sub">Will be shipped once available</div>' +
             '</div>';
 
         var _checkSVG = '<svg viewBox="0 0 20 20" fill="none"><path d="M4 10l5 5 7-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -582,10 +584,17 @@
             ? '<button class="add-btn add-btn--cart add-btn--done" data-pn="' + escapeHtml(p.number) + '" data-act="cart" type="button">' + _checkSVG + 'In Cart</button>'
             : '<button class="add-btn add-btn--cart" data-pn="' + escapeHtml(p.number) + '" data-act="cart"' + (!compatible ? ' data-cross-machine="true"' : '') + ' type="button">' + _cartSVG + 'Add to Cart</button>';
         } else {
-          var _inQuote = !!_quoteParts[p.number];
-          btn = _inQuote
-            ? '<button class="add-btn add-btn--quote add-btn--done" data-pn="' + escapeHtml(p.number) + '" data-act="quote" type="button">' + _checkSVG + 'In Quote</button>'
-            : '<button class="add-btn add-btn--quote" data-pn="' + escapeHtml(p.number) + '" data-act="quote" type="button">' + _quoteSVG + 'Add to Quote</button>';
+          if (_role === 'customer' && !compatible) {
+            var _inQuote = !!_quoteParts[p.number];
+            btn = _inQuote
+              ? '<button class="add-btn add-btn--quote add-btn--done" data-pn="' + escapeHtml(p.number) + '" data-act="quote" type="button">' + _checkSVG + 'In Quote</button>'
+              : '<button class="add-btn add-btn--quote" data-pn="' + escapeHtml(p.number) + '" data-act="quote" type="button">' + _quoteSVG + 'Add to Quote</button>';
+          } else {
+            var _inCartBO = !!_cartParts[p.number];
+            btn = _inCartBO
+              ? '<button class="add-btn add-btn--cart add-btn--done" data-pn="' + escapeHtml(p.number) + '" data-act="cart" type="button">' + _checkSVG + 'In Cart</button>'
+              : '<button class="add-btn add-btn--cart" data-pn="' + escapeHtml(p.number) + '" data-act="cart" type="button">' + _cartSVG + 'Add to Cart</button>';
+          }
         }
 
         return '<div class="part-card" style="--cat-color:' + catColor + '">' +
@@ -595,15 +604,9 @@
               '<div class="part-card__pn">' + escapeHtml(p.number) + '</div>' +
             '</div>' +
             '<div class="part-card__name">' + escapeHtml(p.name) + '</div>' +
-            '<div class="part-card__attrs">' +
-              '<span class="part-card__attr">' +
-                '<svg viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h4M4 8h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>' +
-                escapeHtml(p.category) +
-              '</span>' +
-            '</div>' +
           '</div>' +
 
-          '<div class="part-card__status">' + compatSection + '<div class="status-vdivider"></div>' + stockSection + '</div>' +
+          '<div class="part-card__status">' + (_role === 'dealer' ? '' : compatSection + '<div class="status-vdivider"></div>') + stockSection + '</div>' +
 
           '<div class="part-card__action">' +
             '<div class="part-card__price-wrap">' +

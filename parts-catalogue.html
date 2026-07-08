@@ -309,6 +309,7 @@
     .pin.in-stock  { background: #005EB8; }
     .pin.out-of-stock { background: #9E9E9E; }
     .pin.selected { box-shadow: 0 0 0 3px white, 0 0 0 5px #005EB8; }
+    .pin.pin--hidden { display: none !important; }
 
     /* Sheet bubble pins — pill shape override */
     .sheet-pin {
@@ -595,7 +596,7 @@
     .alt-original__price { font-size: 13px; color: #9E9E9E; text-decoration: line-through; }
     .badge-oos {
       font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
-      color: #B91C1C; background: #FEF2F2; border: 1px solid #FECACA;
+      color: #ffffff; background: #9BA2AE; border: 1px solid #9BA2AE;
       border-radius: 20px; padding: 2px 8px; white-space: nowrap;
     }
 
@@ -621,11 +622,11 @@
     .alt-part-row__meta { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
     .badge-compat {
       font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
-      color: #166534; background: #F0FDF4; border: 1px solid #BBF7D0;
+      color: #ffffff; background: #29AA3F; border: 1px solid #29AA3F;
       border-radius: 20px; padding: 2px 8px; white-space: nowrap;
     }
     .badge-compat--secondary {
-      color: #1D4ED8; background: #EFF6FF; border-color: #BFDBFE;
+      color: #ffffff; background: #29AA3F; border-color: #29AA3F;
     }
     .alt-part-row__price { font-size: 14px; font-weight: 700; color: #1A1A1A; white-space: nowrap; }
     .alt-part-row__right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
@@ -1288,8 +1289,8 @@
             <button type="button" class="pin out-of-stock" data-pin="3" data-ix="0.36" data-iy="0.46" title="Part 3" aria-label="Part 3">3</button>
             <button type="button" class="pin in-stock"     data-pin="4" data-ix="0.54" data-iy="0.30" title="Part 4" aria-label="Part 4">4</button>
             <button type="button" class="pin in-stock"     data-pin="5" data-ix="0.51" data-iy="0.26" title="Part 5" aria-label="Part 5">5</button>
-            <button type="button" class="pin in-stock"     data-pin="6" data-ix="0.42" data-iy="0.40" title="Part 6" aria-label="Part 6">6</button>
-            <button type="button" class="pin in-stock"     data-pin="7" data-ix="0.53" data-iy="0.44" title="Part 7" aria-label="Part 7">7</button>
+            <button type="button" class="pin out-of-stock" data-pin="6" data-ix="0.42" data-iy="0.40" title="Part 6" aria-label="Part 6">6</button>
+            <button type="button" class="pin out-of-stock" data-pin="7" data-ix="0.53" data-iy="0.44" title="Part 7" aria-label="Part 7">7</button>
 
             <!-- Part Popup moved to body level -->
           </div>
@@ -1316,7 +1317,7 @@
               <th>Part Name</th>
               <th>Description</th>
               <th>Unit Price</th>
-              <th>Available</th>
+              <th>Status</th>
               <th>Qty</th>
               <th></th>
             </tr>
@@ -1374,7 +1375,7 @@
             </div>
             <div class="alt-original__right">
               <span class="alt-original__price" id="alt-orig-price">-</span>
-              <span class="badge-oos">Out of Stock</span>
+              <span class="badge-oos">Non Sellable</span>
             </div>
           </div>
         </div>
@@ -1443,13 +1444,13 @@
   <script>
     // â”€â”€ Parts Data - pins map by callout number; rows match active render (PG Cover (7)) â”€â”€
     const partsData = [
-      { id: 1, num: 1, partNum: '112-0140-10',   name: 'Joint',                   compat: 'Verified',            price: 247.50,  inStock: true,  action: 'Add To Cart'  },
-      { id: 2, num: 2, partNum: '525-0100-11',   name: 'Plate',                   compat: 'Verified',            price: 412.00,  inStock: true,  action: 'Add To Cart'  },
-      { id: 3, num: 3, partNum: 'C5010-080201',  name: 'BOLT, socket-head 8X20',  compat: 'Verified',            price: 89.75,   inStock: false, action: 'Add To Quote' },
-      { id: 4, num: 4, partNum: '25-0100-02-02', name: 'Support',                 compat: 'Direct Replacement',  price: 34.20,   inStock: true,  action: 'Add To Cart'  },
-      { id: 5, num: 5, partNum: 'C0201-080321',  name: 'TP 8X30',                 compat: 'Direct Replacement',  price: 34.20,   inStock: true,  action: 'Add To Cart'  },
-      { id: 6, num: 6, partNum: 'C5010-120301',  name: 'BOLT, socket-head 12X30', compat: 'Direct Replacement',  price: 34.20,   inStock: true,  action: 'Add To Cart'  },
-      { id: 7, num: 7, partNum: 'C5010-120451',  name: 'BOLT, socket-head 12X45', compat: 'Direct Replacement',  price: 34.20,   inStock: true,  action: 'Add To Cart'  },
+      { id: 1, num: 1, partNum: '112-0140-10',   name: 'Joint',                   compat: 'Verified',            price: 247.50,  inStock: true,  status: 'in-stock',     action: 'Add To Cart'  },
+      { id: 2, num: 2, partNum: '525-0100-11',   name: 'Plate',                   compat: 'Verified',            price: 412.00,  inStock: true,  status: 'in-stock',     action: 'Add To Cart'  },
+      { id: 3, num: 3, partNum: 'C5010-080201',  name: 'BOLT, socket-head 8X20',  compat: 'Verified',            price: 89.75,   inStock: false, status: 'back-order',   action: 'Add To Cart'  },
+      { id: 4, num: 4, partNum: '25-0100-02-02', name: 'Support',                 compat: 'Direct Replacement',  price: 34.20,   inStock: true,  status: 'in-stock',     action: 'Add To Cart'  },
+      { id: 5, num: 5, partNum: 'C0201-080321',  name: 'TP 8X30',                 compat: 'Direct Replacement',  price: 34.20,   inStock: true,  status: 'in-stock',     action: 'Add To Cart'  },
+      { id: 6, num: 6, partNum: 'C5010-120301',  name: 'BOLT, socket-head 12X30', compat: 'Direct Replacement',  price: 34.20,   inStock: false, status: 'non-sellable', action: 'Suggested Alternatives' },
+      { id: 7, num: 7, partNum: 'C5010-120451',  name: 'BOLT, socket-head 12X45', compat: 'Direct Replacement',  price: 34.20,   inStock: false, status: 'back-order',   action: 'Add To Cart'  },
     ];
 
     // Per-row quantities
@@ -1572,6 +1573,8 @@
 
     // â”€â”€ Order mode (dealer create-order flow) â”€â”€
     const isOrderMode = localStorage.getItem('okmOrderMode') === 'order';
+    var _pcUser = (typeof okuma_getUser === 'function') ? okuma_getUser() : null;
+    var _role = _pcUser ? _pcUser.role : 'customer';
 
     if (isOrderMode) {
       // Change table action button labels before building the table
@@ -1584,7 +1587,8 @@
 
     // â”€â”€ Alternatives map (partNum → array of alternative part IDs) â”€â”€
     const ALTERNATIVES_MAP = {
-      'C5010-080201': [6, 7]   // BOLT 8X20 → BOLT 12X30, BOLT 12X45
+      'C5010-080201': [4, 5],  // BOLT 8X20 → Support, TP 8X30
+      'C5010-120301': [1, 2]   // BOLT 12X30 (non-sellable) → Joint, Plate
     };
 
     // â”€â”€ Build Table Rows â”€â”€
@@ -1596,8 +1600,14 @@
         tr.id = 'row-' + part.id;
         tr.setAttribute('data-id', part.id);
 
-        const stockClass = part.inStock ? 'in-stock' : 'out-of-stock';
-        const stockLabel = part.inStock ? 'In-Stock' : 'Out of Stock';
+        if (_role === 'dealer' && part.status === 'non-sellable') return;
+
+        const stockClass = part.status === 'in-stock' ? 'in-stock' : 'out-of-stock';
+        const stockLabel = part.status === 'in-stock' ? 'In Stock' : part.status === 'back-order' ? 'Back Order' : 'Non-Sellable';
+
+        const ctaBtn = (part.status === 'non-sellable')
+          ? `<button class="action-btn-inline" data-id="${part.id}" data-action="alt" type="button">Suggested Alternatives</button>`
+          : `<button class="action-btn-inline" data-id="${part.id}" data-action="add" type="button">${part.action}</button>`;
 
         tr.innerHTML = `
           <td class="cell-rownum">${part.num}</td>
@@ -1612,17 +1622,17 @@
               <button class="row-stepper-btn row-step-btn" data-id="${part.id}" data-dir="1" type="button">+</button>
             </div>
           </td>
-          <td>
-            ${part.inStock
-              ? `<button class="action-btn-inline" data-id="${part.id}" data-action="add" type="button">${part.action}</button>`
-              : `<button class="action-btn-inline" data-id="${part.id}" data-action="alt" type="button">Suggested Alternative</button>`}
-          </td>
+          <td>${ctaBtn}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
     buildTable();
+    if (_role === 'dealer') {
+      var pin6 = document.querySelector('.pin[data-pin="6"]');
+      if (pin6) pin6.classList.add('pin--hidden');
+    }
 
     // â”€â”€ Dropdown Cascade â”€â”€
     function setPlaceholderState(sel) {
@@ -2118,11 +2128,14 @@
       popupPartNum.textContent = part.partNum;
       popupDesc.textContent = part.name;
       document.getElementById('popup-price').textContent = part.price ? '$' + part.price.toFixed(2) + ' / ea' : '';
-      popupAddBtn.textContent = part.inStock
-        ? (isOrderMode ? 'Add to Order' : 'Add to Cart')
-        : 'Add to Quote';
-      const hasAlts = !part.inStock && (ALTERNATIVES_MAP[part.partNum] || []).length > 0;
-      popupAltBtn.style.display = hasAlts ? 'block' : 'none';
+      if (part.status === 'non-sellable') {
+        popupAddBtn.style.display = 'none';
+        popupAltBtn.style.display = 'block';
+      } else {
+        popupAddBtn.style.display = 'block';
+        popupAddBtn.textContent = isOrderMode ? 'Add to Order' : 'Add to Cart';
+        popupAltBtn.style.display = 'none';
+      }
       activePinEl = pinEl;
       popup.style.display = 'block';
       positionPopupNearPin(pinEl);
@@ -2196,12 +2209,7 @@
         const id = parseInt(e.target.getAttribute('data-id'), 10);
         const part = partsData.find(p => p.id === id);
         if (!part) return;
-        if (!part.inStock) {
-          selectedPartId = id;
-          showQuoteToast(part);
-        } else {
-          showCartToast(part, rowQtys[id]);
-        }
+        showCartToast(part, rowQtys[id]);
         return;
       }
 
@@ -2281,11 +2289,7 @@
       if (!selectedPartId) return;
       const part = partsData.find(p => p.id === selectedPartId);
       if (!part) return;
-      if (!part.inStock) {
-        showQuoteToast(part);
-      } else {
-        showCartToast(part, popupQty);
-      }
+      showCartToast(part, popupQty);
     });
 
     // â”€â”€ Alternatives modal â”€â”€
@@ -2309,13 +2313,14 @@
       altPartsList.innerHTML = altParts.map(alt => {
         altQtys[alt.id] = 1;
         const compatClass = alt.compat === 'Direct Replacement' ? 'badge-compat' : 'badge-compat badge-compat--secondary';
+        const compatLabel = alt.compat === 'Verified' ? 'In Stock' : alt.compat;
         return `
           <div class="alt-part-row">
             <div class="alt-part-row__info">
               <span class="alt-part-row__pn">${alt.partNum}</span>
               <span class="alt-part-row__name">${alt.name}</span>
               <div class="alt-part-row__meta">
-                <span class="${compatClass}">${alt.compat}</span>
+                <span class="${compatClass}">${compatLabel}</span>
               </div>
             </div>
             <div class="alt-part-row__right">
