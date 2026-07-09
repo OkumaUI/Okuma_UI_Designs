@@ -157,6 +157,8 @@ header.app-header { position: sticky; top: 0; z-index: 100; }
   color: #fff; text-transform: uppercase; letter-spacing: 0.5px;
 }
 .sub-header__right b { font-weight: 700; }
+.sub-header__left b { font-weight: 700; }
+.sub-header__sep { width: 1px; height: 14px; background: rgba(255,255,255,0.4); margin: 0 10px; flex-shrink: 0; }
 .sub-header__chevron { width: 10px; height: 10px; display: inline-flex; align-items: center; }
 
 /* ── Machine picker (sub-header dropdown) ── */

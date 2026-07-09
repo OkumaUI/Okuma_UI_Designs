@@ -63,7 +63,7 @@
           '<div id="custPickerList" class="cust-picker-list" role="listbox"></div>' +
         '</div>' +
       '</div>';
-    var subLeftHTML  = isDealer ? custPickHTML : '<div class="sub-header__left"><span>My Distributor&nbsp;:&nbsp;<b>ABC Industries</b></span></div>';
+    var subLeftHTML  = isDealer ? custPickHTML : '<div class="sub-header__left"><span>My Company&nbsp;:&nbsp;<b>Precision Parts Co.</b></span><span class="sub-header__sep"></span><span>My Distributor&nbsp;:&nbsp;<b>ABC Industries</b></span></div>';
     var subRightHTML = machPickHTML;
     return `
     <a class="skip-link" href="#main">Skip to main content</a>
