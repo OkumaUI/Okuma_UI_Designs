@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist – Okuma Parts Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #FFFFFF;
+      color: #1A1A1A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      padding: 32px 32px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .page-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1A1A1A;
+      letter-spacing: -0.3px;
+    }
+
+    .wip-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      background: #F8F9FB;
+      border: 1px solid #EBEBEB;
+      border-radius: 8px;
+      padding: 80px 40px;
+      text-align: center;
+      min-height: 420px;
+    }
+
+    .wip-card__icon {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #EEF4FF;
+      border-radius: 50%;
+    }
+
+    .wip-card__title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1A1A1A;
+    }
+
+    .wip-card__sub {
+      font-size: 14px;
+      color: #717171;
+      max-width: 360px;
+      line-height: 1.6;
+    }
+
+    .wip-card__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #005EB8;
+      text-decoration: none;
+    }
+
+    .wip-card__back:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════ HEADER ═══════════════ -->
+  <div id="okuma-header"></div>
+
+  <!-- ═══════════════ PAGE ═══════════════ -->
+  <div class="app-body-shell">
+
+    <!-- SIDEBAR -->
+    <div id="okuma-sidebar" data-active="wishlist"></div>
+
+    <!-- MAIN AREA -->
+    <main class="main-area">
+
+      <h1 class="page-title">My Wishlist</h1>
+
+      <div class="wip-card">
+        <div class="wip-card__icon">
+          <svg width="32" height="32" viewBox="0 0 466 419" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M232.818 43.5439C237.958 38.1612 243.503 33.176 249.4 28.6316C309.088 -17.2123 389.488 -6.928 435.258 53.1381C464.04 90.9085 469.213 133.43 463.065 179.394C460.749 196.81 455.647 213.74 447.953 229.536C422.28 281.223 364 325.546 318.578 360.194C314.695 363.302 309.483 366.678 305.328 369.503L283.8 384.105C267.066 395.458 249.507 407.916 232.649 418.815L182.232 384.518C169.658 375.99 156.824 367.631 144.681 358.498C137.447 353.057 130.294 347.52 123.179 341.924C107.861 330.037 92.973 317.607 78.5439 304.657C30.5537 260.936 3.87243 223.982 0.263438 157.113C-4.15245 75.2949 47.2344 3.86318 132.839 0.0769593C133.19 0.0559668 133.543 0.0415101 133.895 0.0342832C173.603 -0.894206 204.923 17.1236 232.818 43.5439ZM232.729 366.805C262.626 344.378 293.724 321.554 322.843 298.26C354.999 272.36 392.414 241.09 409.392 202.586C414.163 191.767 416.545 179.476 417.884 167.803C421.657 136.314 417.874 105.146 397.409 79.7233C382.72 61.4808 362.469 49.3147 339.009 46.7953C307.986 43.4633 280.499 58.3876 260.67 81.3418C251.927 91.4595 245.961 103.87 230.336 102.168C217.208 100.921 212.531 90.074 204.772 81.3314C188.452 62.9413 168.404 49.5281 143.524 46.8431C139 46.3744 134.446 46.2677 129.906 46.5231C106.086 48.3918 85.7357 58.91 70.2519 76.998C49.0403 101.777 44.0144 130.587 46.9298 162.218C48.0086 173.924 49.0744 181.855 52.6269 193.293C63.6201 228.69 95.0818 258.36 122.849 282.004C157.601 311.598 196.116 339.195 232.729 366.805Z" fill="#005EB8"/>
+          </svg>
+        </div>
+        <p class="wip-card__title">Design in Progress</p>
+        <p class="wip-card__sub">The Wishlist page is currently being designed. Check back soon to save and manage your favourite parts.</p>
+        <a href="dashboard.html" class="wip-card__back">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 11.5L4.5 7 9 2.5" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to Dashboard
+        </a>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ═══════════════ SCRIPTS ═══════════════ -->
+  <script src="auth.js"></script>
+  <script src="components.js"></script>
+
+</body>
+</html>

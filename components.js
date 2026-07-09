@@ -98,15 +98,20 @@
           <button class="nav__search-btn" id="navSearchBtn" aria-label="Search" aria-expanded="false" aria-controls="navSearch">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/><path d="M14 14l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
+          <div class="nav__parts">
+            <a class="nav__icon-btn" href="parts-catalogue.html" aria-label="Browse parts catalog" data-tooltip="Browse Parts Catalog">
+              <img src="figma-assets/reading-book.png" width="20" height="20" alt="" aria-hidden="true" style="display:block;">
+            </a>
+          </div>
           <div class="nav__basket">
-            <a class="nav__icon-btn" href="quote-basket.html" aria-label="Quote basket, 2 items">
-              <svg width="20" height="20" viewBox="0 0 147 136" fill="none" aria-hidden="true"><path d="M103.811 47.1243C101.887 44.8161 100.117 41.9528 98.4298 39.4652L89.114 25.7158L80.016 12.3416C78.9201 10.7037 75.6578 6.52208 75.8443 4.69984C76.1406 1.80505 79.1369 -0.830552 82.2345 0.341003L82.3731 0.394473C84.5273 1.20511 92.5039 14.0902 94.3914 16.789C99.54 24.15 104.545 31.8259 109.628 39.2547C111.314 41.7177 113.228 44.3281 114.514 47C119.828 47.0804 125.143 46.9343 130.471 47.0045C134.221 47.0541 139.379 46.4829 142.721 48.3729C144.352 49.4049 146.018 51.8801 146.121 53.8193C146.519 61.2682 147.298 66.7496 138.208 68.2366C137.5 74.0479 136.514 79.8218 135.254 85.5389C133.863 92.1428 133.113 99.3624 131.945 106.048C131.3 109.739 130.618 113.343 129.848 117.021C128.958 121.048 128.869 125.721 127.178 129.495C126.109 131.88 122.479 134.504 119.87 134.734C115.393 135.129 110.838 135 106.347 135L81.0355 134.993L45.4443 134.991C39.5705 134.989 33.5466 135.079 27.683 134.927C25.9631 134.883 23.3554 134.221 22.0497 133.155C21.1374 132.327 18.3704 129.248 18.1062 128.102C16.7253 122.112 16.0721 115.629 15.017 109.586L10.1529 81.2748C9.3466 76.6683 8.34224 73.1328 7.77153 68.3421C0.320346 66.8704 0.169456 64.0644 0.00791678 57.3385C-0.276646 45.5035 7.1503 46.9988 15.7914 47.009C20.9233 47.0052 26.0554 47.0312 31.187 47.087C39.3931 33.618 49.7685 20.4887 58.1801 7.04589C59.6815 4.64614 61.9918 1.04561 64.6548 0.00206462C66.5303 -0.0289744 67.0756 0.286402 68.6697 1.18971C69.8397 3.03755 70.7382 5.21368 69.443 7.29625C67.9667 9.66994 66.3155 11.9784 64.7491 14.2979L54.517 29.3557L46.9113 40.6329C45.6884 42.4529 43.7302 45.8511 42.2473 47.1572C45.7042 46.9075 49.6922 47.0201 53.2105 47.0219L70.318 47.0154L91.1173 47.0113C95.163 47.0124 99.8017 46.9166 103.811 47.1243ZM26.5909 53.2218C20.0027 53.2782 13.1651 53.1137 6.6249 53.302C6.14278 54.4092 5.97648 60.8484 6.67656 61.7621C9.28202 62.2999 17.2042 62.0865 20.4004 62.0795L43.9674 62.0831L109.675 62.0786C118.394 62.0673 127.118 62.1071 135.837 62.0922C136.829 62.0904 138.381 62.0183 139.316 61.7533C139.903 60.5006 139.725 55.0176 139.592 53.4328C137.298 53.1525 134.576 53.2352 132.236 53.2418L119.313 53.22C119.635 54.3093 119.962 55.2117 119.872 56.3581C119.596 59.8685 116.85 62.8464 113.371 60.4902C111.036 58.9081 109.214 55.7165 107.991 53.2452L37.9952 53.2236C36.6046 55.9775 34.5546 60.079 31.4154 61.0953C28.8346 61.9311 26.8501 59.9294 26.25 57.5714C25.7959 55.7883 26.1564 54.9328 26.5909 53.2218ZM105.647 83.3709C108.2 83.1145 128.519 83.573 129.224 83.0832C130.138 78.4439 131.111 72.7157 132.189 68.179C126.716 68.1319 121.243 68.1224 115.77 68.1509C114.21 68.1552 108.96 68.2696 107.574 68.0542C107.077 68.7087 105.924 81.5537 105.647 83.3709ZM16.6381 83.3327C19.4094 83.1852 22.5529 83.1566 25.331 83.2506C30.0329 83.4099 34.9885 83.0712 39.6598 83.3104L40.027 83.1016C40.3308 81.1139 39.0711 71.0491 39.0718 68.1496L22.3708 68.1387C19.9903 68.1444 16.2105 68.2764 13.9302 68.1419C15.2742 72.9937 15.902 78.3222 16.6381 83.3327ZM46.2761 83.3682C52.8409 82.914 59.7971 83.4711 66.4059 83.2713C67.4687 83.2391 68.6915 83.2409 69.7554 83.2817C70.335 81.3792 69.7522 71.3174 70.0375 68.1747C64.4067 68.1312 58.7757 68.1197 53.1448 68.1405C51.294 68.1419 46.6759 68.2755 45.0454 68.053C45.5119 71.2972 46.264 80.139 46.2761 83.3682ZM75.9827 83.2577C83.7681 83.2592 91.92 83.1374 99.6719 83.3351C99.8382 78.6376 100.32 72.8829 100.863 68.1999C95.3128 68.099 89.7616 68.0782 84.211 68.1371C82.2689 68.1437 77.6799 68.2762 75.8982 68.0759C76.1406 70.1127 76.2088 81.3468 75.9827 83.2577ZM76.1096 129.05C82.154 128.666 89.868 129.37 95.439 128.95C95.5976 128.586 95.6248 128.647 95.5969 128.284C95.9859 122.689 97.0995 116.608 97.3806 111.245C90.9386 111.251 82.2376 111.523 75.9777 111.184C76.1674 117.042 76.0915 123.167 76.1096 129.05ZM125.886 104.616C126.556 100.043 127.387 94.1404 128.289 89.6592C121.463 89.6637 111.89 89.9582 105.287 89.5622C104.56 93.9387 104.551 100.528 104.076 105.112L119.305 105.124C121.346 105.131 123.415 105.19 125.451 105.048C125.596 104.904 125.741 104.76 125.886 104.616ZM76.2491 89.572C75.6345 90.7761 76.3375 102.545 75.9535 105.141C78.3231 105.093 96.8958 105.36 97.8408 105.069C98.2665 100.043 98.6109 94.7047 99.1331 89.7183C92.1099 89.5942 82.9975 89.9635 76.2491 89.572ZM48.3532 105.093C54.9779 105.093 63.5585 104.85 69.9942 105.154C69.6779 101.939 69.8105 93.0379 69.9969 89.6902C62.8976 89.6411 54.0664 89.9492 47.2358 89.5917C46.323 90.9973 48.0913 102.68 48.3532 105.093ZM41.8764 105.088C41.4784 100.393 40.9652 94.3529 40.8213 89.704C33.5795 89.6001 24.6751 89.9413 17.6476 89.5942C18.354 93.4876 20.2825 101.678 20.4887 105.136C27.6028 104.965 34.7545 105.164 41.8764 105.088ZM69.9799 128.951C69.5998 124.548 69.8687 115.842 69.9525 111.239C63.2678 111.248 55.6086 111.433 49.0018 111.171C49.4697 116.846 50.0893 123.449 50.3311 129.088C55.1691 128.819 65.0341 128.763 69.9799 128.951ZM21.5282 111.222C24.6939 133.658 23.2673 128.369 44.3045 128.963C43.8471 124.339 42.6608 115.473 42.6168 111.279C36.0461 111.212 27.9288 111.49 21.5282 111.222ZM103.451 111.192C103.209 116.44 102.741 123.76 102.196 128.984C107.353 128.891 114.136 129.359 119.147 128.593C119.926 128.474 120.785 127.651 121.334 127.09C122.959 124.048 123.583 115.358 124.494 111.288C117.818 111.208 109.964 111.479 103.451 111.192Z" fill="currentColor"/></svg>
+            <a class="nav__icon-btn" href="quote-basket.html" aria-label="Quote basket, 2 items" data-tooltip="Quote Basket">
+              <img src="figma-assets/Quote-bag.png" width="20" height="20" alt="" aria-hidden="true" style="display:block;">
             </a>
             <span class="nav__basket-badge" aria-hidden="true">2</span>
           </div>
           <div class="nav__cart">
-            <a class="nav__icon-btn" href="cart.html" aria-label="Cart, 3 items">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M1 1h2.2l2.1 10.4a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.47-1.2L19 4.5H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="1.3" fill="currentColor"/><circle cx="16" cy="17" r="1.3" fill="currentColor"/></svg>
+            <a class="nav__icon-btn" href="cart.html" aria-label="Cart, 3 items" data-tooltip="Your Cart">
+              <img src="figma-assets/shopping-cart.png" width="20" height="20" alt="" aria-hidden="true" style="display:block;">
             </a>
             <span class="nav__cart-badge" aria-hidden="true">3</span>
           </div>
@@ -123,6 +128,10 @@
               <a href="${_okuma_user && _okuma_user.role === 'dealer' ? 'dealer-profile.html' : 'profile.html'}" class="user-menu__item" role="menuitem">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="4.5" r="2.5" stroke="#005EB8" stroke-width="1.3"/><path d="M2.5 12c0-2.2 2-3.8 4.5-3.8s4.5 1.6 4.5 3.8" stroke="#005EB8" stroke-width="1.3" stroke-linecap="round"/></svg>
                 My Account
+              </a>
+              <a href="wishlist.html" class="user-menu__item" role="menuitem">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 12C7 12 1.5 8 1.5 4.5a2.5 2.5 0 0 1 5-0.3 2.5 2.5 0 0 1 5 0.3C11.5 8 7 12 7 12z" stroke="#005EB8" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                My Wishlist
               </a>
               <div class="user-menu__sep"></div>
               <a href="#" onclick="if(typeof okuma_logout==='function'){okuma_logout();}else{sessionStorage.removeItem('okuma_session');window.location.replace('login.html');}return false;" class="user-menu__item" role="menuitem">
@@ -145,7 +154,7 @@
   var SIDEBAR_ITEMS = [
     { key: 'dashboard', label: 'Dashboard', href: _dashHref,
       icon: '<rect x="2" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="2" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>' },
-    { key: 'parts', label: 'Browse Parts Book', href: 'parts-catalogue.html',
+    { key: 'parts', label: 'Stock Order', href: 'create-order.html?mode=stock', dealerOnly: true,
       icon: '<path d="M4 2h11a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2"/><path d="M7 2v16M10 6h3M10 9h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
     { key: 'orders', label: 'My Orders', href: 'my-orders.html',
       icon: '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 5.5V10l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
@@ -156,7 +165,10 @@
   ];
 
   function sidebarHTML(active) {
-    var items = SIDEBAR_ITEMS.map(function (it) {
+    var isDealer = _okuma_user && _okuma_user.role === 'dealer';
+    var items = SIDEBAR_ITEMS.filter(function (it) {
+      return !it.dealerOnly || isDealer;
+    }).map(function (it) {
       var isActive = it.key === active;
       var cls = 'sidebar-item' + (isActive ? ' active' : '');
       return '<a href="' + it.href + '" class="' + cls + '"' + (isActive ? ' aria-current="page"' : '') + '>' +

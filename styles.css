@@ -68,9 +68,30 @@ header.app-header { position: sticky; top: 0; z-index: 100; }
 .nav__icon-btn {
   background: none; border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  color: #1A1A1A; padding: 0; position: relative;
+  color: #1A1A1A; padding: 6px; position: relative;
+  border-radius: 6px; transition: background 0.15s;
 }
-.nav__icon-btn:hover { color: #005EB8; }
+.nav__icon-btn:hover { color: #005EB8; background: #F5F5F5; }
+.nav__icon-btn:hover img { filter: brightness(0) saturate(100%) invert(27%) sepia(87%) saturate(1200%) hue-rotate(196deg) brightness(89%); }
+.nav__icon-btn[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1A1A1A;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 3px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 100;
+}
+.nav__icon-btn[data-tooltip]:hover::after { opacity: 1; }
 
 .nav__basket { position: relative; display: inline-flex; }
 .nav__basket-badge {
