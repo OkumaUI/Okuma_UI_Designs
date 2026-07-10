@@ -39,10 +39,15 @@
     var _firstMach = _MACHINE_LIST[0];
     var machPickHTML =
       '<div class="machine-picker" id="machinePicker">' +
-        '<button class="machine-picker__btn" id="machinePickerBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Change selected machine">' +
-          '<span id="machinePickerLabel">Selected Machine : ' + _firstMach.model + ' ' + _firstMach.serial + '</span>' +
-          '<svg class="machine-picker__chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2.5 3.5L5 6L7.5 3.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        '</button>' +
+        '<div class="machine-picker__wrap">' +
+          '<button class="machine-picker__btn" id="machinePickerBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Change selected machine">' +
+            '<svg class="machine-picker__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="1.6" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18M8 18v2M16 18v2M6 20h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
+            '<span class="machine-picker__lbl-key">Machine&nbsp;:&nbsp;</span>' +
+            '<span id="machinePickerLabel">' + _firstMach.model + ' · ' + _firstMach.serial + '</span>' +
+            '<svg class="machine-picker__chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2.5 3.5L5 6L7.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>' +
+          '<a class="machine-picker__browse" href="parts-catalogue.html">Browse Parts</a>' +
+        '</div>' +
         '<div class="machine-picker__menu" id="machinePickerMenu" role="listbox" aria-label="Select machine">' +
           _machSearchHTML +
           '<div id="machPickerList"></div>' +
@@ -74,7 +79,7 @@
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
           <div class="nav__logo">
-            <a href="${isDealer ? 'dealer-dashboard.html' : 'dashboard.html'}" aria-label="Okuma — go to dashboard"><img src="images/okuma-logo.png" alt="Okuma – Open Possibilities"></a>
+            <span><img src="images/okuma-logo.png" alt="Okuma – Open Possibilities"></span>
           </div>
         </div>
         <ul class="nav__links" style="display:none">
@@ -98,11 +103,6 @@
           <button class="nav__search-btn" id="navSearchBtn" aria-label="Search" aria-expanded="false" aria-controls="navSearch">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/><path d="M14 14l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
-          <div class="nav__parts">
-            <a class="nav__icon-btn" href="parts-catalogue.html" aria-label="Browse parts catalog" data-tooltip="Browse Parts Catalog">
-              <img src="figma-assets/reading-book.png" width="20" height="20" alt="" aria-hidden="true" style="display:block;">
-            </a>
-          </div>
           <div class="nav__basket">
             <a class="nav__icon-btn" href="quote-basket.html" aria-label="Quote basket, 2 items" data-tooltip="Quote Basket">
               <img src="figma-assets/Quote-bag.png" width="20" height="20" alt="" aria-hidden="true" style="display:block;">
@@ -641,8 +641,8 @@
       localStorage.setItem('okmDefaultMachine', name);
       var machData = _MACHINE_LIST.filter(function (m) { return m.name === name; })[0];
       pickerLabel.innerHTML = machData
-        ? 'Selected Machine : ' + machData.model + ' ' + machData.serial
-        : 'Selected Machine : ' + name;
+        ? machData.model + ' &middot; ' + machData.serial
+        : name;
       renderMachList(machSearchInput ? machSearchInput.value : '');
     }
 
@@ -666,7 +666,7 @@
         if (picker) picker.style.visibility = '';
         var _curName = localStorage.getItem('okmDefaultMachine') || _MACHINE_LIST[0].name;
         var _curData = _MACHINE_LIST.filter(function (m) { return m.name === _curName; })[0];
-        pickerLabel.innerHTML = _curData ? 'Selected Machine : ' + _curData.model + ' ' + _curData.serial : 'Selected Machine : ' + _curName;
+        pickerLabel.innerHTML = _curData ? _curData.model + ' &middot; ' + _curData.serial : _curName;
         pickerBtn.style.opacity = '';
         pickerBtn.style.cursor  = '';
       }

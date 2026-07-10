@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Header Concepts – Responsive Matrix – Okuma Parts Portal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root { --blue:#005EB8; --navy:#0B308E; --cyan:#0a78d4; --ink:#1A1A1A; --muted:#5B6572; }
+    body { background:#EEF1F5; color:var(--ink); font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; }
+
+    .wrap { max-width:1340px; margin:0 auto; padding:30px 24px 90px; }
+    .page__eyebrow { font-size:12px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--blue); }
+    .page__title { font-size:24px; font-weight:700; margin-top:6px; }
+    .page__sub { font-size:14px; color:var(--muted); margin-top:8px; max-width:880px; line-height:1.6; }
+
+    /* concept block */
+    .cx { margin-top:44px; padding-top:28px; border-top:1px solid #DFE5EC; }
+    .cx:first-of-type { border-top:none; }
+    .cx-cap { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+    .cap-badge { background:var(--blue); color:#fff; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; padding:4px 11px; border-radius:20px; }
+    .cap-name { font-size:17px; font-weight:700; }
+    .cap-desc { flex-basis:100%; font-size:13px; color:var(--muted); line-height:1.55; max-width:900px; }
+
+    /* device frames */
+    .dvz { }
+    .dvz--row { display:flex; gap:26px; align-items:flex-start; margin-top:20px; flex-wrap:wrap; }
+    .dv__lbl { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:#33506E; margin-bottom:9px; }
+    .dv__dim { font-weight:400; color:#9AA6B4; }
+    .dv--d { width:100%; }
+    .dv--t { width:768px; max-width:100%; }
+    .dv--m { width:375px; max-width:100%; }
+    .scr { container-type:inline-size; border:1px solid #CBD5E1; border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 4px 18px rgba(16,42,90,.08); }
+    .scr--m { border-radius:22px; }
+
+    /* faux page strip */
+    .fbody { padding:14px 18px 16px; background:#F6F8FB; border-top:1px solid #EAEEF3; }
+    .fbody .cr { font-size:11px; color:#9AA6B4; }
+    .fbody .bars { display:flex; gap:10px; margin-top:10px; }
+    .fbody .bar { flex:1; height:34px; background:#fff; border:1px solid #E7ECF2; border-radius:7px; }
+
+    /* ════════════ SHARED HEADER PRIMITIVES ════════════ */
+    .hdr { position:relative; }
+    .hb-logo { display:block; flex-shrink:0; }
+    .hb-logo img { height:32px; display:block; }
+
+    .hb-search { flex:1; max-width:520px; display:flex; align-items:center; gap:10px; height:42px; background:#fff; border:1px solid #B4CBE6; border-radius:8px; padding:0 13px; min-width:0; }
+    .hb-search:focus-within { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,94,184,.12); }
+    .hb-search input { flex:1; border:none; outline:none; background:transparent; font:inherit; font-size:13.5px; color:var(--ink); min-width:0; }
+    .hb-search input::placeholder { color:#8A94A2; }
+    .hb-search__ic { color:#8A94A2; display:flex; flex-shrink:0; }
+
+    .hb-actions { display:flex; align-items:center; gap:5px; flex-shrink:0; }
+    .hb-div { width:1px; height:24px; background:#E3E8EE; margin:0 5px; }
+    .hb-icon { position:relative; display:inline-flex; }
+    .icon-btn { width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--ink); background:none; border:none; cursor:pointer; position:relative; transition:background .15s; text-decoration:none; }
+    .icon-btn:hover { background:#EEF3F9; }
+    .icon-btn img { width:20px; height:20px; display:block; }
+    .icon-btn:hover img { filter:brightness(0) saturate(100%) invert(27%) sepia(87%) saturate(1200%) hue-rotate(196deg) brightness(89%); }
+    .badge { position:absolute; top:1px; right:1px; min-width:15px; height:15px; padding:0 4px; background:var(--blue); color:#fff; font-size:9.5px; font-weight:700; border-radius:8px; display:flex; align-items:center; justify-content:center; pointer-events:none; border:1.5px solid #fff; }
+
+    .hb-user { position:relative; }
+    .hb-user__btn { display:flex; align-items:center; gap:8px; background:none; border:none; cursor:pointer; padding:4px 5px; border-radius:8px; font:inherit; }
+    .hb-user__btn:hover { background:#EEF3F9; }
+    .hb-user__name { font-size:13px; font-weight:600; color:var(--ink); white-space:nowrap; }
+    .avatar { width:32px; height:32px; border-radius:50%; background:var(--blue); color:#fff; font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; letter-spacing:.5px; }
+    .hb-user .caret { color:#8A94A2; }
+    .caret { transition:transform .16s; flex-shrink:0; }
+    .js-mach-btn[aria-expanded="true"] .caret, .js-user-btn[aria-expanded="true"] .caret { transform:rotate(180deg); }
+
+    /* dropdowns (clip inside frame in this matrix view — full interaction lives in header-concepts.html) */
+    .um { position:absolute; top:calc(100% + 8px); right:0; width:210px; background:#fff; border:1px solid #E5E5E5; border-radius:8px; box-shadow:0 8px 26px rgba(16,42,90,.16); overflow:hidden; z-index:80; opacity:0; visibility:hidden; transform:translateY(-6px); transition:.16s; }
+    .um.open { opacity:1; visibility:visible; transform:none; }
+    .um__head { padding:11px 14px; border-bottom:1px solid #F0F0F0; }
+    .um__name { font-size:13px; font-weight:700; }
+    .um__sub { font-size:12px; color:#9E9E9E; margin-top:2px; }
+    .um__item { display:block; padding:9px 14px; font-size:13px; color:var(--ink); text-decoration:none; }
+    .um__item:hover { background:#F5F7FA; }
+    .um__sep { height:1px; background:#F0F0F0; }
+
+    .mm { position:absolute; top:calc(100% + 8px); left:0; min-width:290px; background:#fff; border:1px solid #E0E0E0; border-radius:10px; box-shadow:0 12px 32px rgba(16,42,90,.20); overflow:hidden; z-index:90; opacity:0; visibility:hidden; transform:translateY(-6px); transition:.16s; }
+    .mm.open { opacity:1; visibility:visible; transform:none; }
+    .mm__srch { display:flex; align-items:center; gap:8px; padding:10px 13px; border-bottom:1px solid #F0F0F0; background:#FAFBFC; color:#9E9E9E; }
+    .mm__srch input { flex:1; border:none; outline:none; background:transparent; font:inherit; font-size:13px; color:var(--ink); }
+    .mm__list { max-height:210px; overflow-y:auto; padding:6px; }
+    .mm-item { display:flex; flex-direction:column; gap:2px; width:100%; text-align:left; background:none; border:none; cursor:pointer; padding:8px 11px; border-radius:8px; font:inherit; }
+    .mm-item:hover { background:#F2F6FC; }
+    .mm-item.active { background:#EAF2FF; }
+    .mm-item__model { font-size:13px; font-weight:700; color:var(--ink); }
+    .mm-item.active .mm-item__model { color:var(--blue); }
+    .mm-item__serial { font-size:11.5px; color:#8A94A2; }
+    .mm__browse { display:flex; align-items:center; gap:8px; padding:11px 14px; border-top:1px solid #F0F0F0; background:var(--blue); color:#fff; font-size:13px; font-weight:700; text-decoration:none; }
+    .mm__browse:hover { background:var(--navy); }
+    .mm__browse-arrow { margin-left:auto; }
+    .mach-ic { flex-shrink:0; }
+    .c1 .mm, .c2 .mm, .c4 .mm { left:auto; right:0; }
+
+    /* ════════════ CONCEPT 1 ════════════ */
+    .c1-nav { display:flex; align-items:center; gap:18px; padding:0 24px; height:72px; background:#fff; }
+    .c1-nav .hb-actions { margin-left:auto; }
+    .c1-sub { display:flex; align-items:center; justify-content:space-between; gap:14px; height:46px; padding:0 24px; background:linear-gradient(90deg,var(--navy) 0%,var(--blue) 55%,var(--cyan) 100%); }
+    .c1-ctx { display:flex; align-items:center; gap:9px; color:#fff; font-size:12px; letter-spacing:.3px; text-transform:uppercase; min-width:0; }
+    .c1-ctx b { font-weight:700; }
+    .c1-ctx > span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .c1-sep { width:1px; height:13px; background:rgba(255,255,255,.4); flex-shrink:0; }
+    .c1-machwrap { display:flex; align-items:stretch; flex-shrink:0; }
+    .c1-mach-pos { position:relative; display:flex; min-width:0; }
+    .c1-mach { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.35); color:#fff; height:33px; padding:0 13px; border-radius:6px 0 0 6px; cursor:pointer; font:inherit; font-size:12px; letter-spacing:.3px; text-transform:uppercase; min-width:0; }
+    .c1-mach b { font-weight:700; text-transform:none; letter-spacing:0; }
+    .c1-mach > span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .c1-mach:hover { background:rgba(255,255,255,.22); }
+    .c1-browse { display:flex; align-items:center; height:33px; padding:0 15px; background:#fff; color:var(--blue); font-size:12px; font-weight:700; text-decoration:none; border-radius:0 6px 6px 0; text-transform:uppercase; letter-spacing:.3px; white-space:nowrap; }
+    .c1-browse:hover { background:#EAF2FF; }
+
+    /* ════════════ CONCEPT 2 ════════════ */
+    .c2-nav { display:flex; align-items:center; gap:18px; padding:0 24px; height:72px; background:#fff; }
+    .c2-nav .hb-actions { margin-left:auto; }
+    .hb-iconset { display:flex; align-items:center; gap:2px; background:#F4F7FA; border:1px solid #E7EDF3; border-radius:10px; padding:3px; }
+    .c2-sub { display:flex; align-items:center; gap:10px; min-height:54px; padding:9px 24px; background:linear-gradient(90deg,var(--navy),var(--blue) 55%,var(--cyan)); }
+    .c2-chip { display:flex; align-items:center; gap:8px; height:36px; padding:0 14px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); border-radius:20px; color:#fff; font-size:12.5px; min-width:0; }
+    .c2-chip__ic { display:flex; opacity:.85; flex-shrink:0; }
+    .c2-chip__t { font-size:10px; text-transform:uppercase; letter-spacing:.5px; opacity:.8; flex-shrink:0; }
+    .c2-chip b { font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .c2-mach-pos { position:relative; margin-left:auto; display:flex; min-width:0; }
+    .c2-chip--mach { cursor:pointer; background:rgba(255,255,255,.2); border-color:rgba(255,255,255,.45); font:inherit; }
+    .c2-chip--mach:hover { background:rgba(255,255,255,.3); }
+    .c2-browse { display:flex; align-items:center; height:36px; padding:0 15px; margin-left:9px; background:#fff; color:var(--blue); font-size:12px; font-weight:700; border-radius:20px; text-decoration:none; white-space:nowrap; flex-shrink:0; }
+    .c2-browse:hover { background:#EAF2FF; }
+
+    /* ════════════ CONCEPT 3 ════════════ */
+    .c3-util { display:flex; align-items:center; justify-content:space-between; height:30px; padding:0 24px; background:var(--navy); color:#fff; }
+    .c3-util__l, .c3-util__r { display:flex; align-items:center; gap:8px; font-size:11.5px; color:rgba(255,255,255,.9); min-width:0; }
+    .c3-util__l > span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .c3-util b { font-weight:700; color:#fff; }
+    .c3-util__dot { opacity:.45; flex-shrink:0; }
+    .c3-util a { color:rgba(255,255,255,.9); text-decoration:none; white-space:nowrap; }
+    .c3-util a:hover { color:#fff; text-decoration:underline; }
+    .c3-main { display:flex; align-items:center; gap:14px; height:70px; padding:0 24px; background:#fff; }
+    .c3-mach-pos { position:relative; flex-shrink:0; }
+    .c3-mach { display:flex; align-items:center; gap:8px; height:42px; padding:0 13px; background:#F4F7FA; border:1px solid #DCE4EC; border-radius:8px; cursor:pointer; font:inherit; color:var(--ink); }
+    .c3-mach:hover { border-color:#B4CBE6; background:#EEF3F9; }
+    .c3-mach__t { font-size:10px; text-transform:uppercase; letter-spacing:.4px; color:#8A94A2; }
+    .c3-mach b { font-size:12.5px; font-weight:700; white-space:nowrap; }
+    .c3-mach .mach-ic { color:var(--blue); }
+
+    /* ════════════ CONCEPT 4 ════════════ */
+    .c4-nav { display:flex; align-items:center; gap:18px; padding:0 24px; height:68px; background:#fff; }
+    .c4-nav .hb-actions { margin-left:auto; }
+    .c4-sub { display:flex; align-items:center; justify-content:space-between; gap:18px; min-height:70px; padding:11px 24px; background:linear-gradient(90deg,var(--navy),var(--blue) 55%,var(--cyan)); }
+    .c4-ctx { display:flex; gap:30px; min-width:0; }
+    .c4-ctx__row { display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .c4-ctx__k { font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:rgba(255,255,255,.7); }
+    .c4-ctx__v { font-size:13.5px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .c4-machcard { display:flex; align-items:center; gap:10px; background:#fff; border-radius:10px; padding:7px 7px 7px 13px; box-shadow:0 5px 16px rgba(0,0,0,.18); flex-shrink:0; }
+    .c4-machcard__pos { position:relative; display:flex; }
+    .c4-machcard__sel { display:flex; align-items:center; gap:9px; background:none; border:none; cursor:pointer; font:inherit; color:var(--ink); padding:2px 5px; }
+    .c4-machcard__meta { display:flex; flex-direction:column; gap:1px; text-align:left; }
+    .c4-machcard__lbl { font-size:10px; text-transform:uppercase; letter-spacing:.4px; color:#8A94A2; }
+    .c4-machcard__meta b { font-size:13.5px; font-weight:700; white-space:nowrap; }
+    .c4-machcard__sel .mach-ic { color:var(--blue); }
+    .c4-machcard__browse { display:flex; align-items:center; gap:7px; height:38px; padding:0 16px; background:var(--blue); color:#fff; font-size:12.5px; font-weight:700; border-radius:8px; text-decoration:none; white-space:nowrap; }
+    .c4-machcard__browse:hover { background:var(--navy); }
+
+    /* ════════════ CONCEPT 5 ════════════ */
+    .c5-util { display:flex; align-items:center; justify-content:space-between; height:32px; padding:0 24px; background:var(--navy); color:#fff; font-size:11.5px; }
+    .c5-util__l { display:flex; align-items:center; gap:7px; min-width:0; }
+    .c5-util__k { color:rgba(255,255,255,.65); text-transform:uppercase; letter-spacing:.4px; font-size:10.5px; flex-shrink:0; }
+    .c5-util__l b { font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .c5-util__dot { width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.4); margin:0 4px; flex-shrink:0; }
+    .c5-util a { color:rgba(255,255,255,.9); text-decoration:none; white-space:nowrap; }
+    .c5-main { display:flex; align-items:center; gap:16px; height:80px; padding:0 24px; background:#fff; }
+    .c5-search { flex:1; max-width:680px; display:flex; align-items:stretch; height:46px; border:1px solid #B4CBE6; border-radius:10px; background:#fff; position:relative; min-width:0; }
+    .c5-search:focus-within { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,94,184,.12); }
+    .c5-scope-pos { position:relative; display:flex; align-self:stretch; flex-shrink:0; }
+    .c5-scope { display:flex; align-items:center; gap:7px; background:#F1F6FC; border:none; border-radius:9px 0 0 9px; padding:0 14px; cursor:pointer; font:inherit; color:var(--ink); font-size:12.5px; white-space:nowrap; }
+    .c5-scope:hover { background:#EAF2FF; }
+    .c5-scope b { font-weight:700; color:var(--blue); }
+    .c5-scope .mach-ic { color:var(--blue); }
+    .c5-search__div { width:1px; align-self:stretch; background:#E3E8EE; flex-shrink:0; }
+    .c5-search input { flex:1; border:none; outline:none; background:transparent; font:inherit; font-size:13.5px; padding:0 13px; color:var(--ink); min-width:0; }
+    .c5-search input::placeholder { color:#8A94A2; }
+    .c5-search__go { width:50px; align-self:stretch; background:var(--blue); color:#fff; border:none; border-radius:0 9px 9px 0; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .c5-search__go:hover { background:var(--navy); }
+    .c5-main .hb-actions { margin-left:auto; }
+
+    /* ═══════════════════════════════════════════════════════════
+       TABLET  (frame ≤ 900px)
+       ═══════════════════════════════════════════════════════════ */
+    @container (max-width:900px) {
+      .hb-logo img { height:30px; }
+      .hb-user__name { display:none; }
+      .hb-search { max-width:none; }
+      .c1-nav, .c2-nav, .c4-nav { padding:0 18px; gap:14px; }
+      .c1-sub, .c2-sub, .c4-sub { padding-left:18px; padding-right:18px; flex-wrap:wrap; height:auto; gap:10px; }
+      .c1-sub { padding-top:8px; padding-bottom:8px; }
+      .c2-mach-pos { margin-left:auto; }
+      .c3-util, .c5-util { padding:0 18px; }
+      .c3-main, .c5-main { padding:0 18px; gap:12px; }
+      .c3-mach__t { display:none; }
+      .c3-main .hb-search { max-width:230px; }
+      .c4-ctx { gap:22px; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MOBILE  (frame ≤ 520px)
+       ═══════════════════════════════════════════════════════════ */
+    @container (max-width:520px) {
+      .hb-logo img { height:26px; }
+      .hb-div { display:none; }
+      .icon-btn { width:36px; height:36px; }
+      .icon-btn img { width:18px; height:18px; }
+      .hb-actions { gap:1px; }
+      .fbody { padding:12px 14px 14px; }
+      .fbody .bars { flex-direction:column; }
+      .fbody .bar { height:30px; }
+
+      /* Concept 1 */
+      .c1-nav { flex-wrap:wrap; height:auto; padding:10px 14px; gap:12px; }
+      .c1-nav .hb-search { order:3; flex-basis:100%; }
+      .c1-sub { flex-direction:column; align-items:stretch; height:auto; padding:11px 14px; gap:10px; }
+      .c1-ctx { font-size:11px; flex-wrap:wrap; gap:4px 8px; white-space:normal; }
+      .c1-ctx > span { white-space:normal; overflow:visible; }
+      .c1-sep { display:none; }
+      .c1-machwrap { width:100%; }
+      .c1-mach-pos { flex:1; }
+      .c1-mach { flex:1; justify-content:space-between; height:42px; }
+      .c1-mach__pre { display:none; }
+      .c1-browse { height:42px; }
+
+      /* Concept 2 */
+      .c2-nav { flex-wrap:wrap; height:auto; padding:10px 14px; gap:12px; }
+      .c2-nav .hb-search { order:3; flex-basis:100%; }
+      .c2-sub { flex-direction:column; align-items:stretch; padding:12px 14px; gap:8px; }
+      .c2-chip { height:40px; }
+      .c2-chip__t { display:none; }
+      .c2-mach-pos { margin-left:0; width:100%; }
+      .c2-chip--mach { width:100%; justify-content:space-between; }
+      .c2-browse { margin-left:0; width:100%; justify-content:center; height:40px; }
+
+      /* Concept 3 */
+      .c3-util { height:auto; padding:8px 14px; flex-wrap:wrap; gap:2px 8px; }
+      .c3-util__r { display:none; }
+      .c3-main { flex-wrap:wrap; height:auto; padding:10px 14px; gap:12px; }
+      .c3-main .hb-actions { order:1; margin-left:auto; }
+      .c3-main .hb-search { order:3; flex-basis:100%; max-width:none; }
+      .c3-mach-pos { order:4; flex-basis:100%; }
+      .c3-mach { width:100%; justify-content:space-between; height:46px; }
+      .c3-mach__t { display:inline; }
+
+      /* Concept 4 */
+      .c4-nav { flex-wrap:wrap; height:auto; padding:10px 14px; gap:12px; }
+      .c4-nav .hb-search { order:3; flex-basis:100%; }
+      .c4-sub { flex-direction:column; align-items:stretch; padding:12px 14px; gap:12px; }
+      .c4-ctx { gap:20px; }
+      .c4-machcard { flex-direction:column; align-items:stretch; gap:10px; padding:12px; }
+      .c4-machcard__pos { width:100%; }
+      .c4-machcard__sel { width:100%; justify-content:space-between; }
+      .c4-machcard__browse { width:100%; justify-content:center; height:42px; }
+
+      /* Concept 5 */
+      .c5-util { height:auto; padding:8px 14px; flex-wrap:wrap; gap:2px 6px; }
+      .c5-util__r { display:none; }
+      .c5-main { flex-wrap:wrap; height:auto; padding:10px 14px; gap:12px; }
+      .c5-main .hb-actions { order:1; margin-left:auto; }
+      .c5-search { order:3; flex-basis:100%; max-width:none; }
+      .c5-scope__pre { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="page__eyebrow">Okuma Parts Portal · Global Header</div>
+    <h1 class="page__title">Header Concepts — Responsive Matrix</h1>
+    <p class="page__sub">
+      Each of the 5 concepts shown at <b>Desktop (1280)</b>, <b>Tablet (768)</b> and <b>Mobile (375)</b>.
+      On smaller screens the search drops to its own full-width row, the profile name collapses to the avatar,
+      icons tighten, and the context bar (company · distributor · machine) stacks — while the machine selector
+      and its <b>Browse Parts</b> action always stay reachable. (Rendered live with CSS container queries;
+      full click-through interactions are in <b>header-concepts.html</b>.)
+    </p>
+
+    <!-- sections injected by JS -->
+    <div id="sections"></div>
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var MACHINES = [
+      { model:'M560-V',    serial:'M5-2891-K', name:'LU300-M' },
+      { model:'U3000-M',   serial:'MU-9102-L', name:'MULTUS U3000' },
+      { model:'LB2000-EX', serial:'LB-4431-M', name:'LB2000 EX III' },
+      { model:'L200E',     serial:'L2-1108-A', name:'GENOS L200E' },
+      { model:'LB3000',    serial:'LB-8821-X', name:'SPACE TURN LB3000' },
+      { model:'MB-56V',    serial:'MB-2234-P', name:'MB-56V AII' }
+    ];
+    var selIdx = 2;
+
+    var CARET   = '<svg class="caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2.5 3.5L5 6l2.5-2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var SEARCH  = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="2"/><path d="M12 12l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    var MACH    = '<svg class="mach-ic" width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="1.6" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18M8 18v2M16 18v2M6 20h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    var BUILDING= '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.5" y="2" width="7" height="12" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 6H13v8H9.5M4.5 5h1M4.5 8h1M4.5 11h1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    var PARTNER = '<svg width="15" height="13" viewBox="0 0 18 14" fill="none" aria-hidden="true"><circle cx="6.5" cy="7" r="3.2" stroke="currentColor" stroke-width="1.3"/><circle cx="11.5" cy="7" r="3.2" stroke="currentColor" stroke-width="1.3"/></svg>';
+    var BOOK_W  = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3.5S6.8 2.5 4.5 2.5 2 3.2 2 3.2v9s.9-.7 2.5-.7S8 12.5 8 12.5m0-9S9.2 2.5 11.5 2.5 14 3.2 14 3.2v9s-.9-.7-2.5-.7S8 12.5 8 12.5m0-9v9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    function logo() { return '<a class="hb-logo" href="dealer-dashboard.html" aria-label="Okuma"><img src="images/okuma-logo.png" alt="Okuma – Open Possibilities"></a>'; }
+    function search(ph) { return '<div class="hb-search"><span class="hb-search__ic">' + SEARCH + '</span><input type="text" placeholder="' + (ph || 'Search by part number or part name') + '" aria-label="Search"></div>'; }
+    function icons() {
+      return '<div class="hb-icon"><a class="icon-btn" href="parts-catalogue.html" data-tooltip="Browse Parts Book"><img src="figma-assets/reading-book.png" alt="Parts Book"></a></div>' +
+        '<div class="hb-icon"><a class="icon-btn" href="quote-basket.html"><img src="figma-assets/Quote-bag.png" alt="Quote basket"></a><span class="badge">2</span></div>' +
+        '<div class="hb-icon"><a class="icon-btn" href="cart.html"><img src="figma-assets/shopping-cart.png" alt="Cart"></a><span class="badge">3</span></div>';
+    }
+    function iconsGrouped() { return '<div class="hb-iconset">' + icons() + '</div>'; }
+    function userMenu() {
+      return '<div class="um js-user-menu" role="menu"><div class="um__head"><div class="um__name">Jonathan Hayes</div><div class="um__sub">Dealer Account</div></div>' +
+        '<a class="um__item" href="dealer-profile.html" role="menuitem">My Account</a><a class="um__item" href="dealer-profile.html?tab=customers" role="menuitem">My Customers</a>' +
+        '<div class="um__sep"></div><a class="um__item" href="login.html" role="menuitem">Sign Out</a></div>';
+    }
+    function user() { return '<div class="hb-user"><button class="hb-user__btn js-user-btn" aria-haspopup="true" aria-expanded="false"><span class="hb-user__name">Jonathan Hayes</span><span class="avatar">JH</span>' + CARET + '</button>' + userMenu() + '</div>'; }
+    function machineMenu() {
+      return '<div class="mm js-mach-menu" role="listbox" aria-label="Select machine"><div class="mm__srch"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input type="text" class="js-mach-search" placeholder="Search model or serial…" aria-label="Search machines"></div>' +
+        '<div class="mm__list js-mach-list"></div>' +
+        '<a class="mm__browse" href="parts-catalogue.html">' + BOOK_W + '<span>Browse Parts for this machine</span><span class="mm__browse-arrow">→</span></a></div>';
+    }
+
+    function c1() {
+      return '<div class="c1-nav">' + logo() + search() + '<div class="hb-actions">' + icons() + '<span class="hb-div"></span>' + user() + '</div></div>' +
+      '<div class="c1-sub"><div class="c1-ctx"><span>My Company : <b>Precision Parts Co.</b></span><span class="c1-sep"></span><span>My Distributor : <b>ABC Industries</b></span></div>' +
+        '<div class="c1-machwrap"><div class="c1-mach-pos"><button class="c1-mach js-mach-btn" aria-haspopup="listbox" aria-expanded="false">' + MACH + '<span><span class="c1-mach__pre">Machine : </span><b class="js-mach-label">LB2000-EX · LB-4431-M</b></span>' + CARET + '</button>' + machineMenu() + '</div><a class="c1-browse" href="parts-catalogue.html">Browse Parts</a></div></div>';
+    }
+    function c2() {
+      return '<div class="c2-nav">' + logo() + search() + '<div class="hb-actions">' + iconsGrouped() + '<span class="hb-div"></span>' + user() + '</div></div>' +
+      '<div class="c2-sub"><span class="c2-chip"><span class="c2-chip__ic">' + BUILDING + '</span><span class="c2-chip__t">Company</span><b>Precision Parts Co.</b></span>' +
+        '<span class="c2-chip"><span class="c2-chip__ic">' + PARTNER + '</span><span class="c2-chip__t">Distributor</span><b>ABC Industries</b></span>' +
+        '<div class="c2-mach-pos"><button class="c2-chip c2-chip--mach js-mach-btn" aria-haspopup="listbox" aria-expanded="false"><span class="c2-chip__ic">' + MACH + '</span><span class="c2-chip__t">Machine</span><b class="js-mach-label">LB2000-EX · LB-4431-M</b>' + CARET + '</button>' + machineMenu() + '</div>' +
+        '<a class="c2-browse" href="parts-catalogue.html">Browse Parts →</a></div>';
+    }
+    function c3() {
+      return '<div class="c3-util"><div class="c3-util__l"><span>My Company : <b>Precision Parts Co.</b></span><span class="c3-util__dot">•</span><span>My Distributor : <b>ABC Industries</b></span></div>' +
+        '<div class="c3-util__r"><a href="#">Support</a><span class="c3-util__dot">•</span><a href="my-orders.html">Order Status</a></div></div>' +
+      '<div class="c3-main">' + logo() + search() + '<div class="c3-mach-pos"><button class="c3-mach js-mach-btn" aria-haspopup="listbox" aria-expanded="false">' + MACH + '<span class="c3-mach__t">Machine</span><b class="js-mach-label">LB2000-EX · LB-4431-M</b>' + CARET + '</button>' + machineMenu() + '</div>' +
+        '<div class="hb-actions">' + icons() + '<span class="hb-div"></span>' + user() + '</div></div>';
+    }
+    function c4() {
+      return '<div class="c4-nav">' + logo() + search() + '<div class="hb-actions">' + icons() + '<span class="hb-div"></span>' + user() + '</div></div>' +
+      '<div class="c4-sub"><div class="c4-ctx"><div class="c4-ctx__row"><span class="c4-ctx__k">My Company</span><span class="c4-ctx__v">Precision Parts Co.</span></div><div class="c4-ctx__row"><span class="c4-ctx__k">My Distributor</span><span class="c4-ctx__v">ABC Industries</span></div></div>' +
+        '<div class="c4-machcard"><div class="c4-machcard__pos"><button class="c4-machcard__sel js-mach-btn" aria-haspopup="listbox" aria-expanded="false">' + MACH + '<span class="c4-machcard__meta"><span class="c4-machcard__lbl">Selected Machine</span><b class="js-mach-label">LB2000-EX · LB-4431-M</b></span>' + CARET + '</button>' + machineMenu() + '</div><a class="c4-machcard__browse" href="parts-catalogue.html">' + BOOK_W + ' Browse Parts</a></div></div>';
+    }
+    function c5() {
+      return '<div class="c5-util"><div class="c5-util__l"><span class="c5-util__k">My Company</span><b>Precision Parts Co.</b><span class="c5-util__dot"></span><span class="c5-util__k">My Distributor</span><b>ABC Industries</b></div><div class="c5-util__r"><a href="#">Help Center</a></div></div>' +
+      '<div class="c5-main">' + logo() + '<div class="c5-search"><div class="c5-scope-pos"><button class="c5-scope js-mach-btn" aria-haspopup="listbox" aria-expanded="false">' + MACH + '<span class="c5-scope__pre">Parts for</span> <b class="js-mach-label-model">LB2000-EX</b>' + CARET + '</button>' + machineMenu() + '</div><span class="c5-search__div"></span><input type="text" placeholder="Search part number or name for this machine" aria-label="Search parts"><button class="c5-search__go" aria-label="Search">' + SEARCH + '</button></div>' +
+        '<div class="hb-actions">' + icons() + '<span class="hb-div"></span>' + user() + '</div></div>';
+    }
+
+    var CONCEPTS = [
+      { n:'1', name:'Refined Classic — two-row context bar', desc:'Polished evolution of today’s header. On mobile the search moves to its own row and the context bar stacks, with the machine pill + Browse Parts going full-width.', build:c1 },
+      { n:'2', name:'Context Chips — scannable pills', desc:'Company / Distributor / Machine as glassy chips. On mobile the tiny chip labels drop and each chip goes full-width; grouped icons stay compact.', build:c2 },
+      { n:'3', name:'Utility Bar — condensed single row', desc:'Navy utility strip for company & distributor. On mobile the inline machine selector drops to its own full-width row beneath the search.', build:c3 },
+      { n:'4', name:'Machine-Centric — hero selector card', desc:'The white machine card is the star. On mobile it becomes a full-width block with the selector on top and a full-width Browse Parts button.', build:c4 },
+      { n:'5', name:'Scoped Mega-Search — machine inside search', desc:'Machine scope lives inside the search bar, so search stays machine-aware at every size; on mobile the whole search spans full width on its own row.', build:c5 }
+    ];
+
+    var fbody = '<div class="fbody"><div class="cr">Dashboard / Parts</div><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div></div>';
+    var MON  = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="9" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M6 14h4M8 11.5V14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+    var TAB  = '<svg width="12" height="13" viewBox="0 0 14 16" fill="none" aria-hidden="true"><rect x="2" y="1.5" width="10" height="13" rx="1.4" stroke="currentColor" stroke-width="1.3"/><path d="M6 12.5h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+    var PHN  = '<svg width="10" height="13" viewBox="0 0 12 16" fill="none" aria-hidden="true"><rect x="2" y="1.5" width="8" height="13" rx="1.6" stroke="currentColor" stroke-width="1.3"/><path d="M5 12.5h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+
+    function screen(cls, buildN) { return '<div class="scr ' + cls + '"><div class="hdr c' + buildN + '" data-build="' + buildN + '"></div>' + fbody + '</div>'; }
+
+    document.getElementById('sections').innerHTML = CONCEPTS.map(function (c) {
+      return '<section class="cx">' +
+        '<div class="cx-cap"><span class="cap-badge">Option ' + c.n + '</span><span class="cap-name">' + c.name + '</span><span class="cap-desc">' + c.desc + '</span></div>' +
+        '<div class="dvz"><div class="dv dv--d"><span class="dv__lbl">' + MON + ' Desktop <span class="dv__dim">· 1280px</span></span>' + screen('scr--d', c.n) + '</div></div>' +
+        '<div class="dvz dvz--row">' +
+          '<div class="dv dv--t"><span class="dv__lbl">' + TAB + ' Tablet <span class="dv__dim">· 768px</span></span>' + screen('scr--t', c.n) + '</div>' +
+          '<div class="dv dv--m"><span class="dv__lbl">' + PHN + ' Mobile <span class="dv__dim">· 375px</span></span>' + screen('scr--m', c.n) + '</div>' +
+        '</div>' +
+      '</section>';
+    }).join('');
+
+    /* build every header instance */
+    var BUILDERS = { '1':c1, '2':c2, '3':c3, '4':c4, '5':c5 };
+    Array.prototype.forEach.call(document.querySelectorAll('[data-build]'), function (el) {
+      el.innerHTML = BUILDERS[el.getAttribute('data-build')]();
+    });
+
+    function renderLists() {
+      Array.prototype.forEach.call(document.querySelectorAll('.js-mach-list'), function (list) {
+        list.innerHTML = MACHINES.map(function (m, i) {
+          return '<button class="mm-item js-mach-item' + (i === selIdx ? ' active' : '') + '" data-i="' + i + '" role="option"><span class="mm-item__model">' + m.model + ' · ' + m.serial + '</span><span class="mm-item__serial">' + m.name + '</span></button>';
+        }).join('');
+      });
+    }
+    function updateLabels() {
+      var m = MACHINES[selIdx];
+      Array.prototype.forEach.call(document.querySelectorAll('.js-mach-label'), function (el) { el.textContent = m.model + ' · ' + m.serial; });
+      Array.prototype.forEach.call(document.querySelectorAll('.js-mach-label-model'), function (el) { el.textContent = m.model; });
+      Array.prototype.forEach.call(document.querySelectorAll('.js-mach-list'), function (list) {
+        Array.prototype.forEach.call(list.querySelectorAll('.js-mach-item'), function (it) { it.classList.toggle('active', +it.getAttribute('data-i') === selIdx); });
+      });
+    }
+    renderLists(); updateLabels();
+
+    function closeAll() {
+      Array.prototype.forEach.call(document.querySelectorAll('.js-mach-menu.open, .js-user-menu.open'), function (m) { m.classList.remove('open'); });
+      Array.prototype.forEach.call(document.querySelectorAll('[aria-expanded="true"]'), function (b) { if (b.classList.contains('js-mach-btn') || b.classList.contains('js-user-btn')) b.setAttribute('aria-expanded', 'false'); });
+    }
+    document.addEventListener('click', function (e) {
+      var mb = e.target.closest('.js-mach-btn');
+      if (mb) { e.preventDefault(); var menu = mb.parentNode.querySelector('.js-mach-menu'); var open = menu.classList.contains('open'); closeAll(); if (!open) { menu.classList.add('open'); mb.setAttribute('aria-expanded', 'true'); } return; }
+      var it = e.target.closest('.js-mach-item');
+      if (it) { e.preventDefault(); selIdx = +it.getAttribute('data-i'); updateLabels(); closeAll(); return; }
+      var ub = e.target.closest('.js-user-btn');
+      if (ub) { e.preventDefault(); var um = ub.parentNode.querySelector('.js-user-menu'); var o = um.classList.contains('open'); closeAll(); if (!o) { um.classList.add('open'); ub.setAttribute('aria-expanded', 'true'); } return; }
+      if (e.target.closest('.js-mach-menu') || e.target.closest('.js-user-menu')) return;
+      closeAll();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+    document.addEventListener('input', function (e) {
+      var s = e.target.closest('.js-mach-search'); if (!s) return;
+      var q = s.value.toLowerCase(); var list = s.closest('.mm').querySelector('.js-mach-list');
+      Array.prototype.forEach.call(list.querySelectorAll('.js-mach-item'), function (it) { it.style.display = it.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none'; });
+    });
+  })();
+  </script>
+
+</body>
+</html>

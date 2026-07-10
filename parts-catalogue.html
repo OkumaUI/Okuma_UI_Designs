@@ -2231,11 +2231,10 @@
       e.stopPropagation();
       selectPart(id);
       highlightRow(id);
-      popupQty = 1;
-      popupQtyEl.value = popupQty;
-      const pinEl = document.querySelector(`.pin[data-pin="${part.num}"]`);
-      if (pinEl) showPopupNearPin(pinEl, part);
-      else showPopupFixed(part);
+      // Show the pin's outer ring (set by selectPart) but suppress the tooltip
+      activePinEl = null;
+      popup.style.display = 'none';
+      stopPopupTracking();
     });
 
     document.getElementById('parts-tbody').addEventListener('change', (e) => {
