@@ -262,6 +262,92 @@
       .qty-value { height: 40px; }
     }
 
+    /* ===== MOVE TO WISHLIST ROW ===== */
+    .move-wishlist-row {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px 0 4px;
+    }
+    .move-wishlist-btn {
+      height: 38px;
+      padding: 0 20px;
+      background: transparent;
+      color: #005EB8;
+      border: 1px solid #005EB8;
+      border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .move-wishlist-btn:hover { background: #F0F6FF; }
+
+    /* ===== EMPTY CART STATE ===== */
+    .empty-cart-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 64px 24px;
+      gap: 20px;
+      text-align: center;
+    }
+    .empty-cart-state__text {
+      font-size: 15px;
+      color: #6E6E6E;
+      font-weight: 400;
+    }
+    .empty-cart-state__cta {
+      height: 40px;
+      padding: 0 24px;
+      background: #005EB8;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 2px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .empty-cart-state__cta:hover { background: #00509C; }
+
+    /* ===== WISHLIST TOAST ===== */
+    @keyframes toast-slide-in {
+      from { opacity: 0; transform: translateX(60px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes toast-slide-out {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(60px); }
+    }
+    #wishlist-toast {
+      position: fixed;
+      top: 28px;
+      right: 28px;
+      min-width: 300px;
+      max-width: 360px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none;
+      flex-direction: row;
+      overflow: hidden;
+      z-index: 10000;
+      animation: toast-slide-in 0.28s cubic-bezier(0.22,1,0.36,1);
+    }
+    #wishlist-toast.hiding { animation: toast-slide-out 0.22s ease forwards; }
+    #wishlist-toast .wt-accent { width: 5px; flex-shrink: 0; background: #2E7D32; }
+    #wishlist-toast .wt-body { flex: 1; padding: 14px 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+    #wishlist-toast .wt-header { color: #2E7D32; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+    #wishlist-toast .wt-msg { font-size: 14px; font-weight: 400; color: #4B4B4B; line-height: 1.45; }
+    #wishlist-toast-close { align-self: flex-start; margin: 10px 10px 0 0; background: none; border: none; cursor: pointer; font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px; flex-shrink: 0; }
+    #wishlist-toast-close:hover { color: #111111; }
+
     /* ===== MACHINE SWITCH MODAL ===== */
     .modal-overlay {
       position: fixed; inset: 0;
@@ -437,6 +523,17 @@
             </div>
           </div>
 
+          <!-- Move to Wishlist CTA -->
+          <div class="move-wishlist-row" id="move-wishlist-row">
+            <button class="move-wishlist-btn" onclick="openWishlistModal()">Move to Wishlist</button>
+          </div>
+
+          <!-- Empty cart state -->
+          <div class="empty-cart-state" id="empty-cart-state">
+            <p class="empty-cart-state__text">No products added yet.</p>
+            <a href="parts-catalogue.html" class="empty-cart-state__cta">Browse Parts</a>
+          </div>
+
         </div><!-- /cart-left -->
 
         <!-- RIGHT: Order Summary -->
@@ -497,6 +594,38 @@
       </div><!-- /cart-layout -->
     </main>
   </div><!-- /app-body -->
+
+  <!-- Wishlist toast -->
+  <div id="wishlist-toast" role="status" aria-live="polite">
+    <div class="wt-accent"></div>
+    <div class="wt-body">
+      <div class="wt-header">&#10003; Moved to Wishlist</div>
+      <div class="wt-msg">All cart items have been moved to your wishlist.</div>
+    </div>
+    <button id="wishlist-toast-close" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <!-- Move to Wishlist confirmation modal -->
+  <div class="modal-overlay" id="wishlistMoveOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wishlistMoveTitle">
+      <div class="modal__header">
+        <h2 class="modal__title" id="wishlistMoveTitle">Move to Wishlist?</h2>
+        <button class="modal__close" id="wishlistMoveClose" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5L15 15M15 5L5 15" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <p style="font-size:14px;color:#4B4B4B;line-height:1.6;">
+          Are you sure you want all the items in your cart to be moved to your wishlist?
+        </p>
+        <div class="modal__divider"></div>
+        <div class="modal__actions">
+          <button class="modal-btn modal-btn--cancel" id="wishlistMoveCancel">Cancel</button>
+          <button class="modal-btn modal-btn--proceed" id="wishlistMoveProceed">Proceed</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Machine switch confirmation modal -->
   <div class="modal-overlay" id="machSwitchOverlay">
@@ -601,6 +730,68 @@
     });
 
     recalcSummary();
+
+    /* ── Move to Wishlist flow ── */
+    var wishlistOverlay = document.getElementById('wishlistMoveOverlay');
+
+    function openWishlistModal() {
+      wishlistOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeWishlistModal() {
+      wishlistOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('wishlistMoveClose').addEventListener('click', closeWishlistModal);
+    document.getElementById('wishlistMoveCancel').addEventListener('click', closeWishlistModal);
+    wishlistOverlay.addEventListener('click', function(e) { if (e.target === wishlistOverlay) closeWishlistModal(); });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && wishlistOverlay.classList.contains('is-open')) closeWishlistModal();
+    });
+
+    document.getElementById('wishlistMoveProceed').addEventListener('click', function() {
+      closeWishlistModal();
+      items.forEach(function(it, idx) {
+        it.removed = true;
+        var row = document.getElementById('item-row-' + idx);
+        if (row) row.style.display = 'none';
+      });
+      var cartHead   = document.querySelector('.cart-head');
+      var machineCtx = document.querySelector('.machine-context');
+      var moveRow    = document.getElementById('move-wishlist-row');
+      var cartRight  = document.querySelector('.cart-right');
+      if (cartHead)   cartHead.style.display = 'none';
+      if (machineCtx) machineCtx.style.display = 'none';
+      if (moveRow)    moveRow.style.display = 'none';
+      if (cartRight)  cartRight.style.display = 'none';
+      document.getElementById('empty-cart-state').style.display = 'flex';
+      recalcSummary();
+      showWishlistToast();
+    });
+
+    /* ── Wishlist toast ── */
+    var _wishlistToastTimer = null;
+    var wishlistToastEl = document.getElementById('wishlist-toast');
+
+    function showWishlistToast() {
+      wishlistToastEl.classList.remove('hiding');
+      wishlistToastEl.style.display = 'flex';
+      clearTimeout(_wishlistToastTimer);
+      _wishlistToastTimer = setTimeout(dismissWishlistToast, 5000);
+    }
+    function dismissWishlistToast() {
+      wishlistToastEl.classList.add('hiding');
+      wishlistToastEl.addEventListener('animationend', function handler() {
+        wishlistToastEl.style.display = 'none';
+        wishlistToastEl.classList.remove('hiding');
+        wishlistToastEl.removeEventListener('animationend', handler);
+      });
+    }
+    document.getElementById('wishlist-toast-close').addEventListener('click', function() {
+      clearTimeout(_wishlistToastTimer);
+      dismissWishlistToast();
+    });
   </script>
 
   <div id="okuma-auth-footer"></div>
