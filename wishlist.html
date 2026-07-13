@@ -23,10 +23,20 @@
     .main-area {
       flex: 1;
       min-width: 0;
-      padding: 32px 32px 64px;
+      padding: 32px 32px 32px;
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 24px;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .wl-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 16px;
     }
 
     .page-title {
@@ -36,56 +46,449 @@
       letter-spacing: -0.3px;
     }
 
-    .wip-card {
-      flex: 1;
+    /* ===== FILTER STRIP ===== */
+    .wl-filter-strip {
       display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wl-pill {
+      height: 36px;
+      padding: 0 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1.5px solid #DEDEDE;
+      background: #FFFFFF;
+      color: #4B4B4B;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .wl-pill:hover { border-color: #005EB8; color: #005EB8; background: #F0F6FF; }
+    .wl-pill.is-active { background: #005EB8; color: #FFFFFF; border-color: #005EB8; }
+    .wl-pill.is-active:hover { background: #00509C; border-color: #00509C; }
+    .wl-pill.is-machine-active { border-color: #005EB8; color: #005EB8; background: #F0F6FF; }
+    .wl-pill.is-machine-active:hover { background: #E0EEFF; }
+
+    .wl-pill__count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 5px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255,255,255,0.25);
+      line-height: 1;
+    }
+    .wl-pill:not(.is-active) .wl-pill__count {
+      background: #EBEBEB;
+      color: #4B4B4B;
+    }
+
+    /* ===== MACHINE DROPDOWN ===== */
+    .wl-machine-wrap { position: relative; }
+
+    .wl-pill--dropdown { padding-right: 12px; }
+
+    .wl-chevron {
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .wl-machine-wrap.is-open .wl-chevron { transform: rotate(180deg); }
+
+    .wl-machine-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      min-width: 230px;
+      background: #FFFFFF;
+      border: 1px solid #E0E0E0;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+      z-index: 500;
+      overflow: hidden;
+    }
+    .wl-machine-wrap.is-open .wl-machine-menu { display: block; }
+
+    .wl-machine-opt {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #1A1A1A;
+      cursor: pointer;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      transition: background 0.1s;
+    }
+    .wl-machine-opt:hover { background: #F5F5F5; }
+    .wl-machine-opt.is-selected { background: #F0F6FF; color: #005EB8; font-weight: 600; }
+    .wl-machine-opt--all { font-weight: 500; color: #4B4B4B; }
+
+    .wl-machine-opt__info { display: flex; flex-direction: column; gap: 2px; }
+    .wl-machine-opt__name { font-size: 13px; }
+    .wl-machine-opt__serial { font-size: 11px; color: #9E9E9E; }
+    .wl-machine-opt.is-selected .wl-machine-opt__serial { color: #6EA8FE; }
+
+    .wl-machine-opt__badge {
+      font-size: 11px;
+      color: #6E6E6E;
+      font-weight: 600;
+      background: #F5F5F5;
+      border-radius: 10px;
+      padding: 2px 8px;
+      flex-shrink: 0;
+      line-height: 1.4;
+    }
+
+    /* ===== TABLE ===== */
+    .wl-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .wl-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      min-width: 760px;
+    }
+
+    .wl-table th {
+      background: transparent;
+      padding: 0 16px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #000000;
+      text-align: left;
+      border-bottom: 1px solid #E0E0E0;
+      white-space: nowrap;
+      vertical-align: bottom;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .wl-table td {
+      padding: 24px 16px;
+      border-bottom: 1px solid #E0E0E0;
+      vertical-align: middle;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .wl-table tbody tr { transition: background 0.1s; }
+
+    /* Column widths — 4 data cols equal; action col fixed to fit buttons */
+    .wl-table .col-stock { text-align: center; }
+    .wl-table .col-price { text-align: center; }
+    .wl-table .col-act   { width: 150px; text-align: right; }
+
+    /* Part cell */
+    .wl-part-name { font-size: 14px; font-weight: 700; color: #000000; line-height: 1.2; }
+    .wl-part-num  { font-size: 12px; font-weight: 400; color: #6E6E6E; margin-top: 3px; line-height: 1; }
+
+    /* Machine cell */
+    .wl-mach-row    { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .wl-mach-name   { font-size: 13px; font-weight: 500; color: #1A1A1A; }
+    .wl-mach-serial { font-size: 11px; color: #9E9E9E; display: block; margin-top: 2px; }
+
+    .wl-selected-mach-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      background: #EEF4FF;
+      color: #005EB8;
+      border: 1px solid #C5D9FF;
+      border-radius: 10px;
+      padding: 2px 8px;
+      white-space: nowrap;
+      letter-spacing: 0.2px;
+      line-height: 1.4;
+    }
+
+    /* Compatibility badge */
+    .compat-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-radius: 20px;
+      padding: 3px 9px;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+    .compat-badge--verified    { background: #EBF7F2; color: #29AA3F; border: 1px solid #29AA3F; }
+    .compat-badge--replacement { background: #EEF4FF; color: #005EB8; border: 1px solid #005EB8; }
+
+    /* Stock badge */
+    .stock-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 12px;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+    .stock-badge.in-stock    { background: #29AA3F; }
+    .stock-badge.out-of-stock { background: #9BA2AE; }
+
+    /* Price */
+    .wl-price { font-size: 14px; font-weight: 500; color: #000000; }
+
+    /* Actions cell */
+    .wl-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .wl-atc-btn {
+      height: 32px;
+      padding: 0 14px;
+      background: #005EB8;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .wl-atc-btn:hover { background: #0B308E; }
+
+    .wl-remove-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9E9E9E;
+      border-radius: 4px;
+      flex-shrink: 0;
+      transition: color 0.15s, background 0.15s;
+      padding: 0;
+    }
+    .wl-remove-btn:hover { color: #AD0000; background: #FFF0F0; }
+
+    /* ===== EMPTY STATE ===== */
+    .wl-empty {
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      background: #F8F9FB;
-      border: 1px solid #EBEBEB;
-      border-radius: 8px;
-      padding: 80px 40px;
+      padding: 80px 24px;
+      gap: 16px;
       text-align: center;
-      min-height: 420px;
     }
 
-    .wip-card__icon {
-      width: 64px;
-      height: 64px;
+    .wl-empty__icon {
+      width: 60px;
+      height: 60px;
+      background: #EEF4FF;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #EEF4FF;
-      border-radius: 50%;
     }
 
-    .wip-card__title {
-      font-size: 20px;
+    .wl-empty__title {
+      font-size: 16px;
       font-weight: 700;
       color: #1A1A1A;
     }
 
-    .wip-card__sub {
+    .wl-empty__sub {
       font-size: 14px;
-      color: #717171;
-      max-width: 360px;
+      color: #6E6E6E;
+      max-width: 300px;
       line-height: 1.6;
     }
 
-    .wip-card__back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 8px;
+    .wl-empty__cta {
+      height: 40px;
+      padding: 0 24px;
+      background: #005EB8;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 2px;
       font-size: 14px;
       font-weight: 500;
-      color: #005EB8;
+      cursor: pointer;
       text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      transition: background 0.15s;
+      margin-top: 4px;
+    }
+    .wl-empty__cta:hover { background: #00509C; }
+
+    /* ===== REMOVE MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.is-open { display: flex; }
+    .modal {
+      width: 100%; max-width: 480px;
+      background: #fff;
+      border-radius: 2px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      margin: auto;
+    }
+    .modal__header {
+      height: 60px;
+      background: #005EB8;
+      border-radius: 2px 2px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      flex-shrink: 0;
+    }
+    .modal__title  { font-size: 18px; font-weight: 700; color: #fff; }
+    .modal__close  { background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; }
+    .modal__close:hover { opacity: .8; }
+    .modal__body   { padding: 28px 32px 24px; display: flex; flex-direction: column; gap: 20px; }
+    .modal__divider { height: 1px; background: #E0E0E0; }
+    .modal__actions { display: flex; gap: 12px; }
+    .modal-btn {
+      flex: 1; height: 40px; border-radius: 2px; cursor: pointer;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .modal-btn--cancel  { background: transparent; border: 1px solid #005EB8; color: #005EB8; }
+    .modal-btn--cancel:hover  { background: #F0F6FF; }
+    .modal-btn--proceed { background: #005EB8; border: 1px solid #005EB8; color: #fff; }
+    .modal-btn--proceed:hover { background: #0B308E; }
+
+    /* ===== TOASTS ===== */
+    @keyframes wl-toast-in  { from { opacity:0; transform:translateX(60px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes wl-toast-out { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(60px); } }
+
+    .wl-toast {
+      position: fixed;
+      top: 28px;
+      right: 28px;
+      min-width: 300px;
+      max-width: 360px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none;
+      flex-direction: row;
+      overflow: hidden;
+      z-index: 10000;
+      animation: wl-toast-in 0.28s cubic-bezier(0.22,1,0.36,1);
+    }
+    .wl-toast.hiding { animation: wl-toast-out 0.22s ease forwards; }
+
+    .wl-toast__accent { width: 5px; flex-shrink: 0; }
+    .wl-toast__accent--green { background: #2E7D32; }
+    .wl-toast__accent--blue  { background: #005EB8; }
+
+    .wl-toast__body {
+      flex: 1;
+      padding: 14px 12px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .wip-card__back:hover { text-decoration: underline; }
+    .wl-toast__hdr {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 4px;
+    }
+    .wl-toast__hdr--green { color: #2E7D32; }
+    .wl-toast__hdr--blue  { color: #005EB8; }
+
+    .wl-toast__name { font-size: 14px; font-weight: 700; color: #111111; }
+    .wl-toast__part { font-size: 13px; color: #6E6E6E; margin-top: 2px; }
+    .wl-toast__msg  { font-size: 14px; font-weight: 400; color: #4B4B4B; line-height: 1.45; }
+
+    .wl-toast__close {
+      align-self: flex-start;
+      margin: 10px 10px 0 0;
+      background: none; border: none; cursor: pointer;
+      font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px;
+      flex-shrink: 0;
+    }
+    .wl-toast__close:hover { color: #111111; }
+
+    /* ===== PAGINATION ===== */
+    .wl-pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+    }
+    .wl-pg-info { font-size: 13px; color: #717171; }
+    .pagination { display: flex; align-items: center; gap: 4px; }
+    .page-btn {
+      min-width: 32px;
+      height: 32px;
+      border: 1px solid #DEDEDE;
+      border-radius: 2px;
+      background: #fff;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1A1A1A;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+    .page-btn:hover:not(:disabled):not(.page-btn--active) { border-color: #005EB8; color: #005EB8; }
+    .page-btn--active { background: #005EB8; border-color: #005EB8; color: #fff; font-weight: 700; cursor: default; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .main-area { padding: 24px 20px 48px; gap: 20px; }
+      .wl-page-header { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .main-area { padding: 16px 12px 40px; }
+      .page-title { font-size: 20px; }
+      .modal__body { padding: 20px; }
+    }
   </style>
 </head>
 <body>
@@ -100,28 +503,506 @@
     <div id="okuma-sidebar" data-active="wishlist"></div>
 
     <!-- MAIN AREA -->
-    <main class="main-area">
+    <main class="main-area" id="main" tabindex="-1">
 
-      <h1 class="page-title">My Wishlist</h1>
+      <!-- ── Page Header: title + filter pills ── -->
+      <div class="wl-page-header">
+        <h1 class="page-title">My Wishlist</h1>
 
-      <div class="wip-card">
-        <div class="wip-card__icon">
-          <svg width="32" height="32" viewBox="0 0 466 419" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M232.818 43.5439C237.958 38.1612 243.503 33.176 249.4 28.6316C309.088 -17.2123 389.488 -6.928 435.258 53.1381C464.04 90.9085 469.213 133.43 463.065 179.394C460.749 196.81 455.647 213.74 447.953 229.536C422.28 281.223 364 325.546 318.578 360.194C314.695 363.302 309.483 366.678 305.328 369.503L283.8 384.105C267.066 395.458 249.507 407.916 232.649 418.815L182.232 384.518C169.658 375.99 156.824 367.631 144.681 358.498C137.447 353.057 130.294 347.52 123.179 341.924C107.861 330.037 92.973 317.607 78.5439 304.657C30.5537 260.936 3.87243 223.982 0.263438 157.113C-4.15245 75.2949 47.2344 3.86318 132.839 0.0769593C133.19 0.0559668 133.543 0.0415101 133.895 0.0342832C173.603 -0.894206 204.923 17.1236 232.818 43.5439ZM232.729 366.805C262.626 344.378 293.724 321.554 322.843 298.26C354.999 272.36 392.414 241.09 409.392 202.586C414.163 191.767 416.545 179.476 417.884 167.803C421.657 136.314 417.874 105.146 397.409 79.7233C382.72 61.4808 362.469 49.3147 339.009 46.7953C307.986 43.4633 280.499 58.3876 260.67 81.3418C251.927 91.4595 245.961 103.87 230.336 102.168C217.208 100.921 212.531 90.074 204.772 81.3314C188.452 62.9413 168.404 49.5281 143.524 46.8431C139 46.3744 134.446 46.2677 129.906 46.5231C106.086 48.3918 85.7357 58.91 70.2519 76.998C49.0403 101.777 44.0144 130.587 46.9298 162.218C48.0086 173.924 49.0744 181.855 52.6269 193.293C63.6201 228.69 95.0818 258.36 122.849 282.004C157.601 311.598 196.116 339.195 232.729 366.805Z" fill="#005EB8"/>
+        <div class="wl-filter-strip">
+          <!-- All pill -->
+          <button class="wl-pill is-active" id="wl-all-btn" type="button">
+            All
+            <span class="wl-pill__count" id="wl-all-count">6</span>
+          </button>
+
+          <!-- Machine filter dropdown pill -->
+          <div class="wl-machine-wrap" id="wl-machine-wrap">
+            <button class="wl-pill wl-pill--dropdown" id="wl-machine-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span id="wl-machine-label">Filter by Machine</span>
+              <svg class="wl-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="wl-machine-menu" id="wl-machine-menu" role="listbox" aria-label="Select machine"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Wishlist Table ── -->
+      <div class="wl-table-wrap" id="wl-table-wrap" role="region" aria-label="Wishlist items (scrollable)" tabindex="0">
+        <table class="wl-table">
+          <thead>
+            <tr>
+              <th class="col-part">Part</th>
+              <th class="col-mach">Machine</th>
+              <th class="col-stock">Status</th>
+              <th class="col-price">Price</th>
+              <th class="col-act"></th>
+            </tr>
+          </thead>
+          <tbody id="wl-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- ── Pagination ── -->
+      <div class="wl-pagination-bar" id="wl-pagination-bar" style="display:none;">
+        <span class="wl-pg-info" id="wl-pg-info"></span>
+        <div class="pagination" id="wl-pagination"></div>
+      </div>
+
+      <!-- ── Empty State ── -->
+      <div class="wl-empty" id="wl-empty">
+        <div class="wl-empty__icon">
+          <svg width="28" height="28" viewBox="0 0 466 419" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M232.818 43.5439C237.958 38.1612 243.503 33.176 249.4 28.6316C309.088 -17.2123 389.488 -6.928 435.258 53.1381C464.04 90.9085 469.213 133.43 463.065 179.394C460.749 196.81 455.647 213.74 447.953 229.536C422.28 281.223 364 325.546 318.578 360.194C314.695 363.302 309.483 366.678 305.328 369.503L283.8 384.105C267.066 395.458 249.507 407.916 232.649 418.815L182.232 384.518C169.658 375.99 156.824 367.631 144.681 358.498C137.447 353.057 130.294 347.52 123.179 341.924C107.861 330.037 92.973 317.607 78.5439 304.657C30.5537 260.936 3.87243 223.982 0.263438 157.113C-4.15245 75.2949 47.2344 3.86318 132.839 0.0769593C133.19 0.0559668 133.543 0.0415101 133.895 0.0342832C173.603 -0.894206 204.923 17.1236 232.818 43.5439Z" fill="#005EB8" fill-opacity="0.25"/>
           </svg>
         </div>
-        <p class="wip-card__title">Design in Progress</p>
-        <p class="wip-card__sub">The Wishlist page is currently being designed. Check back soon to save and manage your favourite parts.</p>
-        <a href="dashboard.html" class="wip-card__back">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 11.5L4.5 7 9 2.5" stroke="#005EB8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Back to Dashboard
-        </a>
+        <p class="wl-empty__title" id="wl-empty-title">No parts in your wishlist yet.</p>
+        <p class="wl-empty__sub" id="wl-empty-sub">Browse the parts catalogue to find what your machines need.</p>
+        <a href="parts-catalogue.html" class="wl-empty__cta">Browse Parts</a>
       </div>
 
     </main>
   </div>
 
+  <!-- ═══════════════ REMOVE CONFIRMATION MODAL ═══════════════ -->
+  <div class="modal-overlay" id="wl-remove-overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wl-remove-title">
+      <div class="modal__header">
+        <h2 class="modal__title" id="wl-remove-title">Remove from Wishlist?</h2>
+        <button class="modal__close" id="wl-remove-close" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5L15 15M15 5L5 15" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <p style="font-size:14px;color:#4B4B4B;line-height:1.6;">
+          Are you sure you want to remove <strong id="wl-remove-name"></strong> from your wishlist? This action cannot be undone.
+        </p>
+        <div class="modal__divider"></div>
+        <div class="modal__actions">
+          <button class="modal-btn modal-btn--cancel"  id="wl-remove-cancel">Cancel</button>
+          <button class="modal-btn modal-btn--proceed" id="wl-remove-confirm">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TOAST: Added to Cart ═══════════════ -->
+  <div class="wl-toast" id="wl-cart-toast" role="status" aria-live="polite">
+    <div class="wl-toast__accent wl-toast__accent--green"></div>
+    <div class="wl-toast__body">
+      <div class="wl-toast__hdr wl-toast__hdr--green">&#10003; Added to Cart</div>
+      <div class="wl-toast__name" id="wl-cart-toast-name"></div>
+      <div class="wl-toast__part" id="wl-cart-toast-part"></div>
+    </div>
+    <button class="wl-toast__close" id="wl-cart-toast-close" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <!-- ═══════════════ TOAST: Removed from Wishlist ═══════════════ -->
+  <div class="wl-toast" id="wl-remove-toast" role="status" aria-live="polite" style="top:28px;">
+    <div class="wl-toast__accent wl-toast__accent--blue"></div>
+    <div class="wl-toast__body">
+      <div class="wl-toast__hdr wl-toast__hdr--blue">&#10003; Removed from Wishlist</div>
+      <div class="wl-toast__msg">Item removed from your wishlist successfully.</div>
+    </div>
+    <button class="wl-toast__close" id="wl-remove-toast-close" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
   <!-- ═══════════════ SCRIPTS ═══════════════ -->
+  <script>
+  (function () {
+
+    /* ── DATA ── */
+    var wlItems = [
+      { id: 0,  name: 'Plate',                   partNum: '525-0100-11',     machine: 'LU300-M',      serial: 'M5-2891-K',  inStock: true,  price: 247.50, removed: false },
+      { id: 1,  name: 'Coolant Pump Assembly',   partNum: 'E4809-045-017-A', machine: 'LU300-M',      serial: 'M5-2891-K',  inStock: true,  price: 185.00, removed: false },
+      { id: 2,  name: 'Servo Drive Belt',        partNum: 'E4809-045-017-B', machine: 'LU300-M',      serial: 'M5-2891-K',  inStock: true,  price: 62.50,  removed: false },
+      { id: 3,  name: 'Spindle Bearing Kit',     partNum: '112-0340-20',     machine: 'MULTUS U3000', serial: 'MU-9102-L',  inStock: true,  price: 312.00, removed: false },
+      { id: 4,  name: 'Joint',                   partNum: '112-0140-10',     machine: 'MULTUS U3000', serial: 'MU-9102-L',  inStock: false, price: 247.50, removed: false },
+      { id: 5,  name: 'Support',                 partNum: '25-0100-02-02',   machine: 'GENOS L200E',  serial: 'L2-1108-A',  inStock: true,  price: 34.20,  removed: false },
+      { id: 6,  name: 'Z-Axis Linear Rail',      partNum: 'DR-5510',         machine: 'LU300-M',      serial: 'M5-2891-K',  inStock: false, price: 540.00, removed: false },
+      { id: 7,  name: 'Hydraulic Filter Element',partNum: 'FLT-201',         machine: 'MULTUS U3000', serial: 'MU-9102-L',  inStock: true,  price: 28.75,  removed: false },
+      { id: 8,  name: 'Turret Drive Coupling',   partNum: 'TC-8810',         machine: 'LU300-M',      serial: 'M5-2891-K',  inStock: true,  price: 196.00, removed: false },
+      { id: 9,  name: 'Lubrication Pump Assy',   partNum: 'LB-0090',         machine: 'GENOS L200E',  serial: 'L2-1108-A',  inStock: false, price: 374.50, removed: false },
+      { id: 10, name: 'Control Board PCB',       partNum: 'CB-1140',         machine: 'MULTUS U3000', serial: 'MU-9102-L',  inStock: true,  price: 892.00, removed: false },
+      { id: 11, name: 'Chuck Jaw Set (Soft)',    partNum: 'SL-7700',         machine: 'GENOS L200E',  serial: 'L2-1108-A',  inStock: true,  price: 118.00, removed: false }
+    ];
+
+    var currentFilter   = 'all';
+    var currentPage     = 1;
+    var PAGE_SIZE       = 5;
+    var pendingRemoveId = null;
+    var machMenuOpen    = false;
+
+    /* ── HELPERS ── */
+    function money(n) { return '$' + n.toFixed(2); }
+
+    function activeItems() {
+      return wlItems.filter(function (i) { return !i.removed; });
+    }
+
+    function filteredItems() {
+      var a = activeItems();
+      if (currentFilter === 'all') return a;
+      return a.filter(function (i) { return i.machine === currentFilter; });
+    }
+
+    function pagedItems() {
+      var start = (currentPage - 1) * PAGE_SIZE;
+      return filteredItems().slice(start, start + PAGE_SIZE);
+    }
+
+    function machineCounts() {
+      var counts = {};
+      activeItems().forEach(function (i) {
+        counts[i.machine] = (counts[i.machine] || 0) + 1;
+      });
+      return counts;
+    }
+
+    function uniqueMachines() {
+      var seen = {}, result = [];
+      wlItems.forEach(function (i) {
+        if (!seen[i.machine]) {
+          seen[i.machine] = true;
+          result.push({ name: i.machine, serial: i.serial });
+        }
+      });
+      return result;
+    }
+
+    /* ── RENDER TABLE ── */
+    function renderTable() {
+      var allFiltered = filteredItems();
+      var items       = pagedItems();
+      var tableWrap   = document.getElementById('wl-table-wrap');
+      var pgBar       = document.getElementById('wl-pagination-bar');
+      var emptyEl     = document.getElementById('wl-empty');
+      var emptyTitle  = document.getElementById('wl-empty-title');
+      var emptySubEl  = document.getElementById('wl-empty-sub');
+      var tbody       = document.getElementById('wl-tbody');
+
+      if (allFiltered.length === 0) {
+        tableWrap.style.display = 'none';
+        pgBar.style.display     = 'none';
+        emptyEl.style.display   = 'flex';
+        if (currentFilter !== 'all') {
+          emptyTitle.textContent = 'No parts saved for ' + currentFilter + '.';
+          emptySubEl.textContent = 'Switch to another machine or browse the catalogue to add parts.';
+        } else {
+          emptyTitle.textContent = 'No parts in your wishlist yet.';
+          emptySubEl.textContent = 'Browse the parts catalogue to find what your machines need.';
+        }
+        return;
+      }
+
+      tableWrap.style.display = '';
+      pgBar.style.display     = '';
+      emptyEl.style.display   = 'none';
+
+      var trashSvg = '<svg width="15" height="15" viewBox="0 0 310 379" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+        '<path d="M32.0532 103.395C32.6087 103.336 33.1665 103.3 33.7252 103.286C42.4357 103.087 50.2827 109.177 51.1077 118.121C51.6885 124.416 51.3957 131.342 51.3937 137.703L51.3895 264.442C51.3855 280.007 51.3787 295.557 51.3925 311.135C51.1452 326.73 63.1095 341.025 78.4862 343.577C84.0225 344.495 91.6162 344.125 97.4125 344.125H191.799C202.941 344.125 214.081 344.127 225.224 344.077C238.809 344.015 250.889 335.65 255.796 322.98C256.791 320.367 257.459 317.637 257.781 314.857C258.324 310.33 258.124 303.892 258.121 299.162L258.104 135.176C258.109 129.479 257.979 123.37 258.419 117.694C258.704 114.034 260.189 111.154 262.759 108.494C265.984 105.183 270.401 103.303 275.024 103.274C279.586 103.222 283.976 105.01 287.204 108.235C293.566 114.648 292.206 122.73 292.201 131.046L292.209 297.885C292.206 305.402 292.481 314.585 291.346 321.925C289.789 331.482 286.176 340.587 280.759 348.615C270.776 363.45 255.284 373.687 237.721 377.052C227.994 378.925 212.284 378.322 201.909 378.325L103.287 378.33C94.676 378.327 82.8285 378.747 74.6117 377.535C64.499 376.097 54.8585 372.33 46.4522 366.527C31.7457 356.51 21.617 341.062 18.2905 323.582C16.739 315.415 17.2462 298.087 17.248 289.055L17.2385 131.772C17.2375 127.663 17.0522 123.351 17.2945 119.27C17.8175 110.46 23.7502 104.947 32.0532 103.395Z" fill="currentColor"/>' +
+        '<path d="M101.624 0.163949C105.72 -0.106051 111.308 0.0386967 115.525 0.0391967L139.946 0.0446975C161.542 0.0514475 183.151 0.0341985 204.749 0.0566985C210.424 0.0626985 214.611 1.1567 218.684 5.2947C220.639 7.2047 222.239 10.0909 222.766 12.7972C223.724 17.7189 223.411 23.5379 223.409 28.5434C223.436 36.2369 223.399 43.9304 223.296 51.6232L271.044 51.6204C277.639 51.6212 290.864 50.9922 297.016 52.3264C308.986 54.9212 313.604 71.5754 304.551 80.6889C302.084 83.2057 298.889 84.8814 295.414 85.4782C292.124 86.0557 287.176 85.9047 283.731 85.9032L36.1782 85.8899C29.2652 85.8922 22.2805 86.1302 15.3452 85.6342C1.01599 84.4932 -5.13326 66.6504 5.02649 56.6352C10.643 51.0987 16.1187 51.6464 23.478 51.6062C28.4972 51.5787 33.6172 51.6262 38.6545 51.6317L86.0585 51.6417C85.845 45.1157 86.1415 37.6809 86.0245 31.0719C85.9545 27.1184 85.8187 16.9702 86.421 13.7357C86.8997 11.0509 88.0367 8.5267 89.7307 6.38945C92.8257 2.47895 96.789 0.743699 101.624 0.163949ZM120.07 51.6147L188.974 51.6192C189.546 50.7882 189.221 36.6377 189.356 34.3177L141.499 34.2859L128.123 34.2914C126.026 34.2934 122.332 34.4024 120.331 34.1809C119.806 35.3769 120.301 48.7485 120.07 51.6147Z" fill="currentColor"/>' +
+        '<path d="M186.452 137.891C193.609 137.368 198.834 139.06 203.181 144.987C205.929 148.735 206.164 152.453 206.226 156.948C206.294 161.843 206.239 166.738 206.234 171.625L206.236 251.755C206.236 259.79 206.351 267.83 206.081 275.857C205.789 284.512 199.869 290.58 191.536 292.13C184.115 293.095 176.111 288.937 173.402 282.047C171.274 276.637 171.989 265.867 171.986 259.89L171.983 176.976C171.984 169.2 171.846 161.385 172.143 153.619C172.463 145.222 178.479 139.445 186.452 137.891Z" fill="currentColor"/>' +
+        '<path d="M117.487 137.906C122.118 137.546 125.935 137.955 129.903 140.605C133.591 143.036 136.143 146.851 136.98 151.188C137.624 154.525 137.407 164.949 137.406 168.804L137.416 266.29C137.416 269.665 137.4 272.922 137.251 276.297C136.896 284.317 131.025 290.575 123.148 292.03C114.938 293.685 105.197 287.627 103.795 279.44C102.798 273.61 103.219 265.327 103.217 259.277L103.217 177.704C103.218 169.786 103.104 161.86 103.358 153.948C103.634 145.305 109.287 139.665 117.487 137.906Z" fill="currentColor"/>' +
+        '</svg>';
+
+      var selectedMachine = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
+
+      tbody.innerHTML = items.map(function (it) {
+        var stockClass  = it.inStock ? 'in-stock' : 'out-of-stock';
+        var stockText   = it.inStock ? 'In Stock' : 'Back Order';
+        var selBadge    = it.machine === selectedMachine
+          ? '<span class="wl-selected-mach-badge">Selected Machine</span>'
+          : '';
+
+        return '<tr id="wl-row-' + it.id + '">' +
+          '<td class="col-part">' +
+            '<div class="wl-part-name">' + it.name + '</div>' +
+            '<div class="wl-part-num">' + it.partNum + '</div>' +
+          '</td>' +
+          '<td class="col-mach">' +
+            '<div class="wl-mach-row">' +
+              '<span class="wl-mach-name">' + it.machine + '</span>' +
+              selBadge +
+            '</div>' +
+            '<span class="wl-mach-serial">' + it.serial + '</span>' +
+          '</td>' +
+          '<td class="col-stock"><span class="stock-badge ' + stockClass + '">' + stockText + '</span></td>' +
+          '<td class="col-price wl-price">' + money(it.price) + '</td>' +
+          '<td class="col-act">' +
+            '<div class="wl-actions">' +
+              '<button class="wl-atc-btn" data-id="' + it.id + '">Add to Cart</button>' +
+              '<button class="wl-remove-btn" data-id="' + it.id + '" aria-label="Remove ' + it.name + ' from wishlist">' + trashSvg + '</button>' +
+            '</div>' +
+          '</td>' +
+        '</tr>';
+      }).join('');
+
+      /* Re-attach button events */
+      tbody.querySelectorAll('.wl-atc-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () { addToCart(parseInt(btn.getAttribute('data-id'), 10)); });
+      });
+      tbody.querySelectorAll('.wl-remove-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () { openRemoveModal(parseInt(btn.getAttribute('data-id'), 10)); });
+      });
+
+      renderPagination();
+    }
+
+    /* ── PAGINATION ── */
+    function renderPagination() {
+      var total      = filteredItems().length;
+      var totalPages = Math.ceil(total / PAGE_SIZE);
+      var pgInfo     = document.getElementById('wl-pg-info');
+      var pgCont     = document.getElementById('wl-pagination');
+
+      var start = (currentPage - 1) * PAGE_SIZE + 1;
+      var end   = Math.min(currentPage * PAGE_SIZE, total);
+      pgInfo.textContent = 'Showing ' + start + '–' + end + ' of ' + total + ' items';
+
+      if (totalPages <= 1) { pgCont.innerHTML = ''; return; }
+
+      var prev = '<button class="page-btn" onclick="wlGoPage(' + (currentPage - 1) + ')"' +
+        (currentPage === 1 ? ' disabled' : '') + ' aria-label="Previous page">' +
+        '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 3L5 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '</button>';
+      var pages = '';
+      for (var p = 1; p <= totalPages; p++) {
+        pages += '<button class="page-btn' + (p === currentPage ? ' page-btn--active' : '') +
+          '" onclick="wlGoPage(' + p + ')" aria-label="Page ' + p + '">' + p + '</button>';
+      }
+      var next = '<button class="page-btn" onclick="wlGoPage(' + (currentPage + 1) + ')"' +
+        (currentPage === totalPages ? ' disabled' : '') + ' aria-label="Next page">' +
+        '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '</button>';
+      pgCont.innerHTML = prev + pages + next;
+    }
+
+    window.wlGoPage = function (p) {
+      var totalPages = Math.ceil(filteredItems().length / PAGE_SIZE);
+      if (p < 1 || p > totalPages) return;
+      currentPage = p;
+      renderTable();
+    };
+
+    /* ── UPDATE PILLS ── */
+    function updatePills() {
+      var allCount = activeItems().length;
+      document.getElementById('wl-all-count').textContent = allCount;
+
+      var counts = machineCounts();
+      document.querySelectorAll('.wl-machine-opt[data-machine]').forEach(function (opt) {
+        var m = opt.getAttribute('data-machine');
+        if (m === 'all') return;
+        var badge = opt.querySelector('.wl-machine-opt__badge');
+        if (badge) badge.textContent = counts[m] || 0;
+      });
+
+      /* If the currently filtered machine now has 0 items, fall back to All */
+      if (currentFilter !== 'all' && (counts[currentFilter] || 0) === 0) {
+        applyFilter('all');
+      }
+    }
+
+    /* ── FILTER ── */
+    function applyFilter(machine) {
+      currentFilter = machine;
+      currentPage   = 1;
+      var allBtn    = document.getElementById('wl-all-btn');
+      var machBtn   = document.getElementById('wl-machine-btn');
+      var machLabel = document.getElementById('wl-machine-label');
+
+      if (machine === 'all') {
+        allBtn.classList.add('is-active');
+        machBtn.classList.remove('is-machine-active');
+        machLabel.textContent = 'Filter by Machine';
+        document.querySelectorAll('.wl-machine-opt').forEach(function (o) { o.classList.remove('is-selected'); });
+      } else {
+        allBtn.classList.remove('is-active');
+        machBtn.classList.add('is-machine-active');
+        machLabel.textContent = machine;
+        document.querySelectorAll('.wl-machine-opt').forEach(function (o) {
+          o.classList.toggle('is-selected', o.getAttribute('data-machine') === machine);
+        });
+      }
+
+      closeMachineMenu();
+      renderTable();
+    }
+
+    /* ── MACHINE DROPDOWN ── */
+    function toggleMachineMenu() {
+      machMenuOpen = !machMenuOpen;
+      var wrap = document.getElementById('wl-machine-wrap');
+      var btn  = document.getElementById('wl-machine-btn');
+      wrap.classList.toggle('is-open', machMenuOpen);
+      btn.setAttribute('aria-expanded', machMenuOpen ? 'true' : 'false');
+    }
+
+    function closeMachineMenu() {
+      machMenuOpen = false;
+      var wrap = document.getElementById('wl-machine-wrap');
+      var btn  = document.getElementById('wl-machine-btn');
+      wrap.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    function buildMachineMenu() {
+      var menu    = document.getElementById('wl-machine-menu');
+      var counts  = machineCounts();
+      var machines = uniqueMachines();
+
+      var html = '<div class="wl-machine-opt wl-machine-opt--all" data-machine="all" role="option">' +
+        '<span>All Machines</span>' +
+      '</div>';
+
+      machines.forEach(function (m) {
+        html += '<div class="wl-machine-opt" data-machine="' + m.name + '" role="option">' +
+          '<div class="wl-machine-opt__info">' +
+            '<span class="wl-machine-opt__name">' + m.name + '</span>' +
+            '<span class="wl-machine-opt__serial">' + m.serial + '</span>' +
+          '</div>' +
+          '<span class="wl-machine-opt__badge">' + (counts[m.name] || 0) + '</span>' +
+        '</div>';
+      });
+
+      menu.innerHTML = html;
+
+      menu.querySelectorAll('.wl-machine-opt').forEach(function (opt) {
+        opt.addEventListener('click', function () {
+          applyFilter(opt.getAttribute('data-machine'));
+        });
+      });
+    }
+
+    /* ── ADD TO CART ── */
+    function addToCart(id) {
+      var item = wlItems[id];
+      item.removed = true;
+      updatePills();
+      renderTable();
+      showCartToast(item);
+    }
+
+    /* ── REMOVE MODAL ── */
+    var removeOverlay = document.getElementById('wl-remove-overlay');
+
+    function openRemoveModal(id) {
+      pendingRemoveId = id;
+      document.getElementById('wl-remove-name').textContent = wlItems[id].name;
+      removeOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeRemoveModal() {
+      removeOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      pendingRemoveId = null;
+    }
+
+    function confirmRemove() {
+      if (pendingRemoveId === null) return;
+      wlItems[pendingRemoveId].removed = true;
+      closeRemoveModal();
+      updatePills();
+      renderTable();
+      showRemoveToast();
+    }
+
+    document.getElementById('wl-remove-close').addEventListener('click', closeRemoveModal);
+    document.getElementById('wl-remove-cancel').addEventListener('click', closeRemoveModal);
+    document.getElementById('wl-remove-confirm').addEventListener('click', confirmRemove);
+    removeOverlay.addEventListener('click', function (e) { if (e.target === removeOverlay) closeRemoveModal(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && removeOverlay.classList.contains('is-open')) closeRemoveModal();
+    });
+
+    /* ── TOAST: Added to Cart ── */
+    var _cartToastTimer = null;
+    var cartToastEl = document.getElementById('wl-cart-toast');
+
+    function showCartToast(item) {
+      document.getElementById('wl-cart-toast-name').textContent = item.name;
+      document.getElementById('wl-cart-toast-part').textContent = item.partNum;
+      cartToastEl.classList.remove('hiding');
+      cartToastEl.style.display = 'flex';
+      clearTimeout(_cartToastTimer);
+      _cartToastTimer = setTimeout(dismissCartToast, 5000);
+    }
+
+    function dismissCartToast() {
+      cartToastEl.classList.add('hiding');
+      cartToastEl.addEventListener('animationend', function h() {
+        cartToastEl.style.display = 'none';
+        cartToastEl.classList.remove('hiding');
+        cartToastEl.removeEventListener('animationend', h);
+      });
+    }
+
+    document.getElementById('wl-cart-toast-close').addEventListener('click', function () {
+      clearTimeout(_cartToastTimer);
+      dismissCartToast();
+    });
+
+    /* ── TOAST: Removed from Wishlist ── */
+    var _removeToastTimer = null;
+    var removeToastEl = document.getElementById('wl-remove-toast');
+
+    function showRemoveToast() {
+      /* If cart toast is visible, stack this one below it */
+      var cartVisible = cartToastEl.style.display === 'flex';
+      removeToastEl.style.top = cartVisible ? '108px' : '28px';
+
+      removeToastEl.classList.remove('hiding');
+      removeToastEl.style.display = 'flex';
+      clearTimeout(_removeToastTimer);
+      _removeToastTimer = setTimeout(dismissRemoveToast, 5000);
+    }
+
+    function dismissRemoveToast() {
+      removeToastEl.classList.add('hiding');
+      removeToastEl.addEventListener('animationend', function h() {
+        removeToastEl.style.display = 'none';
+        removeToastEl.classList.remove('hiding');
+        removeToastEl.removeEventListener('animationend', h);
+      });
+    }
+
+    document.getElementById('wl-remove-toast-close').addEventListener('click', function () {
+      clearTimeout(_removeToastTimer);
+      dismissRemoveToast();
+    });
+
+    /* ── PILL LISTENERS ── */
+    document.getElementById('wl-all-btn').addEventListener('click', function () {
+      applyFilter('all');
+    });
+
+    document.getElementById('wl-machine-btn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleMachineMenu();
+    });
+
+    document.addEventListener('click', function (e) {
+      var wrap = document.getElementById('wl-machine-wrap');
+      if (machMenuOpen && !wrap.contains(e.target)) closeMachineMenu();
+    });
+
+    /* ── MACHINE CHANGE (from header picker) ── */
+    window.addEventListener('okuma:machineChanged', function () {
+      renderTable();
+    });
+
+    /* ── INIT ── */
+    buildMachineMenu();
+    renderTable();
+
+  })();
+  </script>
+
+  <div id="okuma-auth-footer"></div>
   <script src="auth.js"></script>
   <script src="components.js"></script>
 

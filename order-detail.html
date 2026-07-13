@@ -306,6 +306,77 @@
       .items-tbl td:nth-child(2) { display: none; }
       .items-tbl { min-width: 0; width: 100%; }
     }
+
+    /* ── RETURN / CANCEL CTA ── */
+    .col-act-rc { text-align: right; }
+    .rc-btn {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px; font-weight: 600; color: #C0392B;
+      background: #fff; border: 1px solid #DEDEDE; border-radius: 2px;
+      padding: 5px 10px; cursor: pointer; white-space: nowrap; display: inline-block;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .rc-btn:hover { border-color: #C0392B; color: #9B2D22; }
+
+    /* ── CANCELLATION REQUESTED BADGE ── */
+    .cancel-req-badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      background: #FFF9EF; color: #B45309; border: 1px solid #FFB549;
+      border-radius: 10px; padding: 2px 8px; white-space: nowrap;
+      letter-spacing: 0.2px; line-height: 1.4; margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── RC MODAL FORM ELEMENTS ── */
+    .rc-modal-info {
+      background: #F5F7FA; border-radius: 2px;
+      padding: 12px 16px; border-left: 3px solid #005EB8;
+    }
+    .rc-modal-info__name { font-size: 14px; font-weight: 700; color: #1A1A1A; }
+    .rc-modal-info__qty  { font-size: 13px; color: #717171; margin-top: 3px; }
+    .rc-modal-notice { font-size: 13px; color: #4B4B4B; line-height: 1.6; }
+    .rc-form-group { display: flex; flex-direction: column; }
+    .rc-form-label {
+      font-size: 11px; font-weight: 700; color: #4B4B4B;
+      text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px;
+    }
+    .rc-form-select, .rc-form-textarea {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; color: #1A1A1A; background: #fff;
+      border: 1px solid #DEDEDE; border-radius: 2px; padding: 8px 10px;
+      transition: border-color 0.15s; width: 100%;
+    }
+    .rc-form-select {
+      -webkit-appearance: none; appearance: none; cursor: pointer;
+      padding-right: 28px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23717171' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+    .rc-form-select:focus, .rc-form-textarea:focus { outline: none; border-color: #005EB8; }
+    .rc-form-textarea { resize: vertical; min-height: 72px; }
+    .rc-err { font-size: 12px; color: #C0392B; margin-top: 5px; display: none; }
+
+    /* ── RC TOAST ── */
+    @keyframes rc-toast-in  { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes rc-toast-out { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(20px); } }
+    #rc-toast {
+      display: none; position: fixed; top: 24px; right: 24px; z-index: 10001;
+      background: #fff; border: 1px solid #DEDEDE; border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      min-width: 280px; max-width: 360px; overflow: hidden; flex-direction: row;
+    }
+    #rc-toast.showing { display: flex; animation: rc-toast-in 0.28s cubic-bezier(0.22,1,0.36,1); }
+    #rc-toast.hiding  { animation: rc-toast-out 0.22s ease forwards; }
+    #rc-toast .rt-accent { width: 4px; background: #74AA50; flex-shrink: 0; }
+    #rc-toast .rt-body   { flex: 1; padding: 14px 12px; }
+    #rc-toast .rt-header { font-size: 13px; font-weight: 700; color: #1A1A1A; }
+    #rc-toast .rt-msg    { font-size: 12px; color: #717171; margin-top: 3px; }
+    #rc-toast-close {
+      padding: 8px 12px; background: none; border: none; cursor: pointer;
+      font-size: 18px; color: #9E9E9E; align-self: flex-start; line-height: 1;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    #rc-toast-close:hover { color: #1A1A1A; }
   </style>
 </head>
 <body>
@@ -565,13 +636,21 @@
           '</div>'
         : '';
 
-      var rows = o.items.map(function(it) {
-        var lineTotal = it.qty * it.price;
+      var rows = o.items.map(function(it, idx) {
+        var lineTotal   = it.qty * it.price;
+        var key         = o.num + ':' + idx;
+        var isCancelled = cancellationState[key];
+        var badge       = isCancelled ? '<span class="cancel-req-badge">Cancellation Requested</span>' : '';
+        var actCell     = isCancelled
+          ? ''
+          : '<button class="rc-btn" onclick="window.openRcModal(\'' + o.num + '\',' + idx + ')" aria-label="Return or cancel ' + it.name + '">Return / Cancel</button>';
+
         return '<tr>' +
-          '<td><div class="it-name">' + it.name + '</div><div class="it-pn">P/N: ' + it.pn + '</div></td>' +
+          '<td data-rc-name="' + key + '"><div class="it-name">' + it.name + badge + '</div><div class="it-pn">P/N: ' + it.pn + '</div></td>' +
           '<td class="r" style="width:50px"><span>' + it.qty + '</span></td>' +
           '<td class="r" style="width:95px"><span style="color:#4B4B4B">' + fmt(it.price) + '</span></td>' +
           '<td class="r" style="width:95px"><span class="it-linetotal">' + fmt(lineTotal) + '</span></td>' +
+          '<td class="col-act-rc" data-rc-act="' + key + '">' + actCell + '</td>' +
           '</tr>';
       }).join('');
 
@@ -585,6 +664,7 @@
         '<th class="r" style="width:50px">Qty</th>' +
         '<th class="r" style="width:95px">Unit Price</th>' +
         '<th class="r" style="width:95px">Total</th>' +
+        '<th class="col-act-rc" style="width:120px"></th>' +
         '</tr></thead>' +
         '<tbody>' + rows + '</tbody>' +
         '</table>' +
@@ -665,6 +745,87 @@
       return html;
     }
 
+    /* ─── CANCELLATION STATE ────────────────────────────── */
+    var cancellationState = {};
+    var currentRcOrder   = null;
+    var currentRcTarget  = null;
+
+    /* ─── RC MODAL ──────────────────────────────────────── */
+    window.openRcModal = function(orderNum, itemIdx) {
+      currentRcOrder  = orderNum;
+      currentRcTarget = itemIdx;
+      var o  = DATA[orderNum];
+      var it = o.items[itemIdx];
+      document.getElementById('rc-item-name').textContent = it.name;
+      document.getElementById('rc-item-qty').textContent  = 'Qty: ' + it.qty + '  ·  P/N: ' + it.pn;
+      document.getElementById('rc-reason').value          = '';
+      document.getElementById('rc-reason-err').style.display = 'none';
+      document.getElementById('rc-notes').value           = '';
+      document.getElementById('rc-overlay').classList.add('open');
+    };
+
+    function closeRcModal() {
+      document.getElementById('rc-overlay').classList.remove('open');
+      currentRcOrder  = null;
+      currentRcTarget = null;
+    }
+
+    function submitRcRequest() {
+      var reason = document.getElementById('rc-reason').value;
+      var errEl  = document.getElementById('rc-reason-err');
+      if (!reason) { errEl.style.display = 'block'; return; }
+      errEl.style.display = 'none';
+
+      var key = currentRcOrder + ':' + currentRcTarget;
+      cancellationState[key] = true;
+
+      var nameCell = document.querySelector('[data-rc-name="' + key + '"]');
+      if (nameCell) {
+        var nameDiv = nameCell.querySelector('.it-name');
+        if (nameDiv && !nameDiv.querySelector('.cancel-req-badge')) {
+          var b = document.createElement('span');
+          b.className   = 'cancel-req-badge';
+          b.textContent = 'Cancellation Requested';
+          nameDiv.appendChild(b);
+        }
+      }
+      var actCell = document.querySelector('[data-rc-act="' + key + '"]');
+      if (actCell) actCell.innerHTML = '';
+
+      closeRcModal();
+      showRcToast();
+    }
+
+    /* ─── RC TOAST ──────────────────────────────────────── */
+    var _rcToastTimer = null;
+    function showRcToast() {
+      var t = document.getElementById('rc-toast');
+      t.classList.remove('hiding');
+      t.classList.add('showing');
+      clearTimeout(_rcToastTimer);
+      _rcToastTimer = setTimeout(dismissRcToast, 5000);
+    }
+    function dismissRcToast() {
+      var t = document.getElementById('rc-toast');
+      t.classList.add('hiding');
+      t.addEventListener('animationend', function h() {
+        t.classList.remove('showing', 'hiding');
+        t.removeEventListener('animationend', h);
+      });
+    }
+
+    /* ─── EVENT WIRING ──────────────────────────────────── */
+    document.addEventListener('click', function(e) {
+      var t = e.target;
+      if (t.closest && (t.closest('#rcModalClose') || t.closest('#rcModalCancel'))) { closeRcModal(); return; }
+      if (t.id === 'rc-overlay') { closeRcModal(); return; }
+      if (t.closest && t.closest('#rcModalSubmit')) { submitRcRequest(); return; }
+      if (t.closest && t.closest('#rc-toast-close')) { dismissRcToast(); return; }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeRcModal();
+    });
+
     /* ─── INIT ─────────────────────────────────────────── */
     var id = new URLSearchParams(window.location.search).get('id');
     var order = id && DATA[id];
@@ -672,6 +833,73 @@
 
   })();
   </script>
+
+
+  <!-- Return / Cancel confirmation modal -->
+  <div id="rc-overlay" class="csw-overlay" role="dialog" aria-modal="true" aria-labelledby="rcModalTitle">
+    <div class="csw-modal" style="max-width:520px;">
+      <div class="csw-modal__hdr">
+        <h2 class="csw-modal__ttl" id="rcModalTitle">Return / Cancel Item</h2>
+        <button class="csw-modal__cls" id="rcModalClose" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 3l10 10M13 3L3 13" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="csw-modal__bdy">
+        <div class="rc-modal-info">
+          <div class="rc-modal-info__name" id="rc-item-name"></div>
+          <div class="rc-modal-info__qty"  id="rc-item-qty"></div>
+        </div>
+        <p class="rc-modal-notice">Your request will be sent to the Okuma support team. You will be contacted within 1 business day to confirm.</p>
+        <div class="csw-modal__div"></div>
+        <div class="rc-form-group">
+          <label class="rc-form-label" for="rc-reason">Reason <span style="color:#C0392B">*</span></label>
+          <select id="rc-reason" class="rc-form-select">
+            <option value="" disabled selected>Select a reason…</option>
+            <optgroup label="Product / Quality">
+              <option>Item received damaged</option>
+              <option>Item is defective / not working</option>
+              <option>Incorrect part received</option>
+              <option>Part does not match description / spec</option>
+            </optgroup>
+            <optgroup label="Order / Admin">
+              <option>Ordered by mistake</option>
+              <option>Duplicate order</option>
+              <option>No longer needed</option>
+              <option>Better pricing found</option>
+            </optgroup>
+            <optgroup label="Logistics">
+              <option>Item not received (missing)</option>
+              <option>Delivery significantly delayed</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option>Other (please describe)</option>
+            </optgroup>
+          </select>
+          <div id="rc-reason-err" class="rc-err">Please select a reason to continue.</div>
+        </div>
+        <div class="rc-form-group">
+          <label class="rc-form-label" for="rc-notes">Additional Notes <span style="color:#9E9E9E; font-size:10px; font-weight:400; text-transform:none;">(optional)</span></label>
+          <textarea id="rc-notes" class="rc-form-textarea" placeholder="Describe the issue or add any relevant details…" rows="3"></textarea>
+        </div>
+        <div class="csw-modal__act">
+          <button class="csw-btn csw-btn--cancel" id="rcModalCancel">Cancel</button>
+          <button class="csw-btn csw-btn--confirm" id="rcModalSubmit">Submit Request</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success toast -->
+  <div id="rc-toast" role="status" aria-live="polite">
+    <div class="rt-accent"></div>
+    <div class="rt-body">
+      <div class="rt-header">Request sent successfully</div>
+      <div class="rt-msg">Our team will follow up within 1 business day.</div>
+    </div>
+    <button id="rc-toast-close" type="button" aria-label="Dismiss">&times;</button>
+  </div>
 
 </body>
 </html>
