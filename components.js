@@ -536,7 +536,9 @@
         '.csw-btn--cancel{background:transparent;border:1px solid #005EB8;color:#005EB8;}' +
         '.csw-btn--cancel:hover{background:#F0F6FF;}' +
         '.csw-btn--confirm{background:#005EB8;border:1px solid #005EB8;color:#fff;}' +
-        '.csw-btn--confirm:hover{background:#0B308E;}';
+        '.csw-btn--confirm:hover{background:#0B308E;}' +
+        '.csw-cancel-link{background:none;border:none;cursor:pointer;color:#6E6E6E;font-size:13px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;text-align:center;padding:4px 8px;margin-top:4px;text-decoration:underline;width:100%;display:block;}' +
+        '.csw-cancel-link:hover{color:#1A1A1A;}';
       document.head.appendChild(cswSharedStyle);
     }
 
@@ -557,24 +559,25 @@
           '<p id="machSwitchBody"></p>' +
           '<div class="csw-modal__div"></div>' +
           '<div class="csw-modal__act">' +
-            '<button class="csw-btn csw-btn--cancel" id="machSwitchCancel">Cancel</button>' +
-            '<button class="csw-btn csw-btn--confirm" id="machSwitchConfirm">Switch Machine</button>' +
+            '<button class="csw-btn csw-btn--cancel" id="machSwitchDiscard">Discard &amp; Switch</button>' +
+            '<button class="csw-btn csw-btn--confirm" id="machSwitchConfirm">Save to Wishlist &amp; Switch</button>' +
           '</div>' +
+          '<button class="csw-cancel-link" id="machSwitchCancel">Cancel</button>' +
         '</div>' +
       '</div>';
     document.body.appendChild(machSwitchEl);
     var machSwitchBody    = machSwitchEl.querySelector('#machSwitchBody');
     var machSwitchCancel  = machSwitchEl.querySelector('#machSwitchCancel');
+    var machSwitchDiscard = machSwitchEl.querySelector('#machSwitchDiscard');
     var machSwitchConfirm = machSwitchEl.querySelector('#machSwitchConfirm');
     var machSwitchClose   = machSwitchEl.querySelector('#machSwitchClose');
     function showMachSwitchModal(name) {
-      machSwitchBody.innerHTML = 'Switching to <strong>' + name + '</strong> will update your active machine context across the portal and will clear your cart. Are you sure you want to switch?';
+      var current = localStorage.getItem('okmDefaultMachine') || 'your current machine';
+      machSwitchBody.innerHTML = 'Your cart has parts specific to <strong>' + current + '</strong>. Switching to <strong>' + name + '</strong> means these items won\'t carry over. Save them to your wishlist so you can revisit them later, or remove them and continue.';
       machSwitchEl.classList.add('open');
     }
     function hideMachSwitchModal() { machSwitchEl.classList.remove('open'); pendingMach = null; }
-    machSwitchClose.addEventListener('click', hideMachSwitchModal);
-    machSwitchCancel.addEventListener('click', hideMachSwitchModal);
-    machSwitchConfirm.addEventListener('click', function () {
+    function doMachSwitch() {
       if (pendingMach) {
         addRecentMachine(pendingMach);
         setActiveMachine(pendingMach);
@@ -582,7 +585,11 @@
       }
       hideMachSwitchModal();
       window.location = isMachDealer ? 'dealer-dashboard.html' : 'dashboard.html';
-    });
+    }
+    machSwitchClose.addEventListener('click', hideMachSwitchModal);
+    machSwitchCancel.addEventListener('click', hideMachSwitchModal);
+    machSwitchDiscard.addEventListener('click', doMachSwitch);
+    machSwitchConfirm.addEventListener('click', doMachSwitch);
     machSwitchEl.addEventListener('click', function (e) { if (e.target === machSwitchEl) hideMachSwitchModal(); });
 
     /* ── render machine list ── */
