@@ -74,7 +74,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 28px;
+      flex: 1;
       padding: 12px 16px;
       background: #F0F6FF;
       border-left: 3px solid #005EB8;
@@ -251,8 +251,9 @@
     /* ===== MOVE TO WISHLIST ROW ===== */
     .move-wishlist-row {
       display: flex;
-      justify-content: flex-end;
-      padding: 20px 0 4px;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 28px;
     }
     .move-wishlist-btn {
       height: 38px;
@@ -511,12 +512,15 @@
         <div class="cart-left">
           <h1 class="page-title">Your Cart</h1>
 
-          <!-- Machine context banner -->
-          <div class="machine-context">
-            <span class="machine-context__label">Shopping for</span>
-            <span class="machine-context__name" id="bannerMachineName">LU300-M</span>
-            <span class="machine-context__sep">|</span>
-            <span class="machine-context__serial" id="bannerMachineSerial">Serial No: M5-2891-K</span>
+          <!-- Machine context banner + Move to Wishlist -->
+          <div class="move-wishlist-row" id="move-wishlist-row">
+            <div class="machine-context">
+              <span class="machine-context__label">Shopping for</span>
+              <span class="machine-context__name" id="bannerMachineName">LU300-M</span>
+              <span class="machine-context__sep">|</span>
+              <span class="machine-context__serial" id="bannerMachineSerial">Serial No: M5-2891-K</span>
+            </div>
+            <button class="move-wishlist-btn" onclick="openWishlistModal()">Move to Wishlist</button>
           </div>
 
           <!-- Table header -->
@@ -629,11 +633,6 @@
             </div>
           </div>
 
-          <!-- Move to Wishlist CTA -->
-          <div class="move-wishlist-row" id="move-wishlist-row">
-            <button class="move-wishlist-btn" onclick="openWishlistModal()">Move to Wishlist</button>
-          </div>
-
           <!-- Empty cart state (shown after move to wishlist) -->
           <div class="empty-cart-state" id="empty-cart-state">
             <p class="empty-cart-state__text">No products added yet.</p>
@@ -744,7 +743,7 @@
       </div>
       <div class="modal__body">
         <p style="font-size:14px;color:#4B4B4B;line-height:1.6;">
-          Your cart has parts specific to <strong id="machSwitchCurrent"></strong>. Switching to <strong id="machSwitchTarget"></strong> means these items won't carry over. Save them to your wishlist so you can revisit them later, or remove them and continue.
+          Your cart/quote basket has parts specific to <strong id="machSwitchCurrent"></strong>. Switching to <strong id="machSwitchTarget"></strong> means these items won't carry over. Save them to your wishlist so you can revisit them later, or remove them and continue.
         </p>
         <div class="modal__divider"></div>
         <div class="modal__actions">

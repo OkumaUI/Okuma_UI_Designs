@@ -288,16 +288,25 @@
     .sum-excl-row__lbl { color: #9E9E9E; font-style: italic; }
     .sum-excl-row__val { color: #C0392B; font-weight: 500; }
 
-    /* TOAST — dark pill (withdraw / generic) */
+    /* TOAST — generic */
+    @keyframes toast-pill-in  { from { opacity:0; transform:translateX(60px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes toast-pill-out { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(60px); } }
     .toast {
-      position: fixed; top: 24px; right: 32px;
-      transform: translateY(-12px);
-      background: #1A1A1A; color: #fff; border-radius: 4px;
-      padding: 11px 20px; font-size: 13px; font-weight: 500;
-      z-index: 9999; opacity: 0; pointer-events: none; white-space: nowrap;
-      transition: opacity 0.2s, transform 0.2s;
+      position: fixed; top: 28px; right: 28px;
+      min-width: 300px; max-width: 360px;
+      background: #fff; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none; flex-direction: row; overflow: hidden;
+      z-index: 9999;
+      animation: toast-pill-in 0.28s cubic-bezier(0.22,1,0.36,1);
     }
-    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.show { display: flex; }
+    .toast.hiding { animation: toast-pill-out 0.22s ease forwards; }
+    .toast .t-accent { width: 5px; flex-shrink: 0; background: #2E7D32; }
+    .toast .t-body { flex: 1; padding: 14px 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+    .toast .t-header { color: #2E7D32; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+    .toast .t-close { align-self: flex-start; margin: 10px 10px 0 0; background: none; border: none; cursor: pointer; font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px; flex-shrink: 0; }
+    .toast .t-close:hover { color: #111; }
 
     /* CART TOAST — white card (matches parts-catalogue / search-results) */
     @keyframes ct-in  { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
@@ -381,7 +390,13 @@
   </div>
 
   <div id="okuma-auth-footer"></div>
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <div class="t-accent"></div>
+    <div class="t-body">
+      <div class="t-header" id="toast-msg"></div>
+    </div>
+    <button class="t-close" id="toast-close-btn" type="button" aria-label="Dismiss">&times;</button>
+  </div>
 
   <!-- Cart Toast (white card) -->
   <div id="cart-toast" role="status" aria-live="polite">
@@ -851,13 +866,29 @@
       }
     }
 
+    var _toastTimer = null;
     function showToast(msg) {
       var t = document.getElementById('toast');
       if (!t) return;
-      t.textContent = msg;
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.remove('hiding');
       t.classList.add('show');
-      setTimeout(function() { t.classList.remove('show'); }, 2200);
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(function() { dismissToast(); }, 4000);
     }
+    function dismissToast() {
+      var t = document.getElementById('toast');
+      if (!t) return;
+      t.classList.add('hiding');
+      t.addEventListener('animationend', function handler() {
+        t.classList.remove('show', 'hiding');
+        t.removeEventListener('animationend', handler);
+      });
+    }
+    document.getElementById('toast-close-btn').addEventListener('click', function() {
+      clearTimeout(_toastTimer);
+      dismissToast();
+    });
 
     var _ctTimer = null;
     function showCartToast(name, pn, qty, unitPrice, allItems) {

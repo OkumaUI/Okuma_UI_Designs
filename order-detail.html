@@ -191,7 +191,7 @@
     .det-card__body { padding: 20px; }
 
     /* ITEMS TABLE */
-    .items-tbl { width: 100%; border-collapse: collapse; min-width: 520px; }
+    .items-tbl { width: 100%; border-collapse: collapse; min-width: 660px; }
     .items-tbl th {
       padding: 10px 16px;
       font-size: 11px;
@@ -357,20 +357,20 @@
     .rc-err { font-size: 12px; color: #C0392B; margin-top: 5px; display: none; }
 
     /* ── RC TOAST ── */
-    @keyframes rc-toast-in  { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
-    @keyframes rc-toast-out { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(20px); } }
+    @keyframes rc-toast-in  { from { opacity:0; transform:translateX(60px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes rc-toast-out { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(60px); } }
     #rc-toast {
-      display: none; position: fixed; top: 24px; right: 24px; z-index: 10001;
-      background: #fff; border: 1px solid #DEDEDE; border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-      min-width: 280px; max-width: 360px; overflow: hidden; flex-direction: row;
+      display: none; position: fixed; top: 28px; right: 28px; z-index: 10001;
+      background: #fff; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      min-width: 300px; max-width: 360px; overflow: hidden; flex-direction: row;
     }
     #rc-toast.showing { display: flex; animation: rc-toast-in 0.28s cubic-bezier(0.22,1,0.36,1); }
     #rc-toast.hiding  { animation: rc-toast-out 0.22s ease forwards; }
-    #rc-toast .rt-accent { width: 4px; background: #74AA50; flex-shrink: 0; }
-    #rc-toast .rt-body   { flex: 1; padding: 14px 12px; }
-    #rc-toast .rt-header { font-size: 13px; font-weight: 700; color: #1A1A1A; }
-    #rc-toast .rt-msg    { font-size: 12px; color: #717171; margin-top: 3px; }
+    #rc-toast .rt-accent { width: 5px; background: #2E7D32; flex-shrink: 0; }
+    #rc-toast .rt-body   { flex: 1; padding: 14px 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+    #rc-toast .rt-header { font-size: 12px; font-weight: 700; color: #2E7D32; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+    #rc-toast .rt-msg    { font-size: 12px; color: #717171; margin-top: 0; }
     #rc-toast-close {
       padding: 8px 12px; background: none; border: none; cursor: pointer;
       font-size: 18px; color: #9E9E9E; align-self: flex-start; line-height: 1;
@@ -578,8 +578,6 @@
           '</div>';
       }
 
-      html += renderTimeline(o);
-
       html += '<div class="detail-layout">';
       html += '<div class="detail-main">' + renderItems(o) + renderShipping(o) + '</div>';
       html += '<div class="detail-aside">' + renderSummary(o) + renderInfo(o) + renderActions(o) + '</div>';
@@ -636,20 +634,26 @@
           '</div>'
         : '';
 
+      var rcType  = (o.status === 'delivered' || o.status === 'shipped') ? 'return' : 'cancel';
+      var canAct  = o.status !== 'cancelled';
       var rows = o.items.map(function(it, idx) {
         var lineTotal   = it.qty * it.price;
         var key         = o.num + ':' + idx;
-        var isCancelled = cancellationState[key];
-        var badge       = isCancelled ? '<span class="cancel-req-badge">Cancellation Requested</span>' : '';
-        var actCell     = isCancelled
+        var reqState    = cancellationState[key];
+        var reqBadge    = reqState === 'return' ? '<span class="cancel-req-badge">Return Requested</span>'
+                        : reqState === 'cancel' ? '<span class="cancel-req-badge">Cancellation Requested</span>'
+                        : '';
+        var btnLabel    = rcType === 'return' ? 'Request Return' : 'Request Cancellation';
+        var actCell     = (reqState || !canAct)
           ? ''
-          : '<button class="rc-btn" onclick="window.openRcModal(\'' + o.num + '\',' + idx + ')" aria-label="Return or cancel ' + it.name + '">Return / Cancel</button>';
+          : '<button class="rc-btn" onclick="window.openRcModal(\'' + o.num + '\',' + idx + ',\'' + rcType + '\')" aria-label="' + btnLabel + ' for ' + it.name + '">' + btnLabel + '</button>';
 
         return '<tr>' +
-          '<td data-rc-name="' + key + '"><div class="it-name">' + it.name + badge + '</div><div class="it-pn">P/N: ' + it.pn + '</div></td>' +
+          '<td data-rc-name="' + key + '"><div class="it-name">' + it.name + reqBadge + '</div><div class="it-pn">P/N: ' + it.pn + '</div></td>' +
           '<td class="r" style="width:50px"><span>' + it.qty + '</span></td>' +
           '<td class="r" style="width:95px"><span style="color:#4B4B4B">' + fmt(it.price) + '</span></td>' +
           '<td class="r" style="width:95px"><span class="it-linetotal">' + fmt(lineTotal) + '</span></td>' +
+          '<td style="width:130px">' + badge(o.status) + '</td>' +
           '<td class="col-act-rc" data-rc-act="' + key + '">' + actCell + '</td>' +
           '</tr>';
       }).join('');
@@ -664,7 +668,8 @@
         '<th class="r" style="width:50px">Qty</th>' +
         '<th class="r" style="width:95px">Unit Price</th>' +
         '<th class="r" style="width:95px">Total</th>' +
-        '<th class="col-act-rc" style="width:120px"></th>' +
+        '<th style="width:130px">Status</th>' +
+        '<th class="col-act-rc" style="width:150px"></th>' +
         '</tr></thead>' +
         '<tbody>' + rows + '</tbody>' +
         '</table>' +
@@ -749,11 +754,13 @@
     var cancellationState = {};
     var currentRcOrder   = null;
     var currentRcTarget  = null;
+    var currentRcType    = null;
 
     /* ─── RC MODAL ──────────────────────────────────────── */
-    window.openRcModal = function(orderNum, itemIdx) {
+    window.openRcModal = function(orderNum, itemIdx, rcType) {
       currentRcOrder  = orderNum;
       currentRcTarget = itemIdx;
+      currentRcType   = rcType || 'cancel';
       var o  = DATA[orderNum];
       var it = o.items[itemIdx];
       document.getElementById('rc-item-name').textContent = it.name;
@@ -761,6 +768,7 @@
       document.getElementById('rc-reason').value          = '';
       document.getElementById('rc-reason-err').style.display = 'none';
       document.getElementById('rc-notes').value           = '';
+      document.getElementById('rcModalTitle').textContent = rcType === 'return' ? 'Request Return' : 'Request Cancellation';
       document.getElementById('rc-overlay').classList.add('open');
     };
 
@@ -776,8 +784,9 @@
       if (!reason) { errEl.style.display = 'block'; return; }
       errEl.style.display = 'none';
 
-      var key = currentRcOrder + ':' + currentRcTarget;
-      cancellationState[key] = true;
+      var key       = currentRcOrder + ':' + currentRcTarget;
+      var badgeText = currentRcType === 'return' ? 'Return Requested' : 'Cancellation Requested';
+      cancellationState[key] = currentRcType;
 
       var nameCell = document.querySelector('[data-rc-name="' + key + '"]');
       if (nameCell) {
@@ -785,7 +794,7 @@
         if (nameDiv && !nameDiv.querySelector('.cancel-req-badge')) {
           var b = document.createElement('span');
           b.className   = 'cancel-req-badge';
-          b.textContent = 'Cancellation Requested';
+          b.textContent = badgeText;
           nameDiv.appendChild(b);
         }
       }
@@ -895,7 +904,7 @@
   <div id="rc-toast" role="status" aria-live="polite">
     <div class="rt-accent"></div>
     <div class="rt-body">
-      <div class="rt-header">Request sent successfully</div>
+      <div class="rt-header">&#10003; Request sent successfully</div>
       <div class="rt-msg">Our team will follow up within 1 business day.</div>
     </div>
     <button id="rc-toast-close" type="button" aria-label="Dismiss">&times;</button>

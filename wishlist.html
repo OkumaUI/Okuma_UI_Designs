@@ -392,6 +392,8 @@
     .modal-btn--cancel:hover  { background: #F0F6FF; }
     .modal-btn--proceed { background: #005EB8; border: 1px solid #005EB8; color: #fff; }
     .modal-btn--proceed:hover { background: #0B308E; }
+    .modal__cancel-link { background: none; border: none; cursor: pointer; color: #6E6E6E; font-size: 13px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: center; padding: 4px 8px; margin-top: 4px; text-decoration: underline; width: 100%; display: block; }
+    .modal__cancel-link:hover { color: #1A1A1A; }
 
     /* ===== TOASTS ===== */
     @keyframes wl-toast-in  { from { opacity:0; transform:translateX(60px); } to { opacity:1; transform:translateX(0); } }
@@ -588,11 +590,33 @@
     </div>
   </div>
 
-  <!-- ═══════════════ TOAST: Added to Cart ═══════════════ -->
+  <!-- ═══════════════ SWITCH MACHINE MODAL ═══════════════ -->
+  <div class="modal-overlay" id="wl-switch-overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wl-switch-title">
+      <div class="modal__header">
+        <h2 class="modal__title" id="wl-switch-title">Switch Machine?</h2>
+        <button class="modal__close" id="wl-switch-close" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5L15 15M15 5L5 15" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <p style="font-size:14px;color:#4B4B4B;line-height:1.6;">
+          This part is saved for <strong id="wl-switch-target"></strong>, but your currently selected machine is <strong id="wl-switch-current"></strong>. Switching will update your machine selection and move this part to your cart.
+        </p>
+        <div class="modal__divider"></div>
+        <div class="modal__actions">
+          <button class="modal-btn modal-btn--cancel" id="wl-switch-cancel">Cancel</button>
+          <button class="modal-btn modal-btn--proceed" id="wl-switch-confirm">Switch &amp; Move to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TOAST: Moved to Cart ═══════════════ -->
   <div class="wl-toast" id="wl-cart-toast" role="status" aria-live="polite">
     <div class="wl-toast__accent wl-toast__accent--green"></div>
     <div class="wl-toast__body">
-      <div class="wl-toast__hdr wl-toast__hdr--green">&#10003; Added to Cart</div>
+      <div class="wl-toast__hdr wl-toast__hdr--green">&#10003; Moved to Cart</div>
       <div class="wl-toast__name" id="wl-cart-toast-name"></div>
       <div class="wl-toast__part" id="wl-cart-toast-part"></div>
     </div>
@@ -733,7 +757,7 @@
           '<td class="col-price wl-price">' + money(it.price) + '</td>' +
           '<td class="col-act">' +
             '<div class="wl-actions">' +
-              '<button class="wl-atc-btn" data-id="' + it.id + '">Add to Cart</button>' +
+              '<button class="wl-atc-btn" data-id="' + it.id + '">Move to Cart</button>' +
               '<button class="wl-remove-btn" data-id="' + it.id + '" aria-label="Remove ' + it.name + ' from wishlist">' + trashSvg + '</button>' +
             '</div>' +
           '</td>' +
@@ -877,8 +901,18 @@
       });
     }
 
-    /* ── ADD TO CART ── */
+    /* ── MOVE TO CART ── */
     function addToCart(id) {
+      var item = wlItems[id];
+      var selectedMachine = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
+      if (item.machine !== selectedMachine) {
+        openSwitchMachineModal(id, selectedMachine, item.machine);
+        return;
+      }
+      doMoveToCart(id);
+    }
+
+    function doMoveToCart(id) {
       var item = wlItems[id];
       item.removed = true;
       updatePills();
@@ -919,7 +953,42 @@
       if (e.key === 'Escape' && removeOverlay.classList.contains('is-open')) closeRemoveModal();
     });
 
-    /* ── TOAST: Added to Cart ── */
+    /* ── SWITCH MACHINE MODAL ── */
+    var pendingSwitchId   = null;
+    var switchOverlay     = document.getElementById('wl-switch-overlay');
+
+    function openSwitchMachineModal(id, currentMachine, targetMachine) {
+      pendingSwitchId = id;
+      document.getElementById('wl-switch-current').textContent = currentMachine;
+      document.getElementById('wl-switch-target').textContent  = targetMachine;
+      switchOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSwitchMachineModal() {
+      switchOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      pendingSwitchId = null;
+    }
+
+    function confirmSwitchAndMove() {
+      if (pendingSwitchId === null) return;
+      var item = wlItems[pendingSwitchId];
+      localStorage.setItem('okmDefaultMachine', item.machine);
+      window.dispatchEvent(new Event('okuma:machineChanged'));
+      closeSwitchMachineModal();
+      doMoveToCart(pendingSwitchId);
+    }
+
+    document.getElementById('wl-switch-close').addEventListener('click', closeSwitchMachineModal);
+    document.getElementById('wl-switch-cancel').addEventListener('click', closeSwitchMachineModal);
+    document.getElementById('wl-switch-confirm').addEventListener('click', confirmSwitchAndMove);
+    switchOverlay.addEventListener('click', function (e) { if (e.target === switchOverlay) closeSwitchMachineModal(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && switchOverlay.classList.contains('is-open')) closeSwitchMachineModal();
+    });
+
+    /* ── TOAST: Moved to Cart ── */
     var _cartToastTimer = null;
     var cartToastEl = document.getElementById('wl-cart-toast');
 

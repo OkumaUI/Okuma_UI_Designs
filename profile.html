@@ -192,16 +192,24 @@
     .save-confirm.is-visible { opacity: 1; }
 
     /* ── TOAST ── */
+    @keyframes toast-in  { from { opacity:0; transform:translateX(60px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes toast-out { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(60px); } }
     .toast {
-      position: fixed; bottom: 32px; left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #1A1A1A; color: #fff; font-size: 14px; font-weight: 500;
-      padding: 12px 20px; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      display: flex; align-items: center; gap: 10px;
-      opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s;
-      z-index: 9999; white-space: nowrap; max-width: calc(100vw - 32px);
+      position: fixed; top: 28px; right: 28px;
+      min-width: 300px; max-width: 360px;
+      background: #fff; border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      display: none; flex-direction: row; overflow: hidden;
+      z-index: 9999;
+      animation: toast-in 0.28s cubic-bezier(0.22,1,0.36,1);
     }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+    .toast.show { display: flex; }
+    .toast.hiding { animation: toast-out 0.22s ease forwards; }
+    .toast-accent { width: 5px; flex-shrink: 0; background: #2E7D32; }
+    .toast-body { flex: 1; padding: 14px 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+    .toast-header { color: #2E7D32; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+    .toast-close { align-self: flex-start; margin: 10px 10px 0 0; background: none; border: none; cursor: pointer; font-size: 18px; color: #6E6E6E; line-height: 1; padding: 2px 4px; flex-shrink: 0; }
+    .toast-close:hover { color: #111; }
 
     /* ── ADDRESS BOOK ── */
     .addr-book-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -211,16 +219,19 @@
       padding: 18px 20px; display: flex; align-items: flex-start;
       gap: 14px; position: relative;
     }
-    .addr-book-card.is-pending { opacity: 0.85; border-color: #D1D5DB; background: #FAFAFA; }
+    .addr-book-card.is-pending  { opacity: 0.85; border-color: #D1D5DB; background: #FAFAFA; }
+    .addr-book-card.is-rejected { opacity: 0.85; border-color: #FECACA; background: #FFF8F8; }
     .addr-book-card__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
     .addr-book-card__label { font-size: 15px; font-weight: 700; color: #2C2A29; line-height: 1; }
     .addr-book-card__tag {
       display: inline-flex; align-items: center; font-size: 11px; font-weight: 700;
       border-radius: 10px; padding: 1px 8px; margin-top: 2px; width: fit-content;
     }
-    .addr-book-card__tag--pending { color: #92400E; background: #FFFBEB; border: 1px solid #FCD34D; }
+    .addr-book-card__tag--pending  { color: #92400E; background: #FFFBEB; border: 1px solid #FCD34D; }
+    .addr-book-card__tag--rejected { color: #7F1D1D; background: #FEF2F2; border: 1px solid #FECACA; }
     .addr-book-card__line { font-size: 13px; font-weight: 400; color: #717171; line-height: 1.5; }
-    .addr-pending-note { font-size: 12px; color: #92400E; margin-top: 4px; font-style: italic; }
+    .addr-pending-note  { font-size: 12px; color: #92400E; margin-top: 4px; font-style: italic; }
+    .addr-rejected-note { font-size: 12px; color: #991B1B; margin-top: 4px; font-style: italic; }
     .addr-add-btn {
       display: inline-flex; align-items: center; gap: 8px;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -860,11 +871,11 @@
   </div>
 
   <div class="toast" id="appToast" role="status" aria-live="polite">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <circle cx="8" cy="8" r="6.5" stroke="#2AAB3F" stroke-width="1.5"/>
-      <path d="M5 8l2 2 4-4" stroke="#2AAB3F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Changes saved successfully
+    <div class="toast-accent"></div>
+    <div class="toast-body">
+      <div class="toast-header">&#10003; Changes saved successfully</div>
+    </div>
+    <button class="toast-close" id="appToastClose" type="button" aria-label="Dismiss">&times;</button>
   </div>
 
   <div id="liveRegion" aria-live="polite" aria-atomic="true"
@@ -1082,9 +1093,10 @@
   /* ── ADDRESS BOOK ── */
   (function () {
     var ADDRS = [
-      { label: 'Warehouse B',       street: '11900 Cottonwood Street', city: 'Charlotte', state: 'NC', zip: '28214', status: 'verified' },
-      { label: 'Service Depot North', street: '455 Innovation Drive',  city: 'Detroit',   state: 'MI', zip: '48126', status: 'verified' },
-      { label: 'New Assembly Plant', street: '800 Industrial Pkwy',    city: 'Columbus',  state: 'OH', zip: '43215', status: 'pending'  },
+      { label: 'Warehouse B',       street: '11900 Cottonwood Street', city: 'Charlotte', state: 'NC', zip: '28214', status: 'verified'  },
+      { label: 'Service Depot North', street: '455 Innovation Drive',  city: 'Detroit',   state: 'MI', zip: '48126', status: 'verified'  },
+      { label: 'New Assembly Plant', street: '800 Industrial Pkwy',    city: 'Columbus',  state: 'OH', zip: '43215', status: 'pending'   },
+      { label: 'East Coast Hub',    street: '320 Commerce Blvd',       city: 'Richmond',  state: 'VA', zip: '23219', status: 'rejected'  },
     ];
 
     var overlay    = document.getElementById('addrModalOverlay');
@@ -1106,6 +1118,17 @@
               '<span class="addr-book-card__tag addr-book-card__tag--pending">Pending Approval</span>' +
               '<span class="addr-book-card__line">' + full + '</span>' +
               '<span class="addr-pending-note">Awaiting distributor approval — cannot be used for orders until approved.</span>' +
+            '</div>' +
+          '</div>';
+        }
+
+        if (a.status === 'rejected') {
+          return '<div class="addr-book-card is-rejected">' +
+            '<div class="addr-book-card__body">' +
+              '<span class="addr-book-card__label">' + a.label + '</span>' +
+              '<span class="addr-book-card__tag addr-book-card__tag--rejected">Rejected</span>' +
+              '<span class="addr-book-card__line">' + full + '</span>' +
+              '<span class="addr-rejected-note">This address request was not approved. Please contact your distributor for more information.</span>' +
             '</div>' +
           '</div>';
         }

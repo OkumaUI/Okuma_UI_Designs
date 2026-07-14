@@ -573,7 +573,7 @@
     var machSwitchClose   = machSwitchEl.querySelector('#machSwitchClose');
     function showMachSwitchModal(name) {
       var current = localStorage.getItem('okmDefaultMachine') || 'your current machine';
-      machSwitchBody.innerHTML = 'Your cart has parts specific to <strong>' + current + '</strong>. Switching to <strong>' + name + '</strong> means these items won\'t carry over. Save them to your wishlist so you can revisit them later, or remove them and continue.';
+      machSwitchBody.innerHTML = 'Your cart/quote basket has parts specific to <strong>' + current + '</strong>. Switching to <strong>' + name + '</strong> means these items won\'t carry over. Save them to your wishlist so you can revisit them later, or remove them and continue.';
       machSwitchEl.classList.add('open');
     }
     function hideMachSwitchModal() { machSwitchEl.classList.remove('open'); pendingMach = null; }
