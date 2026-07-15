@@ -210,11 +210,12 @@
     .orders-table tbody tr { cursor: pointer; }
     .orders-table tbody tr:hover { background: #F0F6FF; }
 
-    .col-order   { width: 28%; }
-    .col-date    { width: 18%; }
-    .col-items   { width: 14%; }
-    .col-total   { width: 18%; }
-    .col-status  { width: 22%; }
+    .col-order   { width: 24%; }
+    .col-date    { width: 15%; }
+    .col-for     { width: 18%; font-weight: 400; }
+    .col-items   { width: 11%; }
+    .col-total   { width: 14%; }
+    .col-status  { width: 18%; }
 
     .ordered-for-self {
       color: #9E9E9E;
@@ -314,7 +315,38 @@
 
     img, svg { max-width: 100%; }
 
-    /* â”€â”€ Tablet landscape: reduce main-area bottom padding â”€â”€ */
+    /* ── Custom dropdown ── */
+    .csd-btn {
+      width: 100%; height: 42px;
+      border: 1px solid #DEDEDE; border-radius: 4px;
+      padding: 0 36px 0 14px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px; font-weight: 500;
+      text-align: left; color: #1A1A1A; background: #fff;
+      cursor: pointer; appearance: none; -webkit-appearance: none;
+    }
+    .csd-btn:focus { outline: none; border-color: #005EB8; }
+    .csd-panel {
+      display: none; position: absolute;
+      top: 100%; left: 0;
+      margin-top: 2px; background: #fff;
+      border: 1px solid #DEDEDE; border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+      max-height: 220px; overflow-y: auto;
+      -webkit-overflow-scrolling: touch; z-index: 300;
+      min-width: 100%; width: max-content;
+    }
+    .csd-panel.open { display: block; }
+    .csd-item {
+      padding: 11px 14px; font-size: 13px; color: #1A1A1A;
+      cursor: pointer; border-top: 1px solid #F0F0F0;
+    }
+    .csd-item:first-child { border-top: none; }
+    .csd-item.csd-placeholder { color: #757575; cursor: default; }
+    .csd-item:not(.csd-placeholder):hover { background: #EEF4FF; }
+    .csd-item.csd-selected { color: #005EB8; font-weight: 700; }
+
+    /* ── Tablet landscape: reduce main-area bottom padding ── */
     @media (min-width: 769px) and (max-width: 1199px) {
       .main-area { padding: 24px 24px 48px; }
     }
@@ -412,7 +444,15 @@
         </div>
         <div class="filter-wrap">
           <select class="filter-select" id="machineFilter" onchange="applyFilters()">
-            <option value="">All Machines</option>
+            <option value="">Filter by Machine</option>
+          </select>
+          <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="filter-wrap" id="customerFilterWrap" style="display:none">
+          <select class="filter-select" id="customerFilter" onchange="applyFilters()">
+            <option value="">Filter by Customer</option>
           </select>
           <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -420,7 +460,7 @@
         </div>
         <div class="filter-wrap">
           <select class="filter-select" id="sortFilter" onchange="applyFilters()">
-            <option value="newest">Sort by</option>
+            <option value="">Sort by</option>
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
           </select>
@@ -461,6 +501,7 @@
               <tr>
                 <th class="col-order">Order #</th>
                 <th class="col-date">Date Placed</th>
+                <th class="col-for" id="thOrderedFor" style="display:none">Ordered For</th>
                 <th class="col-items">Items</th>
                 <th class="col-total">Total</th>
                 <th class="col-status">Status</th>
@@ -488,6 +529,8 @@
   <script src="components.js"></script>
   <script>
     (function () {
+
+      var isDealer = (typeof okuma_getUser === 'function' && okuma_getUser() && okuma_getUser().role === 'dealer');
 
       var ALL_ORDERS = [
         { num: 'OKU-2026-00421', date: 'Jun 10, 2026', dateSort: 20260610, items: 3,  total: 1284.50, status: 'shipped',    orderedFor: 'ABC Industries',      machine: 'M5-2891-K' },
@@ -535,15 +578,21 @@
         var pageItems = filteredOrders.slice(start, start + PAGE_SIZE);
 
         if (filteredOrders.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state">No orders found matching your search.</div></td></tr>';
+          tbody.innerHTML = '<tr><td colspan="' + (isDealer ? 6 : 5) + '"><div class="empty-state">No orders found matching your search.</div></td></tr>';
         } else {
           scroll.style.display = '';
           empty.style.display  = 'none';
           tbody.innerHTML = pageItems.map(function (o) {
             var itemLabel = o.items === 1 ? '1 item' : o.items + ' items';
+            var forCell = isDealer
+              ? '<td class="col-for">' + (o.orderedFor
+                  ? '<span class="ordered-for-customer">' + o.orderedFor + '</span>'
+                  : '<span class="ordered-for-self">Self</span>') + '</td>'
+              : '';
             return '<tr onclick="window.location=\'order-detail.html?id=' + o.num + '\'">' +
               '<td class="col-order"><span class="order-num-label">' + o.num + '</span></td>' +
               '<td class="col-date">' + o.date + '</td>' +
+              forCell +
               '<td class="col-items">' + itemLabel + '</td>' +
               '<td class="col-total"><span class="col-total-val">' + formatTotal(o.total) + '</span></td>' +
               '<td class="col-status">' + statusBadge(o.status) + '</td>' +
@@ -619,16 +668,19 @@
       })();
 
       function applyFilters() {
-        var query   = (document.getElementById('orderSearch').value || '').toLowerCase().trim();
-        var status  = document.getElementById('statusFilter').value;
-        var machine = document.getElementById('machineFilter').value;
-        var sort    = document.getElementById('sortFilter').value;
+        var query    = (document.getElementById('orderSearch').value || '').toLowerCase().trim();
+        var status   = document.getElementById('statusFilter').value;
+        var machine  = document.getElementById('machineFilter').value;
+        var custEl   = document.getElementById('customerFilter');
+        var customer = custEl ? custEl.value : '';
+        var sort     = document.getElementById('sortFilter').value;
 
         filteredOrders = ALL_ORDERS.filter(function (o) {
-          var matchQuery   = !query   || o.num.toLowerCase().includes(query) || o.date.toLowerCase().includes(query);
-          var matchStatus  = !status  || (status === 'open' ? (o.status === 'processing' || o.status === 'shipped') : o.status === status);
-          var matchMachine = !machine || o.machine === machine;
-          return matchQuery && matchStatus && matchMachine;
+          var matchQuery    = !query    || o.num.toLowerCase().includes(query) || o.date.toLowerCase().includes(query);
+          var matchStatus   = !status   || (status === 'open' ? (o.status === 'processing' || o.status === 'shipped') : o.status === status);
+          var matchMachine  = !machine  || o.machine === machine;
+          var matchCustomer = !customer || (customer === '__self__' ? !o.orderedFor : o.orderedFor === customer);
+          return matchQuery && matchStatus && matchMachine && matchCustomer;
         });
 
         if (sort === 'oldest') { filteredOrders.sort(function (a, b) { return a.dateSort - b.dateSort; }); }
@@ -638,7 +690,7 @@
         render();
 
         var clearBar = document.getElementById('clearFilterBar');
-        if (clearBar) clearBar.classList.toggle('visible', !!status);
+        if (clearBar) clearBar.classList.toggle('visible', !!(status || customer));
       }
 
       window.applyFilters = applyFilters;
@@ -647,8 +699,36 @@
       if (clearFilterBtn) {
         clearFilterBtn.addEventListener('click', function () {
           document.getElementById('statusFilter').value = '';
+          var cf = document.getElementById('customerFilter');
+          if (cf) cf.value = '';
+          if (typeof window.syncCsdDropdowns === 'function') window.syncCsdDropdowns();
           applyFilters();
         });
+      }
+
+      // Show dealer-only columns
+      if (isDealer) {
+        var thFor = document.getElementById('thOrderedFor');
+        if (thFor) thFor.style.display = '';
+        var custWrap = document.getElementById('customerFilterWrap');
+        if (custWrap) custWrap.style.display = '';
+        var custSel = document.getElementById('customerFilter');
+        if (custSel) {
+          var selfOpt = document.createElement('option');
+          selfOpt.value = '__self__';
+          selfOpt.textContent = 'Self';
+          custSel.appendChild(selfOpt);
+          var custNames = ALL_ORDERS
+            .map(function (o) { return o.orderedFor; })
+            .filter(function (v, i, a) { return v && a.indexOf(v) === i; })
+            .sort();
+          custNames.forEach(function (n) {
+            var opt = document.createElement('option');
+            opt.value = n;
+            opt.textContent = n;
+            custSel.appendChild(opt);
+          });
+        }
       }
 
       // Hide Stock Order CTA for non-dealer users
@@ -699,6 +779,80 @@
       // Initial render
       applyFilters();
 
+    })();
+  </script>
+
+  <script>
+    /* ── Custom dropdowns for Filter/Sort ── */
+    (function () {
+      var syncFns = [];
+      document.querySelectorAll('.filter-wrap').forEach(function (wrap) {
+        var sel = wrap.querySelector('.filter-select');
+        var chevron = wrap.querySelector('.filter-wrap__chevron');
+        if (!sel) return;
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'csd-btn';
+
+        var panel = document.createElement('div');
+        panel.className = 'csd-panel';
+
+        function syncBtn() {
+          var opt = sel.options[sel.selectedIndex];
+          btn.textContent = opt ? opt.text.trim() : '';
+          btn.style.color = (!opt || opt.value === '') ? '#757575' : '#1A1A1A';
+        }
+
+        function buildPanel() {
+          panel.innerHTML = '';
+          Array.from(sel.options).forEach(function (opt) {
+            var item = document.createElement('div');
+            item.className = 'csd-item' +
+              (opt.value === '' ? ' csd-placeholder' : '') +
+              (opt.selected ? ' csd-selected' : '');
+            item.textContent = opt.text.trim();
+            item.addEventListener('click', function () {
+              sel.value = opt.value;
+              sel.dispatchEvent(new Event('change'));
+              syncBtn();
+              buildPanel();
+              panel.classList.remove('open');
+            });
+            panel.appendChild(item);
+          });
+        }
+
+        btn.addEventListener('click', function () {
+          buildPanel();
+          panel.classList.toggle('open');
+          if (panel.classList.contains('open')) {
+            panel.style.left = '0';
+            panel.style.right = 'auto';
+            var rect = panel.getBoundingClientRect();
+            if (rect.right > window.innerWidth - 8) {
+              panel.style.left = 'auto';
+              panel.style.right = '0';
+            }
+          }
+        });
+
+        document.addEventListener('click', function (e) {
+          if (!wrap.contains(e.target)) panel.classList.remove('open');
+        });
+
+        window.addEventListener('scroll', function () {
+          panel.classList.remove('open');
+        }, { passive: true });
+
+        sel.style.display = 'none';
+        wrap.appendChild(btn);
+        wrap.appendChild(panel);
+        syncFns.push(syncBtn);
+        syncBtn();
+      });
+
+      window.syncCsdDropdowns = function () { syncFns.forEach(function (fn) { fn(); }); };
     })();
   </script>
 

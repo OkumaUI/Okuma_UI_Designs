@@ -664,6 +664,9 @@
       if (cust) {
         var label = document.getElementById('cartAccLabel');
         if (label) label.textContent = cust + "'s Cart";
+      } else {
+        var cardEl = document.getElementById('card-card');
+        if (cardEl) cardEl.style.display = 'none';
       }
     })();
   </script>

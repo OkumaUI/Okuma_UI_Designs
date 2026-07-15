@@ -637,7 +637,7 @@
       </div>
       <div class="modal__body">
         <p style="font-size:14px;color:#4B4B4B;line-height:1.6;">
-          Switching to <strong id="machSwitchTarget"></strong> will clear all items in your current cart. This cannot be undone.
+          Your cart basket has parts specific to <strong id="machSwitchCurrent"></strong>. Switching to <strong id="machSwitchTarget"></strong> means these items won't carry over. Save them to your wishlist so you can revisit them later and note that all the quote basket items will be lost.
         </p>
         <div class="modal__divider"></div>
         <div class="modal__actions">
@@ -795,19 +795,7 @@
 
   <div id="okuma-auth-footer"></div>
 
-  <script>
-    var OKUMA_USERS = [
-      { email: 'customer@okuma.com', password: 'customer123', role: 'customer', firstName: 'Jonathan', lastName: 'Hayes' },
-      { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer',   firstName: 'Sarah',    lastName: 'Mitchell' }
-    ];
-    function okuma_checkAuth() {}
-    function okuma_getUser() {
-      try { var s = JSON.parse(sessionStorage.getItem('okuma_session')); if (s && s.firstName) return s; } catch(e) {}
-      return OKUMA_USERS[1];
-    }
-    function okuma_logout() { sessionStorage.removeItem('okuma_session'); window.location.replace('login.html'); }
-  </script>
-
+  <script src="auth.js"></script>
   <script src="components.js"></script>
 
   <script>
@@ -851,6 +839,8 @@
         return items.some(function(it) { return !it.removed; });
       }
       function openModal(name) {
+        var currentLbl = document.getElementById('machSwitchCurrent');
+        if (currentLbl) currentLbl.textContent = lsGet('okmDefaultMachine') || 'your current machine';
         if (targetLbl) targetLbl.textContent = name;
         overlay.classList.add('is-open');
         document.body.style.overflow = 'hidden';

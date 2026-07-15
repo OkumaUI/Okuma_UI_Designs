@@ -639,19 +639,7 @@
 
   <div id="okuma-auth-footer"></div>
 
-  <script>
-    var OKUMA_USERS = [
-      { email: 'customer@okuma.com', password: 'customer123', role: 'customer', firstName: 'Jonathan', lastName: 'Hayes' },
-      { email: 'dealer@okuma.com',   password: 'dealer123',   role: 'dealer',   firstName: 'Sarah',    lastName: 'Mitchell' }
-    ];
-    function okuma_checkAuth() {}
-    function okuma_getUser() {
-      try { var s = JSON.parse(sessionStorage.getItem('okuma_session')); if (s && s.firstName) return s; } catch(e) {}
-      return OKUMA_USERS[0];
-    }
-    function okuma_logout() { sessionStorage.removeItem('okuma_session'); window.location.replace('login.html'); }
-  </script>
-
+  <script src="auth.js"></script>
   <script src="components.js"></script>
 
   <script>

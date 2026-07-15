@@ -170,6 +170,8 @@
       transition: background 0.15s;
     }
     .btn-primary:hover { background: #0052A3; }
+    .btn-primary:disabled { background: #D1D5DB; cursor: not-allowed; }
+    .btn-primary:disabled:hover { background: #D1D5DB; }
     .btn-secondary {
       background: transparent; border: 1px solid #005EB8; color: #005EB8;
       height: 56px; width: 100%; border-radius: 2px; font-size: 14px; font-weight: 700;
@@ -658,7 +660,7 @@
 
           <!-- CTA -->
           <div class="cta-block">
-            <button class="btn-primary" onclick="window.location='dealer-order-payment.html'">
+            <button class="btn-primary" id="continueBtn" onclick="window.location='dealer-order-payment.html'">
               Continue to Payment Details
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="3" y1="8" x2="13" y2="8"/><polyline points="8.5 3.5 13 8 8.5 12.5"/>
@@ -728,7 +730,7 @@
     var selectedAddress  = 0;
     var selectedShipping = 1;
 
-    document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); });
+    document.addEventListener('DOMContentLoaded', function() { onCarrierChange(); updateContinueBtn(); });
 
     document.querySelectorAll('input[name="address"]').forEach(function (r) {
       r.addEventListener('change', function () { selectedAddress = parseInt(this.value, 10); });
@@ -753,6 +755,19 @@
       document.body.classList.toggle('prepaid-active', isPrepaid);
 
       if (isPrepaid) input.value = '';
+      updateContinueBtn();
+    }
+
+    function updateContinueBtn() {
+      var carrier   = document.getElementById('acct-carrier').value;
+      var acctVal   = (document.getElementById('acct-number').value || '').trim();
+      var isPrepaid = (carrier === 'okuma');
+      var btn       = document.getElementById('continueBtn');
+      if (btn) btn.disabled = !isPrepaid && acctVal.length === 0;
+    }
+
+    function onAcctNumberChange() {
+      updateContinueBtn();
     }
   </script>
 

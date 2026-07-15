@@ -179,12 +179,16 @@
     .quotes-table tbody tr:last-child td { border-bottom: none; }
     .quotes-table tbody tr:hover { background: #FAFAFA; }
 
-    .col-quote   { width: 22%; }
-    .col-date    { width: 16%; }
-    .col-expiry  { width: 18%; }
-    .col-items   { width: 10%; }
-    .col-total   { width: 16%; }
-    .col-status  { width: 18%; }
+    .col-quote   { width: 19%; }
+    .col-date    { width: 14%; }
+    .col-for     { width: 16%; font-weight: 400; }
+    .col-expiry  { width: 15%; }
+    .col-items   { width: 8%; }
+    .col-total   { width: 13%; }
+    .col-status  { width: 15%; }
+
+    .ordered-for-self     { color: #9E9E9E; font-style: italic; }
+    .ordered-for-customer { color: #1A1A1A; font-weight: 500; }
 
     .quotes-table tbody tr { cursor: pointer; }
     .quotes-table tbody tr:hover { background: #F0F6FF; }
@@ -329,18 +333,17 @@
       font-size: 13px; font-weight: 500;
       text-align: left; color: #1A1A1A; background: #fff;
       cursor: pointer; appearance: none; -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%23717171' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 10px center;
     }
     .csd-btn:focus { outline: none; border-color: #005EB8; }
     .csd-panel {
       display: none; position: absolute;
-      top: 100%; left: 0; right: 0;
+      top: 100%; left: 0;
       margin-top: 2px; background: #fff;
       border: 1px solid #DEDEDE; border-radius: 4px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.14);
       max-height: 220px; overflow-y: auto;
       -webkit-overflow-scrolling: touch; z-index: 300;
+      min-width: 100%; width: max-content;
     }
     .csd-panel.open { display: block; }
     .csd-item {
@@ -401,9 +404,9 @@
             <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <div class="filter-wrap">
+        <div class="filter-wrap" id="customerFilterWrap" style="display:none">
           <select class="filter-select" id="customerFilter" onchange="applyFilters()">
-            <option value="">Ordered For</option>
+            <option value="">Filter by Customer</option>
           </select>
           <svg class="filter-wrap__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M3 5l4 4 4-4" stroke="#717171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -411,7 +414,7 @@
         </div>
         <div class="filter-wrap">
           <select class="filter-select" id="sortFilter" onchange="applyFilters()">
-            <option value="newest">Sort by</option>
+            <option value="">Sort by</option>
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
           </select>
@@ -439,6 +442,7 @@
               <tr>
                 <th class="col-quote">Quote #</th>
                 <th class="col-date">Date Submitted</th>
+                <th class="col-for" id="thOrderedFor" style="display:none">Ordered For</th>
                 <th class="col-expiry">Expiry Date</th>
                 <th class="col-items">Items</th>
                 <th class="col-total">Total</th>
@@ -549,7 +553,7 @@
         var pageItems = filteredQuotes.slice(start, start + PAGE_SIZE);
 
         if (filteredQuotes.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state">No quotes found matching your search.</div></td></tr>';
+          tbody.innerHTML = '<tr><td colspan="' + (isDealer ? 7 : 6) + '"><div class="empty-state">No quotes found matching your search.</div></td></tr>';
         } else {
           tbody.innerHTML = pageItems.map(function (q) {
             var itemLabel = q.items === 1 ? '1 item' : q.items + ' items';
@@ -557,12 +561,18 @@
               ? '<span class="col-total-val">' + formatTotal(q.total) + '</span>'
               : '<span class="col-total-pending">Pending</span>';
             var effectiveStatus = lsStatus(q.num) || q.status;
+            var forCell = isDealer
+              ? '<td class="col-for">' + (q.orderedFor
+                  ? '<span class="ordered-for-customer">' + q.orderedFor + '</span>'
+                  : '<span class="ordered-for-self">Self</span>') + '</td>'
+              : '';
           var dest = (isDealer && (effectiveStatus === 'open' || effectiveStatus === 'responded' || effectiveStatus === 'closed'))
             ? 'dealer-quote-response.html?id=' + q.num
             : 'quote-detail.html?id=' + q.num;
           return '<tr onclick="window.location=\'' + dest + '\'">' +
               '<td class="col-quote"><span class="quote-num-label">' + q.num + '</span></td>' +
               '<td class="col-date">' + q.submitted + '</td>' +
+              forCell +
               '<td class="col-expiry">' + expiryCell(q) + '</td>' +
               '<td class="col-items">' + itemLabel + '</td>' +
               '<td class="col-total">' + totalCell + '</td>' +
@@ -605,10 +615,14 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
-      // Populate Ordered For dropdown with unique customer names from quote data
+      // Populate customer filter dropdown with Self + unique customer names from quote data
       (function () {
         var sel = document.getElementById('customerFilter');
         if (!sel) return;
+        var selfOpt = document.createElement('option');
+        selfOpt.value = '__self__';
+        selfOpt.textContent = 'Self';
+        sel.appendChild(selfOpt);
         var names = ALL_QUOTES
           .map(function (q) { return q.orderedFor; })
           .filter(function (v, i, a) { return v && a.indexOf(v) === i; })
@@ -630,7 +644,7 @@
         filteredQuotes = ALL_QUOTES.filter(function (q) {
           var matchQuery    = !query    || q.num.toLowerCase().indexOf(query) !== -1;
           var matchStatus   = !status   || q.status === status;
-          var matchCustomer = !customer || q.orderedFor === customer;
+          var matchCustomer = !customer || (customer === '__self__' ? !q.orderedFor : q.orderedFor === customer);
           return matchQuery && matchStatus && matchCustomer;
         });
 
@@ -651,8 +665,17 @@
         clearFilterBtn.addEventListener('click', function () {
           document.getElementById('statusFilter').value   = '';
           document.getElementById('customerFilter').value = '';
+          if (typeof window.syncCsdDropdowns === 'function') window.syncCsdDropdowns();
           applyFilters();
         });
+      }
+
+      // Show dealer-only columns
+      if (isDealer) {
+        var thFor = document.getElementById('thOrderedFor');
+        if (thFor) thFor.style.display = '';
+        var custWrap = document.getElementById('customerFilterWrap');
+        if (custWrap) custWrap.style.display = '';
       }
 
       // Set Home breadcrumb to the correct dashboard based on role
@@ -683,6 +706,7 @@
   <script>
     /* ── Custom dropdowns for Filter/Sort (mirrors parts-catalogue pattern) ── */
     (function () {
+      var syncFns = [];
       document.querySelectorAll('.filter-wrap').forEach(function (wrap) {
         var sel = wrap.querySelector('.filter-select');
         var chevron = wrap.querySelector('.filter-wrap__chevron');
@@ -710,7 +734,6 @@
               (opt.selected ? ' csd-selected' : '');
             item.textContent = opt.text.trim();
             item.addEventListener('click', function () {
-              if (opt.value === '') return;
               sel.value = opt.value;
               sel.dispatchEvent(new Event('change'));
               syncBtn();
@@ -724,6 +747,15 @@
         btn.addEventListener('click', function () {
           buildPanel();
           panel.classList.toggle('open');
+          if (panel.classList.contains('open')) {
+            panel.style.left = '0';
+            panel.style.right = 'auto';
+            var rect = panel.getBoundingClientRect();
+            if (rect.right > window.innerWidth - 8) {
+              panel.style.left = 'auto';
+              panel.style.right = '0';
+            }
+          }
         });
 
         document.addEventListener('click', function (e) {
@@ -735,11 +767,13 @@
         }, { passive: true });
 
         sel.style.display = 'none';
-        if (chevron) chevron.style.display = 'none';
         wrap.appendChild(btn);
         wrap.appendChild(panel);
+        syncFns.push(syncBtn);
         syncBtn();
       });
+
+      window.syncCsdDropdowns = function () { syncFns.forEach(function (fn) { fn(); }); };
     })();
   </script>
 

@@ -68,7 +68,10 @@
           '<div id="custPickerList" class="cust-picker-list" role="listbox"></div>' +
         '</div>' +
       '</div>';
-    var subLeftHTML  = isDealer ? custPickHTML : '<div class="sub-header__left"><span>My Company&nbsp;:&nbsp;<b>Precision Parts Co.</b></span><span class="sub-header__sep"></span><span>My Distributor&nbsp;:&nbsp;<b>ABC Industries</b></span></div>';
+    var _companyName = (_okuma_user && _okuma_user.company) ? _okuma_user.company : '';
+    var subLeftHTML  = isDealer
+      ? '<div class="sub-header__left"><span>My Company&nbsp;:&nbsp;' + _companyName + '</span><span class="sub-header__sep"></span>' + custPickHTML + '</div>'
+      : '<div class="sub-header__left"><span>My Company&nbsp;:&nbsp;Precision Parts Co.</span><span class="sub-header__sep"></span><span>My Distributor&nbsp;:&nbsp;ABC Industries</span></div>';
     var subRightHTML = machPickHTML;
     return `
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -110,7 +113,7 @@
             <span class="nav__basket-badge" aria-hidden="true">2</span>
           </div>
           <div class="nav__cart">
-            <a class="nav__icon-btn" href="cart.html" aria-label="Cart, 3 items" data-tooltip="Your Cart">
+            <a class="nav__icon-btn" id="navCartLink" href="cart.html" aria-label="Cart, 3 items" data-tooltip="Your Cart">
               <img src="figma-assets/shopping-cart.png" width="20" height="20" alt="" aria-hidden="true" style="display:block;">
             </a>
             <span class="nav__cart-badge" aria-hidden="true">3</span>
@@ -154,7 +157,7 @@
   var SIDEBAR_ITEMS = [
     { key: 'dashboard', label: 'Dashboard', href: _dashHref,
       icon: '<rect x="2" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="2" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>' },
-    { key: 'parts', label: 'Stock Order', href: 'create-order.html?mode=stock', dealerOnly: true,
+    { key: 'parts', label: 'Stock Order', href: 'create-order.html?mode=stock', dealerOnly: true, stockContextOnly: true,
       icon: '<path d="M4 2h11a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2"/><path d="M7 2v16M10 6h3M10 9h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
     { key: 'orders', label: 'My Orders', href: 'my-orders.html',
       icon: '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 5.5V10l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
@@ -166,8 +169,9 @@
 
   function sidebarHTML(active) {
     var isDealer = _okuma_user && _okuma_user.role === 'dealer';
+    var isStockContext = !localStorage.getItem('okmSelectedCustomer');
     var items = SIDEBAR_ITEMS.filter(function (it) {
-      return !it.dealerOnly || isDealer;
+      return (!it.dealerOnly || isDealer) && (!it.stockContextOnly || isStockContext);
     }).map(function (it) {
       var isActive = it.key === active;
       var cls = 'sidebar-item' + (isActive ? ' active' : '');
@@ -285,6 +289,12 @@
   if (sb) replace('okuma-sidebar', sidebarHTML(sbActive));
   replace('okuma-auth-header', authHeaderHTML());
   replace('okuma-auth-footer', authFooterHTML());
+
+  /* Point cart icon to dealer-cart.html for dealer users */
+  if (_okuma_user && _okuma_user.role === 'dealer') {
+    var _cartLink = document.getElementById('navCartLink');
+    if (_cartLink) _cartLink.href = 'dealer-cart.html';
+  }
 
   /* Ensure the main content region is a labelled skip-link target */
   var main = document.querySelector('main');
@@ -573,7 +583,7 @@
     var machSwitchClose   = machSwitchEl.querySelector('#machSwitchClose');
     function showMachSwitchModal(name) {
       var current = localStorage.getItem('okmDefaultMachine') || 'your current machine';
-      machSwitchBody.innerHTML = 'Your cart/quote basket has parts specific to <strong>' + current + '</strong>. Switching to <strong>' + name + '</strong> means these items won\'t carry over. Save them to your wishlist so you can revisit them later, or remove them and continue.';
+      machSwitchBody.innerHTML = 'Your cart basket has parts specific to <strong>' + current + '</strong>. Switching to <strong>' + name + '</strong> means these items won\'t carry over. Save them to your wishlist so you can revisit them later and note that all the quote basket items will be lost.';
       machSwitchEl.classList.add('open');
     }
     function hideMachSwitchModal() { machSwitchEl.classList.remove('open'); pendingMach = null; }
@@ -832,21 +842,25 @@
           '<p id="custSwitchBody"></p>' +
           '<div class="csw-modal__div"></div>' +
           '<div class="csw-modal__act">' +
-            '<button class="csw-btn csw-btn--cancel" id="custSwitchCancel">Cancel</button>' +
-            '<button class="csw-btn csw-btn--confirm" id="custSwitchConfirm">Switch &amp; Clear Cart</button>' +
+            '<button class="csw-btn csw-btn--cancel" id="custSwitchDiscard">Discard &amp; Switch</button>' +
+            '<button class="csw-btn csw-btn--confirm" id="custSwitchConfirm">Save to Wishlist &amp; Switch</button>' +
           '</div>' +
+          '<button class="csw-cancel-link" id="custSwitchCancel">Cancel</button>' +
         '</div>' +
       '</div>';
     document.body.appendChild(cswEl);
 
     var cswBody    = cswEl.querySelector('#custSwitchBody');
     var cswCancel  = cswEl.querySelector('#custSwitchCancel');
+    var cswDiscard = cswEl.querySelector('#custSwitchDiscard');
     var cswConfirm = cswEl.querySelector('#custSwitchConfirm');
     var cswClose   = cswEl.querySelector('#custSwitchClose');
 
     function showSwitchModal(toName) {
-      var label = toName ? ('<strong>' + toName + '</strong>') : '<strong>Stock Order (Self)</strong>';
-      cswBody.innerHTML = 'Switching to ' + label + ' will clear your current cart. Any unsaved items will be lost.';
+      var current = localStorage.getItem('okmSelectedCustomer') || '';
+      var fromLabel = current ? ('<strong>' + current + '</strong>') : '<strong>Stock Order (Self)</strong>';
+      var toLabel   = toName  ? ('<strong>' + toName  + '</strong>') : '<strong>Stock Order (Self)</strong>';
+      cswBody.innerHTML = 'You\'re currently ordering for ' + fromLabel + '. Switching to ' + toLabel + ' will move your cart to your Wishlist — you can come back to it anytime.';
       cswEl.classList.add('open');
     }
     function hideSwitchModal() { cswEl.classList.remove('open'); pendingCust = null; }
@@ -857,6 +871,7 @@
     }
     cswClose.addEventListener('click', hideSwitchModal);
     cswCancel.addEventListener('click', hideSwitchModal);
+    cswDiscard.addEventListener('click', function () { commitSwitch(pendingCust); hideSwitchModal(); window.location = 'dealer-dashboard.html'; });
     cswConfirm.addEventListener('click', function () { commitSwitch(pendingCust); hideSwitchModal(); window.location = 'dealer-dashboard.html'; });
     cswEl.addEventListener('click', function (e) { if (e.target === cswEl) hideSwitchModal(); });
 
