@@ -1,0 +1,10 @@
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+# Node modules (if applicable)
+node_modules/
+
+# Build output
+dist/
+build/
