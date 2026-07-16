@@ -325,7 +325,11 @@
       border-radius: 10px; padding: 2px 8px; white-space: nowrap;
       letter-spacing: 0.2px; line-height: 1.4; margin-left: 6px;
       vertical-align: middle;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
     }
+    .cancel-req-badge--approved { background: #F4F9F1; color: #4A7C59; border-color: #74AA50; }
+    .status-badge--return-initiated { background: #EFF4FB; border: 0.5px solid #005EB8; color: #005EB8; }
+    .status-badge--return-initiated .dot { background: #005EB8; }
 
     /* ── RC MODAL FORM ELEMENTS ── */
     .rc-modal-info {
@@ -784,18 +788,22 @@
       if (!reason) { errEl.style.display = 'block'; return; }
       errEl.style.display = 'none';
 
-      var key       = currentRcOrder + ':' + currentRcTarget;
-      var badgeText = currentRcType === 'return' ? 'Return Requested' : 'Cancellation Requested';
-      cancellationState[key] = currentRcType;
+      var orderNum  = currentRcOrder;
+      var rcType    = currentRcType;
+      var key       = orderNum + ':' + currentRcTarget;
+      var badgeText = rcType === 'return' ? 'Return Requested' : 'Cancellation Requested';
+      cancellationState[key] = rcType;
 
+      var badgeEl  = null;
       var nameCell = document.querySelector('[data-rc-name="' + key + '"]');
       if (nameCell) {
         var nameDiv = nameCell.querySelector('.it-name');
         if (nameDiv && !nameDiv.querySelector('.cancel-req-badge')) {
-          var b = document.createElement('span');
+          var b         = document.createElement('span');
           b.className   = 'cancel-req-badge';
           b.textContent = badgeText;
           nameDiv.appendChild(b);
+          badgeEl = b;
         }
       }
       var actCell = document.querySelector('[data-rc-act="' + key + '"]');
@@ -803,6 +811,23 @@
 
       closeRcModal();
       showRcToast();
+
+      /* Prototype simulation: 2 s later, auto-approve and update order status */
+      setTimeout(function() {
+        if (badgeEl) {
+          badgeEl.textContent = rcType === 'return' ? 'Return Approved' : 'Cancellation Approved';
+          badgeEl.className   = 'cancel-req-badge cancel-req-badge--approved';
+        }
+        var newStatusHtml = rcType === 'return'
+          ? '<span class="status-badge status-badge--return-initiated"><span class="dot"></span>Return Initiated</span>'
+          : '<span class="status-badge status-badge--cancelled"><span class="dot"></span>Cancelled</span>';
+        var targetCell = document.querySelector('[data-rc-name="' + key + '"]');
+        if (targetCell) {
+          var row      = targetCell.parentElement;
+          var statusTd = row ? row.querySelectorAll('td')[4] : null;
+          if (statusTd) statusTd.innerHTML = newStatusHtml;
+        }
+      }, 2000);
     }
 
     /* ─── RC TOAST ──────────────────────────────────────── */

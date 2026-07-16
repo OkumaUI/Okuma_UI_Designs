@@ -40,11 +40,27 @@
     }
 
     .page-title {
-      font-size: 22px;
+      font-size: 28px;
       font-weight: 700;
       color: #1A1A1A;
       letter-spacing: -0.3px;
     }
+
+    /* Machine context banner (customer wishlist view) */
+    .machine-context {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 16px;
+      background: #F0F6FF;
+      border-left: 3px solid #005EB8;
+      border-radius: 2px;
+    }
+    .machine-context__label  { font-size: 12px; font-weight: 400; color: #6E6E6E; text-transform: uppercase; letter-spacing: 0.4px; flex-shrink: 0; }
+    .machine-context__name   { font-size: 15px; font-weight: 700; color: #005EB8; }
+    .machine-context__sep    { font-size: 14px; color: #BDBDBD; }
+    .machine-context__serial { font-size: 13px; font-weight: 400; color: #4B4B4B; }
 
     /* ===== FILTER STRIP ===== */
     .wl-filter-strip {
@@ -486,6 +502,9 @@
       .main-area { padding: 24px 20px 48px; gap: 20px; }
       .wl-page-header { flex-direction: column; align-items: flex-start; }
     }
+    @media (max-width: 768px) {
+      .page-title { font-size: 22px; }
+    }
     @media (max-width: 480px) {
       .main-area { padding: 16px 12px 40px; }
       .page-title { font-size: 20px; }
@@ -510,6 +529,14 @@
       <!-- ── Page Header: title + filter pills ── -->
       <div class="wl-page-header">
         <h1 class="page-title">My Wishlist</h1>
+
+        <!-- Machine context bar — shown for customer role only, populated by JS -->
+        <div class="machine-context" id="wl-machine-context">
+          <span class="machine-context__label">Wishlist for</span>
+          <span class="machine-context__name" id="wl-ctx-machine">LU300-M</span>
+          <span class="machine-context__sep">|</span>
+          <span class="machine-context__serial" id="wl-ctx-serial">Serial No: M5-2891-K</span>
+        </div>
 
         <div class="wl-filter-strip">
           <!-- All pill -->
@@ -653,6 +680,12 @@
       { id: 11, name: 'Chuck Jaw Set (Soft)',    partNum: 'SL-7700',         machine: 'GENOS L200E',  serial: 'L2-1108-A',  inStock: true,  price: 118.00, removed: false }
     ];
 
+    /* ── ROLE (read sessionStorage directly; auth.js loads after this script) ── */
+    var _wlRole = (function() {
+      try { return (JSON.parse(sessionStorage.getItem('okuma_session') || '{}')).role || null; } catch(e) { return null; }
+    })();
+    var isCustomer = _wlRole === 'customer';
+
     var currentFilter   = 'all';
     var currentPage     = 1;
     var PAGE_SIZE       = 5;
@@ -668,6 +701,10 @@
 
     function filteredItems() {
       var a = activeItems();
+      if (isCustomer) {
+        var sel = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
+        return a.filter(function(i) { return i.machine === sel; });
+      }
       if (currentFilter === 'all') return a;
       return a.filter(function (i) { return i.machine === currentFilter; });
     }
@@ -711,7 +748,11 @@
         tableWrap.style.display = 'none';
         pgBar.style.display     = 'none';
         emptyEl.style.display   = 'flex';
-        if (currentFilter !== 'all') {
+        if (isCustomer) {
+          var sel = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
+          emptyTitle.textContent = 'No parts saved for ' + sel + ' yet.';
+          emptySubEl.textContent = 'Browse the parts catalogue to find what your machine needs.';
+        } else if (currentFilter !== 'all') {
           emptyTitle.textContent = 'No parts saved for ' + currentFilter + '.';
           emptySubEl.textContent = 'Switch to another machine or browse the catalogue to add parts.';
         } else {
@@ -740,19 +781,22 @@
         var selBadge    = it.machine === selectedMachine
           ? '<span class="wl-selected-mach-badge">Selected Machine</span>'
           : '';
-
-        return '<tr id="wl-row-' + it.id + '">' +
-          '<td class="col-part">' +
-            '<div class="wl-part-name">' + it.name + '</div>' +
-            '<div class="wl-part-num">' + it.partNum + '</div>' +
-          '</td>' +
+        var machineTd = isCustomer ? '' : (
           '<td class="col-mach">' +
             '<div class="wl-mach-row">' +
               '<span class="wl-mach-name">' + it.machine + '</span>' +
               selBadge +
             '</div>' +
             '<span class="wl-mach-serial">' + it.serial + '</span>' +
+          '</td>'
+        );
+
+        return '<tr id="wl-row-' + it.id + '">' +
+          '<td class="col-part">' +
+            '<div class="wl-part-name">' + it.name + '</div>' +
+            '<div class="wl-part-num">' + it.partNum + '</div>' +
           '</td>' +
+          machineTd +
           '<td class="col-stock"><span class="stock-badge ' + stockClass + '">' + stockText + '</span></td>' +
           '<td class="col-price wl-price">' + money(it.price) + '</td>' +
           '<td class="col-act">' +
@@ -813,6 +857,7 @@
 
     /* ── UPDATE PILLS ── */
     function updatePills() {
+      if (isCustomer) return;
       var allCount = activeItems().length;
       document.getElementById('wl-all-count').textContent = allCount;
 
@@ -1059,13 +1104,47 @@
       if (machMenuOpen && !wrap.contains(e.target)) closeMachineMenu();
     });
 
+    /* ── CONTEXT BAR (customer view) ── */
+    function getSelectedMachineSerial(machineName) {
+      for (var i = 0; i < wlItems.length; i++) {
+        if (wlItems[i].machine === machineName) return wlItems[i].serial;
+      }
+      return '';
+    }
+
+    function updateContextBar() {
+      var sel    = localStorage.getItem('okmDefaultMachine') || 'LU300-M';
+      var serial = getSelectedMachineSerial(sel);
+      var mEl = document.getElementById('wl-ctx-machine');
+      var sEl = document.getElementById('wl-ctx-serial');
+      if (mEl) mEl.textContent = sel;
+      if (sEl) sEl.textContent = 'Serial No: ' + serial;
+    }
+
     /* ── MACHINE CHANGE (from header picker) ── */
     window.addEventListener('okuma:machineChanged', function () {
+      if (isCustomer) updateContextBar();
       renderTable();
     });
 
     /* ── INIT ── */
-    buildMachineMenu();
+    if (isCustomer) {
+      var filterStrip = document.querySelector('.wl-filter-strip');
+      if (filterStrip) filterStrip.style.display = 'none';
+      var ctxBar = document.getElementById('wl-machine-context');
+      if (ctxBar) ctxBar.style.display = 'flex';
+      var machTh = document.querySelector('th.col-mach');
+      if (machTh) machTh.style.display = 'none';
+      var pageHdr = document.querySelector('.wl-page-header');
+      if (pageHdr) {
+        pageHdr.style.flexDirection = 'column';
+        pageHdr.style.alignItems    = 'flex-start';
+        pageHdr.style.gap           = '12px';
+      }
+      updateContextBar();
+    } else {
+      buildMachineMenu();
+    }
     renderTable();
 
   })();

@@ -606,7 +606,7 @@
             '<div class="part-card__name">' + escapeHtml(p.name) + '</div>' +
           '</div>' +
 
-          '<div class="part-card__status">' + (_role === 'dealer' ? '' : compatSection + '<div class="status-vdivider"></div>') + stockSection + '</div>' +
+          '<div class="part-card__status">' + (_role !== 'dealer' || !!localStorage.getItem('okmSelectedCustomer') ? compatSection + '<div class="status-vdivider"></div>' : '') + stockSection + '</div>' +
 
           '<div class="part-card__action">' +
             '<div class="part-card__price-wrap">' +
@@ -762,6 +762,12 @@
       /* live re-classification when machine changes in header */
       window.addEventListener('okuma:machineChanged', function(e) {
         selectedMachine = e.detail.name;
+        currentPage = 1;
+        renderResults();
+      });
+
+      /* re-render when customer context changes — compat section visibility depends on it */
+      window.addEventListener('okuma:customerChanged', function() {
         currentPage = 1;
         renderResults();
       });
