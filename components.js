@@ -68,10 +68,11 @@
           '<div id="custPickerList" class="cust-picker-list" role="listbox"></div>' +
         '</div>' +
       '</div>';
-    var _companyName = (_okuma_user && _okuma_user.company) ? _okuma_user.company : '';
+    var _companyName    = (_okuma_user && _okuma_user.company)     ? _okuma_user.company     : '';
+    var _distributorName = (_okuma_user && _okuma_user.distributor) ? _okuma_user.distributor : '';
     var subLeftHTML  = isDealer
       ? '<div class="sub-header__left"><span>My Company&nbsp;:&nbsp;' + _companyName + '</span><span class="sub-header__sep"></span>' + custPickHTML + '</div>'
-      : '<div class="sub-header__left"><span>My Company&nbsp;:&nbsp;Precision Parts Co.</span><span class="sub-header__sep"></span><span>My Distributor&nbsp;:&nbsp;ABC Industries</span></div>';
+      : '<div class="sub-header__left"><span>My Company&nbsp;:&nbsp;' + _companyName + '</span><span class="sub-header__sep"></span><span>My Distributor&nbsp;:&nbsp;' + _distributorName + '</span></div>';
     var subRightHTML = machPickHTML;
     return `
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -132,10 +133,6 @@
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="4.5" r="2.5" stroke="#005EB8" stroke-width="1.3"/><path d="M2.5 12c0-2.2 2-3.8 4.5-3.8s4.5 1.6 4.5 3.8" stroke="#005EB8" stroke-width="1.3" stroke-linecap="round"/></svg>
                 My Account
               </a>
-              <a href="wishlist.html" class="user-menu__item" role="menuitem">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 12C7 12 1.5 8 1.5 4.5a2.5 2.5 0 0 1 5-0.3 2.5 2.5 0 0 1 5 0.3C11.5 8 7 12 7 12z" stroke="#005EB8" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                My Wishlist
-              </a>
               <div class="user-menu__sep"></div>
               <a href="#" onclick="if(typeof okuma_logout==='function'){okuma_logout();}else{sessionStorage.removeItem('okuma_session');window.location.replace('login.html');}return false;" class="user-menu__item" role="menuitem">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5.5 12H2.5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round"/><path d="M9 9.5L12 7 9 4.5M12 7H5.5" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -163,6 +160,8 @@
       icon: '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 5.5V10l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
     { key: 'quotes', label: 'My Quotes', href: 'my-quotes.html',
       icon: '<path d="M5 2h6l4 4v12a1 1 0 01-1 1H5a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M11 2v4h4M7 11h6M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
+    { key: 'wishlist', label: 'My Wishlist', href: 'wishlist.html', customerOnly: true,
+      icon: '<path d="M10 17s-7-4.35-7-9a4 4 0 0 1 7-2.64A4 4 0 0 1 17 8c0 4.65-7 9-7 9z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' },
     { key: 'account', label: 'My Account', href: (_okuma_user && _okuma_user.role === 'dealer') ? 'dealer-profile.html' : 'profile.html',
       icon: '<circle cx="10" cy="6.5" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M3 18c0-3.6 3.13-6.5 7-6.5s7 2.9 7 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
   ];
@@ -171,7 +170,7 @@
     var isDealer = _okuma_user && _okuma_user.role === 'dealer';
     var isStockContext = !localStorage.getItem('okmSelectedCustomer');
     var items = SIDEBAR_ITEMS.filter(function (it) {
-      return (!it.dealerOnly || isDealer) && (!it.stockContextOnly || isStockContext);
+      return (!it.dealerOnly || isDealer) && (!it.stockContextOnly || isStockContext) && (!it.customerOnly || !isDealer);
     }).map(function (it) {
       var isActive = it.key === active;
       var cls = 'sidebar-item' + (isActive ? ' active' : '');
@@ -569,6 +568,7 @@
           '<p id="machSwitchBody"></p>' +
           '<div class="csw-modal__div"></div>' +
           '<div class="csw-modal__act">' +
+            '<button class="csw-btn csw-btn--cancel" id="machSwitchCancelBtn" style="display:none">Cancel</button>' +
             '<button class="csw-btn csw-btn--cancel" id="machSwitchDiscard">Discard &amp; Switch</button>' +
             '<button class="csw-btn csw-btn--confirm" id="machSwitchConfirm">Save to Wishlist &amp; Switch</button>' +
           '</div>' +
@@ -576,14 +576,28 @@
         '</div>' +
       '</div>';
     document.body.appendChild(machSwitchEl);
-    var machSwitchBody    = machSwitchEl.querySelector('#machSwitchBody');
-    var machSwitchCancel  = machSwitchEl.querySelector('#machSwitchCancel');
-    var machSwitchDiscard = machSwitchEl.querySelector('#machSwitchDiscard');
-    var machSwitchConfirm = machSwitchEl.querySelector('#machSwitchConfirm');
-    var machSwitchClose   = machSwitchEl.querySelector('#machSwitchClose');
+    var machSwitchBody      = machSwitchEl.querySelector('#machSwitchBody');
+    var machSwitchCancel    = machSwitchEl.querySelector('#machSwitchCancel');
+    var machSwitchCancelBtn = machSwitchEl.querySelector('#machSwitchCancelBtn');
+    var machSwitchDiscard   = machSwitchEl.querySelector('#machSwitchDiscard');
+    var machSwitchConfirm   = machSwitchEl.querySelector('#machSwitchConfirm');
+    var machSwitchClose     = machSwitchEl.querySelector('#machSwitchClose');
     function showMachSwitchModal(name) {
       var current = localStorage.getItem('okmDefaultMachine') || 'your current machine';
-      machSwitchBody.innerHTML = 'Your cart basket has parts specific to <strong>' + current + '</strong>. Switching to <strong>' + name + '</strong> means these items won\'t carry over. Save them to your wishlist so you can revisit them later and note that all the quote basket items will be lost.';
+      var isDealer = _okuma_user && _okuma_user.role === 'dealer';
+      if (isDealer) {
+        machSwitchBody.innerHTML = 'Your cart basket has parts specific to <strong>' + current + '</strong>. Switching to <strong>' + name + '</strong> means these items won\'t carry over, and all quote basket items will be lost.';
+        machSwitchCancelBtn.style.display = '';
+        machSwitchDiscard.className = 'csw-btn csw-btn--confirm';
+        machSwitchConfirm.style.display = 'none';
+        machSwitchCancel.style.display = 'none';
+      } else {
+        machSwitchBody.innerHTML = 'Your cart basket has parts specific to <strong>' + current + '</strong>. Switching to <strong>' + name + '</strong> means these items won\'t carry over. Save them to your wishlist so you can revisit them later and note that all the quote basket items will be lost.';
+        machSwitchCancelBtn.style.display = 'none';
+        machSwitchDiscard.className = 'csw-btn csw-btn--cancel';
+        machSwitchConfirm.style.display = '';
+        machSwitchCancel.style.display = '';
+      }
       machSwitchEl.classList.add('open');
     }
     function hideMachSwitchModal() { machSwitchEl.classList.remove('open'); pendingMach = null; }
@@ -598,6 +612,7 @@
     }
     machSwitchClose.addEventListener('click', hideMachSwitchModal);
     machSwitchCancel.addEventListener('click', hideMachSwitchModal);
+    machSwitchCancelBtn.addEventListener('click', hideMachSwitchModal);
     machSwitchDiscard.addEventListener('click', doMachSwitch);
     machSwitchConfirm.addEventListener('click', doMachSwitch);
     machSwitchEl.addEventListener('click', function (e) { if (e.target === machSwitchEl) hideMachSwitchModal(); });
@@ -842,16 +857,14 @@
           '<p id="custSwitchBody"></p>' +
           '<div class="csw-modal__div"></div>' +
           '<div class="csw-modal__act">' +
-            '<button class="csw-btn csw-btn--cancel" id="custSwitchDiscard">Discard &amp; Switch</button>' +
-            '<button class="csw-btn csw-btn--confirm" id="custSwitchConfirm">Save to Wishlist &amp; Switch</button>' +
+            '<button class="csw-btn csw-btn--cancel" id="custSwitchDiscard">Cancel</button>' +
+            '<button class="csw-btn csw-btn--confirm" id="custSwitchConfirm">Discard &amp; Switch</button>' +
           '</div>' +
-          '<button class="csw-cancel-link" id="custSwitchCancel">Cancel</button>' +
         '</div>' +
       '</div>';
     document.body.appendChild(cswEl);
 
     var cswBody    = cswEl.querySelector('#custSwitchBody');
-    var cswCancel  = cswEl.querySelector('#custSwitchCancel');
     var cswDiscard = cswEl.querySelector('#custSwitchDiscard');
     var cswConfirm = cswEl.querySelector('#custSwitchConfirm');
     var cswClose   = cswEl.querySelector('#custSwitchClose');
@@ -860,7 +873,7 @@
       var current = localStorage.getItem('okmSelectedCustomer') || '';
       var fromLabel = current ? ('<strong>' + current + '</strong>') : '<strong>Stock Order (Self)</strong>';
       var toLabel   = toName  ? ('<strong>' + toName  + '</strong>') : '<strong>Stock Order (Self)</strong>';
-      cswBody.innerHTML = 'You\'re currently ordering for ' + fromLabel + '. Switching to ' + toLabel + ' will move your cart to your Wishlist — you can come back to it anytime.';
+      cswBody.innerHTML = 'You\'re currently ordering for ' + fromLabel + '. Switching to ' + toLabel + ' will discard all items in your cart. This action cannot be undone.';
       cswEl.classList.add('open');
     }
     function hideSwitchModal() { cswEl.classList.remove('open'); pendingCust = null; }
@@ -870,8 +883,7 @@
       window.dispatchEvent(new CustomEvent('okuma:customerChanged', { detail: { name: name } }));
     }
     cswClose.addEventListener('click', hideSwitchModal);
-    cswCancel.addEventListener('click', hideSwitchModal);
-    cswDiscard.addEventListener('click', function () { commitSwitch(pendingCust); hideSwitchModal(); window.location = 'dealer-dashboard.html'; });
+    cswDiscard.addEventListener('click', hideSwitchModal);
     cswConfirm.addEventListener('click', function () { commitSwitch(pendingCust); hideSwitchModal(); window.location = 'dealer-dashboard.html'; });
     cswEl.addEventListener('click', function (e) { if (e.target === cswEl) hideSwitchModal(); });
 

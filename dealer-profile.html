@@ -349,7 +349,7 @@
     .cust-back-btn svg { width: 16px; height: 16px; }
     .cust-back-btn:hover { border-color: #005EB8; background: #F0F6FF; color: #005EB8; }
     .cust-detail-info { flex: 1; min-width: 0; }
-    .cust-detail-name { font-size: 24px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.3px; display: block; }
+    .cust-detail-name { font-size: 20px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.3px; display: block; }
     .cust-detail-meta { font-size: 13px; color: #717171; margin-top: 3px; display: block; }
     .machines-list { display: flex; flex-direction: column; }
     .machine-row {
@@ -605,17 +605,6 @@
     }
     .approve-modal__confirm:hover { background: #0052A3; }
 
-    /* ── RETURN / CANCELLATION TYPE BADGES ── */
-    .req-type-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 4px 10px; border-radius: 10px;
-      font-size: 11px; font-weight: 700; white-space: nowrap;
-    }
-    .req-type-badge--return       { background: #FFF9EF; border: 0.5px solid #FFB549; color: #B45309; }
-    .req-type-badge--cancellation { background: #EFF4FB; border: 0.5px solid #005EB8; color: #005EB8; }
-    .ret-part-name  { font-size: 13px; font-weight: 700; color: #1A1A1A; }
-    .ret-part-pn    { font-size: 11px; color: #9E9E9E; margin-top: 2px; }
-
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .main-area { padding: 24px; }
@@ -695,11 +684,6 @@
                   aria-selected="false" aria-controls="panel-addr-requests" tabindex="-1">
             Address Approval Requests
             <span class="tab-count-badge" id="tabAddrBadge">2</span>
-          </button>
-          <button role="tab" class="tab-btn" id="tab-return-requests"
-                  aria-selected="false" aria-controls="panel-return-requests" tabindex="-1">
-            Return &amp; Cancellation Requests
-            <span class="tab-count-badge" id="tabReturnBadge">3</span>
           </button>
         </div>
 
@@ -1103,129 +1087,6 @@
 
         </div><!-- /panel-addr-requests -->
 
-        <!-- ═══ PANEL 5 — Return & Cancellation Requests ═══ -->
-        <div role="tabpanel" id="panel-return-requests" class="tab-panel"
-             aria-labelledby="tab-return-requests" tabindex="0" hidden>
-
-          <!-- Pending section -->
-          <div class="addr-req-section">
-            <div class="addr-req-section__head">
-              <span class="addr-req-section__title">Pending Requests</span>
-              <span class="addr-req-section__count" id="retPendingCount" style="display:none;">0</span>
-            </div>
-            <div class="addr-req-toolbar">
-              <div class="addr-req-search-wrap">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
-                  <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                <input type="text" class="addr-req-search" id="retPendingSearch"
-                       placeholder="Search by customer or part" aria-label="Search pending return/cancellation requests">
-              </div>
-              <div class="addr-req-sort-wrap">
-                <select class="addr-req-sort" id="retPendingTypeFilter" aria-label="Filter by type">
-                  <option value="">All Types</option>
-                  <option value="return">Return</option>
-                  <option value="cancellation">Cancellation</option>
-                </select>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="addr-req-sort-wrap">
-                <select class="addr-req-sort" id="retPendingSort" aria-label="Sort pending requests">
-                  <option value="date-desc">Newest to Oldest</option>
-                  <option value="date-asc">Oldest to Newest</option>
-                </select>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-            </div>
-            <div class="orders-wrap">
-              <div class="orders-scroll">
-                <table class="addr-req-table" style="min-width:900px;">
-                  <thead>
-                    <tr>
-                      <th style="width:150px">Customer</th>
-                      <th>Part</th>
-                      <th style="width:190px">Machine</th>
-                      <th style="width:130px">Date Submitted</th>
-                      <th style="width:130px">Type</th>
-                      <th style="width:220px"></th>
-                    </tr>
-                  </thead>
-                  <tbody id="retPendingTbody"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- History section -->
-          <div class="addr-req-section" id="retHistSection">
-            <div class="addr-req-section__head">
-              <span class="addr-req-section__title">History</span>
-            </div>
-            <div class="addr-req-toolbar">
-              <div class="addr-req-search-wrap">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <circle cx="7" cy="7" r="5" stroke="#9E9E9E" stroke-width="1.5"/>
-                  <path d="M11 11l3 3" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                <input type="text" class="addr-req-search" id="retHistSearch"
-                       placeholder="Search by customer or part" aria-label="Search history">
-              </div>
-              <div class="addr-req-sort-wrap">
-                <select class="addr-req-sort" id="retHistTypeFilter" aria-label="Filter by type">
-                  <option value="">All Types</option>
-                  <option value="return">Return</option>
-                  <option value="cancellation">Cancellation</option>
-                </select>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="addr-req-sort-wrap">
-                <select class="addr-req-sort" id="retHistStatusFilter" aria-label="Filter by status">
-                  <option value="">All Statuses</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div class="addr-req-sort-wrap">
-                <select class="addr-req-sort" id="retHistSort" aria-label="Sort history">
-                  <option value="date-desc">Newest to Oldest</option>
-                  <option value="date-asc">Oldest to Newest</option>
-                </select>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                  <path d="M2.5 4.5l3.5 3 3.5-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-            </div>
-            <div class="orders-wrap">
-              <div class="orders-scroll">
-                <table class="addr-req-table" style="min-width:900px;">
-                  <thead>
-                    <tr>
-                      <th style="width:150px">Customer</th>
-                      <th>Part</th>
-                      <th style="width:190px">Machine</th>
-                      <th style="width:130px">Date Submitted</th>
-                      <th style="width:130px">Type</th>
-                      <th style="width:140px">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="retHistTbody"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- /panel-return-requests -->
-
       </div><!-- /profile-tabs -->
 
     </main>
@@ -1249,29 +1110,6 @@
         <div class="approve-modal__actions">
           <button type="button" class="approve-modal__cancel" id="approveModalCancel">Cancel</button>
           <button type="button" class="approve-modal__confirm" id="approveModalConfirm">Confirm Approval</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Return/Cancellation Approve Confirmation Modal -->
-  <div class="approve-modal-overlay" id="retApproveOverlay">
-    <div class="approve-modal" role="dialog" aria-modal="true" aria-labelledby="retApproveTitle">
-      <div class="approve-modal__header">
-        <span class="approve-modal__title" id="retApproveTitle">Confirm Approval</span>
-        <button type="button" class="approve-modal__close" id="retApproveClose" aria-label="Close">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M5 5L15 15M15 5L5 15" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
-      <div class="approve-modal__body">
-        <p class="approve-modal__desc" id="retApproveDesc"></p>
-        <div class="approve-modal__card" id="retApproveCard"></div>
-        <div class="approve-modal__divider"></div>
-        <div class="approve-modal__actions">
-          <button type="button" class="approve-modal__cancel" id="retApproveCancel">Cancel</button>
-          <button type="button" class="approve-modal__confirm" id="retApproveConfirm">Confirm Approval</button>
         </div>
       </div>
     </div>
@@ -2055,203 +1893,6 @@
   })();
   </script>
 
-  <script>
-  /* ── RETURN & CANCELLATION REQUESTS ── */
-  (function () {
-
-    var RET_REQUESTS = [
-      { customer: 'ABC Industries',      partNo: 'LU3-4892-A', partName: 'Spindle Bearing Assembly',  machine: 'LB3000 EX',   serial: 'LB3-00482', date: '14 Jul 2026', type: 'return',       status: 'pending',  rejectReason: '' },
-      { customer: 'Delta Components',    partNo: 'MB-0211-C',  partName: 'Coolant Pump Motor',         machine: 'MULTUS B300',  serial: 'MB3-01194', date: '11 Jul 2026', type: 'cancellation', status: 'pending',  rejectReason: '' },
-      { customer: 'Smith Manufacturing', partNo: 'GL-7731-X',  partName: 'Turret Drive Belt',          machine: 'GENOS L200',   serial: 'GL2-00871', date: '08 Jul 2026', type: 'return',       status: 'pending',  rejectReason: '' },
-      { customer: 'Pacific Precision',   partNo: 'MV-3301-F',  partName: 'Z-Axis Ball Screw',          machine: 'MU-6300V',     serial: 'MU6-00334', date: '25 Jun 2026', type: 'cancellation', status: 'approved', rejectReason: '' },
-      { customer: 'Apex Machining',      partNo: 'LB-5540-Q',  partName: 'Hydraulic Chuck Cylinder',   machine: 'LB3000 EX',   serial: 'LB3-00219', date: '20 Jun 2026', type: 'return',       status: 'approved', rejectReason: '' },
-      { customer: 'ABC Industries',      partNo: 'H9-4412-A',  partName: 'Servo Amplifier Board',      machine: 'MULTUS B300',  serial: 'MB3-00762', date: '12 Jun 2026', type: 'cancellation', status: 'rejected', rejectReason: 'Order already shipped' },
-      { customer: 'Delta Components',    partNo: 'GL-2211-T',  partName: 'Chuck Jaw Set (3-piece)',     machine: 'GENOS L200',   serial: 'GL2-00453', date: '05 Jun 2026', type: 'return',       status: 'rejected', rejectReason: 'Return window expired' }
-    ];
-
-    var pendingTbody      = document.getElementById('retPendingTbody');
-    var histTbody         = document.getElementById('retHistTbody');
-    var histSection       = document.getElementById('retHistSection');
-    var retPendingCountEl = document.getElementById('retPendingCount');
-    var tabReturnBadge    = document.getElementById('tabReturnBadge');
-
-    var retApproveOverlay = document.getElementById('retApproveOverlay');
-    var retApproveCard    = document.getElementById('retApproveCard');
-    var retApproveDesc    = document.getElementById('retApproveDesc');
-    var retApproveConfirm = document.getElementById('retApproveConfirm');
-    var retApproveCancel  = document.getElementById('retApproveCancel');
-    var retApproveClose   = document.getElementById('retApproveClose');
-    var retPendingIdx     = -1;
-
-    var _pSearch = '', _pType = '', _pSort = 'date-desc';
-    var _hSearch = '', _hType = '', _hStatus = '', _hSort = 'date-desc';
-
-    function typeBadge(type) {
-      return type === 'return'
-        ? '<span class="req-type-badge req-type-badge--return">Return</span>'
-        : '<span class="req-type-badge req-type-badge--cancellation">Cancellation</span>';
-    }
-
-    function applySort(rows, sortKey) {
-      return sortKey === 'date-asc' ? rows.slice().reverse() : rows.slice();
-    }
-
-    function updateBadges() {
-      var count = RET_REQUESTS.filter(function(r) { return r.status === 'pending'; }).length;
-      if (tabReturnBadge) { tabReturnBadge.textContent = count; tabReturnBadge.style.display = count > 0 ? '' : 'none'; }
-      if (retPendingCountEl) { retPendingCountEl.textContent = count; retPendingCountEl.style.display = count > 0 ? '' : 'none'; }
-    }
-
-    function renderTable() {
-      var pendingBase = RET_REQUESTS.filter(function(r) { return r.status === 'pending'; });
-      var histBase    = RET_REQUESTS.filter(function(r) { return r.status === 'approved' || r.status === 'rejected'; });
-
-      var q = _pSearch.toLowerCase();
-      var pending = pendingBase.slice();
-      if (q) pending = pending.filter(function(r) {
-        return r.customer.toLowerCase().indexOf(q) !== -1 ||
-               r.partNo.toLowerCase().indexOf(q) !== -1 ||
-               r.partName.toLowerCase().indexOf(q) !== -1 ||
-               r.machine.toLowerCase().indexOf(q) !== -1 ||
-               r.serial.toLowerCase().indexOf(q) !== -1;
-      });
-      if (_pType) pending = pending.filter(function(r) { return r.type === _pType; });
-      pending = applySort(pending, _pSort);
-
-      var hq = _hSearch.toLowerCase();
-      var history = histBase.slice();
-      if (hq) history = history.filter(function(r) {
-        return r.customer.toLowerCase().indexOf(hq) !== -1 ||
-               r.partNo.toLowerCase().indexOf(hq) !== -1 ||
-               r.partName.toLowerCase().indexOf(hq) !== -1 ||
-               r.machine.toLowerCase().indexOf(hq) !== -1 ||
-               r.serial.toLowerCase().indexOf(hq) !== -1;
-      });
-      if (_hType)   history = history.filter(function(r) { return r.type   === _hType; });
-      if (_hStatus) history = history.filter(function(r) { return r.status === _hStatus; });
-      history = applySort(history, _hSort);
-
-      /* --- Pending rows --- */
-      if (pending.length === 0) {
-        var msg = (q || _pType) ? 'No requests match your filter.' : 'No pending requests at this time.';
-        pendingTbody.innerHTML = '<tr><td colspan="6"><div class="addr-req-empty">' + msg + '</div></td></tr>';
-      } else {
-        pendingTbody.innerHTML = pending.map(function(r) {
-          var i = RET_REQUESTS.indexOf(r);
-          var actionCell =
-            '<div id="ret-actions-' + i + '" style="display:flex;align-items:center;gap:8px;">' +
-              '<button class="addr-req-approve" onclick="window._retApprove(' + i + ')">Approve</button>' +
-              '<button class="addr-req-reject"  onclick="window._retOpenReject(' + i + ')">Reject</button>' +
-            '</div>' +
-            '<div id="ret-reject-row-' + i + '" style="display:none;">' +
-              '<div class="addr-req-reason-row">' +
-                '<input type="text" class="addr-req-reason-input" id="ret-reject-input-' + i + '" placeholder="Reason for rejection (optional)">' +
-                '<button class="addr-req-confirm-reject" onclick="window._retConfirmReject(' + i + ')">Confirm</button>' +
-                '<button class="addr-req-cancel-reject"  onclick="window._retCancelReject(' + i + ')">Cancel</button>' +
-              '</div>' +
-            '</div>';
-          return '<tr>' +
-            '<td style="font-weight:600;">' + r.customer + '</td>' +
-            '<td><div class="ret-part-name">' + r.partName + '</div><div class="ret-part-pn">P/N: ' + r.partNo + '</div></td>' +
-            '<td><div class="ret-part-name">' + r.machine + '</div><div class="ret-part-pn">S/N: ' + r.serial + '</div></td>' +
-            '<td>' + r.date + '</td>' +
-            '<td>' + typeBadge(r.type) + '</td>' +
-            '<td style="white-space:nowrap;">' + actionCell + '</td>' +
-          '</tr>';
-        }).join('');
-      }
-
-      /* --- History rows --- */
-      if (histBase.length === 0) {
-        histSection.style.display = 'none';
-      } else {
-        histSection.style.display = '';
-        if (history.length === 0) {
-          histTbody.innerHTML = '<tr><td colspan="6"><div class="addr-req-empty">No records match your filter.</div></td></tr>';
-        } else {
-          histTbody.innerHTML = history.map(function(r) {
-            var isApp = r.status === 'approved';
-            var statusBadge =
-              '<span class="addr-hist-badge addr-hist-badge--' + r.status + '">' +
-                '<span class="dot"></span>' + (isApp ? 'Approved' : 'Rejected') +
-              '</span>' +
-              ((!isApp && r.rejectReason) ? '<div class="addr-hist-reason">' + r.rejectReason + '</div>' : '');
-            return '<tr>' +
-              '<td style="font-weight:600;">' + r.customer + '</td>' +
-              '<td><div class="ret-part-name">' + r.partName + '</div><div class="ret-part-pn">P/N: ' + r.partNo + '</div></td>' +
-              '<td><div class="ret-part-name">' + r.machine + '</div><div class="ret-part-pn">S/N: ' + r.serial + '</div></td>' +
-              '<td>' + r.date + '</td>' +
-              '<td>' + typeBadge(r.type) + '</td>' +
-              '<td>' + statusBadge + '</td>' +
-            '</tr>';
-          }).join('');
-        }
-      }
-
-      updateBadges();
-    }
-
-    /* Approve flow */
-    function openRetApproveModal(idx) {
-      retPendingIdx = idx;
-      var r = RET_REQUESTS[idx];
-      var typeLabel = r.type === 'return' ? 'return' : 'cancellation';
-      retApproveDesc.textContent = 'You are about to approve the following ' + typeLabel + ' request. Once confirmed, the status on the customer\'s order will be updated.';
-      retApproveCard.innerHTML =
-        '<span class="approve-modal__card-label">' + r.partName + '</span>' +
-        '<span class="approve-modal__card-meta">P/N: ' + r.partNo + ' &middot; ' + r.machine + ' (S/N: ' + r.serial + ')</span>' +
-        '<span class="approve-modal__card-meta">' + r.customer + ' &middot; Submitted ' + r.date + '</span>' +
-        '<span style="display:block;margin-top:8px;">' + typeBadge(r.type) + '</span>';
-      retApproveOverlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeRetApproveModal() {
-      retApproveOverlay.classList.remove('open');
-      document.body.style.overflow = '';
-      retPendingIdx = -1;
-    }
-
-    retApproveConfirm.addEventListener('click', function() {
-      if (retPendingIdx < 0) return;
-      RET_REQUESTS[retPendingIdx].status = 'approved';
-      renderTable();
-      closeRetApproveModal();
-    });
-    retApproveCancel.addEventListener('click', closeRetApproveModal);
-    retApproveClose.addEventListener('click', closeRetApproveModal);
-    retApproveOverlay.addEventListener('click', function(e) { if (e.target === retApproveOverlay) closeRetApproveModal(); });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && retApproveOverlay.classList.contains('open')) closeRetApproveModal();
-    });
-
-    window._retApprove = function(idx) { openRetApproveModal(idx); };
-    window._retOpenReject = function(idx) {
-      document.getElementById('ret-actions-' + idx).style.display = 'none';
-      document.getElementById('ret-reject-row-' + idx).style.display = '';
-    };
-    window._retCancelReject = function(idx) {
-      document.getElementById('ret-actions-' + idx).style.display = 'flex';
-      document.getElementById('ret-reject-row-' + idx).style.display = 'none';
-    };
-    window._retConfirmReject = function(idx) {
-      var input = document.getElementById('ret-reject-input-' + idx);
-      RET_REQUESTS[idx].status = 'rejected';
-      RET_REQUESTS[idx].rejectReason = input ? input.value.trim() : '';
-      renderTable();
-    };
-
-    renderTable();
-
-    document.getElementById('retPendingSearch').addEventListener('input',      function() { _pSearch = this.value; renderTable(); });
-    document.getElementById('retPendingTypeFilter').addEventListener('change', function() { _pType   = this.value; renderTable(); });
-    document.getElementById('retPendingSort').addEventListener('change',       function() { _pSort   = this.value; renderTable(); });
-    document.getElementById('retHistSearch').addEventListener('input',         function() { _hSearch = this.value; renderTable(); });
-    document.getElementById('retHistTypeFilter').addEventListener('change',    function() { _hType   = this.value; renderTable(); });
-    document.getElementById('retHistStatusFilter').addEventListener('change',  function() { _hStatus = this.value; renderTable(); });
-    document.getElementById('retHistSort').addEventListener('change',          function() { _hSort   = this.value; renderTable(); });
-
-  })();
-  </script>
 
 </body>
 </html>
