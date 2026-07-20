@@ -427,6 +427,111 @@
 
     /* ─── ORDER DATA ─────────────────────────────────────── */
     var DATA = {
+      'OKU-2026-00418': {
+        num: 'OKU-2026-00418', date: 'Feb 22, 2026', status: 'processing',
+        orderedFor: 'ABC Industries', poRef: 'ABC-PO-7788', placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: null,
+          estDelivery: 'Mar 03, 2026',
+          addr: { name: 'ABC Industries — Receiving Dock', street: '4521 Commerce Drive', city: 'Charlotte, NC 28208, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Feb 22, 2026', s: 'done'    },
+          { label: 'Confirmed',    date: 'Feb 23, 2026', s: 'active'  },
+          { label: 'Shipped',      date: 'Est. Feb 27',  s: 'pending' },
+          { label: 'Delivered',    date: 'Est. Mar 03',  s: 'pending' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LU300-M', ser: 'M5-2891-K', qty: 2, price: 86.50,  img: 'images/product-servo-belt.png' },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-0045-SLK',     mach: 'LU300-M', ser: 'M5-2891-K', qty: 3, price: 18.00,  img: null }
+        ],
+        sum: { subtotal: 747.00, shipping: 45.00, tax: 50.25, total: 842.25 }
+      },
+      'OKU-2026-00392': {
+        num: 'OKU-2026-00392', date: 'Feb 18, 2026', status: 'shipped',
+        orderedFor: null, poRef: null, placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999BB10884422113',
+          shippedDate: 'Feb 20, 2026', estDelivery: 'Feb 24, 2026',
+          addr: { name: 'Okuma HQ — Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte, NC 28214, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Feb 18, 2026', s: 'done'    },
+          { label: 'Confirmed',    date: 'Feb 19, 2026', s: 'done'    },
+          { label: 'Shipped',      date: 'Feb 20, 2026', s: 'active'  },
+          { label: 'Delivered',    date: 'Est. Feb 24',  s: 'pending' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly',    pn: 'E4809-045-017-A', mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Plate Bearing',            pn: '525-0100-11',     mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 380.00, img: 'images/product-plate-bearing.png' },
+          { name: 'Servo Drive Belt',         pn: 'B0612-045-H8',    mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 86.50,  img: 'images/product-servo-belt.png' },
+          { name: 'O-Ring Seal Kit',          pn: 'OR-0045-SLK',     mach: 'LU300-M', ser: 'M5-2891-K', qty: 3, price: 18.00,  img: null },
+          { name: 'Turret Index Pin',         pn: 'TIP-4421-K',      mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 51.00,  img: null },
+          { name: 'Hydraulic Filter Element', pn: 'HF-2201-09',      mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 64.00,  img: null }
+        ],
+        sum: { subtotal: 1155.50, shipping: 0, tax: 48.50, total: 1204.00 }
+      },
+      'OKU-2026-00355': {
+        num: 'OKU-2026-00355', date: 'Feb 10, 2026', status: 'delivered',
+        orderedFor: 'Delta Components', poRef: 'DLT-PO-3301', placedBy: 'James Hartwell',
+        ship: {
+          method: 'FedEx Express', tracking: '748923445120',
+          shippedDate: 'Feb 12, 2026', estDelivery: 'Feb 16, 2026', deliveredDate: 'Feb 15, 2026',
+          addr: { name: 'Delta Components — Main Plant', street: '810 Industrial Pkwy', city: 'Atlanta, GA 30301, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Feb 10, 2026', s: 'done' },
+          { label: 'Confirmed',    date: 'Feb 11, 2026', s: 'done' },
+          { label: 'Shipped',      date: 'Feb 12, 2026', s: 'done' },
+          { label: 'Delivered',    date: 'Feb 15, 2026', s: 'done' }
+        ],
+        items: [
+          { name: 'Plate Bearing', pn: '525-0100-11', mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 1, price: 380.00, img: 'images/product-plate-bearing.png' }
+        ],
+        sum: { subtotal: 380.00, shipping: 15.00, tax: 17.00, total: 412.00 }
+      },
+      'OKU-2026-00310': {
+        num: 'OKU-2026-00310', date: 'Feb 02, 2026', status: 'delivered',
+        orderedFor: null, poRef: null, placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999BB10774411882',
+          shippedDate: 'Feb 04, 2026', estDelivery: 'Feb 08, 2026', deliveredDate: 'Feb 07, 2026',
+          addr: { name: 'Okuma HQ — Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte, NC 28214, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Feb 02, 2026', s: 'done' },
+          { label: 'Confirmed',    date: 'Feb 03, 2026', s: 'done' },
+          { label: 'Shipped',      date: 'Feb 04, 2026', s: 'done' },
+          { label: 'Delivered',    date: 'Feb 07, 2026', s: 'done' }
+        ],
+        items: [
+          { name: 'Servo Drive Belt', pn: 'B0612-045-H8', mach: 'MULTUS U3000', ser: 'MU-9102-L', qty: 1, price: 86.50, img: 'images/product-servo-belt.png' },
+          { name: 'O-Ring Seal Kit',  pn: 'OR-0045-SLK',  mach: 'MULTUS U3000', ser: 'MU-9102-L', qty: 1, price: 18.00, img: null }
+        ],
+        sum: { subtotal: 104.50, shipping: 12.00, tax: 8.00, total: 124.50 }
+      },
+      'OKU-2026-00445': {
+        num: 'OKU-2026-00445', date: 'Jul 15, 2026', status: 'processing',
+        orderedFor: 'Delta Components', poRef: 'DLT-PO-3418', placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: null,
+          estDelivery: 'Jul 25, 2026',
+          addr: { name: 'Delta Components — Main Plant', street: '810 Industrial Pkwy', city: 'Atlanta, GA 30301, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Jul 15, 2026', s: 'done'    },
+          { label: 'Confirmed',    date: 'Jul 16, 2026', s: 'active'  },
+          { label: 'Shipped',      date: 'Est. Jul 21',  s: 'pending' },
+          { label: 'Delivered',    date: 'Est. Jul 25',  s: 'pending' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 1, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Spindle Bearing Unit',  pn: 'SK-2291-001',     mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 1, price: 720.00, img: null },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 2, price: 86.50,  img: 'images/product-servo-belt.png' }
+        ],
+        sum: { subtotal: 1413.00, shipping: 55.00, tax: 92.00, total: 1560.00 }
+      },
       'OKU-2026-00421': {
         num: 'OKU-2026-00421', date: 'Jun 10, 2026', status: 'shipped',
         orderedFor: 'ABC Industries', poRef: 'ABC-PO-7741', placedBy: 'James Hartwell',
@@ -534,6 +639,224 @@
           { name: 'Chuck Jaw Set (3-pc)', pn: 'A1B-0092-330',    mach: 'LB2000 EX III', ser: 'LB-4431-M',  qty: 1, price: 121.00, img: null }
         ],
         sum: { subtotal: 2005.50, shipping: 55.50, tax: 84.00, total: 2145.00 }
+      },
+      'OKU-2026-00278': {
+        num: 'OKU-2026-00278', date: 'Mar 22, 2026', status: 'delivered',
+        orderedFor: 'Keystone Precision', poRef: 'KP-PO-1180', placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999CC10456789012',
+          shippedDate: 'Mar 24, 2026', estDelivery: 'Mar 28, 2026', deliveredDate: 'Mar 27, 2026',
+          addr: { name: 'Keystone Precision — Receiving', street: '1420 Foundry Lane', city: 'Cleveland, OH 44101, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Mar 22, 2026', s: 'done' },
+          { label: 'Confirmed',    date: 'Mar 23, 2026', s: 'done' },
+          { label: 'Shipped',      date: 'Mar 24, 2026', s: 'done' },
+          { label: 'Delivered',    date: 'Mar 27, 2026', s: 'done' }
+        ],
+        items: [
+          { name: 'Servo Drive Belt', pn: 'B0612-045-H8', mach: 'LB3000 EX III', ser: 'L2-1108-A', qty: 2, price: 86.50,  img: 'images/product-servo-belt.png'    },
+          { name: 'O-Ring Seal Kit',  pn: 'OR-0045-SLK',  mach: 'LB3000 EX III', ser: 'L2-1108-A', qty: 5, price: 18.00,  img: null },
+          { name: 'Plate Bearing',    pn: '525-0100-11',  mach: 'LB3000 EX III', ser: 'L2-1108-A', qty: 1, price: 380.00, img: 'images/product-plate-bearing.png' },
+          { name: 'Chuck Jaw Set (3-pc)', pn: 'A1B-0092-330', mach: 'LB3000 EX III', ser: 'L2-1108-A', qty: 1, price: 121.00, img: null }
+        ],
+        sum: { subtotal: 764.00, shipping: 45.00, tax: 81.00, total: 890.00 }
+      },
+      'OKU-2026-00245': {
+        num: 'OKU-2026-00245', date: 'Mar 05, 2026', status: 'delivered',
+        orderedFor: null, poRef: null, placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999BB10334455667',
+          shippedDate: 'Mar 07, 2026', estDelivery: 'Mar 11, 2026', deliveredDate: 'Mar 10, 2026',
+          addr: { name: 'Okuma HQ — Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte, NC 28214, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Mar 05, 2026', s: 'done' },
+          { label: 'Confirmed',    date: 'Mar 06, 2026', s: 'done' },
+          { label: 'Shipped',      date: 'Mar 07, 2026', s: 'done' },
+          { label: 'Delivered',    date: 'Mar 10, 2026', s: 'done' }
+        ],
+        items: [
+          { name: 'Servo Drive Belt', pn: 'B0612-045-H8', mach: 'LB2000 EX III', ser: 'LB-8821-X', qty: 2, price: 86.50, img: 'images/product-servo-belt.png' },
+          { name: 'O-Ring Seal Kit',  pn: 'OR-0045-SLK',  mach: 'LB2000 EX III', ser: 'LB-8821-X', qty: 5, price: 18.00, img: null }
+        ],
+        sum: { subtotal: 263.00, shipping: 24.50, tax: 37.00, total: 324.50 }
+      },
+      'OKU-2026-00211': {
+        num: 'OKU-2026-00211', date: 'Feb 14, 2026', status: 'delivered',
+        orderedFor: 'Smith Manufacturing', poRef: 'SM-PO-6620', placedBy: 'James Hartwell',
+        ship: {
+          method: 'FedEx Express', tracking: '748923556101',
+          shippedDate: 'Feb 16, 2026', estDelivery: 'Feb 20, 2026', deliveredDate: 'Feb 19, 2026',
+          addr: { name: 'Smith Manufacturing — Dock 3', street: '305 Steelworks Ave', city: 'Pittsburgh, PA 15201, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Feb 14, 2026', s: 'done' },
+          { label: 'Confirmed',    date: 'Feb 15, 2026', s: 'done' },
+          { label: 'Shipped',      date: 'Feb 16, 2026', s: 'done' },
+          { label: 'Delivered',    date: 'Feb 19, 2026', s: 'done' }
+        ],
+        items: [
+          { name: 'Spindle Bearing Unit',  pn: 'SK-2291-001',     mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 2, price: 720.00, img: null },
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 2, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 2, price: 380.00, img: 'images/product-plate-bearing.png' },
+          { name: 'Chuck Jaw Set (3-pc)',  pn: 'A1B-0092-330',    mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 1, price: 246.00, img: null },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 3, price: 86.50,  img: 'images/product-servo-belt.png' },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-0045-SLK',     mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 5, price: 18.00,  img: null }
+        ],
+        sum: { subtotal: 3835.50, shipping: 125.00, tax: 239.50, total: 4200.00 }
+      },
+      'OKU-2026-00188': {
+        num: 'OKU-2026-00188', date: 'Jan 30, 2026', status: 'delivered',
+        orderedFor: 'Global Parts Supply', poRef: 'GPS-PO-4415', placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999AA10778899001',
+          shippedDate: 'Feb 01, 2026', estDelivery: 'Feb 05, 2026', deliveredDate: 'Feb 04, 2026',
+          addr: { name: 'Global Parts Supply — Warehouse 2', street: '88 Distribution Blvd', city: 'Columbus, OH 43004, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Jan 30, 2026', s: 'done' },
+          { label: 'Confirmed',    date: 'Jan 31, 2026', s: 'done' },
+          { label: 'Shipped',      date: 'Feb 01, 2026', s: 'done' },
+          { label: 'Delivered',    date: 'Feb 04, 2026', s: 'done' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LU300-M', ser: 'M5-2891-K', qty: 1, price: 86.50,  img: 'images/product-servo-belt.png' },
+          { name: 'O-Ring Seal Kit',       pn: 'OR-0045-SLK',     mach: 'LU300-M', ser: 'M5-2891-K', qty: 2, price: 18.00,  img: null }
+        ],
+        sum: { subtotal: 642.50, shipping: 45.00, tax: 77.50, total: 765.00 }
+      },
+      'OKU-2026-00154': {
+        num: 'OKU-2026-00154', date: 'Jan 12, 2026', status: 'delivered',
+        orderedFor: null, poRef: null, placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999BB10220033445',
+          shippedDate: 'Jan 14, 2026', estDelivery: 'Jan 18, 2026', deliveredDate: 'Jan 17, 2026',
+          addr: { name: 'Okuma HQ — Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte, NC 28214, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Jan 12, 2026', s: 'done' },
+          { label: 'Confirmed',    date: 'Jan 13, 2026', s: 'done' },
+          { label: 'Shipped',      date: 'Jan 14, 2026', s: 'done' },
+          { label: 'Delivered',    date: 'Jan 17, 2026', s: 'done' }
+        ],
+        items: [
+          { name: 'Servo Drive Belt', pn: 'B0612-045-H8', mach: 'MULTUS U3000', ser: 'MU-9102-L', qty: 1, price: 86.50, img: 'images/product-servo-belt.png' }
+        ],
+        sum: { subtotal: 86.50, shipping: 0, tax: 2.00, total: 88.50 }
+      },
+      'OKU-2025-00892': {
+        num: 'OKU-2025-00892', date: 'Dec 19, 2025', status: 'delivered',
+        orderedFor: 'Apex Machining', poRef: 'AM-PO-2098', placedBy: 'James Hartwell',
+        ship: {
+          method: 'FedEx Express', tracking: '748923778420',
+          shippedDate: 'Dec 22, 2025', estDelivery: 'Dec 27, 2025', deliveredDate: 'Dec 26, 2025',
+          addr: { name: 'Apex Machining — Main Plant', street: '640 Precision Way', city: 'Grand Rapids, MI 49503, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Dec 19, 2025', s: 'done' },
+          { label: 'Confirmed',    date: 'Dec 20, 2025', s: 'done' },
+          { label: 'Shipped',      date: 'Dec 22, 2025', s: 'done' },
+          { label: 'Delivered',    date: 'Dec 26, 2025', s: 'done' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 1, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 1, price: 380.00, img: 'images/product-plate-bearing.png' },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 3, price: 86.50,  img: 'images/product-servo-belt.png' },
+          { name: 'Chuck Jaw Set (3-pc)',  pn: 'A1B-0092-330',    mach: 'LB2000 EX III', ser: 'LB-4431-M', qty: 1, price: 246.00, img: null }
+        ],
+        sum: { subtotal: 1405.50, shipping: 45.00, tax: 89.50, total: 1540.00 }
+      },
+      'OKU-2025-00841': {
+        num: 'OKU-2025-00841', date: 'Nov 28, 2025', status: 'delivered',
+        orderedFor: null, poRef: null, placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999BB10556677889',
+          shippedDate: 'Dec 01, 2025', estDelivery: 'Dec 05, 2025', deliveredDate: 'Dec 04, 2025',
+          addr: { name: 'Okuma HQ — Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte, NC 28214, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Nov 28, 2025', s: 'done' },
+          { label: 'Confirmed',    date: 'Nov 29, 2025', s: 'done' },
+          { label: 'Shipped',      date: 'Dec 01, 2025', s: 'done' },
+          { label: 'Delivered',    date: 'Dec 04, 2025', s: 'done' }
+        ],
+        items: [
+          { name: 'Servo Drive Belt', pn: 'B0612-045-H8', mach: 'MB-4000H', ser: 'MB-2234-P', qty: 2, price: 86.50, img: 'images/product-servo-belt.png' },
+          { name: 'O-Ring Seal Kit',  pn: 'OR-0045-SLK',  mach: 'MB-4000H', ser: 'MB-2234-P', qty: 3, price: 18.00, img: null }
+        ],
+        sum: { subtotal: 227.00, shipping: 40.00, tax: 45.00, total: 312.00 }
+      },
+      'OKU-2025-00790': {
+        num: 'OKU-2025-00790', date: 'Oct 14, 2025', status: 'delivered',
+        orderedFor: 'East Coast Tooling', poRef: 'ECT-PO-3310', placedBy: 'James Hartwell',
+        ship: {
+          method: 'FedEx Express', tracking: '748923991055',
+          shippedDate: 'Oct 16, 2025', estDelivery: 'Oct 21, 2025', deliveredDate: 'Oct 20, 2025',
+          addr: { name: 'East Coast Tooling — Receiving', street: '220 Seaboard Dr', city: 'Providence, RI 02903, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Oct 14, 2025', s: 'done' },
+          { label: 'Confirmed',    date: 'Oct 15, 2025', s: 'done' },
+          { label: 'Shipped',      date: 'Oct 16, 2025', s: 'done' },
+          { label: 'Delivered',    date: 'Oct 20, 2025', s: 'done' }
+        ],
+        items: [
+          { name: 'Spindle Bearing Unit',  pn: 'SK-2291-001',     mach: 'LB3000 EX III', ser: 'L2-1108-A', qty: 1, price: 720.00, img: null },
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LB3000 EX III', ser: 'L2-1108-A', qty: 1, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Plate Bearing',         pn: '525-0100-11',     mach: 'LB3000 EX III', ser: 'L2-1108-A', qty: 1, price: 380.00, img: 'images/product-plate-bearing.png' },
+          { name: 'Chuck Jaw Set (3-pc)',  pn: 'A1B-0092-330',    mach: 'LB3000 EX III', ser: 'L2-1108-A', qty: 1, price: 246.00, img: null },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LB3000 EX III', ser: 'L2-1108-A', qty: 2, price: 86.50,  img: 'images/product-servo-belt.png' }
+        ],
+        sum: { subtotal: 2039.00, shipping: 95.00, tax: 126.00, total: 2260.00 }
+      },
+      'OKU-2025-00733': {
+        num: 'OKU-2025-00733', date: 'Sep 02, 2025', status: 'delivered',
+        orderedFor: null, poRef: null, placedBy: 'James Hartwell',
+        ship: {
+          method: 'UPS Ground', tracking: '1Z999BB10667788990',
+          shippedDate: 'Sep 04, 2025', estDelivery: 'Sep 09, 2025', deliveredDate: 'Sep 08, 2025',
+          addr: { name: 'Okuma HQ — Warehouse B', street: '11900 Cottonwood Street', city: 'Charlotte, NC 28214, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Sep 02, 2025', s: 'done' },
+          { label: 'Confirmed',    date: 'Sep 03, 2025', s: 'done' },
+          { label: 'Shipped',      date: 'Sep 04, 2025', s: 'done' },
+          { label: 'Delivered',    date: 'Sep 08, 2025', s: 'done' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly', pn: 'E4809-045-017-A', mach: 'LB2000 EX III', ser: 'LB-8821-X', qty: 1, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Chuck Jaw Set (3-pc)',  pn: 'A1B-0092-330',    mach: 'LB2000 EX III', ser: 'LB-8821-X', qty: 1, price: 246.00, img: null },
+          { name: 'Servo Drive Belt',      pn: 'B0612-045-H8',    mach: 'LB2000 EX III', ser: 'LB-8821-X', qty: 1, price: 86.50,  img: 'images/product-servo-belt.png' }
+        ],
+        sum: { subtotal: 852.50, shipping: 40.00, tax: 52.50, total: 945.00 }
+      },
+      'OKU-2025-00681': {
+        num: 'OKU-2025-00681', date: 'Aug 20, 2025', status: 'delivered',
+        orderedFor: 'Century Fabrication', poRef: 'CF-PO-7702', placedBy: 'James Hartwell',
+        ship: {
+          method: 'FedEx Express', tracking: '748924110238',
+          shippedDate: 'Aug 22, 2025', estDelivery: 'Aug 27, 2025', deliveredDate: 'Aug 26, 2025',
+          addr: { name: 'Century Fabrication — Dock A', street: '1750 Millwright Rd', city: 'Milwaukee, WI 53202, USA' }
+        },
+        steps: [
+          { label: 'Order Placed', date: 'Aug 20, 2025', s: 'done' },
+          { label: 'Confirmed',    date: 'Aug 21, 2025', s: 'done' },
+          { label: 'Shipped',      date: 'Aug 22, 2025', s: 'done' },
+          { label: 'Delivered',    date: 'Aug 26, 2025', s: 'done' }
+        ],
+        items: [
+          { name: 'Coolant Pump Assembly',     pn: 'E4809-045-017-A', mach: 'MB-4000H', ser: 'MB-2234-P', qty: 1, price: 520.00, img: 'images/product-coolant-pump.png' },
+          { name: 'Spindle Bearing Unit',      pn: 'SK-2291-001',     mach: 'MB-4000H', ser: 'MB-2234-P', qty: 1, price: 720.00, img: null },
+          { name: 'Plate Bearing',             pn: '525-0100-11',     mach: 'MB-4000H', ser: 'MB-2234-P', qty: 2, price: 380.00, img: 'images/product-plate-bearing.png' },
+          { name: 'Chuck Jaw Set (3-pc)',      pn: 'A1B-0092-330',    mach: 'MB-4000H', ser: 'MB-2234-P', qty: 1, price: 246.00, img: null },
+          { name: 'Servo Drive Belt',          pn: 'B0612-045-H8',    mach: 'MB-4000H', ser: 'MB-2234-P', qty: 3, price: 86.50,  img: 'images/product-servo-belt.png' },
+          { name: 'O-Ring Seal Kit',           pn: 'OR-0045-SLK',     mach: 'MB-4000H', ser: 'MB-2234-P', qty: 5, price: 18.00,  img: null },
+          { name: 'Turret Index Pin',          pn: 'TIP-4421-K',      mach: 'MB-4000H', ser: 'MB-2234-P', qty: 2, price: 51.00,  img: null },
+          { name: 'Hydraulic Filter Element',  pn: 'HF-2201-09',      mach: 'MB-4000H', ser: 'MB-2234-P', qty: 2, price: 64.00,  img: null }
+        ],
+        sum: { subtotal: 2825.50, shipping: 125.00, tax: 169.50, total: 3120.00 }
       }
     };
 
@@ -639,7 +962,7 @@
         : '';
 
       var rcType  = (o.status === 'delivered' || o.status === 'shipped') ? 'return' : 'cancel';
-      var canAct  = o.status !== 'cancelled';
+      var canAct  = o.status !== 'cancelled' && !!o.orderedFor;
       var rows = o.items.map(function(it, idx) {
         var lineTotal   = it.qty * it.price;
         var key         = o.num + ':' + idx;
@@ -658,7 +981,7 @@
           '<td class="r" style="width:95px"><span style="color:#4B4B4B">' + fmt(it.price) + '</span></td>' +
           '<td class="r" style="width:95px"><span class="it-linetotal">' + fmt(lineTotal) + '</span></td>' +
           '<td style="width:130px">' + badge(o.status) + '</td>' +
-          '<td class="col-act-rc" data-rc-act="' + key + '">' + actCell + '</td>' +
+          (canAct ? '<td class="col-act-rc" data-rc-act="' + key + '">' + actCell + '</td>' : '') +
           '</tr>';
       }).join('');
 
@@ -673,7 +996,7 @@
         '<th class="r" style="width:95px">Unit Price</th>' +
         '<th class="r" style="width:95px">Total</th>' +
         '<th style="width:130px">Status</th>' +
-        '<th class="col-act-rc" style="width:150px"></th>' +
+        (canAct ? '<th class="col-act-rc" style="width:150px"></th>' : '') +
         '</tr></thead>' +
         '<tbody>' + rows + '</tbody>' +
         '</table>' +
